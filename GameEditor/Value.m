@@ -2,9 +2,6 @@
 //  Value.m
 //  GameEditor
 //
-//  Created by Rhody Lugo on 3/15/15.
-//
-//
 
 #import "Value.h"
 
@@ -68,4 +65,10 @@
 	return [_realValue objCType];
 }
 
+@end
+
+@implementation NSString (conversions)
+- (NSPoint)pointValue {
+	return NSPointFromString(self);
+}
 @end
