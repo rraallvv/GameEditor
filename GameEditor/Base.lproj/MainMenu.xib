@@ -270,7 +270,7 @@
                                                     </prototypeCellViews>
                                                     <connections>
                                                         <binding destination="MHP-mB-ED2" name="editable" keyPath="arrangedObjects.editable" id="RG3-iw-ePb"/>
-                                                        <binding destination="MHP-mB-ED2" name="value" keyPath="arrangedObjects.value" id="E4B-Ts-dOS"/>
+                                                        <binding destination="MHP-mB-ED2" name="value" keyPath="arrangedObjects.propertyValue" id="6bK-1K-kxS"/>
                                                     </connections>
                                                 </tableColumn>
                                             </tableColumns>
