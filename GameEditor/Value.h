@@ -15,3 +15,7 @@
 - (float)x;
 - (void)setX:(float)value;
 @end
+
+@interface NSString (conversions)
+- (NSPoint)pointValue;
+@end
