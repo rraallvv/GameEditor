@@ -60,6 +60,10 @@
 }
  */
 
+- (void)getValue:(void *)value {
+	[_realValue getValue:value];
+}
+
 - (const char *)objCType {
 	return [_realValue objCType];
 }
