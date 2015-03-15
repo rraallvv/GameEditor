@@ -141,21 +141,23 @@
                                                             <rect key="frame" x="1" y="1" width="103" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TeN-VV-aFq">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="17"/>
-                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="property" id="OqT-mH-FSe">
-                                                                        <font key="font" metaFont="system"/>
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MdD-hT-1Ht">
+                                                                    <rect key="frame" x="-2" y="0.0" width="107" height="17"/>
+                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="property" id="T5M-xp-jgp">
+                                                                        <font key="font" metaFont="smallSystem"/>
                                                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                     <connections>
-                                                                        <binding destination="VdE-35-N2m" name="value" keyPath="objectValue.key" id="I3y-60-DNS"/>
+                                                                        <binding destination="VdE-35-N2m" name="value" keyPath="objectValue.key" id="fVz-L4-apX"/>
                                                                     </connections>
                                                                 </textField>
                                                             </subviews>
-                                                            <connections>
-                                                                <outlet property="textField" destination="TeN-VV-aFq" id="Nm4-ee-dNL"/>
-                                                            </connections>
+                                                            <constraints>
+                                                                <constraint firstAttribute="trailing" secondItem="MdD-hT-1Ht" secondAttribute="trailing" id="22S-sH-I4P"/>
+                                                                <constraint firstAttribute="centerY" secondItem="MdD-hT-1Ht" secondAttribute="centerY" id="dru-Zj-fj0"/>
+                                                                <constraint firstItem="MdD-hT-1Ht" firstAttribute="leading" secondItem="VdE-35-N2m" secondAttribute="leading" id="mf4-yV-Agx"/>
+                                                            </constraints>
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                     <connections>
