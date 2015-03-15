@@ -27,7 +27,7 @@ static NSDictionary *pointToStringTransformer = nil;
 	return result;
 }
 - (id)reverseTransformedValue:(id)value {
-	NSValue *result = [NSValue valueWithPoint:NSPointFromString(value)];
+	Value *result = [Value valueWithPoint:NSPointFromString(value)];
 	//NSLog(@"<%@", result);
 	return result;
 }
@@ -44,13 +44,13 @@ static NSDictionary *stringToPointTransformer = nil;
 	}
 }
 + (Class)transformedValueClass {
-	return [NSValue class];
+	return [Value class];
 }
 + (BOOL)allowsReverseTransformation {
 	return YES;
 }
 - (id)transformedValue:(id)value {
-	NSValue *result = [NSValue valueWithPoint:NSPointFromString(value)];
+	Value *result = [Value valueWithPoint:NSPointFromString(value)];
 	//NSLog(@">%@", result);
 	return result;
 }
@@ -78,12 +78,12 @@ static NSDictionary *degreesTostringTransformer = nil;
 	return YES;
 }
 - (id)transformedValue:(id)value {
-	NSString *result = [[NSNumber numberWithFloat:[value floatValue]*180/M_PI] stringValue];
+	NSString *result = [[Value numberWithFloat:[value floatValue]*180/M_PI] stringValue];
 	//NSLog(@">%@", result);
 	return result;
 }
 - (id)reverseTransformedValue:(id)value {
-	NSValue *result = [NSNumber numberWithFloat:[value floatValue]*M_PI/180];
+	Value *result = [Value numberWithFloat:[value floatValue]*M_PI/180];
 	//NSLog(@"<%@", result);
 	return result;
 }
@@ -100,39 +100,39 @@ static NSDictionary *stringToDegreesTransformer = nil;
 	}
 }
 + (Class)transformedValueClass {
-	return [NSNumber class];
+	return [Value class];
 }
 + (BOOL)allowsReverseTransformation {
 	return YES;
 }
 - (id)transformedValue:(id)value {
-	NSNumber *result = [NSNumber numberWithFloat:[value floatValue]*M_PI/180];
+	Value *result = [Value numberWithFloat:[value floatValue]*M_PI/180];
 	//NSLog(@">%@", result);
 	return result;
 }
 - (id)reverseTransformedValue:(id)value {
-	NSString *result = [[NSNumber numberWithFloat:[value floatValue]/M_PI*180] stringValue];
+	NSString *result = [[Value numberWithFloat:[value floatValue]/M_PI*180] stringValue];
 	//NSLog(@"<%@", result);
 	return result;
 }
 @end
 
 @implementation Property
-@synthesize key, value, editable;
+@synthesize key, propertyValue, editable;
 +(Property *)propertyWithKey:(NSString *)key node:(SKNode* )node type:(NSString *)type {
 	Property *property = [[Property alloc] init];
 	property.key = key;
 	property.type = type;
 
 	if ([type isEqualToString:@"point"]) {
-		[property bind:@"value" toObject:node withKeyPath:property.key options:[PointToStringTransformer transformer]];
-		[node bind:property.key toObject:property withKeyPath:@"value" options:[StringToPointTransformer transformer]];
+		[property bind:@"propertyValue" toObject:node withKeyPath:property.key options:[PointToStringTransformer transformer]];
+		[node bind:property.key toObject:property withKeyPath:@"propertyValue" options:[StringToPointTransformer transformer]];
 	} else if ([type isEqualToString:@"degrees"]) {
-		[property bind:@"value" toObject:node withKeyPath:property.key options:[DegreesToStringTransformer transformer]];
-		[node bind:property.key toObject:property withKeyPath:@"value" options:[StringToDegreesTransformer transformer]];
+		[property bind:@"propertyValue" toObject:node withKeyPath:property.key options:[DegreesToStringTransformer transformer]];
+		[node bind:property.key toObject:property withKeyPath:@"propertyValue" options:[StringToDegreesTransformer transformer]];
 	} else {
-		[property bind:@"value" toObject:node withKeyPath:property.key options:nil];
-		[node bind:property.key toObject:property withKeyPath:@"value" options:nil];
+		[property bind:@"propertyValue" toObject:node withKeyPath:property.key options:nil];
+		[node bind:property.key toObject:property withKeyPath:@"propertyValue" options:nil];
 	}
 
 	return property;
