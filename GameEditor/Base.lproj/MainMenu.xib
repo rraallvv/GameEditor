@@ -190,7 +190,7 @@
                                                                     </textFieldCell>
                                                                     <connections>
                                                                         <binding destination="2Ss-NZ-lOU" name="editable" keyPath="objectValue.editable" id="5mY-zg-VSe"/>
-                                                                        <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.value" id="WEl-Ds-0jy">
+                                                                        <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.propertyValue" id="L8M-gP-tkC">
                                                                             <dictionary key="options">
                                                                                 <bool key="NSConditionallySetsEditable" value="YES"/>
                                                                             </dictionary>
@@ -218,7 +218,7 @@
                                                                         <font key="font" metaFont="smallSystem"/>
                                                                     </buttonCell>
                                                                     <connections>
-                                                                        <binding destination="52C-rc-ywy" name="value" keyPath="objectValue.value" id="83q-fJ-PnC"/>
+                                                                        <binding destination="52C-rc-ywy" name="value" keyPath="objectValue.propertyValue" id="TVM-cM-Cwx"/>
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
@@ -236,7 +236,7 @@
                                                                     <rect key="frame" x="-2" y="1" width="13" height="15"/>
                                                                     <stepperCell key="cell" controlSize="mini" continuous="YES" alignment="left" minValue="-360" maxValue="360" id="InT-SD-zPt"/>
                                                                     <connections>
-                                                                        <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.value" id="00L-uE-Fju"/>
+                                                                        <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.propertyValue" id="hnt-eB-IHT"/>
                                                                     </connections>
                                                                 </stepper>
                                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fV5-EB-vtf">
@@ -255,7 +255,7 @@
                                                                     </textFieldCell>
                                                                     <connections>
                                                                         <binding destination="ykA-kB-Fwq" name="editable" keyPath="objectValue.editable" id="bwo-nE-Nya"/>
-                                                                        <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.value" id="das-eD-u9f"/>
+                                                                        <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.propertyValue" id="pBx-Vr-zsC"/>
                                                                     </connections>
                                                                 </textField>
                                                             </subviews>
