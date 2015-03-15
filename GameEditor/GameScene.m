@@ -27,6 +27,8 @@
 	[sprite runAction:[SKAction repeatActionForever:[SKAction sequence:@[moveAction, moveAction.reversedAction]]]];
 
 	[self addChild:sprite];
+
+	sprite.paused = YES;
 }
 
 -(void)mouseDown:(NSEvent *)theEvent {
