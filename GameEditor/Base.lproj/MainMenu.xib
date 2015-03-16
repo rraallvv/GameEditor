@@ -185,6 +185,9 @@
                                                                         <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WZK-4b-Rc6">
                                                                             <rect key="frame" x="-2" y="1" width="13" height="15"/>
                                                                             <stepperCell key="cell" controlSize="mini" continuous="YES" alignment="left" minValue="-9.2233720368547758e+18" maxValue="9.2233720368547758e+18" id="Z4b-Zt-ieb"/>
+                                                                            <connections>
+                                                                                <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.x" id="hCD-Ad-8L5"/>
+                                                                            </connections>
                                                                         </stepper>
                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tOs-8Z-T1g">
                                                                             <rect key="frame" x="7" y="0.0" width="94" height="17"/>
@@ -195,10 +198,9 @@
                                                                             </textFieldCell>
                                                                             <connections>
                                                                                 <binding destination="2Ss-NZ-lOU" name="editable" keyPath="objectValue.editable" id="58c-am-Cia"/>
-                                                                                <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.propertyValue" id="N4O-88-Bri">
+                                                                                <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.x" id="cYX-RB-Ua2">
                                                                                     <dictionary key="options">
                                                                                         <bool key="NSConditionallySetsHidden" value="YES"/>
-                                                                                        <string key="NSValueTransformerName">PointTransformer</string>
                                                                                     </dictionary>
                                                                                 </binding>
                                                                             </connections>
