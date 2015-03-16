@@ -111,7 +111,7 @@ static NSDictionary *stringToDegreesTransformer = nil;
 	return result;
 }
 - (id)reverseTransformedValue:(id)value {
-	NSString *result = [[Value numberWithFloat:[value floatValue]*M_PI/180] stringValue];
+	Value *result = [Value numberWithFloat:[value floatValue]*M_PI/180];
 	//NSLog(@"<%@", result);
 	return result;
 }

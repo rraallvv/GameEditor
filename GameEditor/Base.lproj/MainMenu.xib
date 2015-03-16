@@ -206,7 +206,7 @@
                                                             <subviews>
                                                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="an0-xg-ycP">
                                                                     <rect key="frame" x="-2" y="1" width="13" height="15"/>
-                                                                    <stepperCell key="cell" controlSize="mini" continuous="YES" alignment="left" minValue="-360" maxValue="360" id="InT-SD-zPt"/>
+                                                                    <stepperCell key="cell" controlSize="mini" continuous="YES" alignment="left" minValue="-9.2233720368547758e+18" maxValue="9.2233720368547758e+18" id="InT-SD-zPt"/>
                                                                     <connections>
                                                                         <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.propertyValue" id="5M5-lE-0R9">
                                                                             <dictionary key="options">
@@ -218,11 +218,9 @@
                                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fV5-EB-vtf">
                                                                     <rect key="frame" x="7" y="0.0" width="114" height="17"/>
                                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" alignment="center" title="degrees" id="PMG-7e-KKm">
-                                                                        <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#.##º" negativeFormat="-#.##º" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="2" id="mTx-fL-3tO">
-                                                                            <real key="minimum" value="-360"/>
-                                                                            <real key="maximum" value="360"/>
+                                                                        <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#º" negativeFormat="#º" usesGroupingSeparator="NO" lenient="YES" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="2" id="mTx-fL-3tO">
                                                                             <metadata>
-                                                                                <real key="inspectorSampleValue" value="1"/>
+                                                                                <real key="inspectorSampleValue" value="-1.2332099999999999"/>
                                                                             </metadata>
                                                                         </numberFormatter>
                                                                         <font key="font" metaFont="system"/>
