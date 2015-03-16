@@ -54,7 +54,7 @@
 	SKSpriteNode *sprite = (SKSpriteNode *)[scene childNodeWithName:@"//Spaceship"];
 
 	// Bind the individual controls on the left side of the window
-	[_positionTextField bind:@"value" toObject:sprite withKeyPath:@"position" options:[PointToStringTransformer transformer]];
+	[_positionTextField bind:@"value" toObject:sprite withKeyPath:@"position" options:[PointTransformer transformer]];
 	[_rotationTextField bind:@"value" toObject:sprite withKeyPath:@"zRotation" options:[DegreesTransformer transformer]];
 	[_pausedButton bind:@"value" toObject:sprite withKeyPath:@"paused" options:nil];
 

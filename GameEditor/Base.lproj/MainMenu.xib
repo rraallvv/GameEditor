@@ -187,10 +187,10 @@
                                                                     </textFieldCell>
                                                                     <connections>
                                                                         <binding destination="2Ss-NZ-lOU" name="editable" keyPath="objectValue.editable" id="58c-am-Cia"/>
-                                                                        <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.propertyValue" id="pUx-GH-KFd">
+                                                                        <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.propertyValue" id="N4O-88-Bri">
                                                                             <dictionary key="options">
                                                                                 <bool key="NSConditionallySetsHidden" value="YES"/>
-                                                                                <string key="NSValueTransformerName">PointToStringTransformer</string>
+                                                                                <string key="NSValueTransformerName">PointTransformer</string>
                                                                             </dictionary>
                                                                         </binding>
                                                                     </connections>
