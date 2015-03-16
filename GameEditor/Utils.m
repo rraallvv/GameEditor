@@ -62,7 +62,7 @@ static NSDictionary *degreesTransformer = nil;
 @end
 
 @implementation Property
-@synthesize propertyName, propertyValue, editable;
+@synthesize propertyName = _propertyName, propertyValue = _propertyValue, editable = _editable;
 +(Property *)propertyWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
 	Property *property = [[Property alloc] init];
 	property.propertyName = name;
