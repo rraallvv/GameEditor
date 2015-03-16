@@ -208,9 +208,9 @@
                                                                     <rect key="frame" x="-2" y="1" width="13" height="15"/>
                                                                     <stepperCell key="cell" controlSize="mini" continuous="YES" alignment="left" minValue="-9.2233720368547758e+18" maxValue="9.2233720368547758e+18" id="InT-SD-zPt"/>
                                                                     <connections>
-                                                                        <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.propertyValue" id="5M5-lE-0R9">
+                                                                        <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.propertyValue" id="kPm-HA-UEN">
                                                                             <dictionary key="options">
-                                                                                <string key="NSValueTransformerName">StringToDegreesTransformer</string>
+                                                                                <string key="NSValueTransformerName">DegreesTransformer</string>
                                                                             </dictionary>
                                                                         </binding>
                                                                     </connections>
@@ -228,9 +228,9 @@
                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                     <connections>
-                                                                        <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.propertyValue" id="0OU-z6-iXk">
+                                                                        <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.propertyValue" id="edY-f5-Cs6">
                                                                             <dictionary key="options">
-                                                                                <string key="NSValueTransformerName">StringToDegreesTransformer</string>
+                                                                                <string key="NSValueTransformerName">DegreesTransformer</string>
                                                                             </dictionary>
                                                                         </binding>
                                                                     </connections>
