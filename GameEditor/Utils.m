@@ -63,7 +63,7 @@ static NSDictionary *degreesTransformer = nil;
 
 @implementation Property
 @synthesize propertyName = _propertyName, propertyValue = _propertyValue, editable = _editable;
-+(Property *)propertyWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
++ (Property *)propertyWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
 	Property *property = [[Property alloc] init];
 	property.propertyName = name;
 	property.node = node;
@@ -80,5 +80,13 @@ static NSDictionary *degreesTransformer = nil;
 - (void)dealloc {
 	[self unbind:@"propertyValue"];
 	[self.node unbind:self.propertyName];
+}
+- (void)setX:(float)value {
+	NSPoint point = _propertyValue.pointValue;
+	point.x = value;
+	self.propertyValue = [NSValue valueWithPoint:point];
+}
+- (float)x {
+	return _propertyValue.pointValue.x;
 }
 @end
