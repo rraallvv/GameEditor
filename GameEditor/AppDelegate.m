@@ -52,6 +52,7 @@
 
 	// The bindings
 	SKSpriteNode *sprite = (SKSpriteNode *)[scene childNodeWithName:@"//Spaceship"];
+	Property *positionProperty = [Property propertyWithName:@"position" node:sprite type:@"point"];
 
 	// Bind the individual controls on the left side of the window
 	[_positionTextField bind:@"value" toObject:sprite withKeyPath:@"position" options:[PointTransformer transformer]];
@@ -59,7 +60,7 @@
 	[_pausedButton bind:@"value" toObject:sprite withKeyPath:@"paused" options:nil];
 
 	// Bind the table on the right side of the window
-	[_arrayController addObject: [Property propertyWithName:@"position" node:sprite type:@"point"]];
+	[_arrayController addObject: positionProperty];
 	[_arrayController addObject: [Property propertyWithName:@"zRotation" node:sprite type:@"degrees"]];
 	[_arrayController addObject: [Property propertyWithName:@"paused" node:sprite type:@"bool"]];
 }
