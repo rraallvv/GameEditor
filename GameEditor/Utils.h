@@ -27,4 +27,5 @@
 @property (copy) NSValue *propertyValue;
 @property (nonatomic, assign) BOOL editable;
 @property (copy) NSString *type;
+@property (weak) SKNode *node;
 @end
