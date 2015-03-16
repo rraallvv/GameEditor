@@ -106,12 +106,12 @@ static NSDictionary *stringToDegreesTransformer = nil;
 	return YES;
 }
 - (id)transformedValue:(id)value {
-	Value *result = [Value numberWithFloat:[value floatValue]*M_PI/180];
+	Value *result = [Value numberWithFloat:[value floatValue]/M_PI*180];
 	//NSLog(@">%@", result);
 	return result;
 }
 - (id)reverseTransformedValue:(id)value {
-	NSString *result = [[Value numberWithFloat:[value floatValue]/M_PI*180] stringValue];
+	NSString *result = [[Value numberWithFloat:[value floatValue]*M_PI/180] stringValue];
 	//NSLog(@"<%@", result);
 	return result;
 }
@@ -127,9 +127,6 @@ static NSDictionary *stringToDegreesTransformer = nil;
 	if ([type isEqualToString:@"point"]) {
 		[property bind:@"propertyValue" toObject:node withKeyPath:property.propertyName options:[PointToStringTransformer transformer]];
 		[node bind:property.propertyName toObject:property withKeyPath:@"propertyValue" options:[StringToPointTransformer transformer]];
-	} else if ([type isEqualToString:@"degrees"]) {
-		[property bind:@"propertyValue" toObject:node withKeyPath:property.propertyName options:[DegreesToStringTransformer transformer]];
-		[node bind:property.propertyName toObject:property withKeyPath:@"propertyValue" options:[StringToDegreesTransformer transformer]];
 	} else {
 		[property bind:@"propertyValue" toObject:node withKeyPath:property.propertyName options:nil];
 		[node bind:property.propertyName toObject:property withKeyPath:@"propertyValue" options:nil];
