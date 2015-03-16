@@ -187,7 +187,12 @@
                                                                     </textFieldCell>
                                                                     <connections>
                                                                         <binding destination="2Ss-NZ-lOU" name="editable" keyPath="objectValue.editable" id="58c-am-Cia"/>
-                                                                        <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.propertyValue" id="dwu-zK-EbT"/>
+                                                                        <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.propertyValue" id="pUx-GH-KFd">
+                                                                            <dictionary key="options">
+                                                                                <bool key="NSConditionallySetsHidden" value="YES"/>
+                                                                                <string key="NSValueTransformerName">PointToStringTransformer</string>
+                                                                            </dictionary>
+                                                                        </binding>
                                                                     </connections>
                                                                 </textField>
                                                             </subviews>

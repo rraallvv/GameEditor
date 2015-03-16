@@ -97,13 +97,8 @@ static NSDictionary *stringToDegreesTransformer = nil;
 	property.node = node;
 	property.type = type;
 
-	if ([type isEqualToString:@"point"]) {
-		[property bind:@"propertyValue" toObject:node withKeyPath:property.propertyName options:[PointToStringTransformer transformer]];
-		[node bind:property.propertyName toObject:property withKeyPath:@"propertyValue" options:[StringToPointTransformer transformer]];
-	} else {
-		[property bind:@"propertyValue" toObject:node withKeyPath:property.propertyName options:nil];
-		[node bind:property.propertyName toObject:property withKeyPath:@"propertyValue" options:nil];
-	}
+	[property bind:@"propertyValue" toObject:node withKeyPath:property.propertyName options:nil];
+	[node bind:property.propertyName toObject:property withKeyPath:@"propertyValue" options:nil];
 
 	return property;
 }
