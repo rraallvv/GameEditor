@@ -17,11 +17,7 @@
 + (NSDictionary *)transformer;
 @end
 
-@interface DegreesToStringTransformer : NSValueTransformer
-+ (NSDictionary *)transformer;
-@end
-
-@interface StringToDegreesTransformer : NSValueTransformer
+@interface DegreesTransformer : NSValueTransformer
 + (NSDictionary *)transformer;
 @end
 

@@ -55,7 +55,7 @@
 
 	// Bind the individual controls on the left side of the window
 	[_positionTextField bind:@"value" toObject:sprite withKeyPath:@"position" options:[PointToStringTransformer transformer]];
-	[_rotationTextField bind:@"value" toObject:sprite withKeyPath:@"zRotation" options:[DegreesToStringTransformer transformer]];
+	[_rotationTextField bind:@"value" toObject:sprite withKeyPath:@"zRotation" options:[DegreesTransformer transformer]];
 	[_pausedButton bind:@"value" toObject:sprite withKeyPath:@"paused" options:nil];
 
 	// Bind the table on the right side of the window

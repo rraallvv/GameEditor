@@ -61,42 +61,14 @@ static NSDictionary *stringToPointTransformer = nil;
 }
 @end
 
-static NSDictionary *degreesTostringTransformer = nil;
-
-@implementation DegreesToStringTransformer
-+ (NSDictionary *)transformer {
-	if (degreesTostringTransformer) {
-		return degreesTostringTransformer;
-	} else {
-		return degreesTostringTransformer = @{ NSValueTransformerBindingOption:[[DegreesToStringTransformer alloc] init] };
-	}
-}
-+ (Class)transformedValueClass {
-	return [NSString class];
-}
-+ (BOOL)allowsReverseTransformation {
-	return YES;
-}
-- (id)transformedValue:(id)value {
-	NSString *result = [[NSNumber numberWithFloat:[value floatValue]*180/M_PI] stringValue];
-	//NSLog(@">%@", result);
-	return result;
-}
-- (id)reverseTransformedValue:(id)value {
-	NSNumber *result = [NSNumber numberWithFloat:[value floatValue]*M_PI/180];
-	//NSLog(@"<%@", result);
-	return result;
-}
-@end
-
 static NSDictionary *stringToDegreesTransformer = nil;
 
-@implementation StringToDegreesTransformer
+@implementation DegreesTransformer
 + (NSDictionary *)transformer {
 	if (stringToDegreesTransformer) {
 		return stringToDegreesTransformer;
 	} else {
-		return stringToDegreesTransformer = @{ NSValueTransformerBindingOption:[[StringToDegreesTransformer alloc] init] };
+		return stringToDegreesTransformer = @{ NSValueTransformerBindingOption:[[DegreesTransformer alloc] init] };
 	}
 }
 + (Class)transformedValueClass {
