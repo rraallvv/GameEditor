@@ -27,8 +27,8 @@
 @end
 
 @interface Property : NSObject
-+(Property *)propertyWithKey:(NSString *)key node:(SKNode* )node type:(NSString *)type;
-@property (copy) NSString *key;
++(Property *)propertyWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
+@property (copy) NSString *propertyName;
 @property (copy) Value *propertyValue;
 @property (nonatomic, assign) BOOL editable;
 @property (copy) NSString *type;
