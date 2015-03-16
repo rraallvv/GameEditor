@@ -114,7 +114,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="56m-Ws-rUR">
-                                <rect key="frame" x="492" y="502" width="288" height="78"/>
+                                <rect key="frame" x="492" y="20" width="288" height="560"/>
                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="FaY-Zo-UUU">
                                     <rect key="frame" x="1" y="0.0" width="238" height="134"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -320,7 +320,6 @@
                                 </clipView>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="288" id="AfL-V6-WS7"/>
-                                    <constraint firstAttribute="height" constant="78" id="Ptp-os-99n"/>
                                 </constraints>
                                 <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="MYI-EJ-rdi">
                                     <rect key="frame" x="1" y="119" width="223" height="15"/>
@@ -384,8 +383,9 @@
                             </textField>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="56m-Ws-rUR" firstAttribute="top" secondItem="BAm-0B-vb9" secondAttribute="top" constant="20" id="GTK-yR-dP1"/>
-                            <constraint firstAttribute="trailing" secondItem="56m-Ws-rUR" secondAttribute="trailing" constant="20" id="YTu-Al-hZs"/>
+                            <constraint firstItem="56m-Ws-rUR" firstAttribute="top" secondItem="BAm-0B-vb9" secondAttribute="top" constant="20" symbolic="YES" id="GTK-yR-dP1"/>
+                            <constraint firstAttribute="trailing" secondItem="56m-Ws-rUR" secondAttribute="trailing" constant="20" symbolic="YES" id="YTu-Al-hZs"/>
+                            <constraint firstAttribute="bottom" secondItem="56m-Ws-rUR" secondAttribute="bottom" constant="20" symbolic="YES" id="v7h-qK-qkk"/>
                         </constraints>
                     </customView>
                 </subviews>
