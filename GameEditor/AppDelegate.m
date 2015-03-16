@@ -59,9 +59,9 @@
 	[_pausedButton bind:@"value" toObject:sprite withKeyPath:@"paused" options:nil];
 
 	// Bind the table on the right side of the window
-	[_arrayController addObject: [Property propertyWithKey:@"position" node:sprite type:@"point"]];
-	[_arrayController addObject: [Property propertyWithKey:@"zRotation" node:sprite type:@"degrees"]];
-	[_arrayController addObject: [Property propertyWithKey:@"paused" node:sprite type:@"bool"]];
+	[_arrayController addObject: [Property propertyWithName:@"position" node:sprite type:@"point"]];
+	[_arrayController addObject: [Property propertyWithName:@"zRotation" node:sprite type:@"degrees"]];
+	[_arrayController addObject: [Property propertyWithName:@"paused" node:sprite type:@"bool"]];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {

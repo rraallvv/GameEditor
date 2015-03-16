@@ -118,21 +118,21 @@ static NSDictionary *stringToDegreesTransformer = nil;
 @end
 
 @implementation Property
-@synthesize key, propertyValue, editable;
-+(Property *)propertyWithKey:(NSString *)key node:(SKNode* )node type:(NSString *)type {
+@synthesize propertyName, propertyValue, editable;
++(Property *)propertyWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
 	Property *property = [[Property alloc] init];
-	property.key = key;
+	property.propertyName = name;
 	property.type = type;
 
 	if ([type isEqualToString:@"point"]) {
-		[property bind:@"propertyValue" toObject:node withKeyPath:property.key options:[PointToStringTransformer transformer]];
-		[node bind:property.key toObject:property withKeyPath:@"propertyValue" options:[StringToPointTransformer transformer]];
+		[property bind:@"propertyValue" toObject:node withKeyPath:property.propertyName options:[PointToStringTransformer transformer]];
+		[node bind:property.propertyName toObject:property withKeyPath:@"propertyValue" options:[StringToPointTransformer transformer]];
 	} else if ([type isEqualToString:@"degrees"]) {
-		[property bind:@"propertyValue" toObject:node withKeyPath:property.key options:[DegreesToStringTransformer transformer]];
-		[node bind:property.key toObject:property withKeyPath:@"propertyValue" options:[StringToDegreesTransformer transformer]];
+		[property bind:@"propertyValue" toObject:node withKeyPath:property.propertyName options:[DegreesToStringTransformer transformer]];
+		[node bind:property.propertyName toObject:property withKeyPath:@"propertyValue" options:[StringToDegreesTransformer transformer]];
 	} else {
-		[property bind:@"propertyValue" toObject:node withKeyPath:property.key options:nil];
-		[node bind:property.key toObject:property withKeyPath:@"propertyValue" options:nil];
+		[property bind:@"propertyValue" toObject:node withKeyPath:property.propertyName options:nil];
+		[node bind:property.propertyName toObject:property withKeyPath:@"propertyValue" options:nil];
 	}
 
 	return property;
