@@ -187,7 +187,7 @@
                                                                     </textFieldCell>
                                                                     <connections>
                                                                         <binding destination="2Ss-NZ-lOU" name="editable" keyPath="objectValue.editable" id="58c-am-Cia"/>
-                                                                        <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.propertyValue" id="2H3-jX-fw3"/>
+                                                                        <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.propertyValue" id="dwu-zK-EbT"/>
                                                                     </connections>
                                                                 </textField>
                                                             </subviews>
@@ -208,7 +208,11 @@
                                                                     <rect key="frame" x="-2" y="1" width="13" height="15"/>
                                                                     <stepperCell key="cell" controlSize="mini" continuous="YES" alignment="left" minValue="-360" maxValue="360" id="InT-SD-zPt"/>
                                                                     <connections>
-                                                                        <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.propertyValue" id="Eha-Y8-p2c"/>
+                                                                        <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.propertyValue" id="5M5-lE-0R9">
+                                                                            <dictionary key="options">
+                                                                                <string key="NSValueTransformerName">StringToDegreesTransformer</string>
+                                                                            </dictionary>
+                                                                        </binding>
                                                                     </connections>
                                                                 </stepper>
                                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fV5-EB-vtf">
@@ -226,7 +230,11 @@
                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                     <connections>
-                                                                        <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.propertyValue" id="R09-b9-38b"/>
+                                                                        <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.propertyValue" id="0OU-z6-iXk">
+                                                                            <dictionary key="options">
+                                                                                <string key="NSValueTransformerName">StringToDegreesTransformer</string>
+                                                                            </dictionary>
+                                                                        </binding>
                                                                     </connections>
                                                                 </textField>
                                                             </subviews>
