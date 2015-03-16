@@ -5,6 +5,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <SpriteKit/SpriteKit.h>
+#import "Utils.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> 
 

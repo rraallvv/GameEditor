@@ -16,13 +16,13 @@ static NSDictionary *pointTransformer = nil;
 	}
 }
 + (Class)transformedValueClass {
-	return [NSString class];
+	return [NSValue class];
 }
 + (BOOL)allowsReverseTransformation {
 	return YES;
 }
 - (id)transformedValue:(id)value {
-	NSString *result = NSStringFromPoint([value pointValue]);
+	NSValue *result = value;
 	//NSLog(@">%@", result);
 	return result;
 }

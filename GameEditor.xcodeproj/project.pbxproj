@@ -90,8 +90,8 @@
 				E4ABDB531AB3933900AAE82E /* GameScene.m */,
 				E4ABDB701AB3BCA700AAE82E /* Utils.h */,
 				E4ABDB711AB3BCA700AAE82E /* Utils.m */,
-				E4ABDB551AB3933900AAE82E /* GameScene.sks */,
 				E4ABDB591AB3933900AAE82E /* MainMenu.xib */,
+				E4ABDB551AB3933900AAE82E /* GameScene.sks */,
 				E4ABDB571AB3933900AAE82E /* Images.xcassets */,
 				E4ABDB4B1AB3933900AAE82E /* Supporting Files */,
 			);
