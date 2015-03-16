@@ -5,14 +5,14 @@
 
 #import "Utils.h"
 
-static NSDictionary *pointToStringTransformer = nil;
+static NSDictionary *pointTransformer = nil;
 
-@implementation PointToStringTransformer
+@implementation PointTransformer
 + (NSDictionary *)transformer {
-	if (pointToStringTransformer) {
-		return pointToStringTransformer;
+	if (pointTransformer) {
+		return pointTransformer;
 	} else {
-		return pointToStringTransformer = @{ NSValueTransformerBindingOption:[[PointToStringTransformer alloc] init] };
+		return pointTransformer = @{ NSValueTransformerBindingOption:[[PointTransformer alloc] init] };
 	}
 }
 + (Class)transformedValueClass {
@@ -33,42 +33,14 @@ static NSDictionary *pointToStringTransformer = nil;
 }
 @end
 
-static NSDictionary *stringToPointTransformer = nil;
-
-@implementation StringToPointTransformer
-+ (NSDictionary *)transformer {
-	if (stringToPointTransformer) {
-		return stringToPointTransformer;
-	} else {
-		return stringToPointTransformer = @{ NSValueTransformerBindingOption:[[StringToPointTransformer alloc] init] };
-	}
-}
-+ (Class)transformedValueClass {
-	return [NSValue class];
-}
-+ (BOOL)allowsReverseTransformation {
-	return YES;
-}
-- (id)transformedValue:(id)value {
-	NSValue *result = [NSValue valueWithPoint:NSPointFromString(value)];
-	//NSLog(@">%@", result);
-	return result;
-}
-- (id)reverseTransformedValue:(id)value {
-	NSString *result = NSStringFromPoint([value pointValue]);
-	//NSLog(@"<%@", result);
-	return result;
-}
-@end
-
-static NSDictionary *stringToDegreesTransformer = nil;
+static NSDictionary *degreesTransformer = nil;
 
 @implementation DegreesTransformer
 + (NSDictionary *)transformer {
-	if (stringToDegreesTransformer) {
-		return stringToDegreesTransformer;
+	if (degreesTransformer) {
+		return degreesTransformer;
 	} else {
-		return stringToDegreesTransformer = @{ NSValueTransformerBindingOption:[[DegreesTransformer alloc] init] };
+		return degreesTransformer = @{ NSValueTransformerBindingOption:[[DegreesTransformer alloc] init] };
 	}
 }
 + (Class)transformedValueClass {

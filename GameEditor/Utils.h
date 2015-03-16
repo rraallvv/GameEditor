@@ -9,11 +9,7 @@
 
 #define NSLog(FORMAT, ...) fprintf( stderr, "%s\n", [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String])
 
-@interface PointToStringTransformer : NSValueTransformer
-+ (NSDictionary *)transformer;
-@end
-
-@interface StringToPointTransformer : NSValueTransformer
+@interface PointTransformer : NSValueTransformer
 + (NSDictionary *)transformer;
 @end
 
