@@ -27,7 +27,7 @@ static NSDictionary *pointToStringTransformer = nil;
 	return result;
 }
 - (id)reverseTransformedValue:(id)value {
-	Value *result = [Value valueWithPoint:NSPointFromString(value)];
+	NSValue *result = [NSValue valueWithPoint:NSPointFromString(value)];
 	//NSLog(@"<%@", result);
 	return result;
 }
@@ -44,13 +44,13 @@ static NSDictionary *stringToPointTransformer = nil;
 	}
 }
 + (Class)transformedValueClass {
-	return [Value class];
+	return [NSValue class];
 }
 + (BOOL)allowsReverseTransformation {
 	return YES;
 }
 - (id)transformedValue:(id)value {
-	Value *result = [Value valueWithPoint:NSPointFromString(value)];
+	NSValue *result = [NSValue valueWithPoint:NSPointFromString(value)];
 	//NSLog(@">%@", result);
 	return result;
 }
@@ -78,12 +78,12 @@ static NSDictionary *degreesTostringTransformer = nil;
 	return YES;
 }
 - (id)transformedValue:(id)value {
-	NSString *result = [[Value numberWithFloat:[value floatValue]*180/M_PI] stringValue];
+	NSString *result = [[NSNumber numberWithFloat:[value floatValue]*180/M_PI] stringValue];
 	//NSLog(@">%@", result);
 	return result;
 }
 - (id)reverseTransformedValue:(id)value {
-	Value *result = [Value numberWithFloat:[value floatValue]*M_PI/180];
+	NSNumber *result = [NSNumber numberWithFloat:[value floatValue]*M_PI/180];
 	//NSLog(@"<%@", result);
 	return result;
 }
@@ -100,18 +100,18 @@ static NSDictionary *stringToDegreesTransformer = nil;
 	}
 }
 + (Class)transformedValueClass {
-	return [Value class];
+	return [NSValue class];
 }
 + (BOOL)allowsReverseTransformation {
 	return YES;
 }
 - (id)transformedValue:(id)value {
-	Value *result = [Value numberWithFloat:[value floatValue]/M_PI*180];
+	NSNumber *result = [NSNumber numberWithFloat:[value floatValue]/M_PI*180];
 	//NSLog(@">%@", result);
 	return result;
 }
 - (id)reverseTransformedValue:(id)value {
-	Value *result = [Value numberWithFloat:[value floatValue]*M_PI/180];
+	NSNumber *result = [NSNumber numberWithFloat:[value floatValue]*M_PI/180];
 	//NSLog(@"<%@", result);
 	return result;
 }

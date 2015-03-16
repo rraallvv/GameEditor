@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E42243041AB631E1009EA7C9 /* Value.m in Sources */ = {isa = PBXBuildFile; fileRef = E42243031AB631E1009EA7C9 /* Value.m */; };
 		E4ABDB4F1AB3933900AAE82E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */; };
 		E4ABDB511AB3933900AAE82E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB501AB3933900AAE82E /* main.m */; };
 		E4ABDB541AB3933900AAE82E /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB531AB3933900AAE82E /* GameScene.m */; };
@@ -29,8 +28,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E42243021AB631E1009EA7C9 /* Value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Value.h; sourceTree = "<group>"; };
-		E42243031AB631E1009EA7C9 /* Value.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Value.m; sourceTree = "<group>"; };
 		E4ABDB481AB3933900AAE82E /* GameEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4ABDB4C1AB3933900AAE82E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4ABDB4D1AB3933900AAE82E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -93,8 +90,6 @@
 				E4ABDB531AB3933900AAE82E /* GameScene.m */,
 				E4ABDB701AB3BCA700AAE82E /* Utils.h */,
 				E4ABDB711AB3BCA700AAE82E /* Utils.m */,
-				E42243021AB631E1009EA7C9 /* Value.h */,
-				E42243031AB631E1009EA7C9 /* Value.m */,
 				E4ABDB551AB3933900AAE82E /* GameScene.sks */,
 				E4ABDB591AB3933900AAE82E /* MainMenu.xib */,
 				E4ABDB571AB3933900AAE82E /* Images.xcassets */,
@@ -231,7 +226,6 @@
 				E4ABDB511AB3933900AAE82E /* main.m in Sources */,
 				E4ABDB541AB3933900AAE82E /* GameScene.m in Sources */,
 				E4ABDB761AB47BB700AAE82E /* Utils.m in Sources */,
-				E42243041AB631E1009EA7C9 /* Value.m in Sources */,
 				E4ABDB4F1AB3933900AAE82E /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
