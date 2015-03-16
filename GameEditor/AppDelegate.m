@@ -55,7 +55,7 @@
 	Property *positionProperty = [Property propertyWithName:@"position" node:sprite type:@"point"];
 
 	// Bind the individual controls on the left side of the window
-	[_positionTextField bind:@"value" toObject:sprite withKeyPath:@"position" options:[PointTransformer transformer]];
+	[_positionTextField bind:@"value" toObject:positionProperty withKeyPath:@"x" options:nil];
 	[_rotationTextField bind:@"value" toObject:sprite withKeyPath:@"zRotation" options:[DegreesTransformer transformer]];
 	[_pausedButton bind:@"value" toObject:sprite withKeyPath:@"paused" options:nil];
 

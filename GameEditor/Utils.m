@@ -91,4 +91,15 @@ static NSDictionary *degreesTransformer = nil;
 - (float)x {
 	return _propertyValue.pointValue.x;
 }
+- (void)setPropertyValue:(NSValue *)propertyValue {
+	NSPoint point = propertyValue.pointValue;
+	float value = self.x;
+	if (value != point.x) {
+		self.x = value;
+	}
+	_propertyValue = propertyValue;
+}
+- (NSValue *)propertyValue {
+	return _propertyValue;
+}
 @end
