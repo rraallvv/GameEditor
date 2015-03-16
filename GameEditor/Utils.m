@@ -94,6 +94,7 @@ static NSDictionary *stringToDegreesTransformer = nil;
 +(Property *)propertyWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
 	Property *property = [[Property alloc] init];
 	property.propertyName = name;
+	property.node = node;
 	property.type = type;
 
 	if ([type isEqualToString:@"point"]) {
@@ -108,5 +109,9 @@ static NSDictionary *stringToDegreesTransformer = nil;
 }
 - (BOOL)editable {
 	return YES;
+}
+- (void)dealloc {
+	[self unbind:@"propertyValue"];
+	[self.node unbind:self.propertyName];
 }
 @end
