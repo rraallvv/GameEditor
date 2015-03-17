@@ -139,4 +139,18 @@
 									forKeyPath:bindingInfo[NSObservedKeyPathKey]];
 }
 
+- (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
+	NSImage *increaseButtonImage = [NSImage imageNamed:NSImageNameAddTemplate];
+	NSRect increaseButtonRect = [self calculateButonRectWithImage:increaseButtonImage];
+	increaseButtonRect.origin.x = self.frame.size.width - increaseButtonRect.size.width - (self.frame.size.height - increaseButtonRect.size.height)/2;
+	increaseButtonRect.origin.y = (self.frame.size.height - increaseButtonRect.size.height)/2;
+	[_increaseButton setFrame:increaseButtonRect];
+
+	NSImage *decreseButtonImage = [NSImage imageNamed:NSImageNameRemoveTemplate];
+	NSRect decreaseButtonRect = [self calculateButonRectWithImage:decreseButtonImage];
+	decreaseButtonRect.origin.x = (self.frame.size.height - increaseButtonRect.size.height)/2;
+	decreaseButtonRect.origin.y = (self.frame.size.height - decreaseButtonRect.size.height)/2;
+	[_decreaseButton setFrame:decreaseButtonRect];
+}
+
 @end
