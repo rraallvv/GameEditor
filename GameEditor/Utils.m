@@ -44,18 +44,18 @@ static NSDictionary *degreesTransformer = nil;
 	}
 }
 + (Class)transformedValueClass {
-	return [NSValue class];
+	return [NSNumber class];
 }
 + (BOOL)allowsReverseTransformation {
 	return YES;
 }
-- (id)transformedValue:(id)value {
-	NSNumber *result = [NSNumber numberWithFloat:[value floatValue]/M_PI*180];
+- (id)transformedValue:(NSNumber *)value {
+	NSNumber *result = @(value.floatValue*180/M_PI);
 	//NSLog(@">%@", result);
 	return result;
 }
-- (id)reverseTransformedValue:(id)value {
-	NSNumber *result = [NSNumber numberWithFloat:[value floatValue]*M_PI/180];
+- (id)reverseTransformedValue:(NSNumber *)value {
+	NSNumber *result = @(value.floatValue*M_PI/180);
 	//NSLog(@"<%@", result);
 	return result;
 }
