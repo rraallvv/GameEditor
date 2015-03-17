@@ -342,9 +342,9 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5FH-Xw-8oN" userLabel="Rotation Field">
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZGu-1S-3o1" customClass="TextField">
                                 <rect key="frame" x="87" y="530" width="96" height="22"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="54X-9G-YVT">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="OUc-Uu-0M4">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -381,6 +381,14 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Att-Fs-ZcA" customClass="TextField">
+                                <rect key="frame" x="87" y="530" width="96" height="22"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="XmU-b4-vHa">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="56m-Ws-rUR" firstAttribute="top" secondItem="BAm-0B-vb9" secondAttribute="top" constant="20" symbolic="YES" id="GTK-yR-dP1"/>
@@ -403,7 +411,7 @@
                 <outlet property="_arrayController" destination="MHP-mB-ED2" id="WIV-gD-tYo"/>
                 <outlet property="_pausedButton" destination="wGl-ny-oTz" id="xLR-th-SlE"/>
                 <outlet property="_positionTextField" destination="GNd-ot-ftd" id="Heo-Os-YtE"/>
-                <outlet property="_rotationTextField" destination="5FH-Xw-8oN" id="Fey-we-M6r"/>
+                <outlet property="_rotationTextField" destination="Att-Fs-ZcA" id="hBr-uq-jRj"/>
                 <outlet property="_tableView" destination="tum-wb-Po7" id="pz9-7M-hmt"/>
                 <outlet property="skView" destination="BAm-0B-vb9" id="MCo-T6-F5E"/>
                 <outlet property="window" destination="371" id="532"/>
