@@ -6,7 +6,7 @@
 #import "TextField.h"
 #import <AppKit/AppKit.h>
 
-#define PADDING_MARGIN 20
+#define PADDING_MARGIN 10
 
 @interface TextFieldCell : NSTextFieldCell
 @end
@@ -68,27 +68,21 @@
 	NSButton *_decreaseButton;
 }
 
-+ (void)load {
-	[self setCellClass:[TextFieldCell class]];
-}
-
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
 
 		/* Change the class of the cell to TextFieldCell */
-		NSTextField *oldCell = self.cell;
-		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:oldCell];
 
-		NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+		NSTextField *oldCell = self.cell;
+
+		NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:[NSKeyedArchiver archivedDataWithRootObject:oldCell]];
 		[arch setClass:[TextFieldCell class] forClassName:@"NSTextFieldCell"];
 		TextFieldCell *cell = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
 		[arch finishDecoding];
 
-		[self setCell:cell];
+		self.cell = cell;
 
-
-		self.alignment = NSCenterTextAlignment;
-		self.drawsBackground = NO;
+		/* Add the increase button for the stepper */
 
 		NSImage *increaseButtonImage = [NSImage imageNamed:NSImageNameAddTemplate];
 		NSRect increaseButtonRect = [self calculateButonRectWithImage:increaseButtonImage];
@@ -105,6 +99,8 @@
 		_increaseButton.target = self;
 		_increaseButton.action = @selector(increaseButtonPressed);
 		[self addSubview: _increaseButton];
+
+		/* Add the decrease button for the stepper */
 
 		NSImage *decreseButtonImage = [NSImage imageNamed:NSImageNameRemoveTemplate];
 		NSRect decreaseButtonRect = [self calculateButonRectWithImage:decreseButtonImage];
@@ -150,6 +146,10 @@
 
 - (void)mouseDown:(NSEvent *)theEvent {
 	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
+
+	NSWindow *window = [[NSApplication sharedApplication] windows].firstObject;
+	[window makeFirstResponder:self];
+
 	if (NSPointInRect(locationInView, _increaseButton.frame)) {
 		[_increaseButton mouseDown:theEvent];
 	}
@@ -219,7 +219,23 @@
 
 - (void)updateBindingValue {
 	NSDictionary *bindingInfo = [self infoForBinding: NSValueBinding];
-	[bindingInfo[NSObservedObjectKey] setValue:@(self.floatValue) forKeyPath:bindingInfo[NSObservedKeyPathKey]];
+
+	NSNumber *value = @(self.floatValue);
+
+	//apply the value transformer, if one has been set
+	NSDictionary* bindingOptions = bindingInfo[NSOptionsKey];
+	if(bindingOptions){
+		NSValueTransformer* transformer = bindingOptions[NSValueTransformerBindingOption];
+		if(transformer && (id)transformer != [NSNull null]){
+			if([[transformer class] allowsReverseTransformation]){
+				value = [transformer reverseTransformedValue:value];
+			} else {
+				NSLog(@"WARNING: binding \"%@\" has value transformer, but it doesn't allow reverse transformations in %s", NSValueBinding, __PRETTY_FUNCTION__);
+			}
+		}
+	}
+
+	[bindingInfo[NSObservedObjectKey] setValue:value forKeyPath:bindingInfo[NSObservedKeyPathKey]];
 }
 
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
