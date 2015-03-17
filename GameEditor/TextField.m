@@ -6,6 +6,62 @@
 #import "TextField.h"
 #import <AppKit/AppKit.h>
 
+#define PADDING_MARGIN 20
+
+@interface TextFieldCell : NSTextFieldCell
+@end
+
+@implementation TextFieldCell
+
+//Function will create rect for title
+//Any padding implemented in this function will be visible in title of textfieldcell
+
+- (NSRect)titleRectForBounds:(NSRect)theRect {
+
+	NSRect titleRect = [super titleRectForBounds:theRect];
+
+	//Padding on left side
+	titleRect.origin.x = PADDING_MARGIN;
+
+	//Padding on right side
+	titleRect.size.width -= (2 * PADDING_MARGIN);
+
+	//Vertically center the title
+	NSAttributedString *attrString = self.attributedStringValue;
+
+	NSRect textRect = [attrString boundingRectWithSize: titleRect.size options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin ];
+	if (textRect.size.height < titleRect.size.height) {
+		titleRect.origin.y = theRect.origin.y + (theRect.size.height - textRect.size.height) / 2.0;
+		titleRect.size.height = textRect.size.height;
+	}
+
+	return titleRect;
+}
+
+//Any padding implemented in this function will be visible while editing text in textfieldcell
+//If Padding is not done here, padding done for title will not be visible while editing
+
+- (void)editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent {
+	NSRect titleRect = [self titleRectForBounds:aRect];
+	[super editWithFrame: titleRect inView: controlView editor:textObj delegate:anObject event: theEvent];
+}
+
+//Any padding implemented in this function will be visible while selecting text in textfieldcell
+//If Padding is not done here, padding done for title will not be visible while selecting text
+
+- (void)selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength {
+	NSRect titleRect = [self titleRectForBounds:aRect];
+	[super selectWithFrame: titleRect inView: controlView editor:textObj delegate:anObject start:selStart length:selLength];
+}
+
+- (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView*)controlView {
+	NSRect titleRect = [self titleRectForBounds:cellFrame];
+	[[self attributedStringValue] drawInRect:titleRect];
+}
+
+@end
+
+
 @implementation TextField {
 	CGFloat _lastPosition;
 	NSButton *_increaseButton;
@@ -14,12 +70,28 @@
 
 @synthesize degrees = _degrees;
 
+
++ (void)load {
+	[self setCellClass:[TextFieldCell class]];
+}
+
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
+
+#if 1
+		TextFieldCell *cell = [[TextFieldCell alloc] init];
+		cell.selectable = YES;
+		cell.scrollable = YES;
+		cell.editable = YES;
+		cell.drawsBackground = YES;
+		cell.alignment = NSCenterTextAlignment;
+		[self setCell:cell];
+#endif
+
 		self.degrees = NO;
 
 		self.alignment = NSCenterTextAlignment;
-		self.drawsBackground = NO;
+		self.drawsBackground = YES;
 
 		NSImage *increaseButtonImage = [NSImage imageNamed:NSImageNameAddTemplate];
 		NSRect increaseButtonRect = [self calculateButonRectWithImage:increaseButtonImage];
