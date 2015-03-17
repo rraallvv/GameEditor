@@ -78,16 +78,18 @@
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
 
-#if 1
-		TextFieldCell *cell = [[TextFieldCell alloc] init];
-		cell.selectable = YES;
-		cell.scrollable = YES;
-		cell.editable = YES;
-		cell.drawsBackground = NO;
-		cell.alignment = NSCenterTextAlignment;
-		[self setCell:cell];
-#endif
+		/* Change the class of the cell to TextFieldCell */
+		NSTextField *oldCell = self.cell;
+		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:oldCell];
 
+		NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+		[arch setClass:[TextFieldCell class] forClassName:@"NSTextFieldCell"];
+		TextFieldCell *cell = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
+		[arch finishDecoding];
+
+		[self setCell:cell];
+
+		
 		self.degrees = NO;
 
 		self.alignment = NSCenterTextAlignment;
