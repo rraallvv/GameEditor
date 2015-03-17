@@ -134,6 +134,7 @@
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
+	/*
 	NSRect blackOutlineFrame = NSMakeRect(0.0, 0.0, [self bounds].size.width, [self bounds].size.height-1.0);
 	NSGradient *gradient = nil;
 	if ([NSApp isActive]) {
@@ -143,8 +144,10 @@
 		gradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:0.55 alpha:1.0] endingColor:[NSColor colorWithCalibratedWhite:0.558 alpha:1.0]];
 	}
 
-	[gradient drawInBezierPath:[NSBezierPath bezierPathWithRoundedRect:blackOutlineFrame xRadius:10 yRadius:10] angle:90];
+	CGFloat radius = MIN([self bounds].size.height/2, 10);
 
+	[gradient drawInBezierPath:[NSBezierPath bezierPathWithRoundedRect:blackOutlineFrame xRadius:radius yRadius:radius] angle:90];
+	 */
 	[super drawRect:dirtyRect];
 }
 
