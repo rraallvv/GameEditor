@@ -83,7 +83,7 @@
 		cell.selectable = YES;
 		cell.scrollable = YES;
 		cell.editable = YES;
-		cell.drawsBackground = YES;
+		cell.drawsBackground = NO;
 		cell.alignment = NSCenterTextAlignment;
 		[self setCell:cell];
 #endif
@@ -91,7 +91,7 @@
 		self.degrees = NO;
 
 		self.alignment = NSCenterTextAlignment;
-		self.drawsBackground = YES;
+		self.drawsBackground = NO;
 
 		NSImage *increaseButtonImage = [NSImage imageNamed:NSImageNameAddTemplate];
 		NSRect increaseButtonRect = [self calculateButonRectWithImage:increaseButtonImage];
@@ -134,9 +134,18 @@
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
-    [super drawRect:dirtyRect];
-    
-    // Drawing code here.
+	NSRect blackOutlineFrame = NSMakeRect(0.0, 0.0, [self bounds].size.width, [self bounds].size.height-1.0);
+	NSGradient *gradient = nil;
+	if ([NSApp isActive]) {
+		gradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:0.24 alpha:1.0] endingColor:[NSColor colorWithCalibratedWhite:0.374 alpha:1.0]];
+	}
+	else {
+		gradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:0.55 alpha:1.0] endingColor:[NSColor colorWithCalibratedWhite:0.558 alpha:1.0]];
+	}
+
+	[gradient drawInBezierPath:[NSBezierPath bezierPathWithRoundedRect:blackOutlineFrame xRadius:10 yRadius:10] angle:90];
+
+	[super drawRect:dirtyRect];
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
