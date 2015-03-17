@@ -68,9 +68,6 @@
 	NSButton *_decreaseButton;
 }
 
-@synthesize degrees = _degrees;
-
-
 + (void)load {
 	[self setCellClass:[TextFieldCell class]];
 }
@@ -89,8 +86,6 @@
 
 		[self setCell:cell];
 
-		
-		self.degrees = NO;
 
 		self.alignment = NSCenterTextAlignment;
 		self.drawsBackground = NO;
@@ -223,10 +218,8 @@
 }
 
 - (void)updateBindingValue {
-	NSNumber *value = self.degrees ? @(self.floatValue*M_PI/180) : @(self.floatValue);
 	NSDictionary *bindingInfo = [self infoForBinding: NSValueBinding];
-	[bindingInfo[NSObservedObjectKey] setValue:value
-									forKeyPath:bindingInfo[NSObservedKeyPathKey]];
+	[bindingInfo[NSObservedObjectKey] setValue:@(self.floatValue) forKeyPath:bindingInfo[NSObservedKeyPathKey]];
 }
 
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
@@ -241,23 +234,6 @@
 	decreaseButtonRect.origin.x = (self.frame.size.height - increaseButtonRect.size.height)/2;
 	decreaseButtonRect.origin.y = (self.frame.size.height - decreaseButtonRect.size.height)/2;
 	[_decreaseButton setFrame:decreaseButtonRect];
-}
-
-- (void)setDegrees:(BOOL)degrees {
-	if (degrees) {
-		self.formatter = [[NSNumberFormatter alloc] init];
-		//[self.formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-		[self.formatter setPositiveFormat:@"#.##º"];
-		[self.formatter setNegativeFormat:@"#.##º"];
-	} else {
-		self.formatter = [[NSNumberFormatter alloc] init];
-		[self.formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-	}
-	_degrees = degrees;
-}
-
-- (BOOL)degrees {
-	return _degrees;
 }
 
 @end
