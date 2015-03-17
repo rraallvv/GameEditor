@@ -12,13 +12,14 @@
 	NSButton *_decreaseButton;
 }
 
+@synthesize degrees = _degrees;
+
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
+		self.degrees = NO;
+
 		self.alignment = NSCenterTextAlignment;
 		self.drawsBackground = NO;
-
-		self.formatter = [[NSNumberFormatter alloc] init];
-		[self.formatter setNumberStyle:NSNumberFormatterDecimalStyle];
 
 		NSImage *increaseButtonImage = [NSImage imageNamed:NSImageNameAddTemplate];
 		NSRect increaseButtonRect = [self calculateButonRectWithImage:increaseButtonImage];
@@ -127,15 +128,18 @@
 
 - (void)increaseButtonPressed {
 	self.floatValue += 1;
-	NSDictionary *bindingInfo = [self infoForBinding: NSValueBinding];
-	[bindingInfo[NSObservedObjectKey] setValue:@(self.floatValue*M_PI/180)
-									forKeyPath:bindingInfo[NSObservedKeyPathKey]];
+	[self updateBindingValue];
 }
 
 - (void)decreaseButtonPressed {
 	self.floatValue -= 1;
+	[self updateBindingValue];
+}
+
+- (void)updateBindingValue {
+	NSNumber *value = self.degrees ? @(self.floatValue*M_PI/180) : @(self.floatValue);
 	NSDictionary *bindingInfo = [self infoForBinding: NSValueBinding];
-	[bindingInfo[NSObservedObjectKey] setValue:@(self.floatValue*M_PI/180)
+	[bindingInfo[NSObservedObjectKey] setValue:value
 									forKeyPath:bindingInfo[NSObservedKeyPathKey]];
 }
 
@@ -151,6 +155,23 @@
 	decreaseButtonRect.origin.x = (self.frame.size.height - increaseButtonRect.size.height)/2;
 	decreaseButtonRect.origin.y = (self.frame.size.height - decreaseButtonRect.size.height)/2;
 	[_decreaseButton setFrame:decreaseButtonRect];
+}
+
+- (void)setDegrees:(BOOL)degrees {
+	if (degrees) {
+		self.formatter = [[NSNumberFormatter alloc] init];
+		//[self.formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+		[self.formatter setPositiveFormat:@"#.##º"];
+		[self.formatter setNegativeFormat:@"#.##º"];
+	} else {
+		self.formatter = [[NSNumberFormatter alloc] init];
+		[self.formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+	}
+	_degrees = degrees;
+}
+
+- (BOOL)degrees {
+	return _degrees;
 }
 
 @end
