@@ -22,7 +22,6 @@ IB_DESIGNABLE
 
 //Function will create rect for title
 //Any padding implemented in this function will be visible in title of textfieldcell
-
 - (NSRect)titleRectForBounds:(NSRect)theRect {
 
 	NSRect titleRect = [super titleRectForBounds:theRect];
@@ -53,22 +52,26 @@ IB_DESIGNABLE
 	[super editWithFrame: titleRect inView: controlView editor:textObj delegate:anObject event: theEvent];
 }
 
-//Any padding implemented in this function will be visible while selecting text in textfieldcell
-//If Padding is not done here, padding done for title will not be visible while selecting text
-
+// Editing padding
 - (void)selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength {
 	NSRect titleRect = [self titleRectForBounds:aRect];
 	[super selectWithFrame: titleRect inView: controlView editor:textObj delegate:anObject start:selStart length:selLength];
 }
 
-- (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView*)controlView {
+- (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
 	NSRect titleRect = [self titleRectForBounds:cellFrame];
 	[[self attributedStringValue] drawInRect:titleRect];
 }
 
+// Normal padding
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
 	NSRect titleRect = [self titleRectForBounds:cellFrame];
 	[[self attributedStringValue] drawInRect:titleRect];
+}
+
+- (void)highlight:(BOOL)flag withFrame:(NSRect)cellFrame inView:(NSView *)controlView {
+	NSRect titleRect = [self titleRectForBounds:cellFrame];
+	[[self attributedStringValue] drawInRect:cellFrame];
 }
 
 @end
