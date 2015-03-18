@@ -146,8 +146,7 @@ alternateDec = _alternateDecreaseImage;
 
 	if (NSPointInRect(locationInView, _increaseButtonRect)) {
 		[self increaseButtonPressed];
-	}
-	if (NSPointInRect(locationInView, _decreaseButtonRect)) {
+	} else if (NSPointInRect(locationInView, _decreaseButtonRect)) {
 		[self decreaseButtonPressed];
 	}
 	return;
