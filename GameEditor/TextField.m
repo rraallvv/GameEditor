@@ -85,6 +85,8 @@ IB_DESIGNABLE
 
 		/* Add the increase button for the stepper */
 
+		self.increment = 1;
+
 		NSImage *increaseButtonImage = [NSImage imageNamed:NSImageNameAddTemplate];
 		NSRect increaseButtonRect = [self calculateButonRectWithImage:increaseButtonImage];
 		increaseButtonRect.origin.x = self.frame.size.width - increaseButtonRect.size.width - (self.frame.size.height - increaseButtonRect.size.height)/2;
@@ -226,12 +228,12 @@ IB_DESIGNABLE
 }
 
 - (void)increaseButtonPressed {
-	self.floatValue += 1;
+	self.floatValue += self.increment;
 	[self updateBindingValue];
 }
 
 - (void)decreaseButtonPressed {
-	self.floatValue -= 1;
+	self.floatValue -= self.increment;
 	[self updateBindingValue];
 }
 
