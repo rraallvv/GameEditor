@@ -31,14 +31,14 @@ IB_DESIGNABLE
 
 	//Padding on right side
 	titleRect.size.width -= (2 * self.margin);
-/*
+#if 0
 	//Vertically center the title
 	NSRect textRect = [[self attributedStringValue] boundingRectWithSize: titleRect.size options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin ];
 	if (textRect.size.height < titleRect.size.height) {
 		titleRect.origin.y = titleRect.origin.y + (titleRect.size.height - textRect.size.height) / 2.0;
 		titleRect.size.height = textRect.size.height;
 	}
-*/
+#endif
 	return titleRect;
 }
 
@@ -128,7 +128,8 @@ IB_DESIGNABLE
 		TextFieldCell *cell = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
 		[arch finishDecoding];
 
-		cell.margin = NSMaxX(decreaseButtonRect) + NSMinX(decreaseButtonRect);
+		CGFloat defaultMargin = (self.bounds.size.width - [cell drawingRectForBounds:self.bounds].size.width) / 2.0;
+		cell.margin = NSMaxX(decreaseButtonRect) + NSMinX(decreaseButtonRect) - defaultMargin;
 
 		self.cell = cell;
 
