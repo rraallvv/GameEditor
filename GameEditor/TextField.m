@@ -59,6 +59,11 @@
 	[[self attributedStringValue] drawInRect:titleRect];
 }
 
+- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
+	NSRect titleRect = [self titleRectForBounds:cellFrame];
+	[[self attributedStringValue] drawInRect:titleRect];
+}
+
 @end
 
 
@@ -81,6 +86,9 @@
 		[arch finishDecoding];
 
 		self.cell = cell;
+
+		cell.drawsBackground = NO;
+		self.drawsBackground = NO;
 
 		/* Add the increase button for the stepper */
 
