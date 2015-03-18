@@ -183,7 +183,7 @@
                                                                     <rect key="frame" x="0.0" y="0.0" width="198" height="17"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tOs-8Z-T1g" customClass="TextField">
-                                                                            <rect key="frame" x="-2" y="0.0" width="103" height="17"/>
+                                                                            <rect key="frame" x="0.0" y="-3" width="99" height="22"/>
                                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="point" bezelStyle="round" id="5Ah-em-z2L">
                                                                                 <font key="font" metaFont="system"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -199,7 +199,7 @@
                                                                             </connections>
                                                                         </textField>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="voO-LH-bcR" customClass="TextField">
-                                                                            <rect key="frame" x="97" y="0.0" width="103" height="17"/>
+                                                                            <rect key="frame" x="99" y="-3" width="99" height="22"/>
                                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" bezelStyle="round" id="eGk-WA-UKb">
                                                                                 <font key="font" metaFont="system"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -232,7 +232,7 @@
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fV5-EB-vtf" customClass="TextField">
-                                                                    <rect key="frame" x="-2" y="0.0" width="202" height="17"/>
+                                                                    <rect key="frame" x="0.0" y="-3" width="198" height="22"/>
                                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="degrees" bezelStyle="round" id="PMG-7e-KKm">
                                                                         <font key="font" metaFont="system"/>
                                                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -320,6 +320,12 @@
                                     <userDefinedRuntimeAttribute type="number" keyPath="increment">
                                         <real key="value" value="1"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="increaseImage" value="NSGoRightTemplate"/>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="decreaseImage" value="NSGoLeftTemplate"/>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="increase" value="NSAddTemplate"/>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="NSGoRightTemplate"/>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="NSRemoveTemplate"/>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="NSGoLeftTemplate"/>
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p00-tL-vti" userLabel="rotation label">
@@ -354,7 +360,7 @@
                                 </buttonCell>
                             </button>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E66-dv-eYA" customClass="TextField">
-                                <rect key="frame" x="200" y="558" width="96" height="22"/>
+                                <rect key="frame" x="198" y="558" width="100" height="22"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" alignment="center" title="123134141.1234124" id="Vou-30-5F9">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -728,4 +734,10 @@
         <customObject id="420" customClass="NSFontManager"/>
         <arrayController objectClassName="Property" id="MHP-mB-ED2"/>
     </objects>
+    <resources>
+        <image name="NSAddTemplate" width="11" height="11"/>
+        <image name="NSGoLeftTemplate" width="9" height="12"/>
+        <image name="NSGoRightTemplate" width="9" height="12"/>
+        <image name="NSRemoveTemplate" width="11" height="11"/>
+    </resources>
 </document>
