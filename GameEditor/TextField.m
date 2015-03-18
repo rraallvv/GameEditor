@@ -90,7 +90,13 @@ alternateDec = _alternateDecreaseImage;
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
 
-		self.increment = 1;
+		/* Default values for inspectable peoperties*/
+		_increment = 1;
+		_increaseImage = [NSImage imageNamed:NSImageNameAddTemplate];
+		_decreaseImage = [NSImage imageNamed:NSImageNameRemoveTemplate];
+		_alternateIncreaseImage = [NSImage imageNamed:NSImageNameGoRightTemplate];
+		_alternateDecreaseImage = [NSImage imageNamed:NSImageNameGoLeftTemplate];
+		
 
 		/* Calculate the stepper button's rect */
 		[self resizeSubviewsWithOldSize:NSZeroSize];
