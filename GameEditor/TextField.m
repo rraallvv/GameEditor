@@ -90,22 +90,12 @@ alternateDec = _alternateDecreaseImage;
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
 
-		/* Add the increase button for the stepper */
-
 		self.increment = 1;
 
-		_increaseButtonRect = [self calculateButonRectWithImage:_increaseImage];
-		_increaseButtonRect.origin.x = self.frame.size.width - _increaseButtonRect.size.width - (self.frame.size.height - _increaseButtonRect.size.height)/2;
-		_increaseButtonRect.origin.y = (self.frame.size.height - _increaseButtonRect.size.height)/2;
+		/* Calculate the stepper button's rect */
+		[self resizeSubviewsWithOldSize:NSZeroSize];
 
-		/* Add the decrease button for the stepper */
-
-		_decreaseButtonRect = [self calculateButonRectWithImage:_decreaseImage];
-		_decreaseButtonRect.origin.x = (self.frame.size.height - _decreaseButtonRect.size.height)/2;
-		_decreaseButtonRect.origin.y = (self.frame.size.height - _decreaseButtonRect.size.height)/2;
-
-		/* Change the class of the cell to TextFieldCell */
-
+		/* Change the cell's class to TextFieldCell */
 		NSTextField *oldCell = self.cell;
 
 		NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:[NSKeyedArchiver archivedDataWithRootObject:oldCell]];
@@ -113,13 +103,11 @@ alternateDec = _alternateDecreaseImage;
 		TextFieldCell *cell = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
 		[arch finishDecoding];
 
-		CGFloat defaultMargin = (self.bounds.size.width - [cell drawingRectForBounds:self.bounds].size.width) / 2.0;
-		cell.margin = NSMaxX(_decreaseButtonRect) + NSMinX(_decreaseButtonRect) - defaultMargin;
-
 		self.cell = cell;
 
-		cell.drawsBackground = NO;
-		self.drawsBackground = NO;
+		/* Fix the margin for the rounded rect button */
+		CGFloat defaultMargin = (self.bounds.size.width - [cell drawingRectForBounds:self.bounds].size.width) / 2.0;
+		cell.margin = NSMaxX(_decreaseButtonRect) + NSMinX(_decreaseButtonRect) - defaultMargin;
 	}
 	return self;
 }
@@ -130,21 +118,9 @@ alternateDec = _alternateDecreaseImage;
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
-	/*
-	NSRect blackOutlineFrame = NSMakeRect(0.0, 0.0, [self bounds].size.width, [self bounds].size.height-1.0);
-	NSGradient *gradient = nil;
-	if ([NSApp isActive]) {
-		gradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:0.24 alpha:1.0] endingColor:[NSColor colorWithCalibratedWhite:0.374 alpha:1.0]];
-	}
-	else {
-		gradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:0.55 alpha:1.0] endingColor:[NSColor colorWithCalibratedWhite:0.558 alpha:1.0]];
-	}
-
-	CGFloat radius = MIN([self bounds].size.height/2, 10);
-
-	[gradient drawInBezierPath:[NSBezierPath bezierPathWithRoundedRect:blackOutlineFrame xRadius:radius yRadius:radius] angle:90];
-	 */
 	[super drawRect:dirtyRect];
+
+	/* Draw the stepper buttons */
 
 	if (_active == 1) {
 		[_alternateIncreaseImage drawInRect:_increaseButtonRect];
@@ -164,11 +140,9 @@ alternateDec = _alternateDecreaseImage;
 
 	if (NSPointInRect(locationInView, _increaseButtonRect)) {
 		[self increaseButtonPressed];
-		_active = 1;
 	}
 	if (NSPointInRect(locationInView, _decreaseButtonRect)) {
 		[self decreaseButtonPressed];
-		_active = 2;
 	}
 	return;
 
@@ -217,11 +191,13 @@ alternateDec = _alternateDecreaseImage;
 */
 
 - (void)increaseButtonPressed {
+	_active = 1;
 	self.floatValue += self.increment;
 	[self updateBindingValue];
 }
 
 - (void)decreaseButtonPressed {
+	_active = 2;
 	self.floatValue -= self.increment;
 	[self updateBindingValue];
 }
@@ -231,7 +207,7 @@ alternateDec = _alternateDecreaseImage;
 
 	NSNumber *value = @(self.floatValue);
 
-	//apply the value transformer, if one has been set
+	/* Apply the value transformer, if one has been set */
 	NSDictionary* bindingOptions = bindingInfo[NSOptionsKey];
 	if(bindingOptions){
 		NSValueTransformer* transformer = bindingOptions[NSValueTransformerBindingOption];
@@ -248,14 +224,12 @@ alternateDec = _alternateDecreaseImage;
 }
 
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
-	NSImage *increaseButtonImage = [NSImage imageNamed:NSImageNameAddTemplate];
-	NSRect increaseButtonRect = [self calculateButonRectWithImage:increaseButtonImage];
+	NSRect increaseButtonRect = [self calculateButonRectWithImage:_increaseImage];
 	increaseButtonRect.origin.x = self.frame.size.width - increaseButtonRect.size.width - (self.frame.size.height - increaseButtonRect.size.height)/2;
 	increaseButtonRect.origin.y = (self.frame.size.height - increaseButtonRect.size.height)/2;
 	_increaseButtonRect = increaseButtonRect;
 
-	NSImage *decreaseButtonImage = [NSImage imageNamed:NSImageNameRemoveTemplate];
-	NSRect decreaseButtonRect = [self calculateButonRectWithImage:decreaseButtonImage];
+	NSRect decreaseButtonRect = [self calculateButonRectWithImage:_decreaseImage];
 	decreaseButtonRect.origin.x = (self.frame.size.height - increaseButtonRect.size.height)/2;
 	decreaseButtonRect.origin.y = (self.frame.size.height - decreaseButtonRect.size.height)/2;
 	_decreaseButtonRect = decreaseButtonRect;
