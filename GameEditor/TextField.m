@@ -153,6 +153,8 @@ alternateDec = _alternateDecreaseImage;
 	} else if (NSPointInRect(locationInView, _decreaseButtonRect)) {
 		[self decreaseButtonPressed];
 	}
+
+	_lastPosition = theEvent.locationInWindow.x;
 	return;
 
 	if (theEvent.clickCount == 2) {
@@ -163,8 +165,6 @@ alternateDec = _alternateDecreaseImage;
 
 	id app = [[NSApplication sharedApplication] delegate];
 	[[app window] makeFirstResponder:self];
-
-	_lastPosition = theEvent.locationInWindow.x;
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
@@ -173,9 +173,9 @@ alternateDec = _alternateDecreaseImage;
 	/* show the normal image for the stepper button */
 	self.needsDisplay = YES;
 
+	[self.window invalidateCursorRectsForView:self];
+
 	_lastPosition = theEvent.locationInWindow.x;
-	return;
-	[[NSCursor arrowCursor] set];
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
@@ -184,11 +184,12 @@ alternateDec = _alternateDecreaseImage;
 	NSTextView *fieldEditor = (NSTextView*)[self.window fieldEditor:YES forObject:self];
 	fieldEditor.insertionPointColor = insertionPointColor;
 
-	//[[NSCursor resizeLeftRightCursor] set];
+	[[NSCursor resizeLeftRightCursor] set];
 
 	CGFloat position = theEvent.locationInWindow.x;
 	CGFloat delta = position - _lastPosition;
 	self.floatValue += delta;
+	
 	_lastPosition = position;
 }
 
