@@ -76,8 +76,10 @@ IB_DESIGNABLE
 
 @implementation TextField {
 	CGFloat _lastPosition;
-	NSButton *_increaseButton;
-	NSButton *_decreaseButton;
+	NSRect _increaseButtonRect;
+	NSRect _decreaseButtonRect;
+	NSImage *_increaseButtonImage;
+	NSImage *_decreaseButtonImage;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
@@ -87,39 +89,17 @@ IB_DESIGNABLE
 
 		self.increment = 1;
 
-		NSImage *increaseButtonImage = [NSImage imageNamed:NSImageNameAddTemplate];
-		NSRect increaseButtonRect = [self calculateButonRectWithImage:increaseButtonImage];
-		increaseButtonRect.origin.x = self.frame.size.width - increaseButtonRect.size.width - (self.frame.size.height - increaseButtonRect.size.height)/2;
-		increaseButtonRect.origin.y = (self.frame.size.height - increaseButtonRect.size.height)/2;
-
-		_increaseButton = [[NSButton alloc] initWithFrame:increaseButtonRect];
-		_increaseButton.title = nil;
-		_increaseButton.buttonType = NSMomentaryLightButton;
-		_increaseButton.bezelStyle = NSRoundedBezelStyle;
-		_increaseButton.imagePosition = NSImageOnly;
-		_increaseButton.bordered = NO;
-		_increaseButton.image = increaseButtonImage;
-		_increaseButton.target = self;
-		_increaseButton.action = @selector(increaseButtonPressed);
-		[self addSubview: _increaseButton];
+		_increaseButtonImage = [NSImage imageNamed:NSImageNameAddTemplate];
+		_increaseButtonRect = [self calculateButonRectWithImage:_increaseButtonImage];
+		_increaseButtonRect.origin.x = self.frame.size.width - _increaseButtonRect.size.width - (self.frame.size.height - _increaseButtonRect.size.height)/2;
+		_increaseButtonRect.origin.y = (self.frame.size.height - _increaseButtonRect.size.height)/2;
 
 		/* Add the decrease button for the stepper */
 
-		NSImage *decreseButtonImage = [NSImage imageNamed:NSImageNameRemoveTemplate];
-		NSRect decreaseButtonRect = [self calculateButonRectWithImage:decreseButtonImage];
-		decreaseButtonRect.origin.x = (self.frame.size.height - increaseButtonRect.size.height)/2;
-		decreaseButtonRect.origin.y = (self.frame.size.height - decreaseButtonRect.size.height)/2;
-
-		_decreaseButton = [[NSButton alloc] initWithFrame:decreaseButtonRect];
-		_decreaseButton.title = nil;
-		_decreaseButton.buttonType = NSMomentaryLightButton;
-		_decreaseButton.bezelStyle = NSRoundedBezelStyle;
-		_decreaseButton.imagePosition = NSImageOnly;
-		_decreaseButton.bordered = NO;
-		_decreaseButton.image = decreseButtonImage;
-		_decreaseButton.target = self;
-		_decreaseButton.action = @selector(decreaseButtonPressed);
-		[self addSubview: _decreaseButton];
+		_decreaseButtonImage = [NSImage imageNamed:NSImageNameRemoveTemplate];
+		_decreaseButtonRect = [self calculateButonRectWithImage:_decreaseButtonImage];
+		_decreaseButtonRect.origin.x = (self.frame.size.height - _decreaseButtonRect.size.height)/2;
+		_decreaseButtonRect.origin.y = (self.frame.size.height - _decreaseButtonRect.size.height)/2;
 
 		/* Change the class of the cell to TextFieldCell */
 
@@ -131,7 +111,7 @@ IB_DESIGNABLE
 		[arch finishDecoding];
 
 		CGFloat defaultMargin = (self.bounds.size.width - [cell drawingRectForBounds:self.bounds].size.width) / 2.0;
-		cell.margin = NSMaxX(decreaseButtonRect) + NSMinX(decreaseButtonRect) - defaultMargin;
+		cell.margin = NSMaxX(_decreaseButtonRect) + NSMinX(_decreaseButtonRect) - defaultMargin;
 
 		self.cell = cell;
 
@@ -162,19 +142,18 @@ IB_DESIGNABLE
 	[gradient drawInBezierPath:[NSBezierPath bezierPathWithRoundedRect:blackOutlineFrame xRadius:radius yRadius:radius] angle:90];
 	 */
 	[super drawRect:dirtyRect];
+	[_increaseButtonImage drawInRect:_increaseButtonRect];
+	[_decreaseButtonImage drawInRect:_decreaseButtonRect];
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
 	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
 
-	NSWindow *window = [[NSApplication sharedApplication] windows].firstObject;
-	[window makeFirstResponder:self];
-
-	if (NSPointInRect(locationInView, _increaseButton.frame)) {
-		[_increaseButton mouseDown:theEvent];
+	if (NSPointInRect(locationInView, _increaseButtonRect)) {
+		[self increaseButtonPressed];
 	}
-	if (NSPointInRect(locationInView, _decreaseButton.frame)) {
-		[_decreaseButton mouseDown:theEvent];
+	if (NSPointInRect(locationInView, _decreaseButtonRect)) {
+		[self decreaseButtonPressed];
 	}
 	return;
 
@@ -217,16 +196,6 @@ IB_DESIGNABLE
 }
 */
 
-- (NSView *)hitTest:(NSPoint)aPoint {
-	if (NSPointInRect(aPoint, _increaseButton.frame))
-		return _increaseButton;
-	if (NSPointInRect(aPoint, _decreaseButton.frame))
-		return _decreaseButton;
-	else if (NSPointInRect(aPoint, self.frame))
-		return self;
-	return nil;
-}
-
 - (void)increaseButtonPressed {
 	self.floatValue += self.increment;
 	[self updateBindingValue];
@@ -263,13 +232,13 @@ IB_DESIGNABLE
 	NSRect increaseButtonRect = [self calculateButonRectWithImage:increaseButtonImage];
 	increaseButtonRect.origin.x = self.frame.size.width - increaseButtonRect.size.width - (self.frame.size.height - increaseButtonRect.size.height)/2;
 	increaseButtonRect.origin.y = (self.frame.size.height - increaseButtonRect.size.height)/2;
-	[_increaseButton setFrame:increaseButtonRect];
+	_increaseButtonRect = increaseButtonRect;
 
-	NSImage *decreseButtonImage = [NSImage imageNamed:NSImageNameRemoveTemplate];
-	NSRect decreaseButtonRect = [self calculateButonRectWithImage:decreseButtonImage];
+	NSImage *decreaseButtonImage = [NSImage imageNamed:NSImageNameRemoveTemplate];
+	NSRect decreaseButtonRect = [self calculateButonRectWithImage:decreaseButtonImage];
 	decreaseButtonRect.origin.x = (self.frame.size.height - increaseButtonRect.size.height)/2;
 	decreaseButtonRect.origin.y = (self.frame.size.height - decreaseButtonRect.size.height)/2;
-	[_decreaseButton setFrame:decreaseButtonRect];
+	_decreaseButtonRect = decreaseButtonRect;
 }
 
 @end
