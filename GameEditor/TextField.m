@@ -24,54 +24,51 @@ IB_DESIGNABLE
 //Any padding implemented in this function will be visible in title of textfieldcell
 - (NSRect)titleRectForBounds:(NSRect)theRect {
 
-	NSRect titleRect = [super titleRectForBounds:theRect];
+	NSRect titleRect = theRect;
 
 	//Padding on left side
 	titleRect.origin.x = self.margin;
 
 	//Padding on right side
 	titleRect.size.width -= (2 * self.margin);
-
+/*
 	//Vertically center the title
-	NSAttributedString *attrString = self.attributedStringValue;
-
-	NSRect textRect = [attrString boundingRectWithSize: titleRect.size options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin ];
+	NSRect textRect = [[self attributedStringValue] boundingRectWithSize: titleRect.size options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin ];
 	if (textRect.size.height < titleRect.size.height) {
-		titleRect.origin.y = theRect.origin.y + (theRect.size.height - textRect.size.height) / 2.0;
+		titleRect.origin.y = titleRect.origin.y + (titleRect.size.height - textRect.size.height) / 2.0;
 		titleRect.size.height = textRect.size.height;
 	}
-
+*/
 	return titleRect;
 }
 
 //Any padding implemented in this function will be visible while editing text in textfieldcell
 //If Padding is not done here, padding done for title will not be visible while editing
-
 - (void)editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent {
-	NSRect titleRect = [self titleRectForBounds:aRect];
-	[super editWithFrame: titleRect inView: controlView editor:textObj delegate:anObject event: theEvent];
+	aRect = [self titleRectForBounds:aRect];
+	[super editWithFrame:aRect inView:controlView editor:textObj delegate:anObject event:theEvent];
 }
 
 // Editing padding
 - (void)selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength {
-	NSRect titleRect = [self titleRectForBounds:aRect];
-	[super selectWithFrame: titleRect inView: controlView editor:textObj delegate:anObject start:selStart length:selLength];
+	aRect = [self titleRectForBounds:aRect];
+	[super selectWithFrame:aRect inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
 }
 
 - (void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
-	NSRect titleRect = [self titleRectForBounds:cellFrame];
-	[[self attributedStringValue] drawInRect:titleRect];
+	cellFrame = [self titleRectForBounds:cellFrame];
+	[super drawInteriorWithFrame:cellFrame inView:controlView];
 }
 
 // Normal padding
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
-	NSRect titleRect = [self titleRectForBounds:cellFrame];
-	[[self attributedStringValue] drawInRect:titleRect];
+	//cellFrame= [self titleRectForBounds:cellFrame];
+	[super drawWithFrame:cellFrame inView:controlView];
 }
 
 - (void)highlight:(BOOL)flag withFrame:(NSRect)cellFrame inView:(NSView *)controlView {
-	NSRect titleRect = [self titleRectForBounds:cellFrame];
-	[[self attributedStringValue] drawInRect:cellFrame];
+	cellFrame = [self titleRectForBounds:cellFrame];
+	[super highlight:flag withFrame:cellFrame inView:controlView];
 }
 
 @end
