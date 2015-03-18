@@ -165,7 +165,10 @@ alternateDec = _alternateDecreaseImage;
 
 - (void)mouseUp:(NSEvent *)theEvent {
 	_active = 0;
+
+	/* show the normal image for the stepper button */
 	self.needsDisplay = YES;
+
 	return;
 	[[NSCursor arrowCursor] set];
 	_lastPosition = theEvent.locationInWindow.x;
