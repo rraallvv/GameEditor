@@ -8,7 +8,8 @@
 
 IB_DESIGNABLE
 @interface TextFieldCell : NSTextFieldCell
-@property (nonatomic) IBInspectable CGFloat margin;
+@property IBInspectable CGFloat margin;
+@property BOOL showsSelection;
 @end
 
 @implementation TextFieldCell
@@ -16,6 +17,7 @@ IB_DESIGNABLE
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
 		self.margin = 0;
+		self.showsSelection = NO;
 	}
 	return self;
 }
@@ -51,6 +53,8 @@ IB_DESIGNABLE
 
 // Editing padding
 - (void)selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength {
+	if (!self.showsSelection)
+		return;
 	aRect = [self titleRectForBounds:aRect];
 	[super selectWithFrame:aRect inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
 }
