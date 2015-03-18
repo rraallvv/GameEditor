@@ -78,9 +78,14 @@ IB_DESIGNABLE
 	CGFloat _lastPosition;
 	NSRect _increaseButtonRect;
 	NSRect _decreaseButtonRect;
-	NSImage *_increaseButtonImage;
-	NSImage *_decreaseButtonImage;
+	int _active;
 }
+
+@synthesize
+increase = _increaseImage,
+decrease = _decreaseImage,
+alternateInc = _alternateIncreaseImage,
+alternateDec = _alternateDecreaseImage;
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
@@ -89,15 +94,13 @@ IB_DESIGNABLE
 
 		self.increment = 1;
 
-		_increaseButtonImage = [NSImage imageNamed:NSImageNameAddTemplate];
-		_increaseButtonRect = [self calculateButonRectWithImage:_increaseButtonImage];
+		_increaseButtonRect = [self calculateButonRectWithImage:_increaseImage];
 		_increaseButtonRect.origin.x = self.frame.size.width - _increaseButtonRect.size.width - (self.frame.size.height - _increaseButtonRect.size.height)/2;
 		_increaseButtonRect.origin.y = (self.frame.size.height - _increaseButtonRect.size.height)/2;
 
 		/* Add the decrease button for the stepper */
 
-		_decreaseButtonImage = [NSImage imageNamed:NSImageNameRemoveTemplate];
-		_decreaseButtonRect = [self calculateButonRectWithImage:_decreaseButtonImage];
+		_decreaseButtonRect = [self calculateButonRectWithImage:_decreaseImage];
 		_decreaseButtonRect.origin.x = (self.frame.size.height - _decreaseButtonRect.size.height)/2;
 		_decreaseButtonRect.origin.y = (self.frame.size.height - _decreaseButtonRect.size.height)/2;
 
@@ -142,8 +145,18 @@ IB_DESIGNABLE
 	[gradient drawInBezierPath:[NSBezierPath bezierPathWithRoundedRect:blackOutlineFrame xRadius:radius yRadius:radius] angle:90];
 	 */
 	[super drawRect:dirtyRect];
-	[_increaseButtonImage drawInRect:_increaseButtonRect];
-	[_decreaseButtonImage drawInRect:_decreaseButtonRect];
+
+	if (_active == 1) {
+		[_alternateIncreaseImage drawInRect:_increaseButtonRect];
+	} else {
+		[_increaseImage drawInRect:_increaseButtonRect];
+	}
+
+	if (_active == 2) {
+		[_alternateDecreaseImage drawInRect:_decreaseButtonRect];
+	} else {
+		[_decreaseImage drawInRect:_decreaseButtonRect];
+	}
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
@@ -151,9 +164,11 @@ IB_DESIGNABLE
 
 	if (NSPointInRect(locationInView, _increaseButtonRect)) {
 		[self increaseButtonPressed];
+		_active = 1;
 	}
 	if (NSPointInRect(locationInView, _decreaseButtonRect)) {
 		[self decreaseButtonPressed];
+		_active = 2;
 	}
 	return;
 
@@ -168,6 +183,15 @@ IB_DESIGNABLE
 
 	_lastPosition = theEvent.locationInWindow.x;
 }
+
+- (void)mouseUp:(NSEvent *)theEvent {
+	_active = 0;
+	self.needsDisplay = YES;
+	return;
+	[[NSCursor arrowCursor] set];
+	_lastPosition = theEvent.locationInWindow.x;
+}
+
 /*
 - (void)mouseDragged:(NSEvent *)theEvent {
 
@@ -183,10 +207,6 @@ IB_DESIGNABLE
 	_lastPosition = position;
 }
 
-- (void)mouseUp:(NSEvent *)theEvent {
-	[[NSCursor arrowCursor] set];
-	_lastPosition = theEvent.locationInWindow.x;
-}
 
 - (void)resetCursorRects {
 	if (self.isEditable)
