@@ -173,19 +173,18 @@ alternateDec = _alternateDecreaseImage;
 	/* show the normal image for the stepper button */
 	self.needsDisplay = YES;
 
+	_lastPosition = theEvent.locationInWindow.x;
 	return;
 	[[NSCursor arrowCursor] set];
-	_lastPosition = theEvent.locationInWindow.x;
 }
 
-/*
 - (void)mouseDragged:(NSEvent *)theEvent {
 
 	NSColor *insertionPointColor = [NSColor clearColor];
 	NSTextView *fieldEditor = (NSTextView*)[self.window fieldEditor:YES forObject:self];
 	fieldEditor.insertionPointColor = insertionPointColor;
 
-	[[NSCursor resizeLeftRightCursor] set];
+	//[[NSCursor resizeLeftRightCursor] set];
 
 	CGFloat position = theEvent.locationInWindow.x;
 	CGFloat delta = position - _lastPosition;
@@ -193,14 +192,18 @@ alternateDec = _alternateDecreaseImage;
 	_lastPosition = position;
 }
 
-
 - (void)resetCursorRects {
-	if (self.isEditable)
+	if ([self.cell showsSelection])
 		[self addCursorRect:[self bounds] cursor:[NSCursor IBeamCursor]];
-	else
-		[self addCursorRect:[self bounds] cursor:[NSCursor resizeLeftRightCursor]];
+	else {
+		NSRect draggableBounds = self.bounds;
+		CGFloat leftPadding = 1.5 * (NSMinX(_decreaseButtonRect) - NSMinX(self.bounds)) + NSWidth(_decreaseButtonRect);
+		draggableBounds.origin.x += leftPadding;
+		CGFloat rightPadding = 1.5 * (NSMaxX(self.bounds) - NSMaxX(_increaseButtonRect)) + NSWidth(_increaseButtonRect);
+		draggableBounds.size.width -= leftPadding + rightPadding;
+		[self addCursorRect:draggableBounds cursor:[NSCursor resizeLeftRightCursor]];
+	}
 }
-*/
 
 - (void)increaseButtonPressed {
 	_active = 1;
@@ -237,13 +240,15 @@ alternateDec = _alternateDecreaseImage;
 
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
 	NSRect increaseButtonRect = [self calculateButonRectWithImage:_increaseImage];
-	increaseButtonRect.origin.x = self.frame.size.width - increaseButtonRect.size.width - (self.frame.size.height - increaseButtonRect.size.height)/2;
-	increaseButtonRect.origin.y = (self.frame.size.height - increaseButtonRect.size.height)/2;
+	CGFloat rightPadding = (NSHeight(self.bounds) - NSHeight(increaseButtonRect)) / 2;
+	increaseButtonRect.origin.x = NSWidth(self.bounds) - NSWidth(increaseButtonRect) - rightPadding;
+	increaseButtonRect.origin.y = rightPadding;
 	_increaseButtonRect = increaseButtonRect;
 
 	NSRect decreaseButtonRect = [self calculateButonRectWithImage:_decreaseImage];
-	decreaseButtonRect.origin.x = (self.frame.size.height - increaseButtonRect.size.height)/2;
-	decreaseButtonRect.origin.y = (self.frame.size.height - decreaseButtonRect.size.height)/2;
+	CGFloat leftPadding = (NSHeight(self.bounds) - NSHeight(decreaseButtonRect)) / 2;
+	decreaseButtonRect.origin.x = leftPadding;
+	decreaseButtonRect.origin.y = leftPadding;
 	_decreaseButtonRect = decreaseButtonRect;
 }
 
