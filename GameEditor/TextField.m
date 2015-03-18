@@ -6,12 +6,19 @@
 #import "TextField.h"
 #import <AppKit/AppKit.h>
 
-#define PADDING_MARGIN 10
-
+IB_DESIGNABLE
 @interface TextFieldCell : NSTextFieldCell
+@property (nonatomic) IBInspectable CGFloat margin;
 @end
 
 @implementation TextFieldCell
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.margin = 0;
+	}
+	return self;
+}
 
 //Function will create rect for title
 //Any padding implemented in this function will be visible in title of textfieldcell
@@ -21,10 +28,10 @@
 	NSRect titleRect = [super titleRectForBounds:theRect];
 
 	//Padding on left side
-	titleRect.origin.x = PADDING_MARGIN;
+	titleRect.origin.x = self.margin;
 
 	//Padding on right side
-	titleRect.size.width -= (2 * PADDING_MARGIN);
+	titleRect.size.width -= (2 * self.margin);
 
 	//Vertically center the title
 	NSAttributedString *attrString = self.attributedStringValue;
@@ -76,20 +83,6 @@
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
 
-		/* Change the class of the cell to TextFieldCell */
-
-		NSTextField *oldCell = self.cell;
-
-		NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:[NSKeyedArchiver archivedDataWithRootObject:oldCell]];
-		[arch setClass:[TextFieldCell class] forClassName:@"NSTextFieldCell"];
-		TextFieldCell *cell = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
-		[arch finishDecoding];
-
-		self.cell = cell;
-
-		cell.drawsBackground = NO;
-		self.drawsBackground = NO;
-
 		/* Add the increase button for the stepper */
 
 		NSImage *increaseButtonImage = [NSImage imageNamed:NSImageNameAddTemplate];
@@ -125,6 +118,22 @@
 		_decreaseButton.target = self;
 		_decreaseButton.action = @selector(decreaseButtonPressed);
 		[self addSubview: _decreaseButton];
+
+		/* Change the class of the cell to TextFieldCell */
+
+		NSTextField *oldCell = self.cell;
+
+		NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:[NSKeyedArchiver archivedDataWithRootObject:oldCell]];
+		[arch setClass:[TextFieldCell class] forClassName:@"NSTextFieldCell"];
+		TextFieldCell *cell = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
+		[arch finishDecoding];
+
+		cell.margin = NSMaxX(decreaseButtonRect) + NSMinX(decreaseButtonRect);
+
+		self.cell = cell;
+
+		cell.drawsBackground = NO;
+		self.drawsBackground = NO;
 	}
 	return self;
 }
