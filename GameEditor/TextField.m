@@ -96,6 +96,7 @@ typedef enum {
 
 @implementation TextField {
 	CGFloat _lastPosition;
+	BOOL _dragging;
 	ActivatedButton _activatedButton;
 	NSRect _increaseButtonRect;
 	NSRect _decreaseButtonRect;
@@ -177,6 +178,7 @@ alternateDec = _alternateDecreaseImage;
 		[self.cell setShowsSelection:YES];
 	}
 
+	_dragging = NO;
 	_lastPosition = theEvent.locationInWindow.x;
 }
 
@@ -188,6 +190,7 @@ alternateDec = _alternateDecreaseImage;
 
 	[self.window invalidateCursorRectsForView:self];
 
+	_dragging = NO;
 	_lastPosition = theEvent.locationInWindow.x;
 }
 
@@ -207,6 +210,7 @@ alternateDec = _alternateDecreaseImage;
 		[self updateBindingValue];
 	}
 
+	_dragging = YES;
 	_lastPosition = position;
 }
 
