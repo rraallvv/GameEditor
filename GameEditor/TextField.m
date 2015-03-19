@@ -46,8 +46,6 @@ IB_DESIGNABLE
 
 // Editing padding
 - (void)selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength {
-	if (!self.showsSelection)
-		return;
 	aRect = [self titleRectForBounds:aRect];
 	[super selectWithFrame:aRect inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
 }
@@ -66,6 +64,26 @@ IB_DESIGNABLE
 - (void)highlight:(BOOL)flag withFrame:(NSRect)cellFrame inView:(NSView *)controlView {
 	cellFrame = [self titleRectForBounds:cellFrame];
 	[super highlight:flag withFrame:cellFrame inView:controlView];
+}
+
+- (void)setShowsSelection:(BOOL)showsSelection {
+	_showsSelection = showsSelection;
+
+	NSTextField *controlView = (NSTextField *)[self controlView];
+	NSTextView *fieldEditor = (NSTextView*)[controlView.window fieldEditor:YES forObject:self];
+
+	NSRect rect = controlView.bounds;
+	rect.origin = NSZeroPoint;
+
+	if (_showsSelection) {
+		[self selectWithFrame:rect	inView:controlView editor:fieldEditor delegate:self start:0 length:self.stringValue.length];
+	} else {
+		[self selectWithFrame:rect	inView:controlView editor:fieldEditor delegate:self start:0 length:0];
+	}
+}
+
+- (BOOL)showsSelection {
+	return _showsSelection;
 }
 
 @end
@@ -150,11 +168,13 @@ alternateDec = _alternateDecreaseImage;
 	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
 
 	if (NSPointInRect(locationInView, _increaseClickableRect)) {
+		[self.cell setShowsSelection:NO];
 		[self increaseButtonPressed];
 	} else if (NSPointInRect(locationInView, _decreaseClickableRect)) {
+		[self.cell setShowsSelection:NO];
 		[self decreaseButtonPressed];
 	} else if (theEvent.clickCount == 2) {
-		[self selectText:self];
+		[self.cell setShowsSelection:YES];
 	}
 
 	_lastPosition = theEvent.locationInWindow.x;
