@@ -80,9 +80,12 @@ IB_DESIGNABLE
 
 @implementation TextField {
 	CGFloat _lastPosition;
+	int _active;
 	NSRect _increaseButtonRect;
 	NSRect _decreaseButtonRect;
-	int _active;
+	NSRect _increaseClickableRect;
+	NSRect _decreaseClickableRect;
+	NSRect _draggableBounds;
 }
 
 @synthesize
@@ -148,9 +151,9 @@ alternateDec = _alternateDecreaseImage;
 - (void)mouseDown:(NSEvent *)theEvent {
 	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
 
-	if (NSPointInRect(locationInView, _increaseButtonRect)) {
+	if (NSPointInRect(locationInView, _increaseClickableRect)) {
 		[self increaseButtonPressed];
-	} else if (NSPointInRect(locationInView, _decreaseButtonRect)) {
+	} else if (NSPointInRect(locationInView, _decreaseClickableRect)) {
 		[self decreaseButtonPressed];
 	}
 
@@ -199,12 +202,7 @@ alternateDec = _alternateDecreaseImage;
 	if ([self.cell showsSelection])
 		[self addCursorRect:[self bounds] cursor:[NSCursor IBeamCursor]];
 	else {
-		NSRect draggableBounds = self.bounds;
-		CGFloat leftPadding = 1.5 * (NSMinX(_decreaseButtonRect) - NSMinX(self.bounds)) + NSWidth(_decreaseButtonRect);
-		draggableBounds.origin.x += leftPadding;
-		CGFloat rightPadding = 1.5 * (NSMaxX(self.bounds) - NSMaxX(_increaseButtonRect)) + NSWidth(_increaseButtonRect);
-		draggableBounds.size.width -= leftPadding + rightPadding;
-		[self addCursorRect:draggableBounds cursor:[NSCursor resizeLeftRightCursor]];
+		[self addCursorRect:_draggableBounds cursor:[NSCursor resizeLeftRightCursor]];
 	}
 }
 
@@ -242,17 +240,30 @@ alternateDec = _alternateDecreaseImage;
 }
 
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
+	// calulate the rectangle where to draw the increase button
 	NSRect increaseButtonRect = [self calculateButonRectWithImage:_increaseImage];
 	CGFloat rightPadding = (NSHeight(self.bounds) - NSHeight(increaseButtonRect)) / 2;
 	increaseButtonRect.origin.x = NSWidth(self.bounds) - NSWidth(increaseButtonRect) - rightPadding;
 	increaseButtonRect.origin.y = rightPadding;
 	_increaseButtonRect = increaseButtonRect;
 
+	// calulate the rectangle where to draw the decrease button
 	NSRect decreaseButtonRect = [self calculateButonRectWithImage:_decreaseImage];
 	CGFloat leftPadding = (NSHeight(self.bounds) - NSHeight(decreaseButtonRect)) / 2;
 	decreaseButtonRect.origin.x = leftPadding;
 	decreaseButtonRect.origin.y = leftPadding;
 	_decreaseButtonRect = decreaseButtonRect;
+
+	// calculate the recangle where to change the pointer for dragging the value
+	_draggableBounds = self.bounds;
+	leftPadding = 1.5 * (NSMinX(_decreaseButtonRect) - NSMinX(self.bounds)) + NSWidth(_decreaseButtonRect);
+	_draggableBounds.origin.x += leftPadding;
+	rightPadding = 1.5 * (NSMaxX(self.bounds) - NSMaxX(_increaseButtonRect)) + NSWidth(_increaseButtonRect);
+	_draggableBounds.size.width -= leftPadding + rightPadding;
+
+	// calculate the are where the increase and decrease buttons are activated
+	_increaseClickableRect = NSMakeRect(NSMaxX(_draggableBounds), NSMinY(self.bounds), NSMaxX(self.bounds)-NSMaxX(_draggableBounds), NSHeight(self.bounds));
+	_decreaseClickableRect = NSMakeRect(0, 0, NSMinX(_draggableBounds), NSHeight(self.bounds));
 }
 
 @end
