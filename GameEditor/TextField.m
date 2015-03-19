@@ -44,8 +44,6 @@ IB_DESIGNABLE
 	return titleRect;
 }
 
-//Any padding implemented in this function will be visible while editing text in textfieldcell
-//If Padding is not done here, padding done for title will not be visible while editing
 - (void)editWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject event:(NSEvent *)theEvent {
 	aRect = [self titleRectForBounds:aRect];
 	[super editWithFrame:aRect inView:controlView editor:textObj delegate:anObject event:theEvent];
@@ -77,10 +75,15 @@ IB_DESIGNABLE
 
 @end
 
+typedef enum {
+	ActivatedButtonNone,
+	ActivatedButtonIncrease,
+	ActivatedButtonDecrease
+} ActivatedButton;
 
 @implementation TextField {
 	CGFloat _lastPosition;
-	int _active;
+	ActivatedButton _activatedButton;
 	NSRect _increaseButtonRect;
 	NSRect _decreaseButtonRect;
 	NSRect _increaseClickableRect;
@@ -135,13 +138,13 @@ alternateDec = _alternateDecreaseImage;
 
 	/* Draw the stepper buttons */
 
-	if (_active == 1) {
+	if (_activatedButton == ActivatedButtonIncrease) {
 		[_alternateIncreaseImage drawInRect:_increaseButtonRect];
 	} else {
 		[_increaseImage drawInRect:_increaseButtonRect];
 	}
 
-	if (_active == 2) {
+	if (_activatedButton == ActivatedButtonDecrease) {
 		[_alternateDecreaseImage drawInRect:_decreaseButtonRect];
 	} else {
 		[_decreaseImage drawInRect:_decreaseButtonRect];
@@ -155,23 +158,15 @@ alternateDec = _alternateDecreaseImage;
 		[self increaseButtonPressed];
 	} else if (NSPointInRect(locationInView, _decreaseClickableRect)) {
 		[self decreaseButtonPressed];
+	} else if (theEvent.clickCount == 2) {
+		[self selectText:self];
 	}
 
 	_lastPosition = theEvent.locationInWindow.x;
-	return;
-
-	if (theEvent.clickCount == 2) {
-		[self selectText:self];
-	}
-	[self setHighlighted:YES];
-	[self selectText:nil];
-
-	id app = [[NSApplication sharedApplication] delegate];
-	[[app window] makeFirstResponder:self];
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
-	_active = 0;
+	_activatedButton = ActivatedButtonNone;
 
 	/* show the normal image for the stepper button */
 	self.needsDisplay = YES;
@@ -182,18 +177,20 @@ alternateDec = _alternateDecreaseImage;
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
-
-	NSColor *insertionPointColor = [NSColor clearColor];
-	NSTextView *fieldEditor = (NSTextView*)[self.window fieldEditor:YES forObject:self];
-	fieldEditor.insertionPointColor = insertionPointColor;
-
-	[[NSCursor resizeLeftRightCursor] set];
-
 	CGFloat position = theEvent.locationInWindow.x;
-	CGFloat delta = position - _lastPosition;
-	self.floatValue += self.draggingMult * delta;
 
-	[self updateBindingValue];
+	if (_activatedButton == ActivatedButtonNone) {
+		NSColor *insertionPointColor = [NSColor clearColor];
+		NSTextView *fieldEditor = (NSTextView*)[self.window fieldEditor:YES forObject:self];
+		fieldEditor.insertionPointColor = insertionPointColor;
+
+		[[NSCursor resizeLeftRightCursor] set];
+
+		CGFloat delta = position - _lastPosition;
+		self.floatValue += self.draggingMult * delta;
+
+		[self updateBindingValue];
+	}
 
 	_lastPosition = position;
 }
@@ -207,13 +204,13 @@ alternateDec = _alternateDecreaseImage;
 }
 
 - (void)increaseButtonPressed {
-	_active = 1;
+	_activatedButton = ActivatedButtonIncrease;
 	self.floatValue += self.increment;
 	[self updateBindingValue];
 }
 
 - (void)decreaseButtonPressed {
-	_active = 2;
+	_activatedButton = ActivatedButtonDecrease;
 	self.floatValue -= self.increment;
 	[self updateBindingValue];
 }
