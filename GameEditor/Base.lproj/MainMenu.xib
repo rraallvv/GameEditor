@@ -326,6 +326,9 @@
                                     <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="NSGoRightTemplate"/>
                                     <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="NSRemoveTemplate"/>
                                     <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="NSGoLeftTemplate"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="draggingMult">
+                                        <real key="value" value="4.5"/>
+                                    </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p00-tL-vti" userLabel="rotation label">
@@ -343,6 +346,11 @@
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="draggingMult">
+                                        <real key="value" value="0.01"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IgZ-r7-B5E" userLabel="paused label">
                                 <rect key="frame" x="27" y="506" width="54" height="17"/>
