@@ -90,14 +90,11 @@ IB_DESIGNABLE
 	NSTextField *controlView = (NSTextField *)[self controlView];
 	NSTextView *fieldEditor = (NSTextView*)[controlView.window fieldEditor:YES forObject:self];
 
-	NSRect rect = controlView.bounds;
-	rect.origin = NSZeroPoint;
-
 	if (_showsSelection) {
-		[self selectWithFrame:rect	inView:controlView editor:fieldEditor delegate:controlView start:0 length:self.stringValue.length];
+		[controlView selectText:self];
 		fieldEditor.insertionPointColor = nil;
 	} else {
-		[self selectWithFrame:rect	inView:controlView editor:fieldEditor delegate:controlView start:0 length:0];
+		[self selectWithFrame:controlView.bounds inView:controlView editor:fieldEditor delegate:controlView start:0 length:0];
 		fieldEditor.insertionPointColor = [NSColor clearColor];
 	}
 }
