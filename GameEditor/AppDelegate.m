@@ -6,6 +6,7 @@
 #import "AppDelegate.h"
 #import "GameScene.h"
 #import "Utils.h"
+#import "HandlesView.h"
 
 @implementation SKScene (Unarchive)
 
@@ -39,6 +40,7 @@
 @implementation AppDelegate {
 	IBOutlet NSTableView *_tableView;
 	IBOutlet NSArrayController *_arrayController;
+	IBOutlet HandlesView *_handlesView;
 }
 
 @synthesize window = _window;
@@ -69,6 +71,8 @@
 	[_arrayController addObject: [Property propertyWithName:@"position" node:sprite type:@"point"]];
 	[_arrayController addObject: [Property propertyWithName:@"zRotation" node:sprite type:@"degrees"]];
 	[_arrayController addObject: [Property propertyWithName:@"paused" node:sprite type:@"bool"]];
+
+	[_handlesView bind:@"position" toObject:sprite withKeyPath:@"position" options:nil];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
