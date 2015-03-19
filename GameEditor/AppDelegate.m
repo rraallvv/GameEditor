@@ -27,9 +27,6 @@
 @end
 
 @implementation AppDelegate {
-	IBOutlet NSTextField *_positionTextField;
-	IBOutlet NSTextField *_rotationTextField;
-	IBOutlet NSButton *_pausedButton;
 	IBOutlet NSTableView *_tableView;
 	IBOutlet NSArrayController *_arrayController;
 }
@@ -62,13 +59,6 @@
 	[_arrayController addObject: [Property propertyWithName:@"position" node:sprite type:@"point"]];
 	[_arrayController addObject: [Property propertyWithName:@"zRotation" node:sprite type:@"degrees"]];
 	[_arrayController addObject: [Property propertyWithName:@"paused" node:sprite type:@"bool"]];
-
-	/* Property views */
-	NSNib *nib = [[NSNib alloc] initWithNibNamed:@"PointTableCellView" bundle:nil];
-	NSArray *topLevelObjects;
-	[nib instantiateWithOwner:self topLevelObjects:&topLevelObjects];
-
-	[_tableView registerNib:nib forIdentifier:@"point"];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {

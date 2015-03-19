@@ -292,6 +292,23 @@
                                                                 <constraint firstAttribute="centerY" secondItem="mOv-OH-5Kf" secondAttribute="centerY" id="wN5-bQ-2MY"/>
                                                             </constraints>
                                                         </tableCellView>
+                                                        <tableCellView identifier="generic property" id="vJr-p1-JI2">
+                                                            <rect key="frame" x="86" y="58" width="198" height="17"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uRd-Y7-HMh">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="106" height="17"/>
+                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="generic property" id="hjK-d3-tIe">
+                                                                        <font key="font" metaFont="smallSystem"/>
+                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                </textField>
+                                                            </subviews>
+                                                            <connections>
+                                                                <outlet property="textField" destination="uRd-Y7-HMh" id="PpW-yL-mUL"/>
+                                                            </connections>
+                                                        </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
                                             </tableColumns>
