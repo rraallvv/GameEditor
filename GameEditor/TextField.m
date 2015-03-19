@@ -33,14 +33,7 @@ IB_DESIGNABLE
 
 	//Padding on right side
 	titleRect.size.width -= (2 * self.margin);
-#if 0
-	//Vertically center the title
-	NSRect textRect = [[self attributedStringValue] boundingRectWithSize: titleRect.size options: NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin ];
-	if (textRect.size.height < titleRect.size.height) {
-		titleRect.origin.y = titleRect.origin.y + (titleRect.size.height - textRect.size.height) / 2.0;
-		titleRect.size.height = textRect.size.height;
-	}
-#endif
+
 	return titleRect;
 }
 
