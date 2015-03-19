@@ -7,7 +7,7 @@
 #import <SpriteKit/SpriteKit.h>
 #import "Utils.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate> 
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSTableViewDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet SKView *skView;
