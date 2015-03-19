@@ -37,6 +37,12 @@
 @synthesize window = _window;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+
+	/* Main window appearance */
+	self.window.styleMask = self.window.styleMask | NSFullSizeContentViewWindowMask;
+	self.window.titleVisibility = NSWindowTitleHidden;
+	self.window.titlebarAppearsTransparent = YES;
+
     GameScene *scene = [GameScene unarchiveFromFile:@"GameScene"];
 
     /* Set the scale mode to scale to fit the window */
@@ -50,19 +56,19 @@
     self.skView.showsFPS = YES;
     self.skView.showsNodeCount = YES;
 
-	// The bindings
 	SKSpriteNode *sprite = (SKSpriteNode *)[scene childNodeWithName:@"//Spaceship"];
-	Property *positionProperty = [Property propertyWithName:@"position" node:sprite type:@"point"];
 
-	// Bind the individual controls on the left side of the window
-	[_positionTextField bind:@"value" toObject:positionProperty withKeyPath:@"x" options:nil];
-	[_rotationTextField bind:@"value" toObject:sprite withKeyPath:@"zRotation" options:[DegreesTransformer transformer]];
-	[_pausedButton bind:@"value" toObject:sprite withKeyPath:@"paused" options:nil];
-
-	// Bind the table on the right side of the window
-	[_arrayController addObject: positionProperty];
+	/* Bindings */
+	[_arrayController addObject: [Property propertyWithName:@"position" node:sprite type:@"point"]];
 	[_arrayController addObject: [Property propertyWithName:@"zRotation" node:sprite type:@"degrees"]];
 	[_arrayController addObject: [Property propertyWithName:@"paused" node:sprite type:@"bool"]];
+
+	/* Property views */
+	NSNib *nib = [[NSNib alloc] initWithNibNamed:@"PointTableCellView" bundle:nil];
+	NSArray *topLevelObjects;
+	[nib instantiateWithOwner:self topLevelObjects:&topLevelObjects];
+
+	[_tableView registerNib:nib forIdentifier:@"point"];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
