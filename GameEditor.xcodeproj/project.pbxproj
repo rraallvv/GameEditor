@@ -15,6 +15,7 @@
 		E4ABDB5B1AB3933900AAE82E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4ABDB591AB3933900AAE82E /* MainMenu.xib */; };
 		E4ABDB671AB3933900AAE82E /* GameEditorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB661AB3933900AAE82E /* GameEditorTests.m */; };
 		E4ABDB761AB47BB700AAE82E /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB711AB3BCA700AAE82E /* Utils.m */; };
+		E4BB58AB1ABB4D4B0021A467 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BB58AA1ABB4D4B0021A467 /* Spaceship.png */; };
 		E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +45,7 @@
 		E4ABDB661AB3933900AAE82E /* GameEditorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameEditorTests.m; sourceTree = "<group>"; };
 		E4ABDB701AB3BCA700AAE82E /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		E4ABDB711AB3BCA700AAE82E /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		E4BB58AA1ABB4D4B0021A467 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
 		E4BFF4AE1AB78E24002DADD3 /* StepperTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StepperTextField.h; sourceTree = "<group>"; };
 		E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StepperTextField.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,6 +99,7 @@
 				E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */,
 				E4ABDB591AB3933900AAE82E /* MainMenu.xib */,
 				E4ABDB551AB3933900AAE82E /* GameScene.sks */,
+				E4BB58AA1ABB4D4B0021A467 /* Spaceship.png */,
 				E4ABDB571AB3933900AAE82E /* Images.xcassets */,
 				E4ABDB4B1AB3933900AAE82E /* Supporting Files */,
 			);
@@ -208,6 +211,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4BB58AB1ABB4D4B0021A467 /* Spaceship.png in Resources */,
 				E4ABDB561AB3933900AAE82E /* GameScene.sks in Resources */,
 				E4ABDB581AB3933900AAE82E /* Images.xcassets in Resources */,
 				E4ABDB5B1AB3933900AAE82E /* MainMenu.xib in Resources */,

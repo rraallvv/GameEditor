@@ -24,6 +24,16 @@
     return scene;
 }
 
++ (BOOL)archiveScene:(SKScene *)scene toFile:(NSString *)file {
+	/* Retrieve scene file path from the application bundle */
+	NSString *nodePath = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
+
+	/* Unarchive the file to an SKScene object */
+	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:scene];
+
+	return [data writeToFile:nodePath atomically:YES];
+}
+
 @end
 
 @implementation AppDelegate {
@@ -53,7 +63,7 @@
     self.skView.showsFPS = YES;
     self.skView.showsNodeCount = YES;
 
-	SKSpriteNode *sprite = (SKSpriteNode *)[scene childNodeWithName:@"//Spaceship"];
+	SKSpriteNode *sprite = (SKSpriteNode *)[scene childNodeWithName:@"//SpaceShip"];
 
 	/* Bindings */
 	[_arrayController addObject: [Property propertyWithName:@"position" node:sprite type:@"point"]];
@@ -72,6 +82,10 @@
 		NSString *type = [[[_arrayController arrangedObjects] objectAtIndex:row] valueForKey:@"type"];
 		return [tableView makeViewWithIdentifier:type owner:self];
 	}
+}
+
+- (IBAction)saveAction:(id)sender {
+	[SKScene archiveScene:self.skView.scene toFile:@"GameScene"];
 }
 
 @end
