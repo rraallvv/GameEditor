@@ -14,6 +14,8 @@ IB_DESIGNABLE
 
 @implementation TextFieldCell
 
+@synthesize margin = _margin, showsSelection = _showsSelection;
+
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
 		self.margin = 0;
