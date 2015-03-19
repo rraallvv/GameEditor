@@ -205,8 +205,12 @@ alternateDec = _alternateDecreaseImage;
 - (void)mouseUp:(NSEvent *)theEvent {
 	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
 
-	if (![self.cell showsSelection] && NSPointInRect(locationInView, _draggableBounds)) {
-		[[NSCursor resizeLeftRightCursor] set];
+	if (NSPointInRect(locationInView, _draggableBounds)) {
+		if ([self.cell showsSelection]) {
+			[[NSCursor IBeamCursor] set];
+		} else {
+			[[NSCursor resizeLeftRightCursor] set];
+		}
 	} else {
 		[[NSCursor arrowCursor] set];
 	}
