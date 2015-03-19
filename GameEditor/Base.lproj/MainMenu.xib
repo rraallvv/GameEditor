@@ -319,67 +319,6 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e7K-xu-fac" userLabel="position label">
-                                <rect key="frame" x="27" y="560" width="54" height="17"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="position" id="pup-jv-TTA">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p00-tL-vti" userLabel="rotation label">
-                                <rect key="frame" x="18" y="532" width="63" height="17"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="zRotation" id="lCk-ey-r6l">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZGu-1S-3o1" userLabel="rotation field" customClass="StepperTextField">
-                                <rect key="frame" x="87" y="529" width="96" height="19"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" bezelStyle="round" id="OUc-Uu-0M4">
-                                    <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#.##º" negativeFormat="#.##º" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="2" id="DQp-lb-iAj"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="draggingMult">
-                                        <real key="value" value="0.01"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IgZ-r7-B5E" userLabel="paused label">
-                                <rect key="frame" x="27" y="506" width="54" height="17"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="paused" id="Qa7-MH-u6C">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wGl-ny-oTz" userLabel="paused check box">
-                                <rect key="frame" x="85" y="505" width="22" height="18"/>
-                                <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="LnE-Cx-5Vk">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
-                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GNd-ot-ftd" userLabel="position field" customClass="StepperTextField">
-                                <rect key="frame" x="87" y="558" width="96" height="19"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" bezelStyle="round" id="TgO-jb-ew0">
-                                    <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="pRc-gw-7In"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="image" keyPath="increaseImage" value="NSGoRightTemplate"/>
-                                    <userDefinedRuntimeAttribute type="image" keyPath="decreaseImage" value="NSGoLeftTemplate"/>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="draggingMult">
-                                        <real key="value" value="4.5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="56m-Ws-rUR" firstAttribute="top" secondItem="BAm-0B-vb9" secondAttribute="top" constant="20" symbolic="YES" id="GTK-yR-dP1"/>
@@ -400,9 +339,6 @@
         <customObject id="494" customClass="AppDelegate">
             <connections>
                 <outlet property="_arrayController" destination="MHP-mB-ED2" id="WIV-gD-tYo"/>
-                <outlet property="_pausedButton" destination="wGl-ny-oTz" id="xLR-th-SlE"/>
-                <outlet property="_positionTextField" destination="GNd-ot-ftd" id="Heo-Os-YtE"/>
-                <outlet property="_rotationTextField" destination="ZGu-1S-3o1" id="P4U-Q6-dDy"/>
                 <outlet property="_tableView" destination="tum-wb-Po7" id="pz9-7M-hmt"/>
                 <outlet property="skView" destination="BAm-0B-vb9" id="MCo-T6-F5E"/>
                 <outlet property="window" destination="371" id="532"/>
@@ -411,8 +347,4 @@
         <customObject id="420" customClass="NSFontManager"/>
         <arrayController objectClassName="Property" id="MHP-mB-ED2"/>
     </objects>
-    <resources>
-        <image name="NSGoLeftTemplate" width="9" height="12"/>
-        <image name="NSGoRightTemplate" width="9" height="12"/>
-    </resources>
 </document>
