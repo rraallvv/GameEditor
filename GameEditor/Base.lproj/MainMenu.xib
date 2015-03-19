@@ -195,6 +195,9 @@
                                                                                     <real key="value" value="4.5"/>
                                                                                 </userDefinedRuntimeAttribute>
                                                                             </userDefinedRuntimeAttributes>
+                                                                            <connections>
+                                                                                <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.y" id="vhb-jw-UDZ"/>
+                                                                            </connections>
                                                                         </textField>
                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tOs-8Z-T1g" customClass="StepperTextField">
                                                                             <rect key="frame" x="0.0" y="-1" width="99" height="19"/>
@@ -210,10 +213,9 @@
                                                                                 </userDefinedRuntimeAttribute>
                                                                             </userDefinedRuntimeAttributes>
                                                                             <connections>
-                                                                                <binding destination="2Ss-NZ-lOU" name="editable" keyPath="objectValue.editable" id="58c-am-Cia"/>
-                                                                                <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.x" id="cYX-RB-Ua2">
+                                                                                <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.x" id="NhU-vE-Azm">
                                                                                     <dictionary key="options">
-                                                                                        <bool key="NSConditionallySetsHidden" value="YES"/>
+                                                                                        <bool key="NSConditionallySetsEditable" value="YES"/>
                                                                                     </dictionary>
                                                                                 </binding>
                                                                             </connections>
