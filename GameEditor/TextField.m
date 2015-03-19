@@ -78,10 +78,10 @@ IB_DESIGNABLE
 	rect.origin = NSZeroPoint;
 
 	if (_showsSelection) {
-		[self selectWithFrame:rect	inView:controlView editor:fieldEditor delegate:self start:0 length:self.stringValue.length];
+		[self selectWithFrame:rect	inView:controlView editor:fieldEditor delegate:controlView start:0 length:self.stringValue.length];
 		fieldEditor.insertionPointColor = _savedInsertionPointColor;
 	} else {
-		[self selectWithFrame:rect	inView:controlView editor:fieldEditor delegate:self start:0 length:0];
+		[self selectWithFrame:rect	inView:controlView editor:fieldEditor delegate:controlView start:0 length:0];
 		fieldEditor.insertionPointColor = [NSColor clearColor];
 	}
 }
@@ -284,6 +284,13 @@ alternateDec = _alternateDecreaseImage;
 	// calculate the are where the increase and decrease buttons are activated
 	_increaseClickableRect = NSMakeRect(NSMaxX(_draggableBounds), NSMinY(self.bounds), NSMaxX(self.bounds)-NSMaxX(_draggableBounds), NSHeight(self.bounds));
 	_decreaseClickableRect = NSMakeRect(0, 0, NSMinX(_draggableBounds), NSHeight(self.bounds));
+}
+
+- (NSView *)hitTest:(NSPoint)aPoint {
+	NSView *result = [super hitTest:aPoint];
+	if (result && ![self.cell showsSelection])
+		result = self;
+	return result;
 }
 
 @end
