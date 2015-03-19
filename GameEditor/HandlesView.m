@@ -23,6 +23,7 @@
 }
 
 - (void)setPosition:(CGPoint)position {
+	position = [self.scene convertPointToView:position];
 	NSRect frame = self.frame;
 	frame.origin = position;
 	self.frame = frame;
