@@ -12,9 +12,7 @@ IB_DESIGNABLE
 @property BOOL showsSelection;
 @end
 
-@implementation TextFieldCell {
-	NSColor *_savedInsertionPointColor;
-}
+@implementation TextFieldCell
 
 @synthesize margin = _margin, showsSelection = _showsSelection;
 
@@ -79,7 +77,7 @@ IB_DESIGNABLE
 
 	if (_showsSelection) {
 		[self selectWithFrame:rect	inView:controlView editor:fieldEditor delegate:controlView start:0 length:self.stringValue.length];
-		fieldEditor.insertionPointColor = _savedInsertionPointColor;
+		fieldEditor.insertionPointColor = nil;
 	} else {
 		[self selectWithFrame:rect	inView:controlView editor:fieldEditor delegate:controlView start:0 length:0];
 		fieldEditor.insertionPointColor = [NSColor clearColor];
