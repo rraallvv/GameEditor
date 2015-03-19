@@ -73,7 +73,7 @@
 	[_arrayController addObject: [Property propertyWithName:@"paused" node:sprite type:@"bool"]];
 
 	_handlesView.scene = scene;
-	[_handlesView bind:@"position" toObject:sprite withKeyPath:@"position" options:nil];
+	[_handlesView bind:@"frameCenter" toObject:sprite withKeyPath:@"position" options:nil];
 	[_handlesView bind:@"frameCenterRotation" toObject:sprite withKeyPath:@"zRotation" options:[DegreesTransformer transformer]];
 }
 
