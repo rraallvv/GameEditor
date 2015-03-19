@@ -189,10 +189,8 @@ alternateDec = _alternateDecreaseImage;
 - (void)mouseUp:(NSEvent *)theEvent {
 	_activatedButton = ActivatedButtonNone;
 
-	/* show the normal image for the stepper button */
+	/* Reset the stepper buttons to show the normal image */
 	self.needsDisplay = YES;
-
-	[self.window invalidateCursorRectsForView:self];
 
 	_dragging = NO;
 	_lastPosition = theEvent.locationInWindow.x;
@@ -218,12 +216,15 @@ alternateDec = _alternateDecreaseImage;
 	_lastPosition = position;
 }
 
-- (void)resetCursorRects {
-	if ([self.cell showsSelection])
-		[self addCursorRect:[self bounds] cursor:[NSCursor IBeamCursor]];
-	else {
-		[self addCursorRect:_draggableBounds cursor:[NSCursor resizeLeftRightCursor]];
+- (void)mouseMoved:(NSEvent *)theEvent {
+	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
+
+	if (![self.cell showsSelection] && NSPointInRect(locationInView, _draggableBounds)) {
+		[[NSCursor resizeLeftRightCursor] set];
 	}
+
+	_dragging = NO;
+	_lastPosition = locationInView.x;
 }
 
 - (void)increaseButtonPressed {
@@ -260,28 +261,28 @@ alternateDec = _alternateDecreaseImage;
 }
 
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
-	// calulate the rectangle where to draw the increase button
+	/* Calulate the rectangle where to draw the increase button */
 	NSRect increaseButtonRect = [self calculateButonRectWithImage:_increaseImage];
 	CGFloat rightPadding = (NSHeight(self.bounds) - NSHeight(increaseButtonRect)) / 2;
 	increaseButtonRect.origin.x = NSWidth(self.bounds) - NSWidth(increaseButtonRect) - rightPadding;
 	increaseButtonRect.origin.y = rightPadding;
 	_increaseButtonRect = increaseButtonRect;
 
-	// calulate the rectangle where to draw the decrease button
+	/* Calulate the rectangle where to draw the decrease button */
 	NSRect decreaseButtonRect = [self calculateButonRectWithImage:_decreaseImage];
 	CGFloat leftPadding = (NSHeight(self.bounds) - NSHeight(decreaseButtonRect)) / 2;
 	decreaseButtonRect.origin.x = leftPadding;
 	decreaseButtonRect.origin.y = leftPadding;
 	_decreaseButtonRect = decreaseButtonRect;
 
-	// calculate the recangle where to change the pointer for dragging the value
+	/* Calculate the recangle where to change the pointer for dragging the value */
 	_draggableBounds = self.bounds;
 	leftPadding = 1.5 * (NSMinX(_decreaseButtonRect) - NSMinX(self.bounds)) + NSWidth(_decreaseButtonRect);
 	_draggableBounds.origin.x += leftPadding;
 	rightPadding = 1.5 * (NSMaxX(self.bounds) - NSMaxX(_increaseButtonRect)) + NSWidth(_increaseButtonRect);
 	_draggableBounds.size.width -= leftPadding + rightPadding;
 
-	// calculate the are where the increase and decrease buttons are activated
+	/* calculate the are where the increase and decrease buttons are activated */
 	_increaseClickableRect = NSMakeRect(NSMaxX(_draggableBounds), NSMinY(self.bounds), NSMaxX(self.bounds)-NSMaxX(_draggableBounds), NSHeight(self.bounds));
 	_decreaseClickableRect = NSMakeRect(0, 0, NSMinX(_draggableBounds), NSHeight(self.bounds));
 }
