@@ -226,8 +226,8 @@ alternateDec = _alternateDecreaseImage;
 
 	if (_activatedButton == ActivatedButtonNone) {
 
-		if (!_dragging)
-			[self.cell setShowsSelection:NO];
+		//if (!_dragging)
+		//	[self.cell setShowsSelection:NO];
 
 		//[[NSCursor resizeLeftRightCursor] set];
 
