@@ -207,12 +207,12 @@ alternateDec = _alternateDecreaseImage;
 
 	if (NSPointInRect(locationInView, _draggableBounds)) {
 		if ([self.cell showsSelection]) {
-			[[NSCursor IBeamCursor] set];
+			//[[NSCursor IBeamCursor] set];
 		} else {
-			[[NSCursor resizeLeftRightCursor] set];
+			//[[NSCursor resizeLeftRightCursor] set];
 		}
 	} else {
-		[[NSCursor arrowCursor] set];
+		//[[NSCursor arrowCursor] set];
 	}
 
 	_activatedButton = ActivatedButtonNone;
@@ -232,7 +232,7 @@ alternateDec = _alternateDecreaseImage;
 		if (!_dragging)
 			[self.cell setShowsSelection:NO];
 
-		[[NSCursor resizeLeftRightCursor] set];
+		//[[NSCursor resizeLeftRightCursor] set];
 
 		CGFloat delta = position - _lastPosition;
 		self.floatValue += self.draggingMult * delta;
@@ -248,7 +248,7 @@ alternateDec = _alternateDecreaseImage;
 	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
 
 	if (![self.cell showsSelection] && NSPointInRect(locationInView, _draggableBounds)) {
-		[[NSCursor resizeLeftRightCursor] set];
+		//[[NSCursor resizeLeftRightCursor] set];
 	}
 
 	_dragging = NO;
