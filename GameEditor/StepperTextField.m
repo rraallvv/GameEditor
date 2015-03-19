@@ -3,16 +3,16 @@
 //  GameEditor
 //
 
-#import "TextField.h"
+#import "StepperTextField.h"
 #import <AppKit/AppKit.h>
 
 IB_DESIGNABLE
-@interface TextFieldCell : NSTextFieldCell
+@interface MarginTextFieldCell : NSTextFieldCell
 @property IBInspectable CGFloat margin;
 @property BOOL showsSelection;
 @end
 
-@implementation TextFieldCell
+@implementation MarginTextFieldCell
 
 @synthesize margin = _margin, showsSelection = _showsSelection;
 
@@ -96,7 +96,7 @@ typedef enum {
 	ActivatedButtonDecrease
 } ActivatedButton;
 
-@implementation TextField {
+@implementation StepperTextField {
 	CGFloat _lastPosition;
 	BOOL _dragging;
 	ActivatedButton _activatedButton;
@@ -131,8 +131,8 @@ alternateDec = _alternateDecreaseImage;
 		NSTextField *oldCell = self.cell;
 
 		NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:[NSKeyedArchiver archivedDataWithRootObject:oldCell]];
-		[arch setClass:[TextFieldCell class] forClassName:@"NSTextFieldCell"];
-		TextFieldCell *cell = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
+		[arch setClass:[MarginTextFieldCell class] forClassName:@"NSTextFieldCell"];
+		MarginTextFieldCell *cell = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
 		[arch finishDecoding];
 
 		self.cell = cell;
