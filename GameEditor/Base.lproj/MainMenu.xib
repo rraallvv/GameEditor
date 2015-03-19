@@ -350,6 +350,12 @@
                             </button>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="suo-YO-fqM" customClass="HandlesView">
                                 <rect key="frame" x="145" y="162" width="251" height="208"/>
+                                <subviews>
+                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="13P-xz-NcW">
+                                        <rect key="frame" x="0.0" y="191" width="16" height="16"/>
+                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSColorPanel" id="FPq-2h-gOS"/>
+                                    </imageView>
+                                </subviews>
                             </customView>
                         </subviews>
                         <constraints>
@@ -382,4 +388,7 @@
         <customObject id="420" customClass="NSFontManager"/>
         <arrayController objectClassName="Property" id="MHP-mB-ED2"/>
     </objects>
+    <resources>
+        <image name="NSColorPanel" width="32" height="32"/>
+    </resources>
 </document>
