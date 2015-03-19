@@ -203,13 +203,21 @@ alternateDec = _alternateDecreaseImage;
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
+	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
+
+	if (![self.cell showsSelection] && NSPointInRect(locationInView, _draggableBounds)) {
+		[[NSCursor resizeLeftRightCursor] set];
+	} else {
+		[[NSCursor arrowCursor] set];
+	}
+
 	_activatedButton = ActivatedButtonNone;
 
 	/* Reset the stepper buttons to show the normal image */
 	self.needsDisplay = YES;
 
 	_dragging = NO;
-	_lastPosition = theEvent.locationInWindow.x;
+	_lastPosition = locationInView.x;
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
