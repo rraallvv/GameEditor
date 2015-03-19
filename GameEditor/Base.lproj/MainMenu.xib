@@ -336,8 +336,20 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="k1U-YT-dMh">
+                                <rect key="frame" x="14" y="13" width="71" height="32"/>
+                                <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Pkg-eH-gld">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="saveAction:" target="494" id="h5y-VK-7Ka"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="k1U-YT-dMh" secondAttribute="bottom" constant="20" symbolic="YES" id="2hY-6I-iow"/>
+                            <constraint firstItem="k1U-YT-dMh" firstAttribute="leading" secondItem="BAm-0B-vb9" secondAttribute="leading" constant="20" symbolic="YES" id="87G-wh-SCC"/>
                             <constraint firstItem="56m-Ws-rUR" firstAttribute="top" secondItem="BAm-0B-vb9" secondAttribute="top" constant="20" symbolic="YES" id="GTK-yR-dP1"/>
                             <constraint firstAttribute="trailing" secondItem="56m-Ws-rUR" secondAttribute="trailing" constant="20" symbolic="YES" id="YTu-Al-hZs"/>
                             <constraint firstAttribute="bottom" secondItem="56m-Ws-rUR" secondAttribute="bottom" constant="20" symbolic="YES" id="v7h-qK-qkk"/>

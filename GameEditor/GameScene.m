@@ -12,23 +12,7 @@
 }
 
 -(void)didMoveToView:(SKView *)view {
-
 	_draggedNode = nil;
-
-	SKSpriteNode *sprite = [SKSpriteNode spriteNodeWithImageNamed:@"Spaceship"];
-	sprite.name = @"Spaceship";
-
-	sprite.position = CGPointMake(self.size.width/4, self.size.height/4);
-
-	SKAction *rotateAction = [SKAction rotateByAngle:M_PI duration:1];
-	SKAction *moveAction = [SKAction moveBy:CGVectorMake(self.size.width/2, self.size.height/2) duration:5];
-
-	[sprite runAction:[SKAction repeatActionForever:rotateAction]];
-	[sprite runAction:[SKAction repeatActionForever:[SKAction sequence:@[moveAction, moveAction.reversedAction]]]];
-
-	[self addChild:sprite];
-
-	sprite.paused = YES;
 }
 
 -(void)mouseDown:(NSEvent *)theEvent {
