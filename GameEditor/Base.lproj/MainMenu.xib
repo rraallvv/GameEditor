@@ -182,9 +182,24 @@
                                                                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="6Fk-3f-kkk">
                                                                     <rect key="frame" x="0.0" y="0.0" width="198" height="17"/>
                                                                     <subviews>
+                                                                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="voO-LH-bcR" customClass="StepperTextField">
+                                                                            <rect key="frame" x="99" y="-1" width="99" height="19"/>
+                                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Y" bezelStyle="round" id="eGk-WA-UKb">
+                                                                                <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="G5n-i3-AE4"/>
+                                                                                <font key="font" metaFont="smallSystem"/>
+                                                                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                            </textFieldCell>
+                                                                            <userDefinedRuntimeAttributes>
+                                                                                <userDefinedRuntimeAttribute type="number" keyPath="draggingMult">
+                                                                                    <real key="value" value="4.5"/>
+                                                                                </userDefinedRuntimeAttribute>
+                                                                            </userDefinedRuntimeAttributes>
+                                                                        </textField>
                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tOs-8Z-T1g" customClass="StepperTextField">
                                                                             <rect key="frame" x="0.0" y="-1" width="99" height="19"/>
                                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="X" bezelStyle="round" id="5Ah-em-z2L">
+                                                                                <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="FAV-pf-bmo"/>
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -202,19 +217,6 @@
                                                                                     </dictionary>
                                                                                 </binding>
                                                                             </connections>
-                                                                        </textField>
-                                                                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="voO-LH-bcR" customClass="StepperTextField">
-                                                                            <rect key="frame" x="99" y="-1" width="99" height="19"/>
-                                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Y" bezelStyle="round" id="eGk-WA-UKb">
-                                                                                <font key="font" metaFont="smallSystem"/>
-                                                                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                            </textFieldCell>
-                                                                            <userDefinedRuntimeAttributes>
-                                                                                <userDefinedRuntimeAttribute type="number" keyPath="draggingMult">
-                                                                                    <real key="value" value="4.5"/>
-                                                                                </userDefinedRuntimeAttribute>
-                                                                            </userDefinedRuntimeAttributes>
                                                                         </textField>
                                                                     </subviews>
                                                                     <constraints>
@@ -709,7 +711,7 @@
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GNd-ot-ftd" userLabel="position field" customClass="StepperTextField">
                                 <rect key="frame" x="87" y="558" width="96" height="19"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" bezelStyle="round" id="TgO-jb-ew0">
-                                    <numberFormatter key="formatter" formatterBehavior="custom10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="pRc-gw-7In"/>
+                                    <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="pRc-gw-7In"/>
                                     <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -754,9 +756,7 @@
         <arrayController objectClassName="Property" id="MHP-mB-ED2"/>
     </objects>
     <resources>
-        <image name="NSAddTemplate" width="11" height="11"/>
         <image name="NSGoLeftTemplate" width="9" height="12"/>
         <image name="NSGoRightTemplate" width="9" height="12"/>
-        <image name="NSRemoveTemplate" width="11" height="11"/>
     </resources>
 </document>
