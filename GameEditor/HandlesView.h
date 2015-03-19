@@ -7,7 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <SpriteKit/SpriteKit.h>
 
 @interface HandlesView : NSView
-
+@property (weak) SKScene *scene;
 @end
