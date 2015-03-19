@@ -12,4 +12,5 @@ IB_DESIGNABLE
 @property (nonatomic, strong) IBInspectable NSImage *alternateInc;
 @property (nonatomic, strong) IBInspectable NSImage *decrease;
 @property (nonatomic, strong) IBInspectable NSImage *alternateDec;
+@property (nonatomic) IBInspectable CGFloat draggingMult;
 @end

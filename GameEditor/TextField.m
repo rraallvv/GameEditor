@@ -100,7 +100,7 @@ alternateDec = _alternateDecreaseImage;
 		_decreaseImage = [NSImage imageNamed:NSImageNameRemoveTemplate];
 		_alternateIncreaseImage = [NSImage imageNamed:NSImageNameGoRightTemplate];
 		_alternateDecreaseImage = [NSImage imageNamed:NSImageNameGoLeftTemplate];
-		
+		_draggingMult = 1.0;
 
 		/* Calculate the stepper button's rect */
 		[self resizeSubviewsWithOldSize:NSZeroSize];
@@ -188,8 +188,8 @@ alternateDec = _alternateDecreaseImage;
 
 	CGFloat position = theEvent.locationInWindow.x;
 	CGFloat delta = position - _lastPosition;
-	self.floatValue += delta;
-	
+	self.floatValue += self.draggingMult * delta;
+
 	[self updateBindingValue];
 
 	_lastPosition = position;
