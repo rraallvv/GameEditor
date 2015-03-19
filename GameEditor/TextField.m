@@ -12,7 +12,9 @@ IB_DESIGNABLE
 @property BOOL showsSelection;
 @end
 
-@implementation TextFieldCell
+@implementation TextFieldCell {
+	NSColor *_savedInsertionPointColor;
+}
 
 @synthesize margin = _margin, showsSelection = _showsSelection;
 
@@ -77,8 +79,10 @@ IB_DESIGNABLE
 
 	if (_showsSelection) {
 		[self selectWithFrame:rect	inView:controlView editor:fieldEditor delegate:self start:0 length:self.stringValue.length];
+		fieldEditor.insertionPointColor = _savedInsertionPointColor;
 	} else {
 		[self selectWithFrame:rect	inView:controlView editor:fieldEditor delegate:self start:0 length:0];
+		fieldEditor.insertionPointColor = [NSColor clearColor];
 	}
 }
 
@@ -174,7 +178,7 @@ alternateDec = _alternateDecreaseImage;
 	} else if (NSPointInRect(locationInView, _decreaseClickableRect)) {
 		[self.cell setShowsSelection:NO];
 		[self decreaseButtonPressed];
-	} else if (theEvent.clickCount == 2) {
+	} else {
 		[self.cell setShowsSelection:YES];
 	}
 
@@ -198,9 +202,9 @@ alternateDec = _alternateDecreaseImage;
 	CGFloat position = theEvent.locationInWindow.x;
 
 	if (_activatedButton == ActivatedButtonNone) {
-		NSColor *insertionPointColor = [NSColor clearColor];
-		NSTextView *fieldEditor = (NSTextView*)[self.window fieldEditor:YES forObject:self];
-		fieldEditor.insertionPointColor = insertionPointColor;
+
+		if (!_dragging)
+			[self.cell setShowsSelection:NO];
 
 		[[NSCursor resizeLeftRightCursor] set];
 
