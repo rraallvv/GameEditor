@@ -190,6 +190,8 @@ alternateDec = _alternateDecreaseImage;
 	CGFloat delta = position - _lastPosition;
 	self.floatValue += delta;
 	
+	[self updateBindingValue];
+
 	_lastPosition = position;
 }
 
