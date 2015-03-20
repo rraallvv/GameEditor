@@ -73,10 +73,6 @@
 	[_arrayController addObject: [Property propertyWithName:@"paused" node:sprite type:@"bool"]];
 
 	_handlesView.node = sprite;
-	[_handlesView bind:@"position" toObject:sprite withKeyPath:@"position" options:nil];
-	[_handlesView bind:@"zRotation" toObject:sprite withKeyPath:@"zRotation" options:nil];
-	[_handlesView bind:@"size" toObject:sprite withKeyPath:@"size" options:nil];
-	[_handlesView bind:@"anchorPoint" toObject:sprite withKeyPath:@"anchorPoint" options:nil];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
