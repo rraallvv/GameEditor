@@ -6,9 +6,9 @@
 #import <Cocoa/Cocoa.h>
 #import <SpriteKit/SpriteKit.h>
 #import "Utils.h"
-#import "HandlesView.h"
+#import "EditorView.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, NSTableViewDelegate, HandlesViewDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSTableViewDelegate, EditorViewDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet SKView *skView;

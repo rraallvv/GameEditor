@@ -6,7 +6,7 @@
 #import "AppDelegate.h"
 #import "GameScene.h"
 #import "Utils.h"
-#import "HandlesView.h"
+#import "EditorView.h"
 
 @implementation SKScene (Unarchive)
 
@@ -40,7 +40,7 @@
 @implementation AppDelegate {
 	IBOutlet NSTableView *_tableView;
 	IBOutlet NSArrayController *_arrayController;
-	IBOutlet HandlesView *_handlesView;
+	IBOutlet EditorView *_editorView;
 }
 
 @synthesize window = _window;
@@ -65,8 +65,9 @@
     self.skView.showsFPS = YES;
     self.skView.showsNodeCount = YES;
 
-	_handlesView.scene = scene;
-	_handlesView.delegate = self;
+	/* Setup the editor view */
+	_editorView.scene = scene;
+	_editorView.delegate = self;
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
