@@ -151,6 +151,10 @@ alternateDec = _alternateDecreaseImage;
 		[arch finishDecoding];
 
 		self.cell = cell;
+
+		/* Add mouse pointer tacking area */
+		NSTrackingArea *area = [[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingActiveAlways|NSTrackingMouseMoved owner:self userInfo:nil];
+		[self addTrackingArea:area];
 	}
 	return self;
 }
