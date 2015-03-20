@@ -14,4 +14,5 @@
 @property CGPoint position;
 @property CGFloat zRotation;
 @property CGSize size;
+@property CGPoint anchorPoint;
 @end

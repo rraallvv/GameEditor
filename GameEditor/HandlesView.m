@@ -14,23 +14,30 @@
 @synthesize
 position = _position,
 zRotation = _zRotation,
-size = _size;
+size = _size,
+anchorPoint = _anchorPoint;
 
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
+	[self drawRectangleOutline];
+}
 
+- (void)drawRectangleOutline {
 	CGFloat width = _size.width;
 	CGFloat	height = _size.height;
 	CGFloat cosine = cos(_zRotation);
 	CGFloat sine = sin(_zRotation);
 
+	CGPoint anchor = CGPointMake(_position.x + height * _anchorPoint.y * sine - width * _anchorPoint.x * cosine,
+								 _position.y - height * _anchorPoint.y * cosine - width * _anchorPoint.x * sine);
+
 	NSBezierPath *line = [NSBezierPath bezierPath];
-	[line moveToPoint:_position];
-	CGPoint point1 = NSMakePoint(_position.x + width * cosine, _position.y + width * sine);
+	[line moveToPoint:anchor];
+	CGPoint point1 = NSMakePoint(anchor.x + width * cosine, anchor.y + width * sine);
 	[line lineToPoint:point1];
 	CGPoint point2 = NSMakePoint(point1.x - height * sine, point1.y + height * cosine);
 	[line lineToPoint:point2];
-	CGPoint point3 = NSMakePoint(_position.x - height * sine, _position.y + height * cosine);
+	CGPoint point3 = NSMakePoint(anchor.x - height * sine, anchor.y + height * cosine);
 	[line lineToPoint:point3];
 	[line closePath];
 	[line setLineWidth:2.0];
@@ -65,6 +72,14 @@ size = _size;
 - (CGSize)size {
 	CGPoint point = [self.node.scene convertPointFromView:CGPointMake(_size.width, _size.height)];
 	return CGSizeMake(point.x, point.y);
+}
+
+- (void)setAnchorPoint:(CGPoint)anchorPoint {
+	_anchorPoint = anchorPoint;
+}
+
+- (CGPoint)anchorPoint {
+	return _anchorPoint;
 }
 
 @end
