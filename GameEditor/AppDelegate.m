@@ -73,8 +73,9 @@
 	[_arrayController addObject: [Property propertyWithName:@"paused" node:sprite type:@"bool"]];
 
 	_handlesView.scene = scene;
-	[_handlesView bind:@"frameCenter" toObject:sprite withKeyPath:@"position" options:nil];
-	[_handlesView bind:@"frameCenterRotation" toObject:sprite withKeyPath:@"zRotation" options:[DegreesTransformer transformer]];
+	[_handlesView bind:@"position" toObject:sprite withKeyPath:@"position" options:nil];
+	[_handlesView bind:@"zRotation" toObject:sprite withKeyPath:@"zRotation" options:nil];
+	[_handlesView bind:@"size" toObject:sprite withKeyPath:@"size" options:nil];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {

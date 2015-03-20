@@ -11,43 +11,60 @@
 
 @implementation HandlesView
 
+@synthesize
+position = _position,
+zRotation = _zRotation,
+size = _size;
+
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
-    
+
+	CGFloat width = _size.width;
+	CGFloat	height = _size.height;
+	CGFloat cosine = cos(_zRotation);
+	CGFloat sine = sin(_zRotation);
+
 	NSBezierPath *line = [NSBezierPath bezierPath];
-	[line moveToPoint:NSMakePoint(NSMinX([self bounds]), NSMinY([self bounds]))];
-	[line lineToPoint:NSMakePoint(NSMaxX([self bounds]), NSMinY([self bounds]))];
-	[line lineToPoint:NSMakePoint(NSMaxX([self bounds]), NSMaxY([self bounds]))];
-	[line lineToPoint:NSMakePoint(NSMinX([self bounds]), NSMaxY([self bounds]))];
+	[line moveToPoint:_position];
+	CGPoint point1 = NSMakePoint(_position.x + width * cosine, _position.y + width * sine);
+	[line lineToPoint:point1];
+	CGPoint point2 = NSMakePoint(point1.x - height * sine, point1.y + height * cosine);
+	[line lineToPoint:point2];
+	CGPoint point3 = NSMakePoint(_position.x - height * sine, _position.y + height * cosine);
+	[line lineToPoint:point3];
 	[line closePath];
 	[line setLineWidth:2.0];
-	[[NSColor redColor] set];
+	[[NSColor whiteColor] set];
 	[line stroke];
-
-	NSBezierPath *line2 = [NSBezierPath bezierPath];
-	[line2 moveToPoint:NSMakePoint(NSMinX([self frame]), NSMinY([self frame]))];
-	[line2 lineToPoint:NSMakePoint(NSMaxX([self frame]), NSMinY([self frame]))];
-	[line2 lineToPoint:NSMakePoint(NSMaxX([self frame]), NSMaxY([self frame]))];
-	[line2 lineToPoint:NSMakePoint(NSMinX([self frame]), NSMaxY([self frame]))];
-	[line2 closePath];
-	[line2 setLineWidth:2.0];
-	[[NSColor blueColor] set];
-	[line2 stroke];
 }
 
-- (void)setFrameCenter:(CGPoint)frameCenter {
-	CGPoint position = [self.scene convertPointToView:frameCenter];
-	NSRect frame = self.frame;
-	CGFloat diaggonal = sqrt(pow(NSWidth(self.bounds), 2)+pow(NSHeight(self.bounds), 2));
-	CGFloat angle = atan2(NSHeight(self.bounds), NSWidth(self.bounds)) + GLKMathDegreesToRadians(self.frameCenterRotation);
-	position.x -= diaggonal / 2 * cos(angle);
-	position.y -= diaggonal / 2 * sin(angle);
-	frame.origin = position;
-	self.frame = frame;
+- (void)setPosition:(CGPoint)position {
+	_position = [self.scene convertPointToView:position];
+	[self setNeedsDisplay:YES];
 }
 
-- (CGPoint)frameCenter {
-	return self.frame.origin;
+- (CGPoint)position {
+	return [self.scene convertPointFromView:_position];
+}
+
+- (void)setZRotation:(CGFloat)zRotation {
+	_zRotation = zRotation;
+	[self setNeedsDisplay:YES];
+}
+
+- (CGFloat)zRotation {
+	return _zRotation;
+}
+
+- (void)setSize:(CGSize)size {
+	CGPoint point = [self.scene convertPointToView:CGPointMake(size.width, size.height)];
+	_size = CGSizeMake(point.x, point.y);
+	[self setNeedsDisplay:YES];
+}
+
+- (CGSize)size {
+	CGPoint point = [self.scene convertPointFromView:CGPointMake(_size.width, _size.height)];
+	return CGSizeMake(point.x, point.y);
 }
 
 @end
