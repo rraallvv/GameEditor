@@ -91,7 +91,7 @@ IB_DESIGNABLE
 	NSTextView *fieldEditor = (NSTextView*)[controlView.window fieldEditor:YES forObject:self];
 
 	if (_showsSelection) {
-		[controlView selectText:self];
+		[controlView performSelector:@selector(selectText:) withObject:controlView afterDelay:0.125];
 		fieldEditor.insertionPointColor = nil;
 	} else {
 		[self selectWithFrame:controlView.bounds inView:controlView editor:fieldEditor delegate:controlView start:0 length:0];
