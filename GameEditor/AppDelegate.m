@@ -72,7 +72,7 @@
 	[_arrayController addObject: [Property propertyWithName:@"zRotation" node:sprite type:@"degrees"]];
 	[_arrayController addObject: [Property propertyWithName:@"paused" node:sprite type:@"bool"]];
 
-	_handlesView.scene = scene;
+	_handlesView.node = sprite;
 	[_handlesView bind:@"position" toObject:sprite withKeyPath:@"position" options:nil];
 	[_handlesView bind:@"zRotation" toObject:sprite withKeyPath:@"zRotation" options:nil];
 	[_handlesView bind:@"size" toObject:sprite withKeyPath:@"size" options:nil];
