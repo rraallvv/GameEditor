@@ -112,7 +112,7 @@ typedef enum {
 } ActivatedButton;
 
 @implementation StepperTextField {
-	CGFloat _lastPosition;
+	NSPoint _lastMousePosition;
 	BOOL _dragging;
 	ActivatedButton _activatedButton;
 	NSRect _increaseButtonRect;
@@ -192,7 +192,7 @@ alternateDec = _alternateDecreaseImage;
 	}
 
 	_dragging = NO;
-	_lastPosition = theEvent.locationInWindow.x;
+	_lastMousePosition = locationInView;
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
@@ -214,11 +214,11 @@ alternateDec = _alternateDecreaseImage;
 	self.needsDisplay = YES;
 
 	_dragging = NO;
-	_lastPosition = locationInView.x;
+	_lastMousePosition = locationInView;
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
-	CGFloat position = theEvent.locationInWindow.x;
+	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
 
 	if (_activatedButton == ActivatedButtonNone) {
 
@@ -227,14 +227,14 @@ alternateDec = _alternateDecreaseImage;
 
 		//[[NSCursor resizeLeftRightCursor] set];
 
-		CGFloat delta = position - _lastPosition;
+		CGFloat delta = locationInView.x - _lastMousePosition.x;
 		self.floatValue += self.draggingMult * delta;
 
 		[self updateBindingValue];
 	}
 
 	_dragging = YES;
-	_lastPosition = position;
+	_lastMousePosition = locationInView;
 }
 
 - (void)mouseMoved:(NSEvent *)theEvent {
@@ -245,7 +245,7 @@ alternateDec = _alternateDecreaseImage;
 	}
 
 	_dragging = NO;
-	_lastPosition = locationInView.x;
+	_lastMousePosition = locationInView;
 }
 
 - (void)increaseButtonPressed {
