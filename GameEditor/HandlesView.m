@@ -39,12 +39,12 @@ size = _size;
 }
 
 - (void)setPosition:(CGPoint)position {
-	_position = [self.scene convertPointToView:position];
+	_position = [self.node.scene convertPointToView:position];
 	[self setNeedsDisplay:YES];
 }
 
 - (CGPoint)position {
-	return [self.scene convertPointFromView:_position];
+	return [self.node.scene convertPointFromView:_position];
 }
 
 - (void)setZRotation:(CGFloat)zRotation {
@@ -57,13 +57,13 @@ size = _size;
 }
 
 - (void)setSize:(CGSize)size {
-	CGPoint point = [self.scene convertPointToView:CGPointMake(size.width, size.height)];
+	CGPoint point = [self.node.scene convertPointToView:CGPointMake(size.width, size.height)];
 	_size = CGSizeMake(point.x, point.y);
 	[self setNeedsDisplay:YES];
 }
 
 - (CGSize)size {
-	CGPoint point = [self.scene convertPointFromView:CGPointMake(_size.width, _size.height)];
+	CGPoint point = [self.node.scene convertPointFromView:CGPointMake(_size.width, _size.height)];
 	return CGSizeMake(point.x, point.y);
 }
 
