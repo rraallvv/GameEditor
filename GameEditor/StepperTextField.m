@@ -92,10 +92,10 @@ IB_DESIGNABLE
 
 	if (_showsSelection) {
 		[controlView performSelector:@selector(selectText:) withObject:controlView afterDelay:0.125];
-		fieldEditor.insertionPointColor = nil;
+		//fieldEditor.insertionPointColor = nil;
 	} else {
 		[self selectWithFrame:controlView.bounds inView:controlView editor:fieldEditor delegate:controlView start:0 length:0];
-		fieldEditor.insertionPointColor = [NSColor clearColor];
+		//fieldEditor.insertionPointColor = [NSColor clearColor];
 	}
 }
 
