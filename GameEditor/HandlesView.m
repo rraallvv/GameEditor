@@ -134,6 +134,8 @@ anchorPoint = _anchorPoint;
 	[self bind:@"zRotation" toObject:_node withKeyPath:@"zRotation" options:nil];
 	[self bind:@"size" toObject:_node withKeyPath:@"size" options:nil];
 	[self bind:@"anchorPoint" toObject:_node withKeyPath:@"anchorPoint" options:nil];
+
+	[self.delegate selectedNode:(SKNode *)node];
 }
 
 - (SKNode *)node {
