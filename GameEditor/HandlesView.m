@@ -28,36 +28,50 @@ anchorPoint = _anchorPoint;
 	CGFloat cosine = cos(_zRotation);
 	CGFloat sine = sin(_zRotation);
 
+	/* Outline rectangle*/
 	CGPoint point1 = CGPointMake(_position.x + height * _anchorPoint.y * sine - width * _anchorPoint.x * cosine,
 								 _position.y - height * _anchorPoint.y * cosine - width * _anchorPoint.x * sine);
 
-	NSBezierPath *line = [NSBezierPath bezierPath];
-	[line moveToPoint:point1];
-	CGPoint point2 = NSMakePoint(point1.x + width * cosine, point1.y + width * sine);
-	[line lineToPoint:point2];
-	CGPoint point3 = NSMakePoint(point2.x - height * sine, point2.y + height * cosine);
-	[line lineToPoint:point3];
-	CGPoint point4 = NSMakePoint(point1.x - height * sine, point1.y + height * cosine);
-	[line lineToPoint:point4];
-	[line closePath];
-	[line setLineWidth:1.0];
-	[[NSColor whiteColor] set];
-	[line stroke];
+	const CGFloat outlineLineWidth = 1.5;
 
+	NSBezierPath *outlinePath = [NSBezierPath bezierPath];
+	[outlinePath moveToPoint:point1];
+	CGPoint point2 = NSMakePoint(point1.x + width * cosine, point1.y + width * sine);
+	[outlinePath lineToPoint:point2];
+	CGPoint point3 = NSMakePoint(point2.x - height * sine, point2.y + height * cosine);
+	[outlinePath lineToPoint:point3];
+	CGPoint point4 = NSMakePoint(point1.x - height * sine, point1.y + height * cosine);
+	[outlinePath lineToPoint:point4];
+	[outlinePath closePath];
+	[outlinePath setLineWidth:outlineLineWidth];
+	[[NSColor whiteColor] set];
+	[outlinePath stroke];
+
+	const CGFloat circleLineWidth = 1.5;
+
+	/* Corner handles */
 	NSColor *fillColor = [NSColor blueColor];
 	NSColor *strokeColor = [NSColor whiteColor];
-	[self drawCircleWithCenter:point1 radius:5.0 fillColor:fillColor strokeColor:strokeColor];
-	[self drawCircleWithCenter:point2 radius:5.0 fillColor:fillColor strokeColor:strokeColor];
-	[self drawCircleWithCenter:point3 radius:5.0 fillColor:fillColor strokeColor:strokeColor];
-	[self drawCircleWithCenter:point4 radius:5.0 fillColor:fillColor strokeColor:strokeColor];
+	[self drawCircleWithCenter:point1 radius:5.0 fillColor:fillColor strokeColor:strokeColor lineWidth:circleLineWidth];
+	[self drawCircleWithCenter:point2 radius:5.0 fillColor:fillColor strokeColor:strokeColor lineWidth:circleLineWidth];
+	[self drawCircleWithCenter:point3 radius:5.0 fillColor:fillColor strokeColor:strokeColor lineWidth:circleLineWidth];
+	[self drawCircleWithCenter:point4 radius:5.0 fillColor:fillColor strokeColor:strokeColor lineWidth:circleLineWidth];
 
-	[self drawCircleWithCenter:_position radius:5.0 fillColor:fillColor strokeColor:strokeColor];
+	/* Rotation angle handle */
+	const CGFloat lineDistance = 40;
+	CGPoint lineEndPoint = CGPointMake(_position.x + lineDistance * cosine, _position.y + lineDistance * sine);
+	[NSBezierPath strokeLineFromPoint:_position toPoint:lineEndPoint];
+	[self drawCircleWithCenter:_position radius:20.0 fillColor:nil strokeColor:strokeColor lineWidth:circleLineWidth];
+	[self drawCircleWithCenter:lineEndPoint radius:5.0 fillColor:fillColor strokeColor:strokeColor lineWidth:circleLineWidth];
+
+	/* Anchor point handle */
+	[self drawCircleWithCenter:_position radius:5.0 fillColor:fillColor strokeColor:strokeColor lineWidth:circleLineWidth];
 }
 
-- (void)drawCircleWithCenter:(CGPoint)center radius:(CGFloat)radius fillColor:(NSColor *)fillColor strokeColor:(NSColor *)strokeColor {
+- (void)drawCircleWithCenter:(CGPoint)center radius:(CGFloat)radius fillColor:(NSColor *)fillColor strokeColor:(NSColor *)strokeColor lineWidth:(CGFloat)lineWidth{
 	NSBezierPath *path = [NSBezierPath bezierPath];
 	[path appendBezierPathWithArcWithCenter:center radius:radius startAngle:0 endAngle:M_2_PI clockwise:YES];
-	[path setLineWidth:2.0];
+	[path setLineWidth:lineWidth];
 	if (fillColor) {
 		[fillColor set];
 		[path fill];
