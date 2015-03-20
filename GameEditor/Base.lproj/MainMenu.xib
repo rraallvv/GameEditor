@@ -206,7 +206,7 @@
                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tOs-8Z-T1g" customClass="StepperTextField">
                                                                             <rect key="frame" x="0.0" y="-1" width="81" height="19"/>
                                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="X" bezelStyle="round" id="5Ah-em-z2L">
-                                                                                <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="FAV-pf-bmo"/>
+                                                                                <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#.###" negativeFormat="#.###" numberStyle="decimal" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="FAV-pf-bmo"/>
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -228,10 +228,14 @@
                                                                                 </binding>
                                                                             </connections>
                                                                         </textField>
-                                                                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="voO-LH-bcR" customClass="StepperTextField">
+                                                                        <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="voO-LH-bcR" customClass="StepperTextField">
                                                                             <rect key="frame" x="80" y="-1" width="81" height="19"/>
                                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Y" bezelStyle="round" id="eGk-WA-UKb">
-                                                                                <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="G5n-i3-AE4"/>
+                                                                                <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#.###" negativeFormat="#.###" numberStyle="decimal" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="G5n-i3-AE4">
+                                                                                    <metadata>
+                                                                                        <real key="inspectorSampleValue" value="1"/>
+                                                                                    </metadata>
+                                                                                </numberFormatter>
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
