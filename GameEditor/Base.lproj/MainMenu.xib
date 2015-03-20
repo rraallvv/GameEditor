@@ -125,7 +125,7 @@
                                     <action selector="saveAction:" target="494" id="h5y-VK-7Ka"/>
                                 </connections>
                             </button>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="suo-YO-fqM" customClass="HandlesView">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="suo-YO-fqM" customClass="EditorView">
                                 <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                                 <subviews>
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="56m-Ws-rUR">
@@ -399,7 +399,7 @@
         <customObject id="494" customClass="AppDelegate">
             <connections>
                 <outlet property="_arrayController" destination="MHP-mB-ED2" id="WIV-gD-tYo"/>
-                <outlet property="_handlesView" destination="suo-YO-fqM" id="D5W-Hu-pTw"/>
+                <outlet property="_editorView" destination="suo-YO-fqM" id="D5W-Hu-pTw"/>
                 <outlet property="_tableView" destination="tum-wb-Po7" id="pz9-7M-hmt"/>
                 <outlet property="skView" destination="BAm-0B-vb9" id="MCo-T6-F5E"/>
                 <outlet property="window" destination="371" id="532"/>

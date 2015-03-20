@@ -1,15 +1,15 @@
 //
-//  HandlesView.m
+//  EditorView.m
 //  GameEditor
 //
 //  Created by Rhody Lugo on 3/19/15.
 //
 //
 
-#import "HandlesView.h"
+#import "EditorView.h"
 #import <GLKit/GLKit.h>
 
-@implementation HandlesView {
+@implementation EditorView {
 	CGPoint _draggedPosition;
 }
 

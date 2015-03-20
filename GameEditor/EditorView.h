@@ -1,5 +1,5 @@
 //
-//  HandlesView.h
+//  EditorView.h
 //  GameEditor
 //
 //  Created by Rhody Lugo on 3/19/15.
@@ -9,11 +9,11 @@
 #import <Cocoa/Cocoa.h>
 #import <SpriteKit/SpriteKit.h>
 
-@protocol HandlesViewDelegate
+@protocol EditorViewDelegate
 - (void)selectedNode:(SKNode *)node;
 @end
 
-@interface HandlesView : NSView
+@interface EditorView : NSView
 @property (weak) SKNode *node;
 @property (weak) SKScene *scene;
 @property CGPoint position;
