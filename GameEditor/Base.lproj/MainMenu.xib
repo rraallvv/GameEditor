@@ -215,6 +215,10 @@
                                                                                 <userDefinedRuntimeAttribute type="number" keyPath="draggingMult">
                                                                                     <real key="value" value="4.5"/>
                                                                                 </userDefinedRuntimeAttribute>
+                                                                                <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
+                                                                                <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="AltIncreaseStepper"/>
+                                                                                <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="DecreaseStepper"/>
+                                                                                <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                                                                             </userDefinedRuntimeAttributes>
                                                                             <connections>
                                                                                 <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.x" id="NhU-vE-Azm">
@@ -236,6 +240,10 @@
                                                                                 <userDefinedRuntimeAttribute type="number" keyPath="draggingMult">
                                                                                     <real key="value" value="4.5"/>
                                                                                 </userDefinedRuntimeAttribute>
+                                                                                <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
+                                                                                <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="AltIncreaseStepper"/>
+                                                                                <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="DecreaseStepper"/>
+                                                                                <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                                                                             </userDefinedRuntimeAttributes>
                                                                             <connections>
                                                                                 <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.y" id="vhb-jw-UDZ"/>
@@ -278,6 +286,10 @@
                                                                         <userDefinedRuntimeAttribute type="number" keyPath="draggingMult">
                                                                             <real key="value" value="0.01"/>
                                                                         </userDefinedRuntimeAttribute>
+                                                                        <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
+                                                                        <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="AltIncreaseStepper"/>
+                                                                        <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="DecreaseStepper"/>
+                                                                        <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                                                                     </userDefinedRuntimeAttributes>
                                                                     <connections>
                                                                         <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.propertyValue" id="edY-f5-Cs6">
@@ -391,6 +403,10 @@
         <arrayController objectClassName="Property" id="MHP-mB-ED2"/>
     </objects>
     <resources>
+        <image name="AltDecreaseStepper" width="11" height="13"/>
+        <image name="AltIncreaseStepper" width="11" height="13"/>
+        <image name="DecreaseStepper" width="11" height="13"/>
+        <image name="IncreaseStepper" width="11" height="13"/>
         <image name="NSColorPanel" width="32" height="32"/>
     </resources>
 </document>
