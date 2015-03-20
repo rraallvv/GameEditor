@@ -75,7 +75,7 @@ IB_DESIGNABLE
 
 // Normal padding
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView {
-	/* cellFrame= [self titleRectForBounds:cellFrame]; */
+	//cellFrame = [self titleRectForBounds:cellFrame];
 	[super drawWithFrame:cellFrame inView:controlView];
 }
 
@@ -119,7 +119,7 @@ typedef enum {
 	NSRect _decreaseButtonRect;
 	NSRect _increaseClickableRect;
 	NSRect _decreaseClickableRect;
-	NSRect _draggableBounds;
+	NSRect _draggableRect;
 }
 
 @synthesize
@@ -176,7 +176,7 @@ alternateDec = _alternateDecreaseImage;
 - (void)mouseDown:(NSEvent *)theEvent {
 	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
 
-	if (theEvent.clickCount == 2) {
+	if (theEvent.clickCount == 2 && NSPointInRect(locationInView, _draggableRect)) {
 		[self.cell setShowsSelection:YES];
 	} else {
 		if (NSPointInRect(locationInView, _increaseClickableRect)) {
@@ -194,7 +194,7 @@ alternateDec = _alternateDecreaseImage;
 - (void)mouseUp:(NSEvent *)theEvent {
 	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
 
-	if (NSPointInRect(locationInView, _draggableBounds)) {
+	if (NSPointInRect(locationInView, _draggableRect)) {
 		if ([self.cell showsSelection]) {
 			//[[NSCursor IBeamCursor] set];
 		} else {
@@ -236,7 +236,7 @@ alternateDec = _alternateDecreaseImage;
 - (void)mouseMoved:(NSEvent *)theEvent {
 	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
 
-	if (![self.cell showsSelection] && NSPointInRect(locationInView, _draggableBounds)) {
+	if (![self.cell showsSelection] && NSPointInRect(locationInView, _draggableRect)) {
 		//[[NSCursor resizeLeftRightCursor] set];
 	}
 
@@ -293,15 +293,15 @@ alternateDec = _alternateDecreaseImage;
 	_decreaseButtonRect = decreaseButtonRect;
 
 	/* Calculate the recangle where to change the pointer for dragging the value */
-	_draggableBounds = self.bounds;
+	_draggableRect = self.bounds;
 	leftPadding = (NSMinX(_decreaseButtonRect) - NSMinX(self.bounds)) + NSWidth(_decreaseButtonRect);
-	_draggableBounds.origin.x += leftPadding;
+	_draggableRect.origin.x += leftPadding;
 	rightPadding = (NSMaxX(self.bounds) - NSMaxX(_increaseButtonRect)) + NSWidth(_increaseButtonRect);
-	_draggableBounds.size.width -= leftPadding + rightPadding;
+	_draggableRect.size.width -= leftPadding + rightPadding;
 
 	/* calculate the are where the increase and decrease buttons are activated */
-	_increaseClickableRect = NSMakeRect(NSMaxX(_draggableBounds), NSMinY(self.bounds), NSMaxX(self.bounds)-NSMaxX(_draggableBounds), NSHeight(self.bounds));
-	_decreaseClickableRect = NSMakeRect(0, 0, NSMinX(_draggableBounds), NSHeight(self.bounds));
+	_increaseClickableRect = NSMakeRect(NSMaxX(_draggableRect), NSMinY(self.bounds), NSMaxX(self.bounds)-NSMaxX(_draggableRect), NSHeight(self.bounds));
+	_decreaseClickableRect = NSMakeRect(0, 0, NSMinX(_draggableRect), NSHeight(self.bounds));
 
 	if ([self.cell isKindOfClass:[MarginTextFieldCell class]]) {
 		/* Desired margin */
