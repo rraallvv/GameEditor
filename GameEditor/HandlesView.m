@@ -9,10 +9,13 @@
 #import "HandlesView.h"
 #import <GLKit/GLKit.h>
 
-@implementation HandlesView
+@implementation HandlesView {
+	CGPoint _draggedPosition;
+}
 
 @synthesize
 node = _node,
+scene = _scene,
 position = _position,
 zRotation = _zRotation,
 size = _size,
@@ -126,6 +129,7 @@ anchorPoint = _anchorPoint;
 	[self unbind:@"size"];
 	[self unbind:@"anchorPoint"];
 	_node = node;
+	self.scene = [_node scene];
 	[self bind:@"position" toObject:_node withKeyPath:@"position" options:nil];
 	[self bind:@"zRotation" toObject:_node withKeyPath:@"zRotation" options:nil];
 	[self bind:@"size" toObject:_node withKeyPath:@"size" options:nil];
@@ -134,6 +138,22 @@ anchorPoint = _anchorPoint;
 
 - (SKNode *)node {
 	return _node;
+}
+
+- (void)mouseDown:(NSEvent *)theEvent {
+	if (_scene) {
+		CGPoint location = [theEvent locationInNode:_scene];
+		self.node = [self.scene nodeAtPoint:location];
+		CGPoint nodePosition = [self.node position];
+		_draggedPosition = CGPointMake(location.x - nodePosition.x, location.y - nodePosition.y);
+	}
+}
+
+- (void)mouseDragged:(NSEvent *)theEvent {
+	if (_scene) {
+		CGPoint location = [theEvent locationInNode:_scene];
+		self.node.position = CGPointMake(location.x - _draggedPosition.x, location.y - _draggedPosition.y);
+	}
 }
 
 @end

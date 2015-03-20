@@ -11,6 +11,7 @@
 
 @interface HandlesView : NSView
 @property (weak) SKNode *node;
+@property (weak) SKScene *scene;
 @property CGPoint position;
 @property CGFloat zRotation;
 @property CGSize size;
