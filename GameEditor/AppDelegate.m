@@ -65,14 +65,8 @@
     self.skView.showsFPS = YES;
     self.skView.showsNodeCount = YES;
 
-	SKSpriteNode *sprite = (SKSpriteNode *)[scene childNodeWithName:@"//SpaceShip"];
-
-	/* Bindings */
-	[_arrayController addObject: [Property propertyWithName:@"position" node:sprite type:@"point"]];
-	[_arrayController addObject: [Property propertyWithName:@"zRotation" node:sprite type:@"degrees"]];
-	[_arrayController addObject: [Property propertyWithName:@"paused" node:sprite type:@"bool"]];
-
-	_handlesView.node = sprite;
+	_handlesView.scene = scene;
+	_handlesView.delegate = self;
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
@@ -90,6 +84,18 @@
 
 - (IBAction)saveAction:(id)sender {
 	[SKScene archiveScene:self.skView.scene toFile:@"GameScene"];
+}
+
+- (void)selectedNode:(SKNode *)node {
+	/* Clear the attibutes table's array controller*/
+	NSRange range = NSMakeRange(0, [[_arrayController arrangedObjects] count]);
+	[_arrayController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+
+	/* Add the attibutes of the selected node */
+	[_arrayController addObject: [Property propertyWithName:@"position" node:node type:@"point"]];
+	[_arrayController addObject: [Property propertyWithName:@"zRotation" node:node type:@"degrees"]];
+	[_arrayController addObject: [Property propertyWithName:@"paused" node:node type:@"bool"]];
+	[_tableView reloadData];
 }
 
 @end
