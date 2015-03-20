@@ -151,10 +151,6 @@ alternateDec = _alternateDecreaseImage;
 		[arch finishDecoding];
 
 		self.cell = cell;
-
-		/* Fix the margin for the rounded rect button */
-		CGFloat defaultMargin = (self.bounds.size.width - [cell drawingRectForBounds:self.bounds].size.width) / 2.0;
-		cell.margin = NSMaxX(_decreaseButtonRect) + NSMinX(_decreaseButtonRect) - defaultMargin;
 	}
 	return self;
 }
@@ -298,14 +294,23 @@ alternateDec = _alternateDecreaseImage;
 
 	/* Calculate the recangle where to change the pointer for dragging the value */
 	_draggableBounds = self.bounds;
-	leftPadding = 1.5 * (NSMinX(_decreaseButtonRect) - NSMinX(self.bounds)) + NSWidth(_decreaseButtonRect);
+	leftPadding = (NSMinX(_decreaseButtonRect) - NSMinX(self.bounds)) + NSWidth(_decreaseButtonRect);
 	_draggableBounds.origin.x += leftPadding;
-	rightPadding = 1.5 * (NSMaxX(self.bounds) - NSMaxX(_increaseButtonRect)) + NSWidth(_increaseButtonRect);
+	rightPadding = (NSMaxX(self.bounds) - NSMaxX(_increaseButtonRect)) + NSWidth(_increaseButtonRect);
 	_draggableBounds.size.width -= leftPadding + rightPadding;
 
 	/* calculate the are where the increase and decrease buttons are activated */
 	_increaseClickableRect = NSMakeRect(NSMaxX(_draggableBounds), NSMinY(self.bounds), NSMaxX(self.bounds)-NSMaxX(_draggableBounds), NSHeight(self.bounds));
 	_decreaseClickableRect = NSMakeRect(0, 0, NSMinX(_draggableBounds), NSHeight(self.bounds));
+
+	if ([self.cell isKindOfClass:[MarginTextFieldCell class]]) {
+		/* Desired margin */
+		CGFloat margin = (NSWidth(_increaseClickableRect) + NSWidth(_decreaseClickableRect)) / 2;
+
+		/* Compensate for intrinsic margin of the cell */
+		margin -= (self.bounds.size.width - [self.cell drawingRectForBounds:self.bounds].size.width) / 2;
+		[self.cell setMargin:margin];
+	}
 }
 
 - (NSView *)hitTest:(NSPoint)aPoint {
