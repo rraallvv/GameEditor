@@ -159,11 +159,6 @@ alternateDec = _alternateDecreaseImage;
 	return self;
 }
 
-- (NSRect)calculateButonRectWithImage:(NSImage *)image {
-	NSSize buttonSize = image.size;
-	return NSMakeRect(0, 0, buttonSize.width, buttonSize.height);
-}
-
 - (void)drawRect:(NSRect)dirtyRect {
 	[super drawRect:dirtyRect];
 
@@ -288,14 +283,14 @@ alternateDec = _alternateDecreaseImage;
 
 - (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
 	/* Calulate the rectangle where to draw the increase button */
-	NSRect increaseButtonRect = [self calculateButonRectWithImage:_increaseImage];
+	NSRect increaseButtonRect = NSMakeRect(0, 0, _increaseImage.size.width, _increaseImage.size.height);
 	CGFloat rightPadding = (NSHeight(self.bounds) - NSHeight(increaseButtonRect)) / 2;
 	increaseButtonRect.origin.x = NSWidth(self.bounds) - NSWidth(increaseButtonRect) - rightPadding;
 	increaseButtonRect.origin.y = rightPadding;
 	_increaseButtonRect = increaseButtonRect;
 
 	/* Calulate the rectangle where to draw the decrease button */
-	NSRect decreaseButtonRect = [self calculateButonRectWithImage:_decreaseImage];
+	NSRect decreaseButtonRect = NSMakeRect(0, 0, _decreaseImage.size.width, _decreaseImage.size.height);
 	CGFloat leftPadding = (NSHeight(self.bounds) - NSHeight(decreaseButtonRect)) / 2;
 	decreaseButtonRect.origin.x = leftPadding;
 	decreaseButtonRect.origin.y = leftPadding;
