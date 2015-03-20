@@ -185,14 +185,15 @@ alternateDec = _alternateDecreaseImage;
 - (void)mouseDown:(NSEvent *)theEvent {
 	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
 
-	if (NSPointInRect(locationInView, _increaseClickableRect)) {
-		[self.cell setShowsSelection:NO];
-		[self increaseButtonPressed];
-	} else if (NSPointInRect(locationInView, _decreaseClickableRect)) {
-		[self.cell setShowsSelection:NO];
-		[self decreaseButtonPressed];
-	} else {
+	if (theEvent.clickCount == 2) {
 		[self.cell setShowsSelection:YES];
+	} else {
+		if (NSPointInRect(locationInView, _increaseClickableRect)) {
+			[self increaseButtonPressed];
+		} else if (NSPointInRect(locationInView, _decreaseClickableRect)) {
+			[self decreaseButtonPressed];
+		}
+		[self.cell setShowsSelection:NO];
 	}
 
 	_dragging = NO;
