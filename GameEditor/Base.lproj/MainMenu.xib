@@ -203,23 +203,6 @@
                                                                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="6Fk-3f-kkk">
                                                                     <rect key="frame" x="0.0" y="0.0" width="161" height="17"/>
                                                                     <subviews>
-                                                                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="voO-LH-bcR" customClass="StepperTextField">
-                                                                            <rect key="frame" x="81" y="-1" width="80" height="19"/>
-                                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Y" bezelStyle="round" id="eGk-WA-UKb">
-                                                                                <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="G5n-i3-AE4"/>
-                                                                                <font key="font" metaFont="smallSystem"/>
-                                                                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                            </textFieldCell>
-                                                                            <userDefinedRuntimeAttributes>
-                                                                                <userDefinedRuntimeAttribute type="number" keyPath="draggingMult">
-                                                                                    <real key="value" value="4.5"/>
-                                                                                </userDefinedRuntimeAttribute>
-                                                                            </userDefinedRuntimeAttributes>
-                                                                            <connections>
-                                                                                <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.y" id="vhb-jw-UDZ"/>
-                                                                            </connections>
-                                                                        </textField>
                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tOs-8Z-T1g" customClass="StepperTextField">
                                                                             <rect key="frame" x="0.0" y="-1" width="81" height="19"/>
                                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="X" bezelStyle="round" id="5Ah-em-z2L">
@@ -241,11 +224,28 @@
                                                                                 </binding>
                                                                             </connections>
                                                                         </textField>
+                                                                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="voO-LH-bcR" customClass="StepperTextField">
+                                                                            <rect key="frame" x="80" y="-1" width="81" height="19"/>
+                                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Y" bezelStyle="round" id="eGk-WA-UKb">
+                                                                                <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="G5n-i3-AE4"/>
+                                                                                <font key="font" metaFont="smallSystem"/>
+                                                                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                            </textFieldCell>
+                                                                            <userDefinedRuntimeAttributes>
+                                                                                <userDefinedRuntimeAttribute type="number" keyPath="draggingMult">
+                                                                                    <real key="value" value="4.5"/>
+                                                                                </userDefinedRuntimeAttribute>
+                                                                            </userDefinedRuntimeAttributes>
+                                                                            <connections>
+                                                                                <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.y" id="vhb-jw-UDZ"/>
+                                                                            </connections>
+                                                                        </textField>
                                                                     </subviews>
                                                                     <constraints>
                                                                         <constraint firstAttribute="trailing" secondItem="voO-LH-bcR" secondAttribute="trailing" id="7Nb-K3-geD"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="tOs-8Z-T1g" secondAttribute="trailing" multiplier="2:1" id="BtK-oL-sUd"/>
-                                                                        <constraint firstItem="tOs-8Z-T1g" firstAttribute="trailing" secondItem="voO-LH-bcR" secondAttribute="leading" id="ILT-2X-5KF"/>
+                                                                        <constraint firstAttribute="width" secondItem="voO-LH-bcR" secondAttribute="width" multiplier="2:1" id="SX1-be-pwR"/>
+                                                                        <constraint firstAttribute="width" secondItem="tOs-8Z-T1g" secondAttribute="width" multiplier="2:1" id="YDa-EA-5xc"/>
                                                                         <constraint firstAttribute="centerY" secondItem="tOs-8Z-T1g" secondAttribute="centerY" id="tup-6K-DPc"/>
                                                                         <constraint firstAttribute="centerY" secondItem="voO-LH-bcR" secondAttribute="centerY" id="x2v-og-vvE"/>
                                                                         <constraint firstItem="tOs-8Z-T1g" firstAttribute="leading" secondItem="6Fk-3f-kkk" secondAttribute="leading" id="yfM-b5-8Ud"/>
