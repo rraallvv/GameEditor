@@ -128,10 +128,6 @@
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="suo-YO-fqM" customClass="HandlesView">
                                 <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                                 <subviews>
-                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="13P-xz-NcW">
-                                        <rect key="frame" x="0.0" y="583" width="16" height="16"/>
-                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSColorPanel" id="FPq-2h-gOS"/>
-                                    </imageView>
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="56m-Ws-rUR">
                                         <rect key="frame" x="544" y="20" width="236" height="560"/>
                                         <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="FaY-Zo-UUU">
@@ -417,6 +413,5 @@
         <image name="AltIncreaseStepper" width="11" height="13"/>
         <image name="DecreaseStepper" width="11" height="13"/>
         <image name="IncreaseStepper" width="11" height="13"/>
-        <image name="NSColorPanel" width="32" height="32"/>
     </resources>
 </document>

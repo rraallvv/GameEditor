@@ -12,6 +12,7 @@
 @implementation HandlesView
 
 @synthesize
+node = _node,
 position = _position,
 zRotation = _zRotation,
 size = _size,
@@ -117,6 +118,22 @@ anchorPoint = _anchorPoint;
 
 - (CGPoint)anchorPoint {
 	return _anchorPoint;
+}
+
+- (void)setNode:(SKNode *)node {
+	[self unbind:@"position"];
+	[self unbind:@"zRotation"];
+	[self unbind:@"size"];
+	[self unbind:@"anchorPoint"];
+	_node = node;
+	[self bind:@"position" toObject:_node withKeyPath:@"position" options:nil];
+	[self bind:@"zRotation" toObject:_node withKeyPath:@"zRotation" options:nil];
+	[self bind:@"size" toObject:_node withKeyPath:@"size" options:nil];
+	[self bind:@"anchorPoint" toObject:_node withKeyPath:@"anchorPoint" options:nil];
+}
+
+- (SKNode *)node {
+	return _node;
 }
 
 @end
