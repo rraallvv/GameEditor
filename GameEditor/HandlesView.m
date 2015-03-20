@@ -28,21 +28,44 @@ anchorPoint = _anchorPoint;
 	CGFloat cosine = cos(_zRotation);
 	CGFloat sine = sin(_zRotation);
 
-	CGPoint anchor = CGPointMake(_position.x + height * _anchorPoint.y * sine - width * _anchorPoint.x * cosine,
+	CGPoint point1 = CGPointMake(_position.x + height * _anchorPoint.y * sine - width * _anchorPoint.x * cosine,
 								 _position.y - height * _anchorPoint.y * cosine - width * _anchorPoint.x * sine);
 
 	NSBezierPath *line = [NSBezierPath bezierPath];
-	[line moveToPoint:anchor];
-	CGPoint point1 = NSMakePoint(anchor.x + width * cosine, anchor.y + width * sine);
-	[line lineToPoint:point1];
-	CGPoint point2 = NSMakePoint(point1.x - height * sine, point1.y + height * cosine);
+	[line moveToPoint:point1];
+	CGPoint point2 = NSMakePoint(point1.x + width * cosine, point1.y + width * sine);
 	[line lineToPoint:point2];
-	CGPoint point3 = NSMakePoint(anchor.x - height * sine, anchor.y + height * cosine);
+	CGPoint point3 = NSMakePoint(point2.x - height * sine, point2.y + height * cosine);
 	[line lineToPoint:point3];
+	CGPoint point4 = NSMakePoint(point1.x - height * sine, point1.y + height * cosine);
+	[line lineToPoint:point4];
 	[line closePath];
-	[line setLineWidth:2.0];
+	[line setLineWidth:1.0];
 	[[NSColor whiteColor] set];
 	[line stroke];
+
+	NSColor *fillColor = [NSColor blueColor];
+	NSColor *strokeColor = [NSColor whiteColor];
+	[self drawCircleWithCenter:point1 radius:5.0 fillColor:fillColor strokeColor:strokeColor];
+	[self drawCircleWithCenter:point2 radius:5.0 fillColor:fillColor strokeColor:strokeColor];
+	[self drawCircleWithCenter:point3 radius:5.0 fillColor:fillColor strokeColor:strokeColor];
+	[self drawCircleWithCenter:point4 radius:5.0 fillColor:fillColor strokeColor:strokeColor];
+
+	[self drawCircleWithCenter:_position radius:5.0 fillColor:fillColor strokeColor:strokeColor];
+}
+
+- (void)drawCircleWithCenter:(CGPoint)center radius:(CGFloat)radius fillColor:(NSColor *)fillColor strokeColor:(NSColor *)strokeColor {
+	NSBezierPath *path = [NSBezierPath bezierPath];
+	[path appendBezierPathWithArcWithCenter:center radius:radius startAngle:0 endAngle:M_2_PI clockwise:YES];
+	[path setLineWidth:2.0];
+	if (fillColor) {
+		[fillColor set];
+		[path fill];
+	}
+	if (strokeColor) {
+		[strokeColor set];
+		[path stroke];
+	}
 }
 
 - (void)setPosition:(CGPoint)position {
