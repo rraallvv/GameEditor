@@ -112,7 +112,6 @@ typedef enum {
 } ActivatedButton;
 
 @implementation StepperTextField {
-	NSPoint _lastMousePosition;
 	BOOL _dragging;
 	ActivatedButton _activatedButton;
 	NSRect _increaseButtonRect;
@@ -192,60 +191,52 @@ alternateDec = _alternateDecreaseImage;
 	}
 
 	_dragging = NO;
-	_lastMousePosition = locationInView;
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
 	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
 
-	if (NSPointInRect(locationInView, _draggableRect)) {
-		if ([self.cell showsSelection]) {
-			//[[NSCursor IBeamCursor] set];
-		} else {
-			//[[NSCursor resizeLeftRightCursor] set];
-		}
-	} else {
-		//[[NSCursor arrowCursor] set];
-	}
-
-	_activatedButton = ActivatedButtonNone;
+	[self.window enableCursorRects];
+	[self updateCursorForLocation:locationInView];
 
 	/* Reset the stepper buttons to show the normal image */
+	_activatedButton = ActivatedButtonNone;
 	self.needsDisplay = YES;
 
 	_dragging = NO;
-	_lastMousePosition = locationInView;
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
-	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
-
 	if (_activatedButton == ActivatedButtonNone) {
 
-		//if (!_dragging)
-		//	[self.cell setShowsSelection:NO];
+		[[NSCursor resizeLeftRightCursor] set];
 
-		//[[NSCursor resizeLeftRightCursor] set];
-
-		CGFloat delta = locationInView.x - _lastMousePosition.x;
-		self.floatValue += self.draggingMult * delta;
-
+		if (!_dragging) {
+			[self.window disableCursorRects];
+		}
+		self.floatValue += self.draggingMult * theEvent.deltaX;
+		
 		[self updateBindingValue];
 	}
-
 	_dragging = YES;
-	_lastMousePosition = locationInView;
 }
 
 - (void)mouseMoved:(NSEvent *)theEvent {
 	NSPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
-
-	if (![self.cell showsSelection] && NSPointInRect(locationInView, _draggableRect)) {
-		//[[NSCursor resizeLeftRightCursor] set];
-	}
-
+	[self updateCursorForLocation:locationInView];
 	_dragging = NO;
-	_lastMousePosition = locationInView;
+}
+
+- (void)updateCursorForLocation:(NSPoint)location {
+	if (NSPointInRect(location, _draggableRect)) {
+		if ([self.cell showsSelection]) {
+			[[NSCursor IBeamCursor] set];
+		} else {
+			[[NSCursor resizeLeftRightCursor] set];
+		}
+	} else {
+		[[NSCursor arrowCursor] set];
+	}
 }
 
 - (void)increaseButtonPressed {
