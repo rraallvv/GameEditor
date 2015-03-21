@@ -1,5 +1,5 @@
 /*
- * StepperTextField.h
+ * EditorView.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
