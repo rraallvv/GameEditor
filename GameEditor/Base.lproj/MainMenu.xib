@@ -112,11 +112,11 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <customView id="BAm-0B-vb9" customClass="SKView">
-                        <rect key="frame" x="0.0" y="0.0" width="529" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
                             <customView id="suo-YO-fqM" customClass="EditorView">
-                                <rect key="frame" x="0.0" y="0.0" width="529" height="600"/>
+                                <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </customView>
                         </subviews>
@@ -329,7 +329,7 @@
                             <rect key="frame" x="1" y="119" width="223" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="kBT-Ld-gv6">
+                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="kBT-Ld-gv6">
                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>

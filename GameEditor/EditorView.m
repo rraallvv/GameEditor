@@ -48,6 +48,12 @@ anchorPoint = _anchorPoint;
 	CGFloat cosine = cos(_zRotation);
 	CGFloat sine = sin(_zRotation);
 
+	/* Setup the shadow effect */
+	NSShadow *shadow = [[NSShadow alloc] init];
+	[shadow setShadowBlurRadius:3.0];
+	[shadow setShadowColor:[NSColor shadowColor]];
+	[shadow set];
+
 	/* Outline rectangle*/
 	CGPoint point1 = CGPointMake(_position.x + size.height * _anchorPoint.y * sine - size.width * _anchorPoint.x * cosine,
 								 _position.y - size.height * _anchorPoint.y * cosine - size.width * _anchorPoint.x * sine);
@@ -103,12 +109,12 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)setPosition:(CGPoint)position {
-	_position = [self.node.scene convertPointToView:position];
+	_position = [_scene convertPointToView:position];
 	[self setNeedsDisplay:YES];
 }
 
 - (CGPoint)position {
-	return [self.node.scene convertPointFromView:_position];
+	return [_scene convertPointFromView:_position];
 }
 
 - (void)setZRotation:(CGFloat)zRotation {
@@ -121,13 +127,13 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)setSize:(CGSize)size {
-	CGPoint point = [self.node.scene convertPointToView:CGPointMake(size.width, size.height)];
+	CGPoint point = [_scene convertPointToView:CGPointMake(size.width, size.height)];
 	_size = CGSizeMake(point.x, point.y);
 	[self setNeedsDisplay:YES];
 }
 
 - (CGSize)size {
-	CGPoint point = [self.node.scene convertPointFromView:CGPointMake(_size.width, _size.height)];
+	CGPoint point = [_scene convertPointFromView:CGPointMake(_size.width, _size.height)];
 	return CGSizeMake(point.x, point.y);
 }
 
@@ -150,7 +156,7 @@ anchorPoint = _anchorPoint;
 	[self unbind:@"anchorPoint"];
 
 	_node = node;
-	self.scene = [_node scene];
+	self.scene = _node.scene;
 
 	/* Craete the new bindings */
 	[self bind:@"position" toObject:_node withKeyPath:@"position" options:nil];
@@ -188,8 +194,8 @@ anchorPoint = _anchorPoint;
 - (void)mouseDown:(NSEvent *)theEvent {
 	if (_scene) {
 		CGPoint location = [theEvent locationInNode:_scene];
-		self.node = [self.scene nodeAtPoint:location];
-		CGPoint nodePosition = [self.node position];
+		self.node = [_scene nodeAtPoint:location];
+		CGPoint nodePosition = [_node position];
 		_draggedPosition = CGPointMake(location.x - nodePosition.x, location.y - nodePosition.y);
 	}
 }
@@ -197,7 +203,7 @@ anchorPoint = _anchorPoint;
 - (void)mouseDragged:(NSEvent *)theEvent {
 	if (_scene) {
 		CGPoint location = [theEvent locationInNode:_scene];
-		self.node.position = CGPointMake(location.x - _draggedPosition.x, location.y - _draggedPosition.y);
+		_node.position = CGPointMake(location.x - _draggedPosition.x, location.y - _draggedPosition.y);
 	}
 }
 
