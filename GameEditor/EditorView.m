@@ -27,10 +27,12 @@
 #import <GLKit/GLKit.h>
 
 const CGFloat kRotationHandleDistance = 25.0;
+const CGFloat kHandleRadius = 4.5;
 
 @implementation EditorView {
 	CGPoint _draggedPosition;
 	CGPoint _viewOrigin;
+	BOOL _manipulatingHandle;
 
 	/* Outline handle points */
 	CGPoint _BLHandlePoint;
@@ -59,7 +61,7 @@ anchorPoint = _anchorPoint;
 
 - (void)drawRectangleOutline {
 	[self updateHandles];
-	
+
 	NSColor *whiteColor = [NSColor whiteColor];
 	NSColor *blueColor = [NSColor colorWithCalibratedRed:0.345 green:0.337 blue:0.961 alpha:1.0];
 
@@ -78,17 +80,16 @@ anchorPoint = _anchorPoint;
 
 	/* Outline handles */
 	const CGFloat handleLineWidth = 1.5;
-	const CGFloat handleRadius = 4.5;
 	NSColor *fillColor = blueColor;
 	NSColor *strokeColor = whiteColor;
-	[self drawCircleWithCenter:_BLHandlePoint radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_BRHandlePoint radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_TRHandlePoint radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_TLHandlePoint radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_BMHandlePoint radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_RMHandlePoint radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_TMHandlePoint radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_LMHandlePoint radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_BLHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_BRHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_TRHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_TLHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_BMHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_RMHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_TMHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_LMHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
 
 	/* Setup the shadow effect */
 	NSShadow *shadow = [[NSShadow alloc] init];
@@ -139,6 +140,11 @@ anchorPoint = _anchorPoint;
 	_LMHandlePoint = CGPointMake((_TLHandlePoint.x + _BLHandlePoint.x) / 2, (_TLHandlePoint.y + _BLHandlePoint.y) / 2);
 
 	_rotationHandlePoint = CGPointMake(_position.x + kRotationHandleDistance * cosine, _position.y + kRotationHandleDistance * sine);
+}
+
+- (CGRect)handleRectFromPoint:(CGPoint)point {
+	CGFloat dimension = kHandleRadius * 2.0;
+	return CGRectMake(point.x - kHandleRadius, point.y - kHandleRadius, dimension, dimension);
 }
 
 - (void)setPosition:(CGPoint)position {
@@ -225,25 +231,52 @@ anchorPoint = _anchorPoint;
 
 - (void)mouseDown:(NSEvent *)theEvent {
 	if (_scene) {
-		CGPoint location = [theEvent locationInNode:_scene];
-		NSArray *nodes = [_scene nodesAtPoint:location];
-		if (nodes.count) {
-			NSUInteger currentIndex = [nodes indexOfObject:_node];
-			NSUInteger index = (currentIndex + 1) % nodes.count;
-			self.node = [nodes objectAtIndex:index];
-		} else {
-			self.node = self.scene;
+		CGPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
+		CGPoint locationInScene = [theEvent locationInNode:_scene];
+		if (!(_node && [self isManipulatingHandleWithPoint:locationInView])) {
+			NSArray *nodes = [_scene nodesAtPoint:locationInScene];
+			if (nodes.count) {
+				NSUInteger currentIndex = [nodes indexOfObject:_node];
+				NSUInteger index = (currentIndex + 1) % nodes.count;
+				self.node = [nodes objectAtIndex:index];
+			} else {
+				self.node = self.scene;
+			}
 		}
-		CGPoint nodePosition = [_node position];
-		_draggedPosition = CGPointMake(location.x - nodePosition.x, location.y - nodePosition.y);
+		CGPoint nodePosition = _node.position;
+		_draggedPosition = CGPointMake(locationInScene.x - nodePosition.x, locationInScene.y - nodePosition.y);
 	}
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
 	if (_scene) {
-		CGPoint location = [theEvent locationInNode:_scene];
-		_node.position = CGPointMake(location.x - _draggedPosition.x, location.y - _draggedPosition.y);
+		CGPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
+		if (_manipulatingHandle) {
+			printf(".");
+		} else {
+			CGPoint location = [theEvent locationInNode:_scene];
+			_node.position = CGPointMake(location.x - _draggedPosition.x, location.y - _draggedPosition.y);
+		}
 	}
+}
+
+- (void)mouseUp:(NSEvent *)theEvent {
+	_manipulatingHandle = NO;
+}
+
+- (BOOL)isManipulatingHandleWithPoint:(CGPoint)point {
+	_manipulatingHandle
+	= NSPointInRect(point, [self handleRectFromPoint:_position])
+	|| NSPointInRect(point, [self handleRectFromPoint:_rotationHandlePoint])
+	|| NSPointInRect(point, [self handleRectFromPoint:_BLHandlePoint])
+	|| NSPointInRect(point, [self handleRectFromPoint:_BRHandlePoint])
+	|| NSPointInRect(point, [self handleRectFromPoint:_TRHandlePoint])
+	|| NSPointInRect(point, [self handleRectFromPoint:_TLHandlePoint])
+	|| NSPointInRect(point, [self handleRectFromPoint:_BMHandlePoint])
+	|| NSPointInRect(point, [self handleRectFromPoint:_RMHandlePoint])
+	|| NSPointInRect(point, [self handleRectFromPoint:_TMHandlePoint])
+	|| NSPointInRect(point, [self handleRectFromPoint:_LMHandlePoint]);
+	return _manipulatingHandle;
 }
 
 - (void)setScene:(SKScene *)scene {
