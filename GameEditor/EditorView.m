@@ -140,18 +140,42 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)setNode:(SKNode *)node {
+	/* Clear the properties bindings*/
 	[self unbind:@"position"];
 	[self unbind:@"zRotation"];
 	[self unbind:@"size"];
 	[self unbind:@"anchorPoint"];
+
 	_node = node;
 	self.scene = [_node scene];
+
+	/* Craete the new bindings */
 	[self bind:@"position" toObject:_node withKeyPath:@"position" options:nil];
 	[self bind:@"zRotation" toObject:_node withKeyPath:@"zRotation" options:nil];
 	[self bind:@"size" toObject:_node withKeyPath:@"size" options:nil];
 	[self bind:@"anchorPoint" toObject:_node withKeyPath:@"anchorPoint" options:nil];
 
+	/* Nofify the delegate */
 	[self.delegate selectedNode:(SKNode *)node];
+
+	/* Extract dimensions from the path if the node is a shape node */
+	if ([_node isKindOfClass:[SKShapeNode class]]) {
+		CGPathRef pathRef = [(SKShapeNode *)_node path];
+		CGRect rect = CGPathGetPathBoundingBox(pathRef);
+		self.size = rect.size;
+		CGPoint anchorPoint;
+		if (rect.size.width == 0) {
+			anchorPoint.x = 0;
+		} else {
+			anchorPoint.x = -rect.origin.x/rect.size.width;
+		}
+		if (rect.size.height == 0) {
+			anchorPoint.y = 0;
+		} else {
+			anchorPoint.y = -rect.origin.y/rect.size.height;
+		}
+		self.anchorPoint = anchorPoint;
+	}
 }
 
 - (SKNode *)node {

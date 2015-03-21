@@ -115,16 +115,6 @@
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="BAm-0B-vb9" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                         <subviews>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="k1U-YT-dMh">
-                                <rect key="frame" x="14" y="13" width="71" height="32"/>
-                                <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Pkg-eH-gld">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="saveAction:" target="494" id="h5y-VK-7Ka"/>
-                                </connections>
-                            </button>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="suo-YO-fqM" customClass="EditorView">
                                 <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                                 <subviews>
@@ -369,17 +359,27 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableHeaderView>
                                     </scrollView>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="k1U-YT-dMh">
+                                        <rect key="frame" x="14" y="13" width="71" height="32"/>
+                                        <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Pkg-eH-gld">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="saveAction:" target="494" id="h5y-VK-7Ka"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="56m-Ws-rUR" secondAttribute="bottom" constant="20" id="4sB-3h-Xq2"/>
                                     <constraint firstAttribute="trailing" secondItem="56m-Ws-rUR" secondAttribute="trailing" constant="20" id="FTZ-68-6R7"/>
+                                    <constraint firstAttribute="bottom" secondItem="k1U-YT-dMh" secondAttribute="bottom" constant="20" symbolic="YES" id="Ud2-Ar-03a"/>
                                     <constraint firstItem="56m-Ws-rUR" firstAttribute="top" secondItem="suo-YO-fqM" secondAttribute="top" constant="20" id="pyl-XA-plV"/>
+                                    <constraint firstItem="k1U-YT-dMh" firstAttribute="leading" secondItem="suo-YO-fqM" secondAttribute="leading" constant="20" symbolic="YES" id="y7h-6Q-4UW"/>
                                 </constraints>
                             </customView>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="k1U-YT-dMh" secondAttribute="bottom" constant="20" symbolic="YES" id="2hY-6I-iow"/>
-                            <constraint firstItem="k1U-YT-dMh" firstAttribute="leading" secondItem="BAm-0B-vb9" secondAttribute="leading" constant="20" symbolic="YES" id="87G-wh-SCC"/>
                             <constraint firstAttribute="trailing" secondItem="suo-YO-fqM" secondAttribute="trailing" id="N1J-wb-6XY"/>
                             <constraint firstItem="suo-YO-fqM" firstAttribute="top" secondItem="BAm-0B-vb9" secondAttribute="top" id="N8v-l9-dik"/>
                             <constraint firstItem="suo-YO-fqM" firstAttribute="leading" secondItem="BAm-0B-vb9" secondAttribute="leading" id="YaT-OD-Gbr"/>
