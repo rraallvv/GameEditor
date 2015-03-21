@@ -45,54 +45,60 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)drawRectangleOutline {
-	CGSize size = _size;
-	CGFloat cosine = cos(_zRotation);
-	CGFloat sine = sin(_zRotation);
+	const CGSize size = _size;
+	const CGFloat cosine = cos(_zRotation);
+	const CGFloat sine = sin(_zRotation);
+
+	NSColor *whiteColor = [NSColor whiteColor];
+	NSColor *blueColor = [NSColor colorWithCalibratedRed:0.345 green:0.337 blue:0.961 alpha:1.0];
+
+	/* Outline rectangle*/
+	const CGFloat outlineLineWidth = 1.0;
+
+	const CGPoint point1 = CGPointMake(_position.x + size.height * _anchorPoint.y * sine - size.width * _anchorPoint.x * cosine,
+									   _position.y - size.height * _anchorPoint.y * cosine - size.width * _anchorPoint.x * sine);
+	const CGPoint point2 = NSMakePoint(point1.x + size.width * cosine, point1.y + size.width * sine);
+	const CGPoint point3 = NSMakePoint(point2.x - size.height * sine, point2.y + size.height * cosine);
+	const CGPoint point4 = NSMakePoint(point1.x - size.height * sine, point1.y + size.height * cosine);
+
+	NSBezierPath *outlinePath = [NSBezierPath bezierPath];
+	[outlinePath moveToPoint:point1];
+	[outlinePath lineToPoint:point2];
+	[outlinePath lineToPoint:point3];
+	[outlinePath lineToPoint:point4];
+	[outlinePath closePath];
+	[outlinePath setLineWidth:outlineLineWidth];
+	[blueColor set];
+	[outlinePath stroke];
+
+	/* Outline handles */
+	const CGFloat handleLineWidth = 1.5;
+	const CGFloat handleRadius = 4.5;
+	NSColor *fillColor = blueColor;
+	NSColor *strokeColor = whiteColor;
+	[self drawCircleWithCenter:point1 radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:point2 radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:point3 radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:point4 radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
 
 	/* Setup the shadow effect */
 	NSShadow *shadow = [[NSShadow alloc] init];
 	[shadow setShadowBlurRadius:3.0];
-	[shadow setShadowColor:[NSColor shadowColor]];
+	[shadow setShadowColor:[NSColor blackColor]];
 	[shadow set];
 
-	/* Outline rectangle*/
-	CGPoint point1 = CGPointMake(_position.x + size.height * _anchorPoint.y * sine - size.width * _anchorPoint.x * cosine,
-								 _position.y - size.height * _anchorPoint.y * cosine - size.width * _anchorPoint.x * sine);
-
-	const CGFloat outlineLineWidth = 1.5;
-
-	NSBezierPath *outlinePath = [NSBezierPath bezierPath];
-	[outlinePath moveToPoint:point1];
-	CGPoint point2 = NSMakePoint(point1.x + size.width * cosine, point1.y + size.width * sine);
-	[outlinePath lineToPoint:point2];
-	CGPoint point3 = NSMakePoint(point2.x - size.height * sine, point2.y + size.height * cosine);
-	[outlinePath lineToPoint:point3];
-	CGPoint point4 = NSMakePoint(point1.x - size.height * sine, point1.y + size.height * cosine);
-	[outlinePath lineToPoint:point4];
-	[outlinePath closePath];
-	[outlinePath setLineWidth:outlineLineWidth];
-	[[NSColor whiteColor] set];
-	[outlinePath stroke];
-
-	const CGFloat circleLineWidth = 1.5;
-
-	/* Corner handles */
-	NSColor *fillColor = [NSColor blueColor];
-	NSColor *strokeColor = [NSColor whiteColor];
-	[self drawCircleWithCenter:point1 radius:5.0 fillColor:fillColor strokeColor:strokeColor lineWidth:circleLineWidth];
-	[self drawCircleWithCenter:point2 radius:5.0 fillColor:fillColor strokeColor:strokeColor lineWidth:circleLineWidth];
-	[self drawCircleWithCenter:point3 radius:5.0 fillColor:fillColor strokeColor:strokeColor lineWidth:circleLineWidth];
-	[self drawCircleWithCenter:point4 radius:5.0 fillColor:fillColor strokeColor:strokeColor lineWidth:circleLineWidth];
-
 	/* Rotation angle handle */
-	const CGFloat lineDistance = 40;
-	CGPoint lineEndPoint = CGPointMake(_position.x + lineDistance * cosine, _position.y + lineDistance * sine);
+	const CGFloat rotationHandleDistance = 25.0;
+	const CGFloat rotationLineWidth = 1.0;
+	const CGFloat rotationHandleRadius = 4.0;
+	const CGPoint lineEndPoint = CGPointMake(_position.x + rotationHandleDistance * cosine, _position.y + rotationHandleDistance * sine);
 	[NSBezierPath strokeLineFromPoint:_position toPoint:lineEndPoint];
-	[self drawCircleWithCenter:_position radius:20.0 fillColor:nil strokeColor:strokeColor lineWidth:circleLineWidth];
-	[self drawCircleWithCenter:lineEndPoint radius:5.0 fillColor:fillColor strokeColor:strokeColor lineWidth:circleLineWidth];
+	[self drawCircleWithCenter:_position radius:rotationHandleDistance fillColor:nil strokeColor:strokeColor lineWidth:rotationLineWidth];
+	[self drawCircleWithCenter:lineEndPoint radius:rotationHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
 
 	/* Anchor point handle */
-	[self drawCircleWithCenter:_position radius:5.0 fillColor:fillColor strokeColor:strokeColor lineWidth:circleLineWidth];
+	const CGFloat anchorHandleRadius = 4.0;
+	[self drawCircleWithCenter:_position radius:anchorHandleRadius fillColor:whiteColor strokeColor:nil lineWidth:handleLineWidth];
 }
 
 - (void)drawCircleWithCenter:(CGPoint)center radius:(CGFloat)radius fillColor:(NSColor *)fillColor strokeColor:(NSColor *)strokeColor lineWidth:(CGFloat)lineWidth{
@@ -168,9 +174,10 @@ anchorPoint = _anchorPoint;
 
 	/* Extract dimensions from the path if the node is a shape node */
 	if ([_node isKindOfClass:[SKShapeNode class]]) {
-		CGPathRef pathRef = [(SKShapeNode *)_node path];
+		SKShapeNode *shapeNode = (SKShapeNode *)_node;
+		CGPathRef pathRef = [shapeNode path];
 		CGRect rect = CGPathGetPathBoundingBox(pathRef);
-		self.size = rect.size;
+		self.size = CGSizeMake(rect.size.width + shapeNode.lineWidth, rect.size.height + shapeNode.lineWidth);
 		CGPoint anchorPoint;
 		if (rect.size.width == 0) {
 			anchorPoint.x = 0;
