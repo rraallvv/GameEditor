@@ -1,10 +1,27 @@
-//
-//  EditorView.m
-//  GameEditor
-//
-//  Created by Rhody Lugo on 3/19/15.
-//
-//
+/*
+ * StepperTextField.h
+ * GameEditor
+ *
+ * Copyright (c) 2015 Rhody Lugo.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 #import "EditorView.h"
 #import <GLKit/GLKit.h>
@@ -27,24 +44,23 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)drawRectangleOutline {
-	CGFloat width = _size.width;
-	CGFloat	height = _size.height;
+	CGSize size = _size;
 	CGFloat cosine = cos(_zRotation);
 	CGFloat sine = sin(_zRotation);
 
 	/* Outline rectangle*/
-	CGPoint point1 = CGPointMake(_position.x + height * _anchorPoint.y * sine - width * _anchorPoint.x * cosine,
-								 _position.y - height * _anchorPoint.y * cosine - width * _anchorPoint.x * sine);
+	CGPoint point1 = CGPointMake(_position.x + size.height * _anchorPoint.y * sine - size.width * _anchorPoint.x * cosine,
+								 _position.y - size.height * _anchorPoint.y * cosine - size.width * _anchorPoint.x * sine);
 
 	const CGFloat outlineLineWidth = 1.5;
 
 	NSBezierPath *outlinePath = [NSBezierPath bezierPath];
 	[outlinePath moveToPoint:point1];
-	CGPoint point2 = NSMakePoint(point1.x + width * cosine, point1.y + width * sine);
+	CGPoint point2 = NSMakePoint(point1.x + size.width * cosine, point1.y + size.width * sine);
 	[outlinePath lineToPoint:point2];
-	CGPoint point3 = NSMakePoint(point2.x - height * sine, point2.y + height * cosine);
+	CGPoint point3 = NSMakePoint(point2.x - size.height * sine, point2.y + size.height * cosine);
 	[outlinePath lineToPoint:point3];
-	CGPoint point4 = NSMakePoint(point1.x - height * sine, point1.y + height * cosine);
+	CGPoint point4 = NSMakePoint(point1.x - size.height * sine, point1.y + size.height * cosine);
 	[outlinePath lineToPoint:point4];
 	[outlinePath closePath];
 	[outlinePath setLineWidth:outlineLineWidth];
