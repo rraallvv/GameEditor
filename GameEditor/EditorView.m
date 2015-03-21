@@ -1,5 +1,5 @@
 /*
- * StepperTextField.h
+ * EditorView.m
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -28,6 +28,7 @@
 
 @implementation EditorView {
 	CGPoint _draggedPosition;
+	CGPoint _viewOrigin;
 }
 
 @synthesize
@@ -127,14 +128,12 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)setSize:(CGSize)size {
-	CGPoint point = [_scene convertPointToView:CGPointMake(size.width, size.height)];
-	_size = CGSizeMake(point.x, point.y);
+	_size = [self convertSizeToView:size];
 	[self setNeedsDisplay:YES];
 }
 
 - (CGSize)size {
-	CGPoint point = [_scene convertPointFromView:CGPointMake(_size.width, _size.height)];
-	return CGSizeMake(point.x, point.y);
+	return [self convertSizeFromView:_size];
 }
 
 - (void)setAnchorPoint:(CGPoint)anchorPoint {
@@ -210,12 +209,24 @@ anchorPoint = _anchorPoint;
 - (void)setScene:(SKScene *)scene {
 	if (_scene == scene)
 		return;
-
 	_scene = scene;
+	_viewOrigin = [_scene convertPointFromView:self.frame.origin];
 }
 
 - (SKScene *)scene {
 	return _scene;
+}
+
+- (CGSize)convertSizeFromView:(CGSize)size {
+	CGPoint point = CGPointMake(size.width, size.height);
+	CGPoint convertedPoint = [_scene convertPointFromView:point];
+	return CGSizeMake(convertedPoint.x - _viewOrigin.x, convertedPoint.y - _viewOrigin.y);
+}
+
+- (CGSize)convertSizeToView:(CGSize)size {
+	CGPoint point = CGPointMake(size.width + _viewOrigin.x, size.height + _viewOrigin.y);
+	CGPoint convertedPoint = [_scene convertPointToView:point];
+	return CGSizeMake(convertedPoint.x, convertedPoint.y);
 }
 
 @end
