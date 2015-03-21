@@ -29,21 +29,27 @@
 const CGFloat kRotationHandleDistance = 25.0;
 const CGFloat kHandleRadius = 4.5;
 
+typedef enum {
+	BLHandle = 0,
+	BRHandle,
+	TRHandle,
+	TLHandle,
+	BMHandle,
+	RMHandle,
+	TMHandle,
+	LMHandle,
+	RotationHandle,
+	AnchorPointHAndle,
+	MaxHandle
+} ManipulatedHandle;
+
 @implementation EditorView {
 	CGPoint _draggedPosition;
 	CGPoint _viewOrigin;
 	BOOL _manipulatingHandle;
 
 	/* Outline handle points */
-	CGPoint _BLHandlePoint;
-	CGPoint _BRHandlePoint;
-	CGPoint _TRHandlePoint;
-	CGPoint _TLHandlePoint;
-	CGPoint _BMHandlePoint;
-	CGPoint _RMHandlePoint;
-	CGPoint _TMHandlePoint;
-	CGPoint _LMHandlePoint;
-	CGPoint _rotationHandlePoint;
+	CGPoint _handlePoints[MaxHandle];
 }
 
 @synthesize
@@ -69,10 +75,10 @@ anchorPoint = _anchorPoint;
 	const CGFloat outlineLineWidth = 1.0;
 
 	NSBezierPath *outlinePath = [NSBezierPath bezierPath];
-	[outlinePath moveToPoint:_BLHandlePoint];
-	[outlinePath lineToPoint:_BRHandlePoint];
-	[outlinePath lineToPoint:_TRHandlePoint];
-	[outlinePath lineToPoint:_TLHandlePoint];
+	[outlinePath moveToPoint:_handlePoints[BLHandle]];
+	[outlinePath lineToPoint:_handlePoints[BRHandle]];
+	[outlinePath lineToPoint:_handlePoints[TRHandle]];
+	[outlinePath lineToPoint:_handlePoints[TLHandle]];
 	[outlinePath closePath];
 	[outlinePath setLineWidth:outlineLineWidth];
 	[blueColor set];
@@ -82,14 +88,14 @@ anchorPoint = _anchorPoint;
 	const CGFloat handleLineWidth = 1.5;
 	NSColor *fillColor = blueColor;
 	NSColor *strokeColor = whiteColor;
-	[self drawCircleWithCenter:_BLHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_BRHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_TRHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_TLHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_BMHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_RMHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_TMHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_LMHandlePoint radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_handlePoints[BLHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_handlePoints[BRHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_handlePoints[TRHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_handlePoints[TLHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_handlePoints[BMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_handlePoints[RMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_handlePoints[TMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_handlePoints[LMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
 
 	/* Setup the shadow effect */
 	NSShadow *shadow = [[NSShadow alloc] init];
@@ -100,9 +106,9 @@ anchorPoint = _anchorPoint;
 	/* Rotation angle handle */
 	const CGFloat rotationLineWidth = 1.0;
 	const CGFloat rotationHandleRadius = 4.0;
-	[NSBezierPath strokeLineFromPoint:_position toPoint:_rotationHandlePoint];
-	[self drawCircleWithCenter:_position radius:kRotationHandleDistance fillColor:nil strokeColor:strokeColor lineWidth:rotationLineWidth];
-	[self drawCircleWithCenter:_rotationHandlePoint radius:rotationHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[NSBezierPath strokeLineFromPoint:_handlePoints[AnchorPointHAndle] toPoint:_handlePoints[RotationHandle]];
+	[self drawCircleWithCenter:_handlePoints[AnchorPointHAndle] radius:kRotationHandleDistance fillColor:nil strokeColor:strokeColor lineWidth:rotationLineWidth];
+	[self drawCircleWithCenter:_handlePoints[RotationHandle] radius:rotationHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
 
 	/* Anchor point handle */
 	const CGFloat anchorHandleRadius = 4.0;
@@ -128,18 +134,20 @@ anchorPoint = _anchorPoint;
 	const CGFloat cosine = cos(_zRotation);
 	const CGFloat sine = sin(_zRotation);
 
-	_BLHandlePoint = CGPointMake(_position.x + size.height * _anchorPoint.y * sine - size.width * _anchorPoint.x * cosine,
+	_handlePoints[BLHandle] = CGPointMake(_position.x + size.height * _anchorPoint.y * sine - size.width * _anchorPoint.x * cosine,
 								 _position.y - size.height * _anchorPoint.y * cosine - size.width * _anchorPoint.x * sine);
-	_BRHandlePoint = NSMakePoint(_BLHandlePoint.x + size.width * cosine, _BLHandlePoint.y + size.width * sine);
-	_TRHandlePoint = NSMakePoint(_BRHandlePoint.x - size.height * sine, _BRHandlePoint.y + size.height * cosine);
-	_TLHandlePoint = NSMakePoint(_BLHandlePoint.x - size.height * sine, _BLHandlePoint.y + size.height * cosine);
+	_handlePoints[BRHandle] = NSMakePoint(_handlePoints[BLHandle].x + size.width * cosine, _handlePoints[BLHandle].y + size.width * sine);
+	_handlePoints[TRHandle] = NSMakePoint(_handlePoints[BRHandle].x - size.height * sine, _handlePoints[BRHandle].y + size.height * cosine);
+	_handlePoints[TLHandle] = NSMakePoint(_handlePoints[BLHandle].x - size.height * sine, _handlePoints[BLHandle].y + size.height * cosine);
 
-	_BMHandlePoint = CGPointMake((_BLHandlePoint.x + _BRHandlePoint.x) / 2, (_BLHandlePoint.y + _BRHandlePoint.y) / 2);
-	_RMHandlePoint = CGPointMake((_BRHandlePoint.x + _TRHandlePoint.x) / 2, (_BRHandlePoint.y + _TRHandlePoint.y) / 2);
-	_TMHandlePoint = CGPointMake((_TRHandlePoint.x + _TLHandlePoint.x) / 2, (_TRHandlePoint.y + _TLHandlePoint.y) / 2);
-	_LMHandlePoint = CGPointMake((_TLHandlePoint.x + _BLHandlePoint.x) / 2, (_TLHandlePoint.y + _BLHandlePoint.y) / 2);
+	_handlePoints[BMHandle] = CGPointMake((_handlePoints[BLHandle].x + _handlePoints[BRHandle].x) / 2, (_handlePoints[BLHandle].y + _handlePoints[BRHandle].y) / 2);
+	_handlePoints[RMHandle] = CGPointMake((_handlePoints[BRHandle].x + _handlePoints[TRHandle].x) / 2, (_handlePoints[BRHandle].y + _handlePoints[TRHandle].y) / 2);
+	_handlePoints[TMHandle] = CGPointMake((_handlePoints[TRHandle].x + _handlePoints[TLHandle].x) / 2, (_handlePoints[TRHandle].y + _handlePoints[TLHandle].y) / 2);
+	_handlePoints[LMHandle] = CGPointMake((_handlePoints[TLHandle].x + _handlePoints[BLHandle].x) / 2, (_handlePoints[TLHandle].y + _handlePoints[BLHandle].y) / 2);
 
-	_rotationHandlePoint = CGPointMake(_position.x + kRotationHandleDistance * cosine, _position.y + kRotationHandleDistance * sine);
+	_handlePoints[RotationHandle] = CGPointMake(_position.x + kRotationHandleDistance * cosine, _position.y + kRotationHandleDistance * sine);
+
+	_handlePoints[AnchorPointHAndle] = _position;
 }
 
 - (CGRect)handleRectFromPoint:(CGPoint)point {
@@ -267,15 +275,15 @@ anchorPoint = _anchorPoint;
 - (BOOL)isManipulatingHandleWithPoint:(CGPoint)point {
 	_manipulatingHandle
 	= NSPointInRect(point, [self handleRectFromPoint:_position])
-	|| NSPointInRect(point, [self handleRectFromPoint:_rotationHandlePoint])
-	|| NSPointInRect(point, [self handleRectFromPoint:_BLHandlePoint])
-	|| NSPointInRect(point, [self handleRectFromPoint:_BRHandlePoint])
-	|| NSPointInRect(point, [self handleRectFromPoint:_TRHandlePoint])
-	|| NSPointInRect(point, [self handleRectFromPoint:_TLHandlePoint])
-	|| NSPointInRect(point, [self handleRectFromPoint:_BMHandlePoint])
-	|| NSPointInRect(point, [self handleRectFromPoint:_RMHandlePoint])
-	|| NSPointInRect(point, [self handleRectFromPoint:_TMHandlePoint])
-	|| NSPointInRect(point, [self handleRectFromPoint:_LMHandlePoint]);
+	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[RotationHandle]])
+	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[BLHandle]])
+	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[BRHandle]])
+	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[TRHandle]])
+	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[TLHandle]])
+	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[BMHandle]])
+	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[RMHandle]])
+	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[TMHandle]])
+	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[LMHandle]]);
 	return _manipulatingHandle;
 }
 
