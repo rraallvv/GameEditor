@@ -140,6 +140,9 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)setNode:(SKNode *)node {
+	if (_node == node)
+		return;
+
 	/* Clear the properties bindings*/
 	[self unbind:@"position"];
 	[self unbind:@"zRotation"];
@@ -196,6 +199,17 @@ anchorPoint = _anchorPoint;
 		CGPoint location = [theEvent locationInNode:_scene];
 		self.node.position = CGPointMake(location.x - _draggedPosition.x, location.y - _draggedPosition.y);
 	}
+}
+
+- (void)setScene:(SKScene *)scene {
+	if (_scene == scene)
+		return;
+
+	_scene = scene;
+}
+
+- (SKScene *)scene {
+	return _scene;
 }
 
 @end
