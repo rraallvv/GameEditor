@@ -61,6 +61,11 @@ anchorPoint = _anchorPoint;
 	const CGPoint point3 = NSMakePoint(point2.x - size.height * sine, point2.y + size.height * cosine);
 	const CGPoint point4 = NSMakePoint(point1.x - size.height * sine, point1.y + size.height * cosine);
 
+	const CGPoint point12 = CGPointMake((point1.x + point2.x) / 2, (point1.y + point2.y) / 2);
+	const CGPoint point23 = CGPointMake((point2.x + point3.x) / 2, (point2.y + point3.y) / 2);
+	const CGPoint point34 = CGPointMake((point3.x + point4.x) / 2, (point3.y + point4.y) / 2);
+	const CGPoint point41 = CGPointMake((point4.x + point1.x) / 2, (point4.y + point1.y) / 2);
+
 	NSBezierPath *outlinePath = [NSBezierPath bezierPath];
 	[outlinePath moveToPoint:point1];
 	[outlinePath lineToPoint:point2];
@@ -80,6 +85,10 @@ anchorPoint = _anchorPoint;
 	[self drawCircleWithCenter:point2 radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
 	[self drawCircleWithCenter:point3 radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
 	[self drawCircleWithCenter:point4 radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:point12 radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:point23 radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:point34 radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:point41 radius:handleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
 
 	/* Setup the shadow effect */
 	NSShadow *shadow = [[NSShadow alloc] init];
@@ -91,10 +100,10 @@ anchorPoint = _anchorPoint;
 	const CGFloat rotationHandleDistance = 25.0;
 	const CGFloat rotationLineWidth = 1.0;
 	const CGFloat rotationHandleRadius = 4.0;
-	const CGPoint lineEndPoint = CGPointMake(_position.x + rotationHandleDistance * cosine, _position.y + rotationHandleDistance * sine);
-	[NSBezierPath strokeLineFromPoint:_position toPoint:lineEndPoint];
+	const CGPoint rotationHandlePoint = CGPointMake(_position.x + rotationHandleDistance * cosine, _position.y + rotationHandleDistance * sine);
+	[NSBezierPath strokeLineFromPoint:_position toPoint:rotationHandlePoint];
 	[self drawCircleWithCenter:_position radius:rotationHandleDistance fillColor:nil strokeColor:strokeColor lineWidth:rotationLineWidth];
-	[self drawCircleWithCenter:lineEndPoint radius:rotationHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:rotationHandlePoint radius:rotationHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
 
 	/* Anchor point handle */
 	const CGFloat anchorHandleRadius = 4.0;
