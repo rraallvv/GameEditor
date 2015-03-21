@@ -47,6 +47,7 @@ typedef enum {
 	CGPoint _draggedPosition;
 	CGPoint _viewOrigin;
 	BOOL _manipulatingHandle;
+	ManipulatedHandle _manipulatedHandle;
 
 	/* Outline handle points */
 	CGPoint _handlePoints[MaxHandle];
@@ -260,7 +261,30 @@ anchorPoint = _anchorPoint;
 	if (_scene) {
 		CGPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
 		if (_manipulatingHandle) {
-			printf(".");
+			switch (_manipulatedHandle) {
+				case AnchorPointHAndle:
+					break;
+				case RotationHandle:
+					break;
+				case BLHandle:
+					break;
+				case BRHandle:
+					break;
+				case TRHandle:
+					break;
+				case TLHandle:
+					break;
+				case BMHandle:
+					break;
+				case RMHandle:
+					break;
+				case TMHandle:
+					break;
+				case LMHandle:
+					break;
+				default:
+					break;
+			};
 		} else {
 			CGPoint location = [theEvent locationInNode:_scene];
 			_node.position = CGPointMake(location.x - _draggedPosition.x, location.y - _draggedPosition.y);
@@ -273,17 +297,29 @@ anchorPoint = _anchorPoint;
 }
 
 - (BOOL)isManipulatingHandleWithPoint:(CGPoint)point {
-	_manipulatingHandle
-	= NSPointInRect(point, [self handleRectFromPoint:_position])
-	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[RotationHandle]])
-	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[BLHandle]])
-	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[BRHandle]])
-	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[TRHandle]])
-	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[TLHandle]])
-	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[BMHandle]])
-	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[RMHandle]])
-	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[TMHandle]])
-	|| NSPointInRect(point, [self handleRectFromPoint:_handlePoints[LMHandle]]);
+	_manipulatedHandle = MaxHandle;
+	if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[AnchorPointHAndle]])) {
+		_manipulatedHandle = AnchorPointHAndle;
+	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[RotationHandle]])) {
+		_manipulatedHandle = RotationHandle;
+	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[BLHandle]])) {
+		_manipulatedHandle = BLHandle;
+	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[BRHandle]])) {
+		_manipulatedHandle = BRHandle;
+	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[TRHandle]])) {
+		_manipulatedHandle = TRHandle;
+	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[TLHandle]])) {
+		_manipulatedHandle = TLHandle;
+	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[BMHandle]])) {
+		_manipulatedHandle = BMHandle;
+	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[RMHandle]])) {
+		_manipulatedHandle = RMHandle;
+	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[TMHandle]])) {
+		_manipulatedHandle = TMHandle;
+	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[LMHandle]])) {
+		_manipulatedHandle = LMHandle;
+	}
+	_manipulatingHandle = _manipulatedHandle != MaxHandle;
 	return _manipulatingHandle;
 }
 
