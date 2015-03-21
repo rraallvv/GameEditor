@@ -200,7 +200,14 @@ anchorPoint = _anchorPoint;
 - (void)mouseDown:(NSEvent *)theEvent {
 	if (_scene) {
 		CGPoint location = [theEvent locationInNode:_scene];
-		self.node = [_scene nodeAtPoint:location];
+		NSArray *nodes = [_scene nodesAtPoint:location];
+		if (nodes.count) {
+			NSUInteger currentIndex = [nodes indexOfObject:_node];
+			NSUInteger index = (currentIndex + 1) % nodes.count;
+			self.node = [nodes objectAtIndex:index];
+		} else {
+			self.node = self.scene;
+		}
 		CGPoint nodePosition = [_node position];
 		_draggedPosition = CGPointMake(location.x - nodePosition.x, location.y - nodePosition.y);
 	}
