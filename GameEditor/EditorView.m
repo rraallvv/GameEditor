@@ -185,6 +185,7 @@ anchorPoint = _anchorPoint;
 
 - (void)setAnchorPoint:(CGPoint)anchorPoint {
 	_anchorPoint = anchorPoint;
+	[self setNeedsDisplay:YES];
 }
 
 - (CGPoint)anchorPoint {
@@ -218,7 +219,7 @@ anchorPoint = _anchorPoint;
 		SKShapeNode *shapeNode = (SKShapeNode *)_node;
 		CGPathRef pathRef = [shapeNode path];
 		CGRect rect = CGPathGetPathBoundingBox(pathRef);
-		self.size = CGSizeMake(rect.size.width + shapeNode.lineWidth, rect.size.height + shapeNode.lineWidth);
+		self.size = CGSizeMake(rect.size.width, rect.size.height);
 		CGPoint anchorPoint;
 		if (rect.size.width == 0) {
 			anchorPoint.x = 0;
@@ -266,12 +267,36 @@ anchorPoint = _anchorPoint;
 			switch (_manipulatedHandle) {
 				case AnchorPointHAndle:
 					if ([_node isKindOfClass:[SKSpriteNode class]]) {
+						/* Translate anchor point and node position */
 						SKSpriteNode *spriteNode = (SKSpriteNode *)_node;
-						CGVector distanceVector = CGVectorMake(locationInView.x - _handlePoints[BLHandle].x, locationInView.y - _handlePoints[BLHandle].y);
+
+						CGVector distanceVector = CGVectorMake(locationInView.x - _handlePoints[BLHandle].x,
+															   locationInView.y - _handlePoints[BLHandle].y);
 						CGFloat distance = sqrt(distanceVector.dx * distanceVector.dx + distanceVector.dy * distanceVector.dy);
 						CGFloat angle = atan2(distanceVector.dy, distanceVector.dx) - _zRotation;
+
 						spriteNode.anchorPoint = CGPointMake(distance * cos(angle) / _size.width, distance * sin(angle) / _size.height);
 						spriteNode.position = [_scene convertPointFromView:locationInView];
+
+					} else if ([_node isKindOfClass:[SKShapeNode class]]) {
+						SKShapeNode *shapeNode = (SKShapeNode *)_node;
+
+						/* Translate the path */
+						CGVector pathDistanceVector = CGVectorMake(locationInScene.x - shapeNode.position.x, locationInScene.y - shapeNode.position.y);
+						CGPathRef path = shapeNode.path;
+						CGAffineTransform translation = CGAffineTransformMakeTranslation(-pathDistanceVector.dx * cos(_zRotation) - pathDistanceVector.dy * sin(_zRotation),
+																						  pathDistanceVector.dx * sin(_zRotation) - pathDistanceVector.dy * cos(_zRotation));
+						shapeNode.path = CGPathCreateCopyByTransformingPath(path, &translation);
+
+						/* Translate anchor point and node position */
+						CGVector distanceVector = CGVectorMake(locationInView.x - _handlePoints[BLHandle].x,
+															   locationInView.y - _handlePoints[BLHandle].y);
+						CGFloat distance = sqrt(distanceVector.dx * distanceVector.dx + distanceVector.dy * distanceVector.dy);
+						CGFloat angle = atan2(distanceVector.dy, distanceVector.dx) - _zRotation;
+
+						shapeNode.position = [_scene convertPointFromView:locationInView];
+						self.anchorPoint = CGPointMake(distance * cos(angle) / _size.width, distance * sin(angle) / _size.height);
+
 					} else {
 						_node.position = newPosition;
 					}
