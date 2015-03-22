@@ -148,7 +148,7 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)updateHandles {
-	const CGSize size = _size;
+	const CGSize size = CGSizeMake(_size.width, _size.height);
 	const CGFloat cosine = cos(_zRotation);
 	const CGFloat sine = sin(_zRotation);
 
@@ -215,8 +215,8 @@ anchorPoint = _anchorPoint;
 
 	/* Clear the properties bindings*/
 	[self unbind:@"position"];
-	[self unbind:@"zRotation"];
 	[self unbind:@"size"];
+	[self unbind:@"zRotation"];
 	[self unbind:@"anchorPoint"];
 
 	_node = node;
@@ -224,8 +224,8 @@ anchorPoint = _anchorPoint;
 
 	/* Craete the new bindings */
 	[self bind:@"position" toObject:_node withKeyPath:@"position" options:nil];
-	[self bind:@"zRotation" toObject:_node withKeyPath:@"zRotation" options:nil];
 	[self bind:@"size" toObject:_node withKeyPath:@"size" options:nil];
+	[self bind:@"zRotation" toObject:_node withKeyPath:@"zRotation" options:nil];
 	[self bind:@"anchorPoint" toObject:_node withKeyPath:@"anchorPoint" options:nil];
 
 	/* Nofify the delegate */
@@ -293,16 +293,21 @@ anchorPoint = _anchorPoint;
 						CGFloat angle = atan2(distanceVector.dy, distanceVector.dx) - _zRotation;
 
 						spriteNode.anchorPoint = CGPointMake(distance * cos(angle) / _size.width, distance * sin(angle) / _size.height);
+						spriteNode.size = [_scene convertSizeFromView:_size]; // setting the anchorPoint make the size positive, so this put back the right size (if it have negative values)
 						spriteNode.position = [_scene convertPointFromView:locationInView];
 
 					} else if ([_node isKindOfClass:[SKShapeNode class]]) {
 						SKShapeNode *shapeNode = (SKShapeNode *)_node;
 
+						CGFloat cosine = cos(_zRotation);
+						CGFloat sine = sin(_zRotation);
+
 						/* Translate the path */
-						CGVector pathDistanceVector = CGVectorMake(locationInScene.x - shapeNode.position.x, locationInScene.y - shapeNode.position.y);
+						CGVector pathDistanceVector = CGVectorMake(locationInScene.x - shapeNode.position.x,
+																   locationInScene.y - shapeNode.position.y);
 						CGPathRef path = shapeNode.path;
-						CGAffineTransform translation = CGAffineTransformMakeTranslation(-pathDistanceVector.dx * cos(_zRotation) - pathDistanceVector.dy * sin(_zRotation),
-																						  pathDistanceVector.dx * sin(_zRotation) - pathDistanceVector.dy * cos(_zRotation));
+						CGAffineTransform translation = CGAffineTransformMakeTranslation(-pathDistanceVector.dx * cosine - pathDistanceVector.dy * sine,
+																						  pathDistanceVector.dx * sine - pathDistanceVector.dy * cosine);
 						shapeNode.path = CGPathCreateCopyByTransformingPath(path, &translation);
 
 						/* Translate anchor point and node position */
@@ -332,10 +337,30 @@ anchorPoint = _anchorPoint;
 				case BMHandle:
 					break;
 				case RMHandle:
+					if ([_node isKindOfClass:[SKSpriteNode class]]) {
+						SKSpriteNode *spriteNode = (SKSpriteNode *)_node;
+						CGVector distanceVector = CGVectorMake(locationInView.x - _handlePoints[LMHandle].x,
+															   locationInView.y - _handlePoints[LMHandle].y);
+						CGFloat distance = sqrt(distanceVector.dx * distanceVector.dx + distanceVector.dy * distanceVector.dy);
+						CGFloat angle = atan2(distanceVector.dy, distanceVector.dx) - _zRotation;
+
+						spriteNode.size = [_scene convertSizeFromView:CGSizeMake(distance * cos(angle), _size.height)];
+						spriteNode.position = [_scene convertPointFromView:CGPointMake(_handlePoints[BLHandle].x
+																					   + _size.width * _anchorPoint.x * cos(_zRotation)
+																					   - _size.height * _anchorPoint.y * sin(_zRotation),
+																					   _handlePoints[BLHandle].y
+																					   + _size.height * _anchorPoint.y * cos(_zRotation)
+																					   + _size.width * _anchorPoint.x * sin(_zRotation))];
+					}
 					break;
 				case TMHandle:
 					break;
 				case LMHandle:
+					if ([_node isKindOfClass:[SKSpriteNode class]]) {
+						SKSpriteNode *spriteNode = (SKSpriteNode *)_node;
+						spriteNode.size = [_scene convertSizeFromView:CGSizeMake(_handlePoints[RMHandle].x - locationInView.x, _size.height)];
+						spriteNode.position = [_scene convertPointFromView:CGPointMake(_handlePoints[RMHandle].x - _size.width * (1.0 - _anchorPoint.x), _position.y)];
+					}
 					break;
 				default:
 					break;
