@@ -323,9 +323,11 @@ anchorPoint = _anchorPoint;
 						_node.position = newPosition;
 					}
 					break;
+
 				case RotationHandle:
 					_node.zRotation = atan2(locationInView.y - _handlePoints[AnchorPointHAndle].y, locationInView.x - _handlePoints[AnchorPointHAndle].x);
 					break;
+
 				case BLHandle:
 					break;
 				case BRHandle:
@@ -341,11 +343,11 @@ anchorPoint = _anchorPoint;
 
 					/* Distance vector between the the handle and the mouse pointer */
 					if (_manipulatedHandle == TMHandle) {
-						distanceVector = CGVectorMake(locationInView.x - _handlePoints[BMHandle].x,
-													  locationInView.y - _handlePoints[BMHandle].y);
+						distanceVector = CGVectorMake(locationInView.x - _handlePoints[BLHandle].x,
+													  locationInView.y - _handlePoints[BLHandle].y);
 					} else {
-						distanceVector = CGVectorMake(_handlePoints[TMHandle].x - locationInView.x,
-													  _handlePoints[TMHandle].y - locationInView.y);
+						distanceVector = CGVectorMake(_handlePoints[TRHandle].x - locationInView.x,
+													  _handlePoints[TRHandle].y - locationInView.y);
 					}
 
 					CGFloat distance = sqrt(distanceVector.dx * distanceVector.dx + distanceVector.dy * distanceVector.dy);
@@ -377,9 +379,9 @@ anchorPoint = _anchorPoint;
 						_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[BLHandle].x + anchorDistance.dx * cosine - anchorDistance.dy * sine,
 																				  _handlePoints[BLHandle].y + anchorDistance.dx * sine + anchorDistance.dy * cosine)];
 					} else {
-						CGVector anchorDistance = CGVectorMake(_size.width * _anchorPoint.x, _size.height * (1.0 - _anchorPoint.y));
-						_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[TLHandle].x + anchorDistance.dx * cosine + anchorDistance.dy * sine,
-																				  _handlePoints[TLHandle].y + anchorDistance.dx * sine - anchorDistance.dy * cosine)];
+						CGVector anchorDistance = CGVectorMake(_size.width * (1.0 - _anchorPoint.x), _size.height * (1.0 - _anchorPoint.y));
+						_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[TRHandle].x - anchorDistance.dx * cosine + anchorDistance.dy * sine,
+																				  _handlePoints[TRHandle].y - anchorDistance.dx * sine - anchorDistance.dy * cosine)];
 					}
 				}
 					break;
@@ -390,11 +392,11 @@ anchorPoint = _anchorPoint;
 
 					/* Distance vector between the the handle and the mouse pointer */
 					if (_manipulatedHandle == RMHandle) {
-						distanceVector = CGVectorMake(locationInView.x - _handlePoints[LMHandle].x,
-													  locationInView.y - _handlePoints[LMHandle].y);
+						distanceVector = CGVectorMake(locationInView.x - _handlePoints[BLHandle].x,
+													  locationInView.y - _handlePoints[BLHandle].y);
 					} else {
-						distanceVector = CGVectorMake(_handlePoints[RMHandle].x - locationInView.x,
-													  _handlePoints[RMHandle].y - locationInView.y);
+						distanceVector = CGVectorMake(_handlePoints[TRHandle].x - locationInView.x,
+													  _handlePoints[TRHandle].y - locationInView.y);
 					}
 
 					CGFloat distance = sqrt(distanceVector.dx * distanceVector.dx + distanceVector.dy * distanceVector.dy);
@@ -426,9 +428,9 @@ anchorPoint = _anchorPoint;
 						_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[BLHandle].x + anchorDistance.dx * cosine - anchorDistance.dy * sine,
 																				  _handlePoints[BLHandle].y + anchorDistance.dx * sine + anchorDistance.dy * cosine)];
 					} else {
-						CGVector anchorDistance = CGVectorMake(_size.width * (1.0 - _anchorPoint.x), _size.height * _anchorPoint.y);
-						_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[BRHandle].x - anchorDistance.dx * cosine - anchorDistance.dy * sine,
-																				  _handlePoints[BRHandle].y - anchorDistance.dx * sine + anchorDistance.dy * cosine)];
+						CGVector anchorDistance = CGVectorMake(_size.width * (1.0 - _anchorPoint.x), _size.height * (1.0 - _anchorPoint.y));
+						_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[TRHandle].x - anchorDistance.dx * cosine + anchorDistance.dy * sine,
+																				  _handlePoints[TRHandle].y - anchorDistance.dx * sine - anchorDistance.dy * cosine)];
 					}
 				}
 					break;
