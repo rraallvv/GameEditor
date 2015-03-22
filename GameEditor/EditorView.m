@@ -29,6 +29,24 @@
 const CGFloat kRotationHandleDistance = 25.0;
 const CGFloat kHandleRadius = 4.5;
 
+@implementation SKScene (SizeConversion)
+
+- (CGSize)convertSizeFromView:(CGSize)size {
+	CGPoint viewOrigin = [self convertPointFromView:self.view.frame.origin];
+	CGPoint point = CGPointMake(size.width, size.height);
+	CGPoint convertedPoint = [self convertPointFromView:point];
+	return CGSizeMake(convertedPoint.x - viewOrigin.x, convertedPoint.y - viewOrigin.y);
+}
+
+- (CGSize)convertSizeToView:(CGSize)size {
+	CGPoint viewOrigin = [self convertPointFromView:self.frame.origin];
+	CGPoint point = CGPointMake(size.width + viewOrigin.x, size.height + viewOrigin.y);
+	CGPoint convertedPoint = [self convertPointToView:point];
+	return CGSizeMake(convertedPoint.x, convertedPoint.y);
+}
+
+@end
+
 typedef enum {
 	BLHandle = 0,
 	BRHandle,
@@ -45,7 +63,6 @@ typedef enum {
 
 @implementation EditorView {
 	CGPoint _draggedPosition;
-	CGPoint _viewOrigin;
 	BOOL _manipulatingHandle;
 	ManipulatedHandle _manipulatedHandle;
 
@@ -175,12 +192,12 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)setSize:(CGSize)size {
-	_size = [self convertSizeToView:size];
+	_size = [_scene convertSizeToView:size];
 	[self setNeedsDisplay:YES];
 }
 
 - (CGSize)size {
-	return [self convertSizeFromView:_size];
+	return [_scene convertSizeFromView:_size];
 }
 
 - (void)setAnchorPoint:(CGPoint)anchorPoint {
@@ -364,23 +381,10 @@ anchorPoint = _anchorPoint;
 	if (_scene == scene)
 		return;
 	_scene = scene;
-	_viewOrigin = [_scene convertPointFromView:self.frame.origin];
 }
 
 - (SKScene *)scene {
 	return _scene;
-}
-
-- (CGSize)convertSizeFromView:(CGSize)size {
-	CGPoint point = CGPointMake(size.width, size.height);
-	CGPoint convertedPoint = [_scene convertPointFromView:point];
-	return CGSizeMake(convertedPoint.x - _viewOrigin.x, convertedPoint.y - _viewOrigin.y);
-}
-
-- (CGSize)convertSizeToView:(CGSize)size {
-	CGPoint point = CGPointMake(size.width + _viewOrigin.x, size.height + _viewOrigin.y);
-	CGPoint convertedPoint = [_scene convertPointToView:point];
-	return CGSizeMake(convertedPoint.x, convertedPoint.y);
 }
 
 @end
