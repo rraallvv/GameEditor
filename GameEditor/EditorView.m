@@ -306,8 +306,8 @@ anchorPoint = _anchorPoint;
 						CGVector pathDistanceVector = CGVectorMake(locationInScene.x - shapeNode.position.x,
 																   locationInScene.y - shapeNode.position.y);
 						CGPathRef path = shapeNode.path;
-						CGAffineTransform translation = CGAffineTransformMakeTranslation(-pathDistanceVector.dx * cosine - pathDistanceVector.dy * sine,
-																						  pathDistanceVector.dx * sine - pathDistanceVector.dy * cosine);
+						CGAffineTransform translation = CGAffineTransformMakeTranslation((-pathDistanceVector.dx * cosine - pathDistanceVector.dy * sine) / shapeNode.xScale,
+																						 (pathDistanceVector.dx * sine - pathDistanceVector.dy * cosine) / shapeNode.yScale);
 						shapeNode.path = CGPathCreateCopyByTransformingPath(path, &translation);
 
 						/* Translate anchor point and node position */
