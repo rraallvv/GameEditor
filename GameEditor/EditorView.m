@@ -334,10 +334,54 @@ anchorPoint = _anchorPoint;
 					break;
 				case TLHandle:
 					break;
-				case BMHandle:
-					break;
 
 				case TMHandle:
+				case BMHandle: {
+					CGVector distanceVector;
+
+					/* Distance vector between the the handle and the mouse pointer */
+					if (_manipulatedHandle == TMHandle) {
+						distanceVector = CGVectorMake(locationInView.x - _handlePoints[BMHandle].x,
+													  locationInView.y - _handlePoints[BMHandle].y);
+					} else {
+						distanceVector = CGVectorMake(_handlePoints[TMHandle].x - locationInView.x,
+													  _handlePoints[TMHandle].y - locationInView.y);
+					}
+
+					CGFloat distance = sqrt(distanceVector.dx * distanceVector.dx + distanceVector.dy * distanceVector.dy);
+					CGFloat angle = atan2(distanceVector.dy, distanceVector.dx) - _zRotation;
+
+					if ([_node isKindOfClass:[SKSpriteNode class]]) {
+						/* Resize the node */
+						SKSpriteNode *spriteNode = (SKSpriteNode *)_node;
+						spriteNode.size = [_scene convertSizeFromView:CGSizeMake(_size.width, distance * sin(angle))];
+
+					} else if ([_node isKindOfClass:[SKShapeNode class]]) {
+						/* Resize the path */
+						SKShapeNode *shapeNode = (SKShapeNode *)_node;
+
+						CGFloat scale = distance * sin(angle) * shapeNode.yScale / _size.height;
+						shapeNode.yScale = scale;
+
+						CGPathRef pathRef = [shapeNode path];
+						CGRect rect = CGPathGetPathBoundingBox(pathRef);
+						self.size = CGSizeMake(rect.size.width * shapeNode.xScale, rect.size.height * shapeNode.yScale);
+					}
+
+					CGFloat cosine = cos(_zRotation);
+					CGFloat sine = sin(_zRotation);
+
+					/* Translate the node */
+					if (_manipulatedHandle == TMHandle) {
+						CGVector anchorDistance = CGVectorMake(_size.width * _anchorPoint.x, _size.height * _anchorPoint.y);
+						_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[BLHandle].x + anchorDistance.dx * cosine - anchorDistance.dy * sine,
+																				  _handlePoints[BLHandle].y + anchorDistance.dx * sine + anchorDistance.dy * cosine)];
+					} else {
+						CGVector anchorDistance = CGVectorMake(_size.width * _anchorPoint.x, _size.height * (1.0 - _anchorPoint.y));
+						_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[TLHandle].x + anchorDistance.dx * cosine + anchorDistance.dy * sine,
+																				  _handlePoints[TLHandle].y + anchorDistance.dx * sine - anchorDistance.dy * cosine)];
+					}
+				}
 					break;
 
 				case RMHandle:
