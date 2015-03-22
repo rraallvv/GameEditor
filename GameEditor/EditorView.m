@@ -353,7 +353,7 @@ anchorPoint = _anchorPoint;
 						CGVector anchorDistance = CGVectorMake(_size.width * _anchorPoint.x, _size.height * _anchorPoint.y);
 
 						spriteNode.position = [_scene convertPointFromView:CGPointMake(_handlePoints[BLHandle].x + anchorDistance.dx * cosine - anchorDistance.dy * sine,
-																					   _handlePoints[BLHandle].y + anchorDistance.dy * cosine + anchorDistance.dx * sine)];
+																					   _handlePoints[BLHandle].y + anchorDistance.dx * sine + anchorDistance.dy * cosine)];
 					}
 					break;
 				case TMHandle:
@@ -361,8 +361,21 @@ anchorPoint = _anchorPoint;
 				case LMHandle:
 					if ([_node isKindOfClass:[SKSpriteNode class]]) {
 						SKSpriteNode *spriteNode = (SKSpriteNode *)_node;
-						spriteNode.size = [_scene convertSizeFromView:CGSizeMake(_handlePoints[RMHandle].x - locationInView.x, _size.height)];
-						spriteNode.position = [_scene convertPointFromView:CGPointMake(_handlePoints[RMHandle].x - _size.width * (1.0 - _anchorPoint.x), _position.y)];
+
+						CGVector distanceVector = CGVectorMake(_handlePoints[RMHandle].x - locationInView.x,
+															   _handlePoints[RMHandle].y - locationInView.y);
+						CGFloat distance = sqrt(distanceVector.dx * distanceVector.dx + distanceVector.dy * distanceVector.dy);
+						CGFloat angle = atan2(distanceVector.dy, distanceVector.dx) - _zRotation;
+
+						spriteNode.size = [_scene convertSizeFromView:CGSizeMake(distance * cos(angle), _size.height)];
+
+						CGFloat cosine = cos(_zRotation);
+						CGFloat sine = sin(_zRotation);
+
+						CGVector anchorDistance = CGVectorMake(_size.width * (1.0 - _anchorPoint.x), _size.height * _anchorPoint.y);
+
+						spriteNode.position = [_scene convertPointFromView:CGPointMake(_handlePoints[BRHandle].x - anchorDistance.dx * cosine - anchorDistance.dy * sine,
+																					   _handlePoints[BRHandle].y - anchorDistance.dx * sine + anchorDistance.dy * cosine)];
 					}
 					break;
 				default:
