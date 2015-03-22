@@ -260,11 +260,24 @@ anchorPoint = _anchorPoint;
 - (void)mouseDragged:(NSEvent *)theEvent {
 	if (_scene) {
 		CGPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
+		CGPoint locationInScene = [theEvent locationInNode:_scene];
+		CGPoint newPosition = CGPointMake(locationInScene.x - _draggedPosition.x, locationInScene.y - _draggedPosition.y);
 		if (_manipulatingHandle) {
 			switch (_manipulatedHandle) {
 				case AnchorPointHAndle:
+					if ([_node isKindOfClass:[SKSpriteNode class]]) {
+						SKSpriteNode *spriteNode = (SKSpriteNode *)_node;
+						CGVector distanceVector = CGVectorMake(locationInView.x - _handlePoints[BLHandle].x, locationInView.y - _handlePoints[BLHandle].y);
+						CGFloat distance = sqrt(distanceVector.dx * distanceVector.dx + distanceVector.dy * distanceVector.dy);
+						CGFloat angle = atan2(distanceVector.dy, distanceVector.dx) - _zRotation;
+						spriteNode.anchorPoint = CGPointMake(distance * cos(angle) / _size.width, distance * sin(angle) / _size.height);
+						spriteNode.position = [_scene convertPointFromView:locationInView];
+					} else {
+						_node.position = newPosition;
+					}
 					break;
 				case RotationHandle:
+					_node.zRotation = atan2(locationInView.y - _handlePoints[AnchorPointHAndle].y, locationInView.x - _handlePoints[AnchorPointHAndle].x);
 					break;
 				case BLHandle:
 					break;
@@ -286,8 +299,7 @@ anchorPoint = _anchorPoint;
 					break;
 			};
 		} else {
-			CGPoint location = [theEvent locationInNode:_scene];
-			_node.position = CGPointMake(location.x - _draggedPosition.x, location.y - _draggedPosition.y);
+			_node.position = newPosition;
 		}
 	}
 }
