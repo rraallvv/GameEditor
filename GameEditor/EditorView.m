@@ -236,7 +236,7 @@ anchorPoint = _anchorPoint;
 		SKShapeNode *shapeNode = (SKShapeNode *)_node;
 		CGPathRef pathRef = [shapeNode path];
 		CGRect rect = CGPathGetPathBoundingBox(pathRef);
-		self.size = CGSizeMake(rect.size.width, rect.size.height);
+		self.size = CGSizeMake(rect.size.width * shapeNode.xScale, rect.size.height * shapeNode.yScale);
 		CGPoint anchorPoint;
 		if (rect.size.width == 0) {
 			anchorPoint.x = 0;
@@ -354,6 +354,30 @@ anchorPoint = _anchorPoint;
 
 						spriteNode.position = [_scene convertPointFromView:CGPointMake(_handlePoints[BLHandle].x + anchorDistance.dx * cosine - anchorDistance.dy * sine,
 																					   _handlePoints[BLHandle].y + anchorDistance.dx * sine + anchorDistance.dy * cosine)];
+					} else if ([_node isKindOfClass:[SKShapeNode class]]) {
+						SKShapeNode *shapeNode = (SKShapeNode *)_node;
+
+						CGVector distanceVector = CGVectorMake(locationInView.x - _handlePoints[LMHandle].x,
+															   locationInView.y - _handlePoints[LMHandle].y);
+						CGFloat distance = sqrt(distanceVector.dx * distanceVector.dx + distanceVector.dy * distanceVector.dy);
+						CGFloat angle = atan2(distanceVector.dy, distanceVector.dx) - _zRotation;
+
+						/* Resize the path */
+						CGFloat scale = distance * cos(angle) * shapeNode.xScale / _size.width;
+						shapeNode.xScale = scale;
+
+						CGPathRef pathRef = [shapeNode path];
+						CGRect rect = CGPathGetPathBoundingBox(pathRef);
+						self.size = CGSizeMake(rect.size.width * shapeNode.xScale, rect.size.height * shapeNode.yScale);
+
+						/* Translate the node */
+						CGFloat cosine = cos(_zRotation);
+						CGFloat sine = sin(_zRotation);
+
+						CGVector anchorDistance = CGVectorMake(_size.width * _anchorPoint.x, _size.height * _anchorPoint.y);
+
+						shapeNode.position = [_scene convertPointFromView:CGPointMake(_handlePoints[BLHandle].x + anchorDistance.dx * cosine - anchorDistance.dy * sine,
+																					  _handlePoints[BLHandle].y + anchorDistance.dx * sine + anchorDistance.dy * cosine)];
 					}
 					break;
 				case TMHandle:
