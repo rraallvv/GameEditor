@@ -106,17 +106,17 @@
 			NSArray *attibutes = [[NSString stringWithUTF8String:property_getAttributes(properties[i])+1] componentsSeparatedByString:@","];
 			NSString *propertyType = [attibutes firstObject];
 			if ([propertyName isEqualToString:@"position"]) {
-				[_arrayController addObject: [Property propertyWithName:@"position" node:node type:@"point"]];
+				[_arrayController addObject: [Property propertyWithName:@"position" node:node type:@"{CGSize=dd}"]];
 			} else if ([propertyName isEqualToString:@"zRotation"]){
 				[_arrayController addObject: [Property propertyWithName:@"zRotation" node:node type:@"degrees"]];
 			} else if ([propertyName isEqualToString:@"paused"]){
-				[_arrayController addObject: [Property propertyWithName:@"paused" node:node type:@"bool"]];
+				[_arrayController addObject: [Property propertyWithName:@"paused" node:node type:@"c"]];
 			} else {
 				[_arrayController addObject: @{
 											   @"propertyName": propertyName,
-											   @"propertyValue": @YES,
+											   @"propertyValue": @NO,
 											   @"editable": @NO,
-											   @"type": @"",
+											   @"type": propertyType,
 											   @"node": @""
 											   }];
 			}
