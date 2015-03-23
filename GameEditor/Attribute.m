@@ -1,5 +1,5 @@
 /*
- * StepperTextField.h
+ * Attribute.m
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-#import "Utils.h"
+#import "Attribute.h"
 
 static NSDictionary *pointTransformer = nil;
 
@@ -43,12 +43,10 @@ static NSDictionary *pointTransformer = nil;
 }
 - (id)transformedValue:(id)value {
 	NSValue *result = value;
-	//NSLog(@">%@", result);
 	return result;
 }
 - (id)reverseTransformedValue:(id)value {
 	NSValue *result = [NSValue valueWithPoint:NSPointFromString(value)];
-	//NSLog(@"<%@", result);
 	return result;
 }
 @end
@@ -71,58 +69,97 @@ static NSDictionary *degreesTransformer = nil;
 }
 - (id)transformedValue:(NSNumber *)value {
 	NSNumber *result = @(value.floatValue*180/M_PI);
-	//NSLog(@">%@", result);
 	return result;
 }
 - (id)reverseTransformedValue:(NSNumber *)value {
 	NSNumber *result = @(value.floatValue*M_PI/180);
-	//NSLog(@"<%@", result);
 	return result;
 }
 @end
 
-@implementation Property
-@synthesize propertyName = _propertyName, propertyValue = _propertyValue, editable = _editable;
-+ (Property *)propertyWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	Property *property = [[Property alloc] init];
-	property.propertyName = name;
-	property.node = node;
-	property.type = type;
+static NSDictionary *attibuteNameTransformer = nil;
 
-	[property bind:@"propertyValue" toObject:node withKeyPath:property.propertyName options:nil];
-	[node bind:property.propertyName toObject:property withKeyPath:@"propertyValue" options:nil];
+@implementation AttibuteNameTransformer
++ (NSDictionary *)transformer {
+	if (attibuteNameTransformer) {
+		return attibuteNameTransformer;
+	} else {
+		return attibuteNameTransformer = @{ NSValueTransformerBindingOption:[[AttibuteNameTransformer alloc] init] };
+	}
+}
++ (Class)transformedValueClass {
+	return [NSString class];
+}
++ (BOOL)allowsReverseTransformation {
+	return NO;
+}
+- (id)transformedValue:(id)value {
+	NSString *str = value;
+	NSMutableString *str2 = [NSMutableString string];
 
-	return property;
+	for (NSInteger i=0; i<str.length; i++){
+		NSString *ch = [str substringWithRange:NSMakeRange(i, 1)];
+		if ([ch rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]].location != NSNotFound) {
+			[str2 appendString:@" "];
+		} else if ([ch isEqualToString:@"_"]) {
+			if (i == 0)
+				continue;
+			else
+				[str2 appendString:@" "];
+		} else if ([ch isEqualToString:@"-"]) {
+			[str2 appendString:@" "];
+		}
+		[str2 appendString:ch];
+	}
+
+	NSString * result = str2.capitalizedString;
+
+	return result;
+}
+@end
+
+@implementation Attribute
+@synthesize name = _name, value = _value, editable = _editable;
++ (Attribute *)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
+	Attribute *attribute = [[Attribute alloc] init];
+	attribute.name = name;
+	attribute.node = node;
+	attribute.type = type;
+
+	[attribute bind:@"value" toObject:node withKeyPath:attribute.name options:nil];
+	[node bind:attribute.name toObject:attribute withKeyPath:@"value" options:nil];
+
+	return attribute;
 }
 - (BOOL)editable {
 	return YES;
 }
 - (void)dealloc {
-	[self unbind:@"propertyValue"];
-	[self.node unbind:self.propertyName];
+	[self unbind:@"value"];
+	[self.node unbind:self.name];
 }
 - (void)setX:(float)value {
-	NSPoint point = _propertyValue.pointValue;
+	NSPoint point = _value.pointValue;
 	if (value != point.x) {
 		point.x = value;
-		self.propertyValue = [NSValue valueWithPoint:point];
+		self.value = [NSValue valueWithPoint:point];
 	}
 }
 - (float)x {
-	return _propertyValue.pointValue.x;
+	return _value.pointValue.x;
 }
 - (void)setY:(float)value {
-	NSPoint point = _propertyValue.pointValue;
+	NSPoint point = _value.pointValue;
 	if (value != point.y) {
 		point.y = value;
-		self.propertyValue = [NSValue valueWithPoint:point];
+		self.value = [NSValue valueWithPoint:point];
 	}
 }
 - (float)y {
-	return _propertyValue.pointValue.y;
+	return _value.pointValue.y;
 }
-- (void)setPropertyValue:(NSValue *)propertyValue {
-	NSPoint point = propertyValue.pointValue;
+- (void)setValue:(NSValue *)value {
+	NSPoint point = value.pointValue;
 	float x = self.x;
 	if (x != point.x) {
 		self.x = x;
@@ -131,9 +168,9 @@ static NSDictionary *degreesTransformer = nil;
 	if (y != point.y) {
 		self.y = y;
 	}
-	_propertyValue = propertyValue;
+	_value = value;
 }
-- (NSValue *)propertyValue {
-	return _propertyValue;
+- (NSValue *)value {
+	return _value;
 }
 @end
