@@ -107,8 +107,8 @@
 			NSString *attributeType = [attibutesArray firstObject];
 			if ([attributeName isEqualToString:@"position"]) {
 				[_arrayController addObject: [Attribute attributeWithName:attributeName node:node type:attributeType]];
-			} else if ([attributeName isEqualToString:@"zRotation"]){
-				[_arrayController addObject: [Attribute attributeWithName:@"zRotation" node:node type:@"degrees"]];
+			} else if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+				[_arrayController addObject: [Attribute attributeWithName:attributeName node:node type:@"degrees"]];
 			} else if ([attributeName isEqualToString:@"paused"]){
 				[_arrayController addObject: [Attribute attributeWithName:@"paused" node:node type:@"c"]];
 			} else {
