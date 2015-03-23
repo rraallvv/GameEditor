@@ -100,7 +100,12 @@
 	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
 		return [outlineView makeViewWithIdentifier:@"key" owner:self];
 	} else {
-		return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
+		NSString *type = [[item representedObject] valueForKey:@"type"];
+		NSLog(@"%@", type);
+		NSView *view = [outlineView makeViewWithIdentifier:type owner:self];
+		if (!view)
+			return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
+		return view;
 	}
 }
 
@@ -154,6 +159,7 @@
 			NSString *attributeType = [attibutesArray firstObject];
 			if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 				[_arrayController addObject: [Attribute attributeWithName:attributeName node:node type:@"degrees"]];
+				[children addObject:[Attribute attributeWithName:attributeName node:node type:@"degrees"]];
 			} else {
 				BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
 				NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
@@ -161,6 +167,7 @@
 
 				if (editable) {
 					[_arrayController addObject: [Attribute attributeWithName:attributeName node:node type:attributeType]];
+					[children addObject:[Attribute attributeWithName:attributeName node:node type:attributeType]];
 				} else {
 					[_arrayController addObject: @{
 												   @"name": attributeName,
@@ -169,13 +176,14 @@
 												   @"type": @"generic property",
 												   @"node": [NSNull null]
 												   }];
+					[children addObject:@{@"name": attributeName,
+										  @"value": @"(non-editable)",
+										  @"type": @"generic attribute",
+										  @"node": [NSNull null],
+										  @"isLeaf": @YES,
+										  @"isEditable": @NO}.mutableCopy];
 				}
 			}
-
-			[children addObject:@{@"name": attributeName,
-								  @"value": attributeType,
-								  @"isLeaf": @(YES),
-								  @"isEditable": @(YES)}.mutableCopy];
 		}
 		free(properties);
 

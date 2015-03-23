@@ -134,6 +134,9 @@ static NSDictionary *attibuteNameTransformer = nil;
 - (BOOL)editable {
 	return YES;
 }
+- (BOOL)isLeaf {
+	return YES;
+}
 - (void)dealloc {
 	[self unbind:@"value"];
 	[self.node unbind:self.name];
