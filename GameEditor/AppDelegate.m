@@ -79,7 +79,10 @@
 		return [tableView makeViewWithIdentifier:@"key" owner:self];
 	} else {
 		NSString *type = [[[_arrayController arrangedObjects] objectAtIndex:row] valueForKey:@"type"];
-		return [tableView makeViewWithIdentifier:type owner:self];
+		NSView *view = [tableView makeViewWithIdentifier:type owner:self];
+		if (!view)
+			return [tableView makeViewWithIdentifier:@"generic property" owner:self];
+		return view;
 	}
 }
 
@@ -93,9 +96,34 @@
 	[_arrayController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
 
 	/* Add the attibutes of the selected node */
-	[_arrayController addObject: [Property propertyWithName:@"position" node:node type:@"point"]];
-	[_arrayController addObject: [Property propertyWithName:@"zRotation" node:node type:@"degrees"]];
-	[_arrayController addObject: [Property propertyWithName:@"paused" node:node type:@"bool"]];
+	Class classType = [node class];
+	do {
+		unsigned int count;
+		objc_property_t *properties = class_copyPropertyList(classType, &count);
+		for(unsigned int i = 0; i < count; i++) {
+			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
+			NSString *propertyName = [NSString stringWithUTF8String:property_getName(properties[i])];
+			if ([propertyName isEqualToString:@"position"]) {
+				[_arrayController addObject: [Property propertyWithName:@"position" node:node type:@"point"]];
+			} else if ([propertyName isEqualToString:@"zRotation"]){
+				[_arrayController addObject: [Property propertyWithName:@"zRotation" node:node type:@"degrees"]];
+			} else if ([propertyName isEqualToString:@"paused"]){
+				[_arrayController addObject: [Property propertyWithName:@"paused" node:node type:@"bool"]];
+			} else {
+				[_arrayController addObject: @{
+											   @"propertyName": propertyName,
+											   @"propertyValue": @YES,
+											   @"editable": @NO,
+											   @"type": @"",
+											   @"node": @""
+											   }];
+			}
+		}
+		free(properties);
+
+		classType = [classType superclass];
+	} while (classType != nil);
+
 	[_tableView reloadData];
 }
 
