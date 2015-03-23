@@ -95,7 +95,7 @@
 	NSRange range = NSMakeRange(0, [[_arrayController arrangedObjects] count]);
 	[_arrayController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
 
-	/* Add the attibutes of the selected node */
+	/* Populate the attibutes table from the selected node's properties */
 	Class classType = [node class];
 	do {
 		unsigned int count;
@@ -103,6 +103,8 @@
 		for(unsigned int i = 0; i < count; i++) {
 			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
 			NSString *propertyName = [NSString stringWithUTF8String:property_getName(properties[i])];
+			NSArray *attibutes = [[NSString stringWithUTF8String:property_getAttributes(properties[i])+1] componentsSeparatedByString:@","];
+			NSString *propertyType = [attibutes firstObject];
 			if ([propertyName isEqualToString:@"position"]) {
 				[_arrayController addObject: [Property propertyWithName:@"position" node:node type:@"point"]];
 			} else if ([propertyName isEqualToString:@"zRotation"]){
