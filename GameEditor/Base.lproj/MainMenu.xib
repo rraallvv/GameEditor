@@ -308,6 +308,9 @@
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
+                                                            <connections>
+                                                                <binding destination="vJr-p1-JI2" name="value" keyPath="objectValue.propertyValue" id="dcN-zi-sJF"/>
+                                                            </connections>
                                                         </textField>
                                                     </subviews>
                                                     <connections>
