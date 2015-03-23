@@ -43,12 +43,10 @@ static NSDictionary *pointTransformer = nil;
 }
 - (id)transformedValue:(id)value {
 	NSValue *result = value;
-	//NSLog(@">%@", result);
 	return result;
 }
 - (id)reverseTransformedValue:(id)value {
 	NSValue *result = [NSValue valueWithPoint:NSPointFromString(value)];
-	//NSLog(@"<%@", result);
 	return result;
 }
 @end
@@ -71,12 +69,32 @@ static NSDictionary *degreesTransformer = nil;
 }
 - (id)transformedValue:(NSNumber *)value {
 	NSNumber *result = @(value.floatValue*180/M_PI);
-	//NSLog(@">%@", result);
 	return result;
 }
 - (id)reverseTransformedValue:(NSNumber *)value {
 	NSNumber *result = @(value.floatValue*M_PI/180);
-	//NSLog(@"<%@", result);
+	return result;
+}
+@end
+
+static NSDictionary *attibuteNameTransformer = nil;
+
+@implementation AttibuteNameTransformer
++ (NSDictionary *)transformer {
+	if (attibuteNameTransformer) {
+		return attibuteNameTransformer;
+	} else {
+		return attibuteNameTransformer = @{ NSValueTransformerBindingOption:[[AttibuteNameTransformer alloc] init] };
+	}
+}
++ (Class)transformedValueClass {
+	return [NSString class];
+}
++ (BOOL)allowsReverseTransformation {
+	return NO;
+}
+- (id)transformedValue:(id)value {
+	NSString *result = @"XXX";
 	return result;
 }
 @end

@@ -48,6 +48,10 @@
 + (NSDictionary *)transformer;
 @end
 
+@interface AttibuteNameTransformer : NSValueTransformer
++ (NSDictionary *)transformer;
+@end
+
 @interface Property : NSObject
 +(Property *)propertyWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
 @property (copy) NSString *propertyName;

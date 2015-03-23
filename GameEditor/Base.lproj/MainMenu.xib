@@ -160,7 +160,11 @@
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="VdE-35-N2m" name="value" keyPath="objectValue.propertyName" id="YX7-Uo-Ix8"/>
+                                                                <binding destination="VdE-35-N2m" name="value" keyPath="objectValue.propertyName" id="1ND-qW-lm1">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">AttibuteNameTransformer</string>
+                                                                    </dictionary>
+                                                                </binding>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
