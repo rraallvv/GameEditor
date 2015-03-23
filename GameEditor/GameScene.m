@@ -8,7 +8,7 @@
 @implementation GameScene
 
 - (void)didMoveToView:(SKView *)view {
-
+#if 0
 	/* Create test shape from points */
 
 	CGPoint points[] = {{0,0}, {-40, -40}, {80, 0}, {0, 120}, {0,0}};
@@ -35,7 +35,10 @@
 	shapeNode2.position = CGPointMake(400, 100);
 	shapeNode2.zRotation = M_PI_4;
 	[self addChild:shapeNode2];
+#endif
 
+	SKSpriteNode *spaceShip = (SKSpriteNode *)[self childNodeWithName:@"//SpaceShip"];
+	[spaceShip setPaused:YES];
 }
 
 @end

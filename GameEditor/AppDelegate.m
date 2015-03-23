@@ -5,8 +5,7 @@
 
 #import "AppDelegate.h"
 #import "GameScene.h"
-#import "Utils.h"
-#import "EditorView.h"
+#import "Attribute.h"
 
 @implementation SKScene (Unarchive)
 
@@ -79,7 +78,10 @@
 		return [tableView makeViewWithIdentifier:@"key" owner:self];
 	} else {
 		NSString *type = [[[_arrayController arrangedObjects] objectAtIndex:row] valueForKey:@"type"];
-		return [tableView makeViewWithIdentifier:type owner:self];
+		NSView *view = [tableView makeViewWithIdentifier:type owner:self];
+		if (!view)
+			return [tableView makeViewWithIdentifier:@"generic property" owner:self];
+		return view;
 	}
 }
 
@@ -92,10 +94,42 @@
 	NSRange range = NSMakeRange(0, [[_arrayController arrangedObjects] count]);
 	[_arrayController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
 
-	/* Add the attibutes of the selected node */
-	[_arrayController addObject: [Property propertyWithName:@"position" node:node type:@"point"]];
-	[_arrayController addObject: [Property propertyWithName:@"zRotation" node:node type:@"degrees"]];
-	[_arrayController addObject: [Property propertyWithName:@"paused" node:node type:@"bool"]];
+	/* Populate the attibutes table from the selected node's properties */
+	Class classType = [node class];
+	do {
+		unsigned int count;
+		objc_property_t *properties = class_copyPropertyList(classType, &count);
+		for(unsigned int i = 0; i < count; i++) {
+			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
+			NSString *attributeName = [NSString stringWithUTF8String:property_getName(properties[i])];
+			NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
+			NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
+			NSString *attributeType = [attibutesArray firstObject];
+			if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+				[_arrayController addObject: [Attribute attributeWithName:attributeName node:node type:@"degrees"]];
+			} else {
+				BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
+				NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
+				editable = editable && [attributeType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
+
+				if (editable) {
+					[_arrayController addObject: [Attribute attributeWithName:attributeName node:node type:attributeType]];
+				} else {
+					[_arrayController addObject: @{
+												   @"name": attributeName,
+												   @"value": @"(non-editable)",
+												   @"editable": @NO,
+												   @"type": @"generic property",
+												   @"node": [NSNull null]
+												   }];
+				}
+			}
+		}
+		free(properties);
+
+		classType = [classType superclass];
+	} while (classType != nil);
+
 	[_tableView reloadData];
 }
 

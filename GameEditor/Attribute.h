@@ -1,5 +1,5 @@
 /*
- * StepperTextField.h
+ * Attribute.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -27,8 +27,6 @@
 #import <objc/runtime.h>
 #import <SpriteKit/SpriteKit.h>
 
-#define NSLog(FORMAT, ...) fprintf( stderr, "%s\n", [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String])
-
 @implementation SKNode (test)
 - (void)setX:(float)value {
 	CGPoint point = self.position;
@@ -48,10 +46,14 @@
 + (NSDictionary *)transformer;
 @end
 
-@interface Property : NSObject
-+(Property *)propertyWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
-@property (copy) NSString *propertyName;
-@property (copy) NSValue *propertyValue;
+@interface AttibuteNameTransformer : NSValueTransformer
++ (NSDictionary *)transformer;
+@end
+
+@interface Attribute : NSObject
++(Attribute *)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
+@property (copy) NSString *name;
+@property (copy) NSValue *value;
 @property (nonatomic, assign) BOOL editable;
 @property (copy) NSString *type;
 @property (weak) SKNode *node;
