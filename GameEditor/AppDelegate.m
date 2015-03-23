@@ -102,8 +102,9 @@
 		for(unsigned int i = 0; i < count; i++) {
 			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
 			NSString *attributeName = [NSString stringWithUTF8String:property_getName(properties[i])];
-			NSArray *attibutes = [[NSString stringWithUTF8String:property_getAttributes(properties[i])+1] componentsSeparatedByString:@","];
-			NSString *attributeType = [attibutes firstObject];
+			NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
+			NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
+			NSString *attributeType = [attibutesArray firstObject];
 			if ([attributeName isEqualToString:@"position"]) {
 				[_arrayController addObject: [Attribute attributeWithName:@"position" node:node type:@"{CGSize=dd}"]];
 			} else if ([attributeName isEqualToString:@"zRotation"]){
@@ -111,13 +112,18 @@
 			} else if ([attributeName isEqualToString:@"paused"]){
 				[_arrayController addObject: [Attribute attributeWithName:@"paused" node:node type:@"c"]];
 			} else {
-				[_arrayController addObject: @{
-											   @"name": attributeName,
-											   @"value": @NO,
-											   @"editable": @NO,
-											   @"type": attributeType,
-											   @"node": @""
-											   }];
+				BOOL editable = [attributes rangeOfString:@",R,"].location == NSNotFound;
+				if (NO) {
+					[_arrayController addObject: [Attribute attributeWithName:attributeName node:node type:attributeType]];
+				} else {
+					[_arrayController addObject: @{
+												   @"name": attributeName,
+												   @"value": @NO,
+												   @"editable": @(editable),
+												   @"type": attributeType,
+												   @"node": @""
+												   }];
+				}
 			}
 		}
 		free(properties);

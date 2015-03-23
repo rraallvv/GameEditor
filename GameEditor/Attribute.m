@@ -94,7 +94,7 @@ static NSDictionary *attibuteNameTransformer = nil;
 	return NO;
 }
 - (id)transformedValue:(id)value {
-	NSString *result = @"XXX";
+	NSString *result = value;
 	return result;
 }
 @end
