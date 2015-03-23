@@ -94,7 +94,26 @@ static NSDictionary *attibuteNameTransformer = nil;
 	return NO;
 }
 - (id)transformedValue:(id)value {
-	NSString *result = value;
+	NSString *str = value;
+	NSMutableString *str2 = [NSMutableString string];
+
+	for (NSInteger i=0; i<str.length; i++){
+		NSString *ch = [str substringWithRange:NSMakeRange(i, 1)];
+		if ([ch rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]].location != NSNotFound) {
+			[str2 appendString:@" "];
+		} else if ([ch isEqualToString:@"_"]) {
+			if (i == 0)
+				continue;
+			else
+				[str2 appendString:@" "];
+		} else if ([ch isEqualToString:@"-"]) {
+			[str2 appendString:@" "];
+		}
+		[str2 appendString:ch];
+	}
+
+	NSString * result = str2.capitalizedString;
+
 	return result;
 }
 @end
