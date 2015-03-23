@@ -160,7 +160,7 @@
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="VdE-35-N2m" name="value" keyPath="objectValue.propertyName" id="1ND-qW-lm1">
+                                                                <binding destination="VdE-35-N2m" name="value" keyPath="objectValue.name" id="hQa-zv-9oY">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">AttibuteNameTransformer</string>
                                                                     </dictionary>
@@ -277,7 +277,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                             <connections>
                                                                 <binding destination="ykA-kB-Fwq" name="editable" keyPath="objectValue.editable" id="AUA-4d-T4U"/>
-                                                                <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.propertyValue" id="edY-f5-Cs6">
+                                                                <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.value" id="NDO-hf-VGp">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">DegreesTransformer</string>
                                                                     </dictionary>
@@ -310,7 +310,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                             <connections>
                                                                 <binding destination="ksH-n0-sGf" name="editable" keyPath="objectValue.editable" id="Iap-x3-KHX"/>
-                                                                <binding destination="ksH-n0-sGf" name="value" keyPath="objectValue.propertyValue" id="mNl-7d-9mw"/>
+                                                                <binding destination="ksH-n0-sGf" name="value" keyPath="objectValue.value" id="ejT-6n-eXz"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
@@ -328,7 +328,7 @@
                                                             </buttonCell>
                                                             <connections>
                                                                 <binding destination="52C-rc-ywy" name="enabled" keyPath="objectValue.editable" id="wjB-9N-hjW"/>
-                                                                <binding destination="52C-rc-ywy" name="value" keyPath="objectValue.propertyValue" id="pxm-fR-xBz"/>
+                                                                <binding destination="52C-rc-ywy" name="value" keyPath="objectValue.value" id="7FA-cE-8SP"/>
                                                             </connections>
                                                         </button>
                                                     </subviews>
@@ -347,7 +347,7 @@
                                                             </textFieldCell>
                                                             <connections>
                                                                 <binding destination="vJr-p1-JI2" name="editable" keyPath="objectValue.editable" id="Jl6-9W-H7g"/>
-                                                                <binding destination="vJr-p1-JI2" name="value" keyPath="objectValue.propertyValue" id="dcN-zi-sJF"/>
+                                                                <binding destination="vJr-p1-JI2" name="value" keyPath="objectValue.value" id="F2h-ql-xwT"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>

@@ -5,8 +5,7 @@
 
 #import "AppDelegate.h"
 #import "GameScene.h"
-#import "Utils.h"
-#import "EditorView.h"
+#import "Attribute.h"
 
 @implementation SKScene (Unarchive)
 
@@ -102,21 +101,21 @@
 		objc_property_t *properties = class_copyPropertyList(classType, &count);
 		for(unsigned int i = 0; i < count; i++) {
 			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
-			NSString *propertyName = [NSString stringWithUTF8String:property_getName(properties[i])];
+			NSString *attributeName = [NSString stringWithUTF8String:property_getName(properties[i])];
 			NSArray *attibutes = [[NSString stringWithUTF8String:property_getAttributes(properties[i])+1] componentsSeparatedByString:@","];
-			NSString *propertyType = [attibutes firstObject];
-			if ([propertyName isEqualToString:@"position"]) {
-				[_arrayController addObject: [Property propertyWithName:@"position" node:node type:@"{CGSize=dd}"]];
-			} else if ([propertyName isEqualToString:@"zRotation"]){
-				[_arrayController addObject: [Property propertyWithName:@"zRotation" node:node type:@"degrees"]];
-			} else if ([propertyName isEqualToString:@"paused"]){
-				[_arrayController addObject: [Property propertyWithName:@"paused" node:node type:@"c"]];
+			NSString *attributeType = [attibutes firstObject];
+			if ([attributeName isEqualToString:@"position"]) {
+				[_arrayController addObject: [Attribute attributeWithName:@"position" node:node type:@"{CGSize=dd}"]];
+			} else if ([attributeName isEqualToString:@"zRotation"]){
+				[_arrayController addObject: [Attribute attributeWithName:@"zRotation" node:node type:@"degrees"]];
+			} else if ([attributeName isEqualToString:@"paused"]){
+				[_arrayController addObject: [Attribute attributeWithName:@"paused" node:node type:@"c"]];
 			} else {
 				[_arrayController addObject: @{
-											   @"propertyName": propertyName,
-											   @"propertyValue": @NO,
+											   @"name": attributeName,
+											   @"value": @NO,
 											   @"editable": @NO,
-											   @"type": propertyType,
+											   @"type": attributeType,
 											   @"node": @""
 											   }];
 			}
