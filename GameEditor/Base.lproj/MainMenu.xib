@@ -184,7 +184,7 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
-                                                <tableCellView identifier="{CGSize=dd}" id="2Ss-NZ-lOU">
+                                                <tableCellView identifier="{CGPoint=dd}" id="2Ss-NZ-lOU">
                                                     <rect key="frame" x="71" y="1" width="161" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>

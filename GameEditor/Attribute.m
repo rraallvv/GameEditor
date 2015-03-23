@@ -158,7 +158,7 @@ static NSDictionary *attibuteNameTransformer = nil;
 - (float)y {
 	return _value.pointValue.y;
 }
-- (void)setPropertyValue:(NSValue *)value {
+- (void)setValue:(NSValue *)value {
 	NSPoint point = value.pointValue;
 	float x = self.x;
 	if (x != point.x) {
