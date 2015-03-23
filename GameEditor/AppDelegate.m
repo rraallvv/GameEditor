@@ -105,12 +105,8 @@
 			NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
 			NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
 			NSString *attributeType = [attibutesArray firstObject];
-			if ([attributeName isEqualToString:@"position"]) {
-				[_arrayController addObject: [Attribute attributeWithName:attributeName node:node type:attributeType]];
-			} else if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+			if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 				[_arrayController addObject: [Attribute attributeWithName:attributeName node:node type:@"degrees"]];
-			} else if ([attributeName isEqualToString:@"paused"]){
-				[_arrayController addObject: [Attribute attributeWithName:@"paused" node:node type:@"c"]];
 			} else {
 				BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
 				NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
