@@ -112,16 +112,19 @@
 			} else if ([attributeName isEqualToString:@"paused"]){
 				[_arrayController addObject: [Attribute attributeWithName:@"paused" node:node type:@"c"]];
 			} else {
-				BOOL editable = [attributes rangeOfString:@",R,"].location == NSNotFound;
-				if (NO) {
+				BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
+				NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
+				editable = editable && [attributeType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
+
+				if (editable) {
 					[_arrayController addObject: [Attribute attributeWithName:attributeName node:node type:attributeType]];
 				} else {
 					[_arrayController addObject: @{
 												   @"name": attributeName,
-												   @"value": @NO,
-												   @"editable": @(editable),
-												   @"type": attributeType,
-												   @"node": @""
+												   @"value": @"(non-editable)",
+												   @"editable": @NO,
+												   @"type": @"generic property",
+												   @"node": [NSNull null]
 												   }];
 				}
 			}

@@ -36,6 +36,9 @@
 	shapeNode2.zRotation = M_PI_4;
 	[self addChild:shapeNode2];
 #endif
+
+	SKSpriteNode *spaceShip = (SKSpriteNode *)[self childNodeWithName:@"//SpaceShip"];
+	[spaceShip setPaused:YES];
 }
 
 @end
