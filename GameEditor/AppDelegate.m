@@ -1,7 +1,27 @@
-//
-//  AppDelegate.m
-//  GameEditor
-//
+/*
+ * AppDelegate.m
+ * GameEditor
+ *
+ * Copyright (c) 2015 Rhody Lugo.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 #import "AppDelegate.h"
 #import "GameScene.h"
@@ -40,12 +60,13 @@
 	IBOutlet NSTableView *_tableView;
 	IBOutlet NSArrayController *_arrayController;
 	IBOutlet EditorView *_editorView;
+	IBOutlet NSTreeController *_treeController;
+	IBOutlet NSOutlineView *_outlineView;
 }
 
 @synthesize window = _window;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-
 	/* Main window appearance */
 	self.window.styleMask = self.window.styleMask | NSFullSizeContentViewWindowMask;
 	self.window.titleVisibility = NSWindowTitleHidden;
@@ -73,6 +94,25 @@
     return YES;
 }
 
+- (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
+	if ([self isHeader:item]) {
+		return [outlineView makeViewWithIdentifier:@"group" owner:self];
+	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
+		return [outlineView makeViewWithIdentifier:@"key" owner:self];
+	} else {
+		return [outlineView makeViewWithIdentifier:@"type" owner:self];
+	}
+}
+
+- (BOOL) isHeader:(id)item{
+	return [[item indexPath] length] < 2;
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item{
+	// This converts a group to a header which influences its style
+	return [self isHeader:item];
+}
+
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
 	if ([[tableColumn identifier] isEqualToString:@"key"]) {
 		return [tableView makeViewWithIdentifier:@"key" owner:self];
@@ -90,6 +130,10 @@
 }
 
 - (void)selectedNode:(SKNode *)node {
+
+	NSMutableArray *parents = [NSMutableArray array];
+
+
 	/* Clear the attibutes table's array controller*/
 	NSRange range = NSMakeRange(0, [[_arrayController arrangedObjects] count]);
 	[_arrayController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
@@ -99,6 +143,9 @@
 	do {
 		unsigned int count;
 		objc_property_t *properties = class_copyPropertyList(classType, &count);
+
+		NSMutableArray *children = [NSMutableArray array];
+
 		for(unsigned int i = 0; i < count; i++) {
 			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
 			NSString *attributeName = [NSString stringWithUTF8String:property_getName(properties[i])];
@@ -124,13 +171,32 @@
 												   }];
 				}
 			}
+
+			[children addObject:@{@"title": attributeName,
+								  @"author": attributeType,
+								  @"isLeaf": @(YES),
+								  @"isEditable": @(YES)}.mutableCopy];
 		}
 		free(properties);
+
+		[parents addObject:@{@"title": [classType description],
+						   @"isLeaf": @NO,
+						   @"isEditable": @NO,
+						   @"children":children}];
 
 		classType = [classType superclass];
 	} while (classType != nil);
 
 	[_tableView reloadData];
+
+	[_treeController setContent:parents];
+
+	// Expand all the groups
+	[_outlineView expandItem:nil expandChildren:YES];
+	[_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
+
+	// Enable Drag and Drop
+	[_outlineView registerForDraggedTypes: [NSArray arrayWithObject: @"public.binary"]];
 }
 
 @end
