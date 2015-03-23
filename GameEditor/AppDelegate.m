@@ -106,7 +106,7 @@
 			NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
 			NSString *attributeType = [attibutesArray firstObject];
 			if ([attributeName isEqualToString:@"position"]) {
-				[_arrayController addObject: [Attribute attributeWithName:@"position" node:node type:@"{CGSize=dd}"]];
+				[_arrayController addObject: [Attribute attributeWithName:attributeName node:node type:attributeType]];
 			} else if ([attributeName isEqualToString:@"zRotation"]){
 				[_arrayController addObject: [Attribute attributeWithName:@"zRotation" node:node type:@"degrees"]];
 			} else if ([attributeName isEqualToString:@"paused"]){
