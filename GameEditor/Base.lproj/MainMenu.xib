@@ -419,7 +419,7 @@
                                                             </textFieldCell>
                                                             <connections>
                                                                 <binding destination="7rC-7M-gVg" name="editable" keyPath="objectValue.isEditable" id="Rag-Jb-cNa"/>
-                                                                <binding destination="7rC-7M-gVg" name="value" keyPath="objectValue.title" id="bAD-x1-UcV"/>
+                                                                <binding destination="7rC-7M-gVg" name="value" keyPath="objectValue.name" id="OMd-qQ-BNG"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
@@ -441,7 +441,7 @@
                                                             </textFieldCell>
                                                             <connections>
                                                                 <binding destination="fRs-0f-VcJ" name="editable" keyPath="objectValue.isEditable" id="eBk-aM-Zok"/>
-                                                                <binding destination="fRs-0f-VcJ" name="value" keyPath="objectValue.title" id="GYx-fU-xHe">
+                                                                <binding destination="fRs-0f-VcJ" name="value" keyPath="objectValue.name" id="xXp-Yg-71f">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">AttibuteNameTransformer</string>
                                                                     </dictionary>
@@ -465,21 +465,21 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
-                                                <tableCellView identifier="type" id="Yzo-qi-qHn">
+                                                <tableCellView identifier="generic attribute" id="Yzo-qi-qHn">
                                                     <rect key="frame" x="111" y="1" width="129" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="3KK-RG-a0Z">
                                                             <rect key="frame" x="0.0" y="0.0" width="129" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="attribute" id="RrX-Zq-Ckg">
+                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="generic attribute" id="RrX-Zq-Ckg">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="Yzo-qi-qHn" name="value" keyPath="objectValue.author" id="c4w-nj-aES"/>
                                                                 <binding destination="fRs-0f-VcJ" name="editable" keyPath="objectValue.isEditable" id="1zV-4s-xQb"/>
+                                                                <binding destination="Yzo-qi-qHn" name="value" keyPath="objectValue.value" id="JRC-d7-ZfY"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>

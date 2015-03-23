@@ -100,7 +100,7 @@
 	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
 		return [outlineView makeViewWithIdentifier:@"key" owner:self];
 	} else {
-		return [outlineView makeViewWithIdentifier:@"type" owner:self];
+		return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
 	}
 }
 
@@ -172,14 +172,14 @@
 				}
 			}
 
-			[children addObject:@{@"title": attributeName,
-								  @"author": attributeType,
+			[children addObject:@{@"name": attributeName,
+								  @"value": attributeType,
 								  @"isLeaf": @(YES),
 								  @"isEditable": @(YES)}.mutableCopy];
 		}
 		free(properties);
 
-		[parents addObject:@{@"title": [classType description],
+		[parents addObject:@{@"name": [classType description],
 						   @"isLeaf": @NO,
 						   @"isEditable": @NO,
 						   @"children":children}];
