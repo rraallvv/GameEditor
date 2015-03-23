@@ -338,60 +338,13 @@ anchorPoint = _anchorPoint;
 					break;
 
 				case TMHandle:
-				case BMHandle: {
-					CGVector distanceVector;
-
-					/* Distance vector between the the handle and the mouse pointer */
-					if (_manipulatedHandle == TMHandle) {
-						distanceVector = CGVectorMake(locationInView.x - _handlePoints[BLHandle].x,
-													  locationInView.y - _handlePoints[BLHandle].y);
-					} else {
-						distanceVector = CGVectorMake(_handlePoints[TRHandle].x - locationInView.x,
-													  _handlePoints[TRHandle].y - locationInView.y);
-					}
-
-					CGFloat distance = sqrt(distanceVector.dx * distanceVector.dx + distanceVector.dy * distanceVector.dy);
-					CGFloat angle = atan2(distanceVector.dy, distanceVector.dx) - _zRotation;
-
-					if ([_node isKindOfClass:[SKSpriteNode class]]) {
-						/* Resize the node */
-						SKSpriteNode *spriteNode = (SKSpriteNode *)_node;
-						spriteNode.size = [_scene convertSizeFromView:CGSizeMake(_size.width, distance * sin(angle))];
-
-					} else if ([_node isKindOfClass:[SKShapeNode class]]) {
-						/* Resize the path */
-						SKShapeNode *shapeNode = (SKShapeNode *)_node;
-
-						CGFloat scale = distance * sin(angle) * shapeNode.yScale / _size.height;
-						shapeNode.yScale = scale;
-
-						CGPathRef pathRef = [shapeNode path];
-						CGRect rect = CGPathGetPathBoundingBox(pathRef);
-						self.size = CGSizeMake(rect.size.width * shapeNode.xScale, rect.size.height * shapeNode.yScale);
-					}
-
-					CGFloat cosine = cos(_zRotation);
-					CGFloat sine = sin(_zRotation);
-
-					/* Translate the node */
-					if (_manipulatedHandle == TMHandle) {
-						CGVector anchorDistance = CGVectorMake(_size.width * _anchorPoint.x, _size.height * _anchorPoint.y);
-						_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[BLHandle].x + anchorDistance.dx * cosine - anchorDistance.dy * sine,
-																				  _handlePoints[BLHandle].y + anchorDistance.dx * sine + anchorDistance.dy * cosine)];
-					} else {
-						CGVector anchorDistance = CGVectorMake(_size.width * (1.0 - _anchorPoint.x), _size.height * (1.0 - _anchorPoint.y));
-						_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[TRHandle].x - anchorDistance.dx * cosine + anchorDistance.dy * sine,
-																				  _handlePoints[TRHandle].y - anchorDistance.dx * sine - anchorDistance.dy * cosine)];
-					}
-				}
-					break;
-
+				case BMHandle:
 				case RMHandle:
 				case LMHandle: {
 					CGVector distanceVector;
 
 					/* Distance vector between the the handle and the mouse pointer */
-					if (_manipulatedHandle == RMHandle) {
+					if (_manipulatedHandle == TMHandle || _manipulatedHandle == RMHandle) {
 						distanceVector = CGVectorMake(locationInView.x - _handlePoints[BLHandle].x,
 													  locationInView.y - _handlePoints[BLHandle].y);
 					} else {
@@ -405,14 +358,23 @@ anchorPoint = _anchorPoint;
 					if ([_node isKindOfClass:[SKSpriteNode class]]) {
 						/* Resize the node */
 						SKSpriteNode *spriteNode = (SKSpriteNode *)_node;
-						spriteNode.size = [_scene convertSizeFromView:CGSizeMake(distance * cos(angle), _size.height)];
+						if (_manipulatedHandle == TMHandle || _manipulatedHandle == BMHandle) {
+							spriteNode.size = [_scene convertSizeFromView:CGSizeMake(_size.width, distance * sin(angle))];
+						} else {
+							spriteNode.size = [_scene convertSizeFromView:CGSizeMake(distance * cos(angle), _size.height)];
+						}
 
 					} else if ([_node isKindOfClass:[SKShapeNode class]]) {
 						/* Resize the path */
 						SKShapeNode *shapeNode = (SKShapeNode *)_node;
 
-						CGFloat scale = distance * cos(angle) * shapeNode.xScale / _size.width;
-						shapeNode.xScale = scale;
+						if (_manipulatedHandle == TMHandle || _manipulatedHandle == BMHandle) {
+							CGFloat scale = distance * sin(angle) * shapeNode.yScale / _size.height;
+							shapeNode.yScale = scale;
+						} else {
+							CGFloat scale = distance * cos(angle) * shapeNode.xScale / _size.width;
+							shapeNode.xScale = scale;
+						}
 
 						CGPathRef pathRef = [shapeNode path];
 						CGRect rect = CGPathGetPathBoundingBox(pathRef);
@@ -423,7 +385,7 @@ anchorPoint = _anchorPoint;
 					CGFloat sine = sin(_zRotation);
 
 					/* Translate the node */
-					if (_manipulatedHandle == RMHandle) {
+					if (_manipulatedHandle == TMHandle || _manipulatedHandle == RMHandle) {
 						CGVector anchorDistance = CGVectorMake(_size.width * _anchorPoint.x, _size.height * _anchorPoint.y);
 						_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[BLHandle].x + anchorDistance.dx * cosine - anchorDistance.dy * sine,
 																				  _handlePoints[BLHandle].y + anchorDistance.dx * sine + anchorDistance.dy * cosine)];
