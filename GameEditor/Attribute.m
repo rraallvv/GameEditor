@@ -131,7 +131,10 @@ static NSDictionary *attibuteNameTransformer = nil;
 
 	return attribute;
 }
-- (BOOL)editable {
+- (BOOL)isEditable {
+	return YES;
+}
+- (BOOL)isLeaf {
 	return YES;
 }
 - (void)dealloc {
