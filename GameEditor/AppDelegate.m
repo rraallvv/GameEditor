@@ -27,6 +27,28 @@
 #import "GameScene.h"
 #import "Attribute.h"
 
+@interface OutlineView : NSOutlineView
+
+@end
+
+@implementation OutlineView
+
+-(void) expandItem:(id)item expandChildren:(BOOL)expandChildren {
+	[NSAnimationContext beginGrouping];
+	[[NSAnimationContext currentContext] setDuration:0.0];
+	[super expandItem:item expandChildren:expandChildren];
+	[NSAnimationContext endGrouping];
+}
+
+- (void)collapseItem:(id)item collapseChildren:(BOOL)collapseChildren {
+	[NSAnimationContext beginGrouping];
+	[[NSAnimationContext currentContext] setDuration:0.0];
+	[super collapseItem:item collapseChildren:collapseChildren];
+	[NSAnimationContext endGrouping];
+}
+
+@end
+
 @implementation SKScene (Unarchive)
 
 + (instancetype)unarchiveFromFile:(NSString *)file {
