@@ -29,7 +29,7 @@
 #import <SpriteKit/SpriteKit.h>
 #import "EditorView.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, NSTableViewDelegate, NSOutlineViewDelegate, EditorViewDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSOutlineViewDelegate, EditorViewDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet SKView *skView;

@@ -435,15 +435,14 @@
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="YVb-3t-owl" secondAttribute="bottom" constant="49" id="70j-ak-1dQ"/>
-                    <constraint firstAttribute="trailing" secondItem="YVb-3t-owl" secondAttribute="trailing" constant="20" id="TjU-bw-jFf"/>
-                    <constraint firstItem="YVb-3t-owl" firstAttribute="top" secondItem="372" secondAttribute="top" constant="20" id="aul-nh-UEv"/>
+                    <constraint firstAttribute="trailing" secondItem="YVb-3t-owl" secondAttribute="trailing" constant="20" symbolic="YES" id="TjU-bw-jFf"/>
+                    <constraint firstItem="YVb-3t-owl" firstAttribute="top" secondItem="372" secondAttribute="top" constant="20" symbolic="YES" id="aul-nh-UEv"/>
                 </constraints>
             </view>
             <point key="canvasLocation" x="428" y="449"/>
         </window>
         <customObject id="494" customClass="AppDelegate">
             <connections>
-                <outlet property="_arrayController" destination="MHP-mB-ED2" id="WIV-gD-tYo"/>
                 <outlet property="_editorView" destination="suo-YO-fqM" id="D5W-Hu-pTw"/>
                 <outlet property="_outlineView" destination="HxU-5v-1iN" id="0rv-VP-QUj"/>
                 <outlet property="_treeController" destination="IEK-xe-ugr" id="TYh-UN-I2P"/>
@@ -452,7 +451,6 @@
             </connections>
         </customObject>
         <customObject id="420" customClass="NSFontManager"/>
-        <arrayController objectClassName="Property" id="MHP-mB-ED2"/>
         <treeController objectClassName="Book" childrenKeyPath="children" leafKeyPath="isLeaf" id="IEK-xe-ugr"/>
     </objects>
     <resources>
