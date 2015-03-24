@@ -108,9 +108,12 @@
 	}
 }
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item{
-	// This converts a group to a header which influences its style
+- (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item {
 	return [self isGroupItem:item];
+}
+
+- (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
+	return 17;
 }
 
 - (BOOL) isGroupItem:(id)item {
@@ -133,6 +136,10 @@
 
 - (BOOL)tableView:(NSTableView *)tableView isGroupRow:(NSInteger)row {
 	return [self isGroupRow:row];
+}
+
+- (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row {
+	return 17;
 }
 
 - (BOOL) isGroupRow:(NSInteger)row {
