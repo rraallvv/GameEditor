@@ -208,7 +208,7 @@
 									 @"children":children}];
 
 		classType = [classType superclass];
-	} while (classType != nil);
+	} while (classType != nil && classType != [SKNode superclass]);
 
 	// Expand all the groups
 	[_outlineView expandItem:nil expandChildren:YES];
