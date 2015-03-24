@@ -120,16 +120,16 @@
                             </customView>
                         </subviews>
                     </customView>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="26" horizontalPageScroll="10" verticalLineScroll="26" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YVb-3t-owl">
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YVb-3t-owl">
                         <rect key="frame" x="528" y="49" width="252" height="531"/>
                         <clipView key="contentView" drawsBackground="NO" id="gWa-sV-qh5">
                             <rect key="frame" x="1" y="0.0" width="238" height="134"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <outlineView appearanceType="vibrantLight" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="systemDefault" viewBased="YES" floatsGroupRows="NO" outlineTableColumn="UZW-3o-Jlu" id="HxU-5v-1iN" customClass="OutlineView">
+                                <outlineView appearanceType="vibrantLight" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="systemDefault" viewBased="YES" floatsGroupRows="NO" outlineTableColumn="UZW-3o-Jlu" id="HxU-5v-1iN" customClass="OutlineView">
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <size key="intercellSpacing" width="3" height="2"/>
-                                    <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <size key="intercellSpacing" width="2" height="3"/>
+                                    <color key="backgroundColor" red="0.94899999999999995" green="0.94899999999999995" blue="0.94899999999999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
                                         <tableColumn identifier="key" width="76" minWidth="16" maxWidth="1000" id="UZW-3o-Jlu">
@@ -153,8 +153,8 @@
                                                             <rect key="frame" x="-2" y="3" width="80" height="14"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="Group" id="eG8-Wc-UOE">
                                                                 <font key="font" metaFont="smallSystemBold"/>
-                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
                                                                 <binding destination="7rC-7M-gVg" name="value" keyPath="objectValue.name" id="GKx-BZ-ucK"/>
@@ -176,7 +176,7 @@
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="name" id="zsv-zk-Ttf">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
                                                                 <binding destination="fRs-0f-VcJ" name="toolTip" keyPath="objectValue.name" id="3XK-fB-b0W">
@@ -200,7 +200,7 @@
                                                 </tableCellView>
                                             </prototypeCellViews>
                                         </tableColumn>
-                                        <tableColumn identifier="value" width="168" minWidth="10" maxWidth="1000" id="Ke9-EM-eLT">
+                                        <tableColumn identifier="value" width="170" minWidth="10" maxWidth="1000" id="Ke9-EM-eLT">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Value">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -218,11 +218,11 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="3KK-RG-a0Z">
-                                                            <rect key="frame" x="-2" y="3" width="172" height="14"/>
+                                                            <rect key="frame" x="-2" y="3" width="174" height="14"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="generic attribute" id="RrX-Zq-Ckg">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
                                                                 <binding destination="Yzo-qi-qHn" name="value" keyPath="objectValue.value" id="JRC-d7-ZfY"/>
@@ -240,10 +240,10 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="Vw7-Ih-Dfd">
-                                                            <rect key="frame" x="0.0" y="0.0" width="167" height="19"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="169" height="19"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SJx-RD-GnC" userLabel="X" customClass="StepperTextField">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="84" height="19"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="85" height="19"/>
                                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="X" bezelStyle="round" id="blG-th-6Qh" userLabel="X">
                                                                         <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#.###" negativeFormat="#.###" numberStyle="decimal" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="mGf-8h-990">
                                                                             <metadata>
@@ -268,7 +268,7 @@
                                                                     </connections>
                                                                 </textField>
                                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="K7c-Mz-Tal" customClass="StepperTextField">
-                                                                    <rect key="frame" x="83" y="0.0" width="84" height="19"/>
+                                                                    <rect key="frame" x="85" y="0.0" width="84" height="19"/>
                                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Y" bezelStyle="round" id="BgJ-i8-Wjc">
                                                                         <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#.###" negativeFormat="#.###" numberStyle="decimal" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="DJc-sP-C5a">
                                                                             <metadata>
@@ -315,7 +315,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YEC-z4-O9q" customClass="StepperTextField">
-                                                            <rect key="frame" x="0.0" y="-2" width="168" height="19"/>
+                                                            <rect key="frame" x="0.0" y="-2" width="170" height="19"/>
                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="double" bezelStyle="round" id="ofv-1e-rEZ">
                                                                 <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#.###" negativeFormat="#.###" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="2" id="FnN-k7-a2m"/>
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -347,7 +347,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="74G-KB-MvT" customClass="StepperTextField">
-                                                            <rect key="frame" x="0.0" y="-2" width="168" height="19"/>
+                                                            <rect key="frame" x="0.0" y="-2" width="170" height="19"/>
                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="angle" bezelStyle="round" id="97D-Kw-i9U">
                                                                 <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#.###º" negativeFormat="#.###º" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="2" id="LV3-Qf-pxQ"/>
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -383,7 +383,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <button translatesAutoresizingMaskIntoConstraints="NO" id="vOX-wV-7o8">
-                                                            <rect key="frame" x="-3" y="2" width="173" height="18"/>
+                                                            <rect key="frame" x="-3" y="2" width="175" height="18"/>
                                                             <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="7iR-tG-Qha">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="smallSystem"/>

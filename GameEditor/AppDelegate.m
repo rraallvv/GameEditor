@@ -27,26 +27,38 @@
 #import "GameScene.h"
 #import "Attribute.h"
 
-@interface OutlineView : NSOutlineView
+@interface TableRowView : NSTableRowView
+@end
 
+@implementation TableRowView
+- (void)drawBackgroundInRect:(NSRect)dirtyRect {
+	[self.backgroundColor set];
+	NSRectFill(dirtyRect);
+}
+@end
+
+@interface OutlineView : NSOutlineView
 @end
 
 @implementation OutlineView
-
 -(void) expandItem:(id)item expandChildren:(BOOL)expandChildren {
 	[NSAnimationContext beginGrouping];
 	[[NSAnimationContext currentContext] setDuration:0.0];
 	[super expandItem:item expandChildren:expandChildren];
 	[NSAnimationContext endGrouping];
 }
-
 - (void)collapseItem:(id)item collapseChildren:(BOOL)collapseChildren {
 	[NSAnimationContext beginGrouping];
 	[[NSAnimationContext currentContext] setDuration:0.0];
 	[super collapseItem:item collapseChildren:collapseChildren];
 	[NSAnimationContext endGrouping];
 }
-
+- (NSTableViewSelectionHighlightStyle)selectionHighlightStyle {
+	return NSTableViewSelectionHighlightStyleNone;
+}
+- (CGFloat)indentationPerLevel {
+	return 0;
+}
 @end
 
 @implementation SKScene (Unarchive)
@@ -133,7 +145,11 @@
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	return 17;
+	return 20;
+}
+
+- (NSTableRowView *)outlineView:(NSOutlineView *)outlineView rowViewForItem:(id)item {
+	return [[TableRowView alloc]init];
 }
 
 - (BOOL) isGroupItem:(id)item {
