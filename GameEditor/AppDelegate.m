@@ -135,12 +135,11 @@
 
 - (void)selectedNode:(SKNode *)node {
 
-	NSMutableArray *parents = [NSMutableArray array];
-
-
-	/* Clear the attibutes table's array controller*/
-	NSRange range = NSMakeRange(0, [[_arrayController arrangedObjects] count]);
-	[_arrayController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+	/* Clear the attibutes table */
+	//NSRange range = NSMakeRange(0, [[_arrayController arrangedObjects] count]);
+	//[_arrayController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+	[_arrayController setContent:nil];
+	[_treeController setContent:nil];
 
 	/* Populate the attibutes table from the selected node's properties */
 	Class classType = [node class];
@@ -183,23 +182,17 @@
 		}
 		free(properties);
 
-		[parents addObject:@{@"name": [classType description],
-						   @"isLeaf": @NO,
-						   @"isEditable": @NO,
-						   @"children":children}];
+		[_treeController addObject:@{@"name": [classType description],
+									 @"isLeaf": @NO,
+									 @"isEditable": @NO,
+									 @"children":children}];
 
 		classType = [classType superclass];
 	} while (classType != nil);
 
-	[_tableView reloadData];
-	[_treeController setContent:parents];
-
 	// Expand all the groups
 	[_outlineView expandItem:nil expandChildren:YES];
 	[_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
-
-	// Enable Drag and Drop
-	[_outlineView registerForDraggedTypes: [NSArray arrayWithObject: @"public.binary"]];
 }
 
 @end
