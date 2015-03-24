@@ -153,8 +153,6 @@
 - (void)selectedNode:(SKNode *)node {
 
 	/* Clear the attibutes table */
-	//NSRange range = NSMakeRange(0, [[_arrayController arrangedObjects] count]);
-	//[_arrayController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
 	[_arrayController setContent:nil];
 	[_treeController setContent:nil];
 
@@ -164,48 +162,50 @@
 		unsigned int count;
 		objc_property_t *properties = class_copyPropertyList(classType, &count);
 
-		[_arrayController addObject:@{@"name": [classType description],
-									  @"type": @"group",
-									  @"isEditable": @NO}];
-		NSMutableArray *children = [NSMutableArray array];
+		if (count) {
+			[_arrayController addObject:@{@"name": [classType description],
+										  @"type": @"group",
+										  @"isEditable": @NO}];
+			NSMutableArray *children = [NSMutableArray array];
 
-		for(unsigned int i = 0; i < count; i++) {
-			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
-			NSString *attributeName = [NSString stringWithUTF8String:property_getName(properties[i])];
-			NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
-			NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
-			NSString *attributeType = [attibutesArray firstObject];
-			if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-				Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:@"degrees"];
-				[_arrayController addObject:attribute];
-				[children addObject:attribute];
-			} else {
-				BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
-				NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
-				editable = editable && [attributeType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
-
-				if (editable) {
-					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType];
-					[_arrayController addObject: attribute];
-					[children addObject:attribute];
-				} else {
-					NSDictionary *attribute = @{@"name": attributeName,
-												@"value": @"(non-editable)",
-												@"type": @"generic attribute",
-												@"node": [NSNull null],
-												@"isLeaf": @YES,
-												@"isEditable": @NO};
+			for(unsigned int i = 0; i < count; i++) {
+				//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
+				NSString *attributeName = [NSString stringWithUTF8String:property_getName(properties[i])];
+				NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
+				NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
+				NSString *attributeType = [attibutesArray firstObject];
+				if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:@"degrees"];
 					[_arrayController addObject:attribute];
 					[children addObject:attribute];
+				} else {
+					BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
+					NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
+					editable = editable && [attributeType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
+
+					if (editable) {
+						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType];
+						[_arrayController addObject: attribute];
+						[children addObject:attribute];
+					} else {
+						NSDictionary *attribute = @{@"name": attributeName,
+													@"value": @"(non-editable)",
+													@"type": @"generic attribute",
+													@"node": [NSNull null],
+													@"isLeaf": @YES,
+													@"isEditable": @NO};
+						[_arrayController addObject:attribute];
+						[children addObject:attribute];
+					}
 				}
 			}
-		}
-		free(properties);
+			free(properties);
 
-		[_treeController addObject:@{@"name": [classType description],
-									 @"isLeaf": @NO,
-									 @"isEditable": @NO,
-									 @"children":children}];
+			[_treeController addObject:@{@"name": [classType description],
+										 @"isLeaf": @NO,
+										 @"isEditable": @NO,
+										 @"children":children}];
+		}
 
 		classType = [classType superclass];
 	} while (classType != nil && classType != [SKNode superclass]);
