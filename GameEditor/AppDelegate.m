@@ -170,19 +170,14 @@
 					[_arrayController addObject: attribute];
 					[children addObject:attribute];
 				} else {
-					[_arrayController addObject: @{
-												   @"name": attributeName,
-												   @"value": @"(non-editable)",
-												   @"editable": @NO,
-												   @"type": @"generic property",
-												   @"node": [NSNull null]
-												   }];
-					[children addObject:@{@"name": attributeName,
-										  @"value": @"(non-editable)",
-										  @"type": @"generic attribute",
-										  @"node": [NSNull null],
-										  @"isLeaf": @YES,
-										  @"isEditable": @NO}.mutableCopy];
+					NSDictionary *attribute = @{@"name": attributeName,
+												@"value": @"(non-editable)",
+												@"type": @"generic attribute",
+												@"node": [NSNull null],
+												@"isLeaf": @YES,
+												@"isEditable": @NO};
+					[_arrayController addObject:attribute];
+					[children addObject:attribute];
 				}
 			}
 		}
@@ -197,7 +192,6 @@
 	} while (classType != nil);
 
 	[_tableView reloadData];
-
 	[_treeController setContent:parents];
 
 	// Expand all the groups

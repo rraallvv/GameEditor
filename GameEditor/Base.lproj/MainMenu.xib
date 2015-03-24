@@ -219,7 +219,7 @@
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="vJr-p1-JI2" name="editable" keyPath="objectValue.editable" id="Jl6-9W-H7g"/>
+                                                                <binding destination="vJr-p1-JI2" name="editable" keyPath="objectValue.isEditable" id="df8-jr-Ucm"/>
                                                                 <binding destination="vJr-p1-JI2" name="value" keyPath="objectValue.value" id="F2h-ql-xwT"/>
                                                             </connections>
                                                         </textField>
@@ -255,7 +255,7 @@
                                                                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                                                                     </userDefinedRuntimeAttributes>
                                                                     <connections>
-                                                                        <binding destination="2Ss-NZ-lOU" name="editable" keyPath="objectValue.editable" id="BDm-9s-s5z"/>
+                                                                        <binding destination="2Ss-NZ-lOU" name="editable" keyPath="objectValue.isEditable" id="5ru-VI-zXz"/>
                                                                         <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.x" id="NhU-vE-Azm">
                                                                             <dictionary key="options">
                                                                                 <bool key="NSConditionallySetsEditable" value="YES"/>
@@ -286,7 +286,7 @@
                                                                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                                                                     </userDefinedRuntimeAttributes>
                                                                     <connections>
-                                                                        <binding destination="2Ss-NZ-lOU" name="editable" keyPath="objectValue.editable" id="ZgX-Az-WCK"/>
+                                                                        <binding destination="2Ss-NZ-lOU" name="editable" keyPath="objectValue.isEditable" id="aCe-Qk-INd"/>
                                                                         <binding destination="2Ss-NZ-lOU" name="value" keyPath="objectValue.y" id="vhb-jw-UDZ"/>
                                                                     </connections>
                                                                 </textField>
@@ -320,7 +320,7 @@
                                                                 <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                                                             </userDefinedRuntimeAttributes>
                                                             <connections>
-                                                                <binding destination="ykA-kB-Fwq" name="editable" keyPath="objectValue.editable" id="AUA-4d-T4U"/>
+                                                                <binding destination="ykA-kB-Fwq" name="editable" keyPath="objectValue.isEditable" id="E1u-TP-1fS"/>
                                                                 <binding destination="ykA-kB-Fwq" name="value" keyPath="objectValue.value" id="NDO-hf-VGp">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">DegreesTransformer</string>
@@ -353,7 +353,7 @@
                                                                 <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                                                             </userDefinedRuntimeAttributes>
                                                             <connections>
-                                                                <binding destination="ksH-n0-sGf" name="editable" keyPath="objectValue.editable" id="Iap-x3-KHX"/>
+                                                                <binding destination="ksH-n0-sGf" name="editable" keyPath="objectValue.isEditable" id="3HR-ny-3Ya"/>
                                                                 <binding destination="ksH-n0-sGf" name="value" keyPath="objectValue.value" id="ejT-6n-eXz"/>
                                                             </connections>
                                                         </textField>
@@ -371,7 +371,7 @@
                                                                 <font key="font" metaFont="smallSystem"/>
                                                             </buttonCell>
                                                             <connections>
-                                                                <binding destination="52C-rc-ywy" name="enabled" keyPath="objectValue.editable" id="wjB-9N-hjW"/>
+                                                                <binding destination="52C-rc-ywy" name="enabled" keyPath="objectValue.isEditable" id="gZJ-R4-fI1"/>
                                                                 <binding destination="52C-rc-ywy" name="value" keyPath="objectValue.value" id="7FA-cE-8SP"/>
                                                             </connections>
                                                         </button>
