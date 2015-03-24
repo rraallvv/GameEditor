@@ -96,7 +96,7 @@
 	if ([self isGroupItem:item]) {
 		return [outlineView makeViewWithIdentifier:@"group" owner:self];
 	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
-		return [outlineView makeViewWithIdentifier:@"key" owner:self];
+		return [outlineView makeViewWithIdentifier:@"name" owner:self];
 	} else {
 		NSString *type = [[item representedObject] valueForKey:@"type"];
 		NSView *view = [outlineView makeViewWithIdentifier:type owner:self];
