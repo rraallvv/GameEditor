@@ -1,7 +1,27 @@
-//
-//  AppDelegate.m
-//  GameEditor
-//
+/*
+ * AppDelegate.m
+ * GameEditor
+ *
+ * Copyright (c) 2015 Rhody Lugo.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 #import "AppDelegate.h"
 #import "GameScene.h"
@@ -40,12 +60,13 @@
 	IBOutlet NSTableView *_tableView;
 	IBOutlet NSArrayController *_arrayController;
 	IBOutlet EditorView *_editorView;
+	IBOutlet NSTreeController *_treeController;
+	IBOutlet NSOutlineView *_outlineView;
 }
 
 @synthesize window = _window;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-
 	/* Main window appearance */
 	self.window.styleMask = self.window.styleMask | NSFullSizeContentViewWindowMask;
 	self.window.titleVisibility = NSWindowTitleHidden;
@@ -73,8 +94,36 @@
     return YES;
 }
 
+- (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
+	if ([self isGroupItem:item]) {
+		return [outlineView makeViewWithIdentifier:@"group" owner:self];
+	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
+		return [outlineView makeViewWithIdentifier:@"key" owner:self];
+	} else {
+		NSString *type = [[item representedObject] valueForKey:@"type"];
+		NSView *view = [outlineView makeViewWithIdentifier:type owner:self];
+		if (!view)
+			return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
+		return view;
+	}
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item {
+	return [self isGroupItem:item];
+}
+
+- (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
+	return 17;
+}
+
+- (BOOL) isGroupItem:(id)item {
+	return [[item indexPath] length] < 2;
+}
+
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-	if ([[tableColumn identifier] isEqualToString:@"key"]) {
+	if ([self isGroupRow:row]) {
+		return [tableView makeViewWithIdentifier:@"group" owner:self];
+	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
 		return [tableView makeViewWithIdentifier:@"key" owner:self];
 	} else {
 		NSString *type = [[[_arrayController arrangedObjects] objectAtIndex:row] valueForKey:@"type"];
@@ -85,52 +134,85 @@
 	}
 }
 
+- (BOOL)tableView:(NSTableView *)tableView isGroupRow:(NSInteger)row {
+	return [self isGroupRow:row];
+}
+
+- (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row {
+	return 17;
+}
+
+- (BOOL) isGroupRow:(NSInteger)row {
+	return [[[[_arrayController arrangedObjects] objectAtIndex:row] valueForKey:@"type"] isEqualToString:@"group" ];
+}
+
 - (IBAction)saveAction:(id)sender {
 	[SKScene archiveScene:self.skView.scene toFile:@"GameScene"];
 }
 
 - (void)selectedNode:(SKNode *)node {
-	/* Clear the attibutes table's array controller*/
-	NSRange range = NSMakeRange(0, [[_arrayController arrangedObjects] count]);
-	[_arrayController removeObjectsAtArrangedObjectIndexes:[NSIndexSet indexSetWithIndexesInRange:range]];
+
+	/* Clear the attibutes table */
+	[_arrayController setContent:nil];
+	[_treeController setContent:nil];
 
 	/* Populate the attibutes table from the selected node's properties */
 	Class classType = [node class];
 	do {
 		unsigned int count;
 		objc_property_t *properties = class_copyPropertyList(classType, &count);
-		for(unsigned int i = 0; i < count; i++) {
-			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
-			NSString *attributeName = [NSString stringWithUTF8String:property_getName(properties[i])];
-			NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
-			NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
-			NSString *attributeType = [attibutesArray firstObject];
-			if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-				[_arrayController addObject: [Attribute attributeWithName:attributeName node:node type:@"degrees"]];
-			} else {
-				BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
-				NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
-				editable = editable && [attributeType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
 
-				if (editable) {
-					[_arrayController addObject: [Attribute attributeWithName:attributeName node:node type:attributeType]];
+		if (count) {
+			[_arrayController addObject:@{@"name": [classType description],
+										  @"type": @"group",
+										  @"isEditable": @NO}];
+			NSMutableArray *children = [NSMutableArray array];
+
+			for(unsigned int i = 0; i < count; i++) {
+				//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
+				NSString *attributeName = [NSString stringWithUTF8String:property_getName(properties[i])];
+				NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
+				NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
+				NSString *attributeType = [attibutesArray firstObject];
+				if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:@"degrees"];
+					[_arrayController addObject:attribute];
+					[children addObject:attribute];
 				} else {
-					[_arrayController addObject: @{
-												   @"name": attributeName,
-												   @"value": @"(non-editable)",
-												   @"editable": @NO,
-												   @"type": @"generic property",
-												   @"node": [NSNull null]
-												   }];
+					BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
+					NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
+					editable = editable && [attributeType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
+
+					if (editable) {
+						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType];
+						[_arrayController addObject: attribute];
+						[children addObject:attribute];
+					} else {
+						NSDictionary *attribute = @{@"name": attributeName,
+													@"value": @"(non-editable)",
+													@"type": @"generic attribute",
+													@"node": [NSNull null],
+													@"isLeaf": @YES,
+													@"isEditable": @NO};
+						[_arrayController addObject:attribute];
+						[children addObject:attribute];
+					}
 				}
 			}
+			free(properties);
+
+			[_treeController addObject:@{@"name": [classType description],
+										 @"isLeaf": @NO,
+										 @"isEditable": @NO,
+										 @"children":children}];
 		}
-		free(properties);
 
 		classType = [classType superclass];
-	} while (classType != nil);
+	} while (classType != nil && classType != [SKNode superclass]);
 
-	[_tableView reloadData];
+	// Expand all the groups
+	[_outlineView expandItem:nil expandChildren:YES];
+	[_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
 }
 
 @end
