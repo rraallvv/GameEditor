@@ -128,7 +128,7 @@
                             <rect key="frame" x="1" y="0.0" width="238" height="134"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView appearanceType="vibrantLight" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="yU3-iz-L3l" viewBased="YES" id="tum-wb-Po7">
+                                <tableView appearanceType="vibrantLight" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="yU3-iz-L3l" viewBased="YES" floatsGroupRows="NO" id="tum-wb-Po7">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -160,11 +160,7 @@
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="VdE-35-N2m" name="value" keyPath="objectValue.name" id="hQa-zv-9oY">
-                                                                    <dictionary key="options">
-                                                                        <string key="NSValueTransformerName">AttibuteNameTransformer</string>
-                                                                    </dictionary>
-                                                                </binding>
+                                                                <binding destination="VdE-35-N2m" name="value" keyPath="objectValue.name" id="TrL-1N-Tge"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>

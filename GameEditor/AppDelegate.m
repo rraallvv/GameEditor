@@ -108,17 +108,19 @@
 	}
 }
 
-- (BOOL) isGroupItem:(id)item{
-	return [[item indexPath] length] < 2;
-}
-
 - (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item{
 	// This converts a group to a header which influences its style
 	return [self isGroupItem:item];
 }
 
+- (BOOL) isGroupItem:(id)item {
+	return [[item indexPath] length] < 2;
+}
+
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-	if ([[tableColumn identifier] isEqualToString:@"key"]) {
+	if ([self isGroupRow:row]) {
+		return [tableView makeViewWithIdentifier:@"group" owner:self];
+	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
 		return [tableView makeViewWithIdentifier:@"key" owner:self];
 	} else {
 		NSString *type = [[[_arrayController arrangedObjects] objectAtIndex:row] valueForKey:@"type"];
@@ -127,6 +129,14 @@
 			return [tableView makeViewWithIdentifier:@"generic property" owner:self];
 		return view;
 	}
+}
+
+- (BOOL)tableView:(NSTableView *)tableView isGroupRow:(NSInteger)row {
+	return [self isGroupRow:row];
+}
+
+- (BOOL) isGroupRow:(NSInteger)row {
+	return [[[[_arrayController arrangedObjects] objectAtIndex:row] valueForKey:@"type"] isEqualToString:@"group" ];
 }
 
 - (IBAction)saveAction:(id)sender {
@@ -147,6 +157,9 @@
 		unsigned int count;
 		objc_property_t *properties = class_copyPropertyList(classType, &count);
 
+		[_arrayController addObject:@{@"name": [classType description],
+									  @"type": @"group",
+									  @"isEditable": @NO}];
 		NSMutableArray *children = [NSMutableArray array];
 
 		for(unsigned int i = 0; i < count; i++) {
