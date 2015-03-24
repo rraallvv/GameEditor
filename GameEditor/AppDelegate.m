@@ -95,13 +95,12 @@
 }
 
 - (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
-	if ([self isHeader:item]) {
+	if ([self isGroupItem:item]) {
 		return [outlineView makeViewWithIdentifier:@"group" owner:self];
 	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
 		return [outlineView makeViewWithIdentifier:@"key" owner:self];
 	} else {
 		NSString *type = [[item representedObject] valueForKey:@"type"];
-		NSLog(@"%@", type);
 		NSView *view = [outlineView makeViewWithIdentifier:type owner:self];
 		if (!view)
 			return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
@@ -109,13 +108,13 @@
 	}
 }
 
-- (BOOL) isHeader:(id)item{
+- (BOOL) isGroupItem:(id)item{
 	return [[item indexPath] length] < 2;
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item{
 	// This converts a group to a header which influences its style
-	return [self isHeader:item];
+	return [self isGroupItem:item];
 }
 
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
