@@ -26,40 +26,7 @@
 #import "AppDelegate.h"
 #import "GameScene.h"
 #import "Attribute.h"
-
-@interface TableRowView : NSTableRowView
-@end
-
-@implementation TableRowView
-- (void)drawBackgroundInRect:(NSRect)dirtyRect {
-	[self.backgroundColor set];
-	NSRectFill(dirtyRect);
-}
-@end
-
-@interface OutlineView : NSOutlineView
-@end
-
-@implementation OutlineView
--(void) expandItem:(id)item expandChildren:(BOOL)expandChildren {
-	[NSAnimationContext beginGrouping];
-	[[NSAnimationContext currentContext] setDuration:0.0];
-	[super expandItem:item expandChildren:expandChildren];
-	[NSAnimationContext endGrouping];
-}
-- (void)collapseItem:(id)item collapseChildren:(BOOL)collapseChildren {
-	[NSAnimationContext beginGrouping];
-	[[NSAnimationContext currentContext] setDuration:0.0];
-	[super collapseItem:item collapseChildren:collapseChildren];
-	[NSAnimationContext endGrouping];
-}
-- (NSTableViewSelectionHighlightStyle)selectionHighlightStyle {
-	return NSTableViewSelectionHighlightStyleNone;
-}
-- (CGFloat)indentationPerLevel {
-	return 0;
-}
-@end
+#import "OutlineView.h"
 
 @implementation SKScene (Unarchive)
 

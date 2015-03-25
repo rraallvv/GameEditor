@@ -268,7 +268,7 @@
                                                                     </connections>
                                                                 </textField>
                                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="K7c-Mz-Tal" customClass="StepperTextField">
-                                                                    <rect key="frame" x="85" y="0.0" width="84" height="19"/>
+                                                                    <rect key="frame" x="84" y="0.0" width="85" height="19"/>
                                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Y" bezelStyle="round" id="BgJ-i8-Wjc">
                                                                         <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#.###" negativeFormat="#.###" numberStyle="decimal" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="DJc-sP-C5a">
                                                                             <metadata>
