@@ -271,6 +271,7 @@
                                                                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                                                                     </userDefinedRuntimeAttributes>
                                                                     <connections>
+                                                                        <binding destination="CQ2-HX-Loe" name="editable" keyPath="objectValue.isEditable" id="0He-U3-XaO"/>
                                                                         <binding destination="CQ2-HX-Loe" name="value" keyPath="objectValue.x" id="eHf-ur-Ydp"/>
                                                                     </connections>
                                                                 </textField>
@@ -288,6 +289,7 @@
                                                                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                                                                     </userDefinedRuntimeAttributes>
                                                                     <connections>
+                                                                        <binding destination="CQ2-HX-Loe" name="editable" keyPath="objectValue.isEditable" id="iin-NH-ZBA"/>
                                                                         <binding destination="CQ2-HX-Loe" name="value" keyPath="objectValue.y" id="Qty-K6-uLc"/>
                                                                     </connections>
                                                                 </textField>
@@ -330,6 +332,7 @@
                                                                 <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                                                             </userDefinedRuntimeAttributes>
                                                             <connections>
+                                                                <binding destination="awp-Hd-mDZ" name="editable" keyPath="objectValue.isEditable" id="DkQ-In-dvQ"/>
                                                                 <binding destination="awp-Hd-mDZ" name="value" keyPath="objectValue.value" id="pga-2H-Uap"/>
                                                             </connections>
                                                         </textField>
@@ -361,6 +364,7 @@
                                                                 <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                                                             </userDefinedRuntimeAttributes>
                                                             <connections>
+                                                                <binding destination="br8-Hk-Tf6" name="editable" keyPath="objectValue.isEditable" id="f2R-Gq-WMj"/>
                                                                 <binding destination="br8-Hk-Tf6" name="value" keyPath="objectValue.value" id="UYb-IO-uDq">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">DegreesTransformer</string>
@@ -389,6 +393,7 @@
                                                                 <font key="font" metaFont="smallSystem"/>
                                                             </buttonCell>
                                                             <connections>
+                                                                <binding destination="cl9-e8-gpO" name="enabled" keyPath="objectValue.isEditable" id="VdZ-9s-NL8"/>
                                                                 <binding destination="cl9-e8-gpO" name="value" keyPath="objectValue.value" id="pur-ZW-XWT"/>
                                                             </connections>
                                                         </button>
