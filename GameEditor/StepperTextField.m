@@ -138,9 +138,6 @@ alternateDec = _alternateDecreaseImage;
 		_alternateDecreaseImage = [NSImage imageNamed:NSImageNameGoLeftTemplate];
 		_draggingMult = 1.0;
 
-		/* Calculate the stepper button's rect */
-		[self resizeSubviewsWithOldSize:NSZeroSize];
-
 		/* Change the cell's class to TextFieldCell */
 		NSTextField *oldCell = self.cell;
 
@@ -154,6 +151,9 @@ alternateDec = _alternateDecreaseImage;
 		/* Add mouse pointer tacking area */
 		NSTrackingArea *area = [[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingActiveAlways|NSTrackingMouseMoved owner:self userInfo:nil];
 		[self addTrackingArea:area];
+
+		/* Update the cell's margin and buttons' bounds */
+		[self updateBounds];
 	}
 	return self;
 }
@@ -274,7 +274,10 @@ alternateDec = _alternateDecreaseImage;
 
 - (void)setFrame:(NSRect)frame {
 	[super setFrame:frame];
+	[self updateBounds];
+}
 
+- (void)updateBounds {
 	NSRect bounds = self.bounds;
 
 	/* Calculate the rectangle where to draw the increase button */
