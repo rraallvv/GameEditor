@@ -117,19 +117,16 @@
 		[outlineView expandItem:item];
 	}
 }
-- (NSTrackingArea *)trackingArea {
+- (void)updateTrackingAreas {
+	[super updateTrackingAreas];
 	if (_trackingArea == nil) {
 		_trackingArea = [[NSTrackingArea alloc] initWithRect:NSZeroRect
 													 options:NSTrackingInVisibleRect | NSTrackingActiveAlways | NSTrackingMouseEnteredAndExited
 													   owner:self
 													userInfo:nil];
 	}
-	return _trackingArea;
-}
-- (void)updateTrackingAreas {
-	[super updateTrackingAreas];
-	if (![[self trackingAreas] containsObject:self.trackingArea]) {
-		[self addTrackingArea:self.trackingArea];
+	if (![[self trackingAreas] containsObject:_trackingArea]) {
+		[self addTrackingArea:_trackingArea];
 	}
 }
 - (void)mouseEntered:(NSEvent *)theEvent {
