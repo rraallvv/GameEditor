@@ -182,4 +182,7 @@
 	}
 	return [_actualDelegate outlineView:outlineView heightOfRowByItem:item];
 }
+- (NSRect)frameOfOutlineCellAtRow:(NSInteger)row {
+	return NSZeroRect; // Remove the disclosure triangle
+}
 @end
