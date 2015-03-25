@@ -408,7 +408,7 @@
                                         </tableColumn>
                                     </tableColumns>
                                     <connections>
-                                        <binding destination="IEK-xe-ugr" name="content" keyPath="arrangedObjects" id="ihQ-p0-EsD"/>
+                                        <binding destination="IEK-xe-ugr" name="content" keyPath="arrangedObjects.objectValue" id="YX3-iT-NnT"/>
                                         <outlet property="delegate" destination="494" id="wTh-p6-eZR"/>
                                     </connections>
                                 </outlineView>

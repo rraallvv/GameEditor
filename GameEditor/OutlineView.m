@@ -137,8 +137,16 @@
 }
 @end
 
+static const CGFloat kIndentationPerLevel = 0.0;
+
 @implementation OutlineView {
 	id _actualDelegate;
+}
+- (instancetype)initWithCoder:(NSCoder *)coder {
+	if (self = [super initWithCoder:coder]) {
+		self.indentationPerLevel = kIndentationPerLevel;
+	}
+	return self;
 }
 - (void) expandItem:(id)item expandChildren:(BOOL)expandChildren {
 	[NSAnimationContext beginGrouping];
@@ -155,8 +163,8 @@
 - (NSTableViewSelectionHighlightStyle)selectionHighlightStyle {
 	return NSTableViewSelectionHighlightStyleNone;
 }
-- (CGFloat)indentationPerLevel {
-	return 0;
+- (void)setIndentationPerLevel:(CGFloat)indentationPerLevel {
+	[super setIndentationPerLevel:kIndentationPerLevel];
 }
 - (NSTableRowView *)outlineView:(NSOutlineView *)outlineView rowViewForItem:(id)item {
 	return [[TableRowView alloc] init];
