@@ -284,8 +284,8 @@
                                                                     <rect key="frame" x="86" y="-2" width="86" height="19"/>
                                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Y" bezelStyle="round" id="IOV-lf-PcD">
                                                                         <font key="font" metaFont="smallSystem"/>
-                                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                     <userDefinedRuntimeAttributes>
                                                                         <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
