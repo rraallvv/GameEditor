@@ -28,10 +28,33 @@
 @interface TableRowView : NSTableRowView
 @end
 
-@implementation TableRowView
+@implementation TableRowView {
+	NSString *_showString;
+	NSString *_hideString;
+	NSString *_showLocalizedString;
+	NSString *_hideLocalizedString;
+}
+- (instancetype)init {
+	if (self = [super init]) {
+		NSBundle *bundle = [NSBundle bundleForClass:[NSApplication class]];
+		_showString = @"Show";
+		_showLocalizedString = bundle ? [bundle localizedStringForKey:_showString value:_showString table:nil] : _showString;
+		_hideString = @"Hide";
+		_hideLocalizedString = bundle ? [bundle localizedStringForKey:_hideString value:_hideString table:nil] : _hideString;
+	}
+	return self;
+}
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
-	[[NSColor yellowColor] set];
+	[self.backgroundColor set];
 	NSRectFill(dirtyRect);
+
+	if (self.isGroupRowStyle) {
+		NSDictionary *attributes = @{NSFontAttributeName: [NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]],
+									 NSForegroundColorAttributeName: [NSColor colorForControlTint:NSGraphiteControlTint]};
+		NSAttributedString * text=[[NSAttributedString alloc] initWithString:_hideLocalizedString attributes: attributes];
+		NSSize attrSize = [text size];
+		[text drawAtPoint:NSMakePoint(NSMaxX(self.bounds) - attrSize.width, 0)];
+	}
 }
 @end
 
