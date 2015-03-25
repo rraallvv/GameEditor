@@ -25,8 +25,5 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface TableRowView : NSTableRowView
-@end
-
 @interface OutlineView : NSOutlineView
 @end

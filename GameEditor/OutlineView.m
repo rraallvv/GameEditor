@@ -25,14 +25,19 @@
 
 #import "OutlineView.h"
 
+@interface TableRowView : NSTableRowView
+@end
+
 @implementation TableRowView
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
-	[self.backgroundColor set];
+	[[NSColor yellowColor] set];
 	NSRectFill(dirtyRect);
 }
 @end
 
-@implementation OutlineView
+@implementation OutlineView {
+	id _actualDelegate;
+}
 - (void) expandItem:(id)item expandChildren:(BOOL)expandChildren {
 	[NSAnimationContext beginGrouping];
 	[[NSAnimationContext currentContext] setDuration:0.0];
@@ -50,5 +55,23 @@
 }
 - (CGFloat)indentationPerLevel {
 	return 0;
+}
+- (NSTableRowView *)outlineView:(NSOutlineView *)outlineView rowViewForItem:(id)item {
+	return [[TableRowView alloc] init];
+}
+- (void)setDelegate:(id)newDelegate {
+	[super setDelegate:nil];
+	_actualDelegate = newDelegate;
+	[super setDelegate:(id)self];
+}
+- (id)delegate {
+	return self;
+}
+- (id)forwardingTargetForSelector:(SEL)aSelector {
+	if ([_actualDelegate respondsToSelector:aSelector]) { return _actualDelegate; }
+	return [super forwardingTargetForSelector:aSelector];
+}
+- (BOOL)respondsToSelector:(SEL)aSelector {
+	return [super respondsToSelector:aSelector] || [_actualDelegate respondsToSelector:aSelector];
 }
 @end

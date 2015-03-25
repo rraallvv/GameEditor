@@ -115,10 +115,6 @@
 	return 20;
 }
 
-- (NSTableRowView *)outlineView:(NSOutlineView *)outlineView rowViewForItem:(id)item {
-	return [[TableRowView alloc]init];
-}
-
 - (BOOL) isGroupItem:(id)item {
 	return [[item indexPath] length] < 2;
 }
