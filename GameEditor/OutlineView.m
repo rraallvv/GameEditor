@@ -40,6 +40,20 @@
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
 	[self.backgroundColor set];
 	NSRectFill(dirtyRect);
+
+	OutlineView *outlineView = (OutlineView *)[self superview];
+
+	NSInteger row = [outlineView rowForView:self];
+	
+	[[NSColor lightGrayColor] set];
+
+	if (self.isGroupRowStyle && row > 0) {
+		NSRectFill(NSMakeRect(0, 0, NSWidth(dirtyRect), 1));
+	}
+
+	if (row == [outlineView numberOfRows] - 1) {
+		NSRectFill(NSMakeRect(0, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect), 1));
+	}
 }
 - (void)setFrame:(NSRect)frame {
 	[super setFrame:frame];

@@ -120,7 +120,7 @@
                             </customView>
                         </subviews>
                     </customView>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YVb-3t-owl">
+                    <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YVb-3t-owl">
                         <rect key="frame" x="528" y="49" width="252" height="531"/>
                         <clipView key="contentView" drawsBackground="NO" id="gWa-sV-qh5">
                             <rect key="frame" x="1" y="0.0" width="238" height="134"/>
@@ -200,7 +200,7 @@
                                                 </tableCellView>
                                             </prototypeCellViews>
                                         </tableColumn>
-                                        <tableColumn identifier="value" width="170" minWidth="10" maxWidth="1000" id="Ke9-EM-eLT">
+                                        <tableColumn identifier="value" width="172" minWidth="10" maxWidth="1000" id="Ke9-EM-eLT">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Value">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -214,11 +214,11 @@
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView identifier="generic attribute" id="Yzo-qi-qHn">
-                                                    <rect key="frame" x="80" y="1" width="168" height="17"/>
+                                                    <rect key="frame" x="79" y="1" width="172" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="3KK-RG-a0Z">
-                                                            <rect key="frame" x="-2" y="3" width="174" height="14"/>
+                                                            <rect key="frame" x="-2" y="3" width="176" height="14"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="generic attribute" id="RrX-Zq-Ckg">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
@@ -236,14 +236,14 @@
                                                     </constraints>
                                                 </tableCellView>
                                                 <tableCellView identifier="{CGPoint=dd}" id="3pg-5t-02p">
-                                                    <rect key="frame" x="80" y="20" width="168" height="19"/>
+                                                    <rect key="frame" x="79" y="21" width="172" height="19"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="Vw7-Ih-Dfd">
-                                                            <rect key="frame" x="0.0" y="0.0" width="169" height="19"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="171" height="19"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SJx-RD-GnC" userLabel="X" customClass="StepperTextField">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="85" height="19"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="86" height="19"/>
                                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="X" bezelStyle="round" id="blG-th-6Qh" userLabel="X">
                                                                         <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#.###" negativeFormat="#.###" numberStyle="decimal" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="mGf-8h-990">
                                                                             <metadata>
@@ -268,7 +268,7 @@
                                                                     </connections>
                                                                 </textField>
                                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="K7c-Mz-Tal" customClass="StepperTextField">
-                                                                    <rect key="frame" x="84" y="0.0" width="85" height="19"/>
+                                                                    <rect key="frame" x="85" y="0.0" width="86" height="19"/>
                                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Y" bezelStyle="round" id="BgJ-i8-Wjc">
                                                                         <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#.###" negativeFormat="#.###" numberStyle="decimal" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="DJc-sP-C5a">
                                                                             <metadata>
@@ -311,11 +311,11 @@
                                                     </constraints>
                                                 </tableCellView>
                                                 <tableCellView identifier="d" id="xBB-5P-BWW">
-                                                    <rect key="frame" x="80" y="39" width="168" height="17"/>
+                                                    <rect key="frame" x="79" y="43" width="172" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YEC-z4-O9q" customClass="StepperTextField">
-                                                            <rect key="frame" x="0.0" y="-2" width="170" height="19"/>
+                                                            <rect key="frame" x="0.0" y="-2" width="172" height="19"/>
                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="double" bezelStyle="round" id="ofv-1e-rEZ">
                                                                 <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#.###" negativeFormat="#.###" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="2" id="FnN-k7-a2m"/>
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -343,11 +343,11 @@
                                                     </constraints>
                                                 </tableCellView>
                                                 <tableCellView identifier="degrees" id="qa2-aV-mjT">
-                                                    <rect key="frame" x="80" y="58" width="168" height="17"/>
+                                                    <rect key="frame" x="79" y="63" width="172" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="74G-KB-MvT" customClass="StepperTextField">
-                                                            <rect key="frame" x="0.0" y="-2" width="170" height="19"/>
+                                                            <rect key="frame" x="0.0" y="-2" width="172" height="19"/>
                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="angle" bezelStyle="round" id="97D-Kw-i9U">
                                                                 <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#.###º" negativeFormat="#.###º" usesGroupingSeparator="NO" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="2" id="LV3-Qf-pxQ"/>
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -379,11 +379,11 @@
                                                     </constraints>
                                                 </tableCellView>
                                                 <tableCellView identifier="c" id="gDz-Um-7CJ">
-                                                    <rect key="frame" x="80" y="77" width="168" height="17"/>
+                                                    <rect key="frame" x="79" y="83" width="172" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <button translatesAutoresizingMaskIntoConstraints="NO" id="vOX-wV-7o8">
-                                                            <rect key="frame" x="-3" y="2" width="175" height="18"/>
+                                                            <rect key="frame" x="-3" y="2" width="177" height="18"/>
                                                             <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="7iR-tG-Qha">
                                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                                 <font key="font" metaFont="smallSystem"/>
