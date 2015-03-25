@@ -160,8 +160,8 @@
                                                     <rect key="frame" x="1" y="1" width="78" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3fy-Ty-hse">
-                                                            <rect key="frame" x="0.0" y="0.0" width="100" height="17"/>
+                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="3fy-Ty-hse">
+                                                            <rect key="frame" x="3" y="3" width="77" height="14"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Class" id="0qY-r9-dez">
                                                                 <font key="font" metaFont="smallSystemBold"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -172,6 +172,11 @@
                                                             </connections>
                                                         </textField>
                                                     </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="3fy-Ty-hse" secondAttribute="trailing" id="2d1-aV-pOT"/>
+                                                        <constraint firstItem="3fy-Ty-hse" firstAttribute="top" secondItem="yfL-tc-DAf" secondAttribute="top" id="jeX-kZ-yTx"/>
+                                                        <constraint firstItem="3fy-Ty-hse" firstAttribute="leading" secondItem="yfL-tc-DAf" secondAttribute="leading" constant="5" id="pJV-YD-vHC"/>
+                                                    </constraints>
                                                     <connections>
                                                         <outlet property="textField" destination="3fy-Ty-hse" id="Bno-BJ-7NH"/>
                                                     </connections>

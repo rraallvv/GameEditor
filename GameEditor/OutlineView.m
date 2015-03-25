@@ -99,7 +99,7 @@
 		for (NSControl *control in self.subviews) {
 			if ([control isKindOfClass:[NSTableCellView class]]) {
 				NSSize size = control.frame.size;
-				control.frame = NSMakeRect(6, frame.size.height - size.height, size.width, size.height);
+				control.frame = NSMakeRect(frame.origin.x, frame.size.height - size.height, size.width, size.height);
 			}
 		}
 	}
