@@ -29,31 +29,52 @@
 @end
 
 @implementation TableRowView {
-	NSString *_showString;
-	NSString *_hideString;
-	NSString *_showLocalizedString;
-	NSString *_hideLocalizedString;
-}
-- (instancetype)init {
-	if (self = [super init]) {
-		NSBundle *bundle = [NSBundle bundleForClass:[NSApplication class]];
-		_showString = @"Show";
-		_showLocalizedString = bundle ? [bundle localizedStringForKey:_showString value:_showString table:nil] : _showString;
-		_hideString = @"Hide";
-		_hideLocalizedString = bundle ? [bundle localizedStringForKey:_hideString value:_hideString table:nil] : _hideString;
-	}
-	return self;
+	NSAttributedString *_showAttributedString;
+	NSAttributedString *_hideAttributedString;
+	NSButton *_hideGroupButton;
 }
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
 	[self.backgroundColor set];
 	NSRectFill(dirtyRect);
-
+}
+- (void)setFrame:(NSRect)frame {
+	[super setFrame:frame];
 	if (self.isGroupRowStyle) {
-		NSDictionary *attributes = @{NSFontAttributeName: [NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]],
-									 NSForegroundColorAttributeName: [NSColor colorForControlTint:NSGraphiteControlTint]};
-		NSAttributedString * text=[[NSAttributedString alloc] initWithString:_hideLocalizedString attributes: attributes];
-		NSSize attrSize = [text size];
-		[text drawAtPoint:NSMakePoint(NSMaxX(self.bounds) - attrSize.width, 0)];
+		if (!_hideGroupButton) {
+
+			NSBundle *bundle = [NSBundle bundleForClass:[NSApplication class]];
+
+			NSString *showString = @"Show";
+			NSString *showLocalizedString = bundle ? [bundle localizedStringForKey:showString value:showString table:nil] : showString;
+
+			NSDictionary *showAttributes = @{NSFontAttributeName: [NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]],
+											 NSForegroundColorAttributeName: [NSColor colorForControlTint:NSGraphiteControlTint]};
+			_showAttributedString = [[NSAttributedString alloc] initWithString:showLocalizedString attributes: showAttributes];
+
+			NSString *hideString = @"Hide";
+			NSString *hideLocalizedString = bundle ? [bundle localizedStringForKey:hideString value:hideString table:nil] : hideString;
+
+			NSDictionary *hideAttributes = @{NSFontAttributeName: [NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]],
+											 NSForegroundColorAttributeName: [NSColor colorForControlTint:NSGraphiteControlTint]};
+			_hideAttributedString = [[NSAttributedString alloc] initWithString:hideLocalizedString attributes: hideAttributes];
+
+			_hideGroupButton = [[NSButton alloc] initWithFrame:NSMakeRect(0, 0, 50, 20)];
+			_hideGroupButton.attributedTitle = _hideAttributedString;
+			_hideGroupButton.target = self;
+			_hideGroupButton.action = @selector(toggleGroupVisibility);
+			[self addSubview:_hideGroupButton];
+		}
+	}
+}
+- (void)toggleGroupVisibility {
+	OutlineView *outlineView = (OutlineView *)[self superview];
+	id item = [outlineView itemAtRow:[outlineView rowForView:self]];
+	if ([outlineView isItemExpanded:item]) {
+		_hideGroupButton.attributedTitle = _showAttributedString;
+		[outlineView collapseItem:item];
+	} else {
+		_hideGroupButton.attributedTitle = _hideAttributedString;
+		[outlineView expandItem:item];
 	}
 }
 @end
