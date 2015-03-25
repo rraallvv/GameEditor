@@ -36,7 +36,6 @@
 	NSButton *_hideGroupButton;
 	NSTrackingArea *_trackingArea;
 }
-
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
 	[self.backgroundColor set];
 	NSRectFill(dirtyRect);
@@ -173,5 +172,11 @@
 }
 - (BOOL)respondsToSelector:(SEL)aSelector {
 	return [super respondsToSelector:aSelector] || [_actualDelegate respondsToSelector:aSelector];
+}
+- (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
+	if ([[item indexPath] length] < 2) {
+		return [[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]] boundingRectForFont].size.height - 1;
+	}
+	return [_actualDelegate outlineView:outlineView heightOfRowByItem:item];
 }
 @end
