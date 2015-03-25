@@ -188,6 +188,11 @@
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
+                                                                <binding destination="M03-u6-Cp5" name="toolTip" keyPath="objectValue.name" id="D9Z-NE-bje">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">AttibuteNameTransformer</string>
+                                                                    </dictionary>
+                                                                </binding>
                                                                 <binding destination="M03-u6-Cp5" name="value" keyPath="objectValue.name" id="5Rn-gn-EYj">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">AttibuteNameTransformer</string>
