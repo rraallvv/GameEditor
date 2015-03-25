@@ -31,8 +31,12 @@
 @implementation TableRowView {
 	NSAttributedString *_showAttributedString;
 	NSAttributedString *_hideAttributedString;
+	NSAttributedString *_showAlternateAttributedString;
+	NSAttributedString *_hideAlternateAttributedString;
 	NSButton *_hideGroupButton;
+	NSTrackingArea *_trackingArea;
 }
+
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
 	[self.backgroundColor set];
 	NSRectFill(dirtyRect);
@@ -44,26 +48,41 @@
 
 			NSBundle *bundle = [NSBundle bundleForClass:[NSApplication class]];
 
+			NSColor *color = [NSColor colorForControlTint:NSGraphiteControlTint];
+			NSDictionary *attributes = @{NSFontAttributeName: [NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]],
+										 NSForegroundColorAttributeName: color};
+
+			NSColor *alternateColor = [NSColor colorForControlTint:NSBlueControlTint];
+			NSDictionary *alternateAttributes = @{NSFontAttributeName: [NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]],
+										 NSForegroundColorAttributeName: alternateColor};
+
 			NSString *showString = @"Show";
 			NSString *showLocalizedString = bundle ? [bundle localizedStringForKey:showString value:showString table:nil] : showString;
 
-			NSDictionary *showAttributes = @{NSFontAttributeName: [NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]],
-											 NSForegroundColorAttributeName: [NSColor colorForControlTint:NSGraphiteControlTint]};
-			_showAttributedString = [[NSAttributedString alloc] initWithString:showLocalizedString attributes: showAttributes];
+			_showAttributedString = [[NSAttributedString alloc] initWithString:showLocalizedString attributes: attributes];
+			_showAlternateAttributedString = [[NSAttributedString alloc] initWithString:showLocalizedString attributes: alternateAttributes];
 
 			NSString *hideString = @"Hide";
 			NSString *hideLocalizedString = bundle ? [bundle localizedStringForKey:hideString value:hideString table:nil] : hideString;
 
-			NSDictionary *hideAttributes = @{NSFontAttributeName: [NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]],
-											 NSForegroundColorAttributeName: [NSColor colorForControlTint:NSGraphiteControlTint]};
-			_hideAttributedString = [[NSAttributedString alloc] initWithString:hideLocalizedString attributes: hideAttributes];
+			_hideAttributedString = [[NSAttributedString alloc] initWithString:hideLocalizedString attributes: attributes];
+			_hideAlternateAttributedString = [[NSAttributedString alloc] initWithString:hideLocalizedString attributes: alternateAttributes];
 
-			_hideGroupButton = [[NSButton alloc] initWithFrame:NSMakeRect(0, 0, 50, 20)];
+			_hideGroupButton = [[NSButton alloc] init];
+			_hideGroupButton.bezelStyle = NSRecessedBezelStyle;
+			_hideGroupButton.buttonType = NSMomentaryChangeButton;
+			_hideGroupButton.bordered = NO;
+			_hideGroupButton.alignment = NSCenterTextAlignment;
 			_hideGroupButton.attributedTitle = _hideAttributedString;
+			_hideGroupButton.attributedAlternateTitle = _hideAlternateAttributedString;
 			_hideGroupButton.target = self;
 			_hideGroupButton.action = @selector(toggleGroupVisibility);
+			_hideGroupButton.hidden = YES;
 			[self addSubview:_hideGroupButton];
 		}
+		[_hideGroupButton sizeToFit];
+		NSSize size = _hideGroupButton.frame.size;
+		_hideGroupButton.frame = NSMakeRect(NSMaxX(self.bounds)-size.width, 0, size.width, size.height);
 	}
 }
 - (void)toggleGroupVisibility {
@@ -71,11 +90,34 @@
 	id item = [outlineView itemAtRow:[outlineView rowForView:self]];
 	if ([outlineView isItemExpanded:item]) {
 		_hideGroupButton.attributedTitle = _showAttributedString;
+		_hideGroupButton.attributedAlternateTitle = _showAlternateAttributedString;
 		[outlineView collapseItem:item];
 	} else {
 		_hideGroupButton.attributedTitle = _hideAttributedString;
+		_hideGroupButton.attributedAlternateTitle = _hideAlternateAttributedString;
 		[outlineView expandItem:item];
 	}
+}
+- (NSTrackingArea *)trackingArea {
+	if (_trackingArea == nil) {
+		_trackingArea = [[NSTrackingArea alloc] initWithRect:NSZeroRect
+													 options:NSTrackingInVisibleRect | NSTrackingActiveAlways | NSTrackingMouseEnteredAndExited
+													   owner:self
+													userInfo:nil];
+	}
+	return _trackingArea;
+}
+- (void)updateTrackingAreas {
+	[super updateTrackingAreas];
+	if (![[self trackingAreas] containsObject:self.trackingArea]) {
+		[self addTrackingArea:self.trackingArea];
+	}
+}
+- (void)mouseEntered:(NSEvent *)theEvent {
+	_hideGroupButton.hidden = NO;
+}
+- (void)mouseExited:(NSEvent *)theEvent {
+	_hideGroupButton.hidden = YES;
 }
 @end
 
