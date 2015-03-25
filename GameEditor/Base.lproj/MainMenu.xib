@@ -181,7 +181,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="XZg-ys-F6V" userLabel="attribute">
-                                                            <rect key="frame" x="-2" y="3" width="82" height="14"/>
+                                                            <rect key="frame" x="6" y="3" width="71" height="14"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="attribute" id="rkw-uf-tbh">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -202,9 +202,9 @@
                                                         </textField>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="XZg-ys-F6V" firstAttribute="leading" secondItem="M03-u6-Cp5" secondAttribute="leading" id="QV5-EO-RN1"/>
+                                                        <constraint firstItem="XZg-ys-F6V" firstAttribute="leading" secondItem="M03-u6-Cp5" secondAttribute="leading" constant="8" id="QV5-EO-RN1"/>
                                                         <constraint firstItem="XZg-ys-F6V" firstAttribute="top" secondItem="M03-u6-Cp5" secondAttribute="top" id="lNh-Rv-gOB"/>
-                                                        <constraint firstAttribute="trailing" secondItem="XZg-ys-F6V" secondAttribute="trailing" id="uCc-6b-a5b"/>
+                                                        <constraint firstAttribute="trailing" secondItem="XZg-ys-F6V" secondAttribute="trailing" constant="3" id="uCc-6b-a5b"/>
                                                     </constraints>
                                                     <connections>
                                                         <outlet property="textField" destination="XZg-ys-F6V" id="QqW-U5-rg1"/>
