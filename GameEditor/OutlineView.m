@@ -95,7 +95,13 @@
 		}
 		[_hideGroupButton sizeToFit];
 		NSSize size = _hideGroupButton.frame.size;
-		_hideGroupButton.frame = NSMakeRect(NSMaxX(self.bounds)-size.width, 0, size.width, size.height);
+		_hideGroupButton.frame = NSMakeRect(NSMaxX(frame) - size.width, frame.size.height - size.height, size.width, size.height);
+		for (NSControl *control in self.subviews) {
+			if ([control isKindOfClass:[NSTableCellView class]]) {
+				NSSize size = control.frame.size;
+				control.frame = NSMakeRect(6, frame.size.height - size.height, size.width, size.height);
+			}
+		}
 	}
 }
 - (void)toggleGroupVisibility {
