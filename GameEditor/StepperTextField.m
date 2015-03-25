@@ -119,6 +119,7 @@ typedef enum {
 	NSRect _increaseClickableRect;
 	NSRect _decreaseClickableRect;
 	NSRect _draggableRect;
+	NSTrackingArea *_trackingArea;
 }
 
 @synthesize
@@ -148,14 +149,24 @@ alternateDec = _alternateDecreaseImage;
 
 		self.cell = cell;
 
-		/* Add mouse pointer tacking area */
-		NSTrackingArea *area = [[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingActiveAlways|NSTrackingMouseMoved owner:self userInfo:nil];
-		[self addTrackingArea:area];
-
 		/* Update the cell's margin and buttons' bounds */
 		[self updateBounds];
 	}
 	return self;
+}
+
+- (void)updateTrackingAreas {
+	/* Add mouse pointer tacking area */
+	[super updateTrackingAreas];
+	if (_trackingArea == nil) {
+		_trackingArea = [[NSTrackingArea alloc] initWithRect:NSZeroRect
+													 options:NSTrackingInVisibleRect | NSTrackingActiveAlways | NSTrackingMouseMoved | NSTrackingCursorUpdate
+													   owner:self
+													userInfo:nil];
+	}
+	if (![[self trackingAreas] containsObject:_trackingArea]) {
+		[self addTrackingArea:_trackingArea];
+	}
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
@@ -174,6 +185,11 @@ alternateDec = _alternateDecreaseImage;
 	} else {
 		[_decreaseImage drawInRect:_decreaseButtonRect];
 	}
+}
+
+- (void)cursorUpdate:(NSEvent *)event {
+	NSPoint locationInView = [self convertPoint:event.locationInWindow fromView:nil];
+	[self updateCursorForLocation:locationInView];
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
