@@ -248,7 +248,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="YBc-RN-b4y">
-                    <rect key="frame" x="-3" y="2" width="177" height="18"/>
+                    <rect key="frame" x="-3" y="-5" width="177" height="25"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="KSu-Ra-wRy"/>
+                    </constraints>
                     <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="yY3-6y-7Tr">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -266,14 +269,14 @@
             </constraints>
         </tableCellView>
         <tableCellView identifier="{CGRect={CGPoint=dd}{CGSize=dd}}" id="dHV-ME-csG" userLabel="{CGRect={CGPoint=dd}{CGSize=dd}}">
-            <rect key="frame" x="0.0" y="0.0" width="168" height="64"/>
+            <rect key="frame" x="0.0" y="0.0" width="172" height="64"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="BvU-Ma-DcR" userLabel="position">
-                    <rect key="frame" x="0.0" y="0.0" width="168" height="64"/>
+                    <rect key="frame" x="0.0" y="0.0" width="172" height="64"/>
                     <subviews>
                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="JUl-PQ-ZNn" userLabel="X" customClass="StepperTextField">
-                            <rect key="frame" x="0.0" y="45" width="84" height="19"/>
+                            <rect key="frame" x="0.0" y="45" width="86" height="19"/>
                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="X" bezelStyle="round" id="csH-2R-kMG">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -291,7 +294,7 @@
                             </connections>
                         </textField>
                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cna-En-eCw" userLabel="Y" customClass="StepperTextField">
-                            <rect key="frame" x="84" y="45" width="84" height="19"/>
+                            <rect key="frame" x="86" y="45" width="86" height="19"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Y" bezelStyle="round" id="OSZ-FZ-1G2">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -309,7 +312,7 @@
                             </connections>
                         </textField>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ogW-tN-3gu">
-                            <rect key="frame" x="34" y="33" width="16" height="14"/>
+                            <rect key="frame" x="35" y="33" width="16" height="14"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="X" id="G8F-Sn-bA4">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -317,7 +320,7 @@
                             </textFieldCell>
                         </textField>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MtY-Av-tje">
-                            <rect key="frame" x="118" y="33" width="16" height="14"/>
+                            <rect key="frame" x="121" y="33" width="16" height="14"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Y" id="NpB-oY-OkB">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -325,7 +328,7 @@
                             </textFieldCell>
                         </textField>
                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i8P-ab-WKn" userLabel="Y" customClass="StepperTextField">
-                            <rect key="frame" x="84" y="12" width="84" height="19"/>
+                            <rect key="frame" x="86" y="12" width="86" height="19"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Height" bezelStyle="round" id="sVD-ox-hmp">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -343,7 +346,7 @@
                             </connections>
                         </textField>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zC2-vy-1Mk">
-                            <rect key="frame" x="118" y="0.0" width="17" height="14"/>
+                            <rect key="frame" x="121" y="0.0" width="17" height="14"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="H" id="NwL-0O-Kg5">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -351,7 +354,7 @@
                             </textFieldCell>
                         </textField>
                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="zOj-4l-QUh" userLabel="W" customClass="StepperTextField">
-                            <rect key="frame" x="0.0" y="12" width="84" height="19"/>
+                            <rect key="frame" x="0.0" y="12" width="86" height="19"/>
                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="Width" bezelStyle="round" id="i3A-IO-FSZ">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -369,7 +372,7 @@
                             </connections>
                         </textField>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fWE-Zh-8rP">
-                            <rect key="frame" x="33" y="0.0" width="19" height="14"/>
+                            <rect key="frame" x="34" y="0.0" width="19" height="14"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="W" id="Vro-ft-nD5">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -410,7 +413,27 @@
             <connections>
                 <outlet property="textField" destination="JUl-PQ-ZNn" id="jwk-0Z-vp2"/>
             </connections>
-            <point key="canvasLocation" x="724" y="274"/>
+            <point key="canvasLocation" x="726" y="274"/>
+        </tableCellView>
+        <tableCellView identifier="@&quot;NSColor&quot;" id="Nhn-ML-Yi0" userLabel="@&quot;NSColor&quot;">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="17"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <colorWell translatesAutoresizingMaskIntoConstraints="NO" id="7B1-9n-jPd" customClass="ColorWell">
+                    <rect key="frame" x="0.0" y="0.0" width="172" height="17"/>
+                    <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <binding destination="Nhn-ML-Yi0" name="value" keyPath="objectValue.color" id="lgt-l3-lNf"/>
+                    </connections>
+                </colorWell>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="7B1-9n-jPd" secondAttribute="trailing" id="aDq-8h-cuf"/>
+                <constraint firstItem="7B1-9n-jPd" firstAttribute="top" secondItem="Nhn-ML-Yi0" secondAttribute="top" id="jpO-mr-ASZ"/>
+                <constraint firstItem="7B1-9n-jPd" firstAttribute="leading" secondItem="Nhn-ML-Yi0" secondAttribute="leading" id="rOd-Rc-tv7"/>
+                <constraint firstAttribute="bottom" secondItem="7B1-9n-jPd" secondAttribute="bottom" id="uxa-2X-XDO"/>
+            </constraints>
+            <point key="canvasLocation" x="726" y="371.5"/>
         </tableCellView>
     </objects>
     <resources>

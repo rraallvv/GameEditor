@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E408138F1AC228F400F54824 /* OutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = E408138E1AC228F400F54824 /* OutlineView.m */; };
 		E40813921AC3C45300F54824 /* ValueEditors.xib in Resources */ = {isa = PBXBuildFile; fileRef = E40813901AC3C45300F54824 /* ValueEditors.xib */; };
+		E40813951AC42FFF00F54824 /* ColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = E40813941AC42FFF00F54824 /* ColorWell.m */; };
 		E4ABDB4F1AB3933900AAE82E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */; };
 		E4ABDB511AB3933900AAE82E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB501AB3933900AAE82E /* main.m */; };
 		E4ABDB541AB3933900AAE82E /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB531AB3933900AAE82E /* GameScene.m */; };
@@ -37,6 +38,8 @@
 		E408138D1AC228F400F54824 /* OutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutlineView.h; sourceTree = "<group>"; };
 		E408138E1AC228F400F54824 /* OutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutlineView.m; sourceTree = "<group>"; };
 		E40813911AC3C45300F54824 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ValueEditors.xib; sourceTree = "<group>"; };
+		E40813931AC42FFF00F54824 /* ColorWell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorWell.h; sourceTree = "<group>"; };
+		E40813941AC42FFF00F54824 /* ColorWell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorWell.m; sourceTree = "<group>"; };
 		E4ABDB481AB3933900AAE82E /* GameEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4ABDB4C1AB3933900AAE82E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4ABDB4D1AB3933900AAE82E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -109,6 +112,8 @@
 				E408138E1AC228F400F54824 /* OutlineView.m */,
 				E4BFF4AE1AB78E24002DADD3 /* StepperTextField.h */,
 				E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */,
+				E40813931AC42FFF00F54824 /* ColorWell.h */,
+				E40813941AC42FFF00F54824 /* ColorWell.m */,
 				E4BB58AC1ABB510A0021A467 /* EditorView.h */,
 				E4BB58AD1ABB510A0021A467 /* EditorView.m */,
 				E4ABDB591AB3933900AAE82E /* MainMenu.xib */,
@@ -251,6 +256,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4BB58AE1ABB510A0021A467 /* EditorView.m in Sources */,
+				E40813951AC42FFF00F54824 /* ColorWell.m in Sources */,
 				E4ABDB511AB3933900AAE82E /* main.m in Sources */,
 				E4ABDB541AB3933900AAE82E /* GameScene.m in Sources */,
 				E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */,

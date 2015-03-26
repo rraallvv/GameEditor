@@ -165,8 +165,12 @@
 				NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
 				NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
 				NSString *attributeType = [attibutesArray firstObject];
+
 				if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:@"degrees" options:[DegreesTransformer transformer]];
+					[children addObject:attribute];
+				} else if ([attributeName rangeOfString:@"color" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:nil];
 					[children addObject:attribute];
 				} else {
 					BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;

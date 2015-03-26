@@ -159,6 +159,8 @@ editable = _editable;
 	//[self.node unbind:self.name];
 }
 
+/* Accessors and Mutators */
+
 #pragma mark position accessors
 
 - (void)setX:(float)x {
@@ -296,6 +298,16 @@ editable = _editable;
 }
 - (NSRect)rect {
 	return [self.value rectValue];
+}
+
+#pragma mark value
+
+- (void)setColor:(NSColor *)color {
+	self.value = color;
+}
+
+- (NSColor *)color {
+	return self.value;
 }
 
 #pragma mark value
