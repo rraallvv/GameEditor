@@ -153,7 +153,7 @@ editable = _editable;
 }
 - (void)dealloc {
 	[self unbind:@"value"];
-	[self.node unbind:self.name];
+	//[self.node unbind:self.name];
 }
 - (void)setX:(float)x {
 	NSPoint position = self.position;
