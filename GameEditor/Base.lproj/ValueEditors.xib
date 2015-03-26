@@ -91,7 +91,7 @@
             <connections>
                 <outlet property="textField" destination="jzj-QV-oE2" id="MVN-XN-UTj"/>
             </connections>
-            <point key="canvasLocation" x="445" y="508.5"/>
+            <point key="canvasLocation" x="445" y="513"/>
         </tableCellView>
         <tableCellView identifier="{CGSize=dd}" id="jGQ-Ay-x9R" userLabel="{CGSize=dd}">
             <rect key="frame" x="0.0" y="0.0" width="172" height="30"/>
@@ -264,6 +264,153 @@
                 <constraint firstAttribute="trailing" secondItem="YBc-RN-b4y" secondAttribute="trailing" id="WAZ-eH-0YJ"/>
                 <constraint firstItem="YBc-RN-b4y" firstAttribute="leading" secondItem="toe-NG-Bn9" secondAttribute="leading" id="WrL-bb-Q9Q"/>
             </constraints>
+        </tableCellView>
+        <tableCellView identifier="{CGRect={CGPoint=dd}{CGSize=dd}}" id="dHV-ME-csG" userLabel="{CGRect={CGPoint=dd}{CGSize=dd}}">
+            <rect key="frame" x="0.0" y="0.0" width="168" height="64"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="BvU-Ma-DcR" userLabel="position">
+                    <rect key="frame" x="0.0" y="0.0" width="168" height="64"/>
+                    <subviews>
+                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="JUl-PQ-ZNn" userLabel="X" customClass="StepperTextField">
+                            <rect key="frame" x="0.0" y="45" width="84" height="19"/>
+                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="X" bezelStyle="round" id="csH-2R-kMG">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="AltIncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="DecreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <binding destination="dHV-ME-csG" name="editable" keyPath="objectValue.isEditable" id="6kp-n8-BKF"/>
+                                <binding destination="dHV-ME-csG" name="value" keyPath="objectValue.rectX" id="O5B-DD-bwM"/>
+                            </connections>
+                        </textField>
+                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cna-En-eCw" userLabel="Y" customClass="StepperTextField">
+                            <rect key="frame" x="84" y="45" width="84" height="19"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Y" bezelStyle="round" id="OSZ-FZ-1G2">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="AltIncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="DecreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <binding destination="dHV-ME-csG" name="editable" keyPath="objectValue.isEditable" id="W9a-9d-Vf7"/>
+                                <binding destination="dHV-ME-csG" name="value" keyPath="objectValue.rectY" id="8gy-us-G3p"/>
+                            </connections>
+                        </textField>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ogW-tN-3gu">
+                            <rect key="frame" x="34" y="33" width="16" height="14"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="X" id="G8F-Sn-bA4">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MtY-Av-tje">
+                            <rect key="frame" x="118" y="33" width="16" height="14"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Y" id="NpB-oY-OkB">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="i8P-ab-WKn" userLabel="Y" customClass="StepperTextField">
+                            <rect key="frame" x="84" y="12" width="84" height="19"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Height" bezelStyle="round" id="sVD-ox-hmp">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="AltIncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="DecreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <binding destination="dHV-ME-csG" name="editable" keyPath="objectValue.isEditable" id="4PC-8p-RXe"/>
+                                <binding destination="dHV-ME-csG" name="value" keyPath="objectValue.rectHeight" id="dgA-Ei-Ag4"/>
+                            </connections>
+                        </textField>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zC2-vy-1Mk">
+                            <rect key="frame" x="118" y="0.0" width="17" height="14"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="H" id="NwL-0O-Kg5">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="zOj-4l-QUh" userLabel="W" customClass="StepperTextField">
+                            <rect key="frame" x="0.0" y="12" width="84" height="19"/>
+                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="Width" bezelStyle="round" id="i3A-IO-FSZ">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="AltIncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="DecreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <binding destination="dHV-ME-csG" name="editable" keyPath="objectValue.isEditable" id="doG-if-4IS"/>
+                                <binding destination="dHV-ME-csG" name="value" keyPath="objectValue.rectWidth" id="2Ru-gE-JY9"/>
+                            </connections>
+                        </textField>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fWE-Zh-8rP">
+                            <rect key="frame" x="33" y="0.0" width="19" height="14"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="W" id="Vro-ft-nD5">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="zOj-4l-QUh" firstAttribute="leading" secondItem="BvU-Ma-DcR" secondAttribute="leading" id="3PX-mu-bNv"/>
+                        <constraint firstAttribute="trailing" secondItem="i8P-ab-WKn" secondAttribute="trailing" id="4r7-gB-Xwu"/>
+                        <constraint firstItem="fWE-Zh-8rP" firstAttribute="top" secondItem="zOj-4l-QUh" secondAttribute="top" constant="17" id="6Ml-Dr-MH2"/>
+                        <constraint firstAttribute="width" secondItem="JUl-PQ-ZNn" secondAttribute="width" multiplier="2:1" id="6o4-em-MwS"/>
+                        <constraint firstItem="MtY-Av-tje" firstAttribute="top" secondItem="cna-En-eCw" secondAttribute="bottom" constant="-2" id="8yb-Xu-waE"/>
+                        <constraint firstItem="i8P-ab-WKn" firstAttribute="top" secondItem="zC2-vy-1Mk" secondAttribute="top" constant="-17" id="Ew9-gO-4Ha"/>
+                        <constraint firstItem="ogW-tN-3gu" firstAttribute="centerX" secondItem="JUl-PQ-ZNn" secondAttribute="centerX" id="Fez-zJ-BGa"/>
+                        <constraint firstItem="i8P-ab-WKn" firstAttribute="centerX" secondItem="zC2-vy-1Mk" secondAttribute="centerX" constant="-0.5" id="Ff9-p9-sFX"/>
+                        <constraint firstItem="MtY-Av-tje" firstAttribute="centerX" secondItem="cna-En-eCw" secondAttribute="centerX" id="Ftb-Am-iM1"/>
+                        <constraint firstAttribute="width" secondItem="cna-En-eCw" secondAttribute="width" multiplier="2:1" id="MyV-Cb-1PW"/>
+                        <constraint firstItem="JUl-PQ-ZNn" firstAttribute="top" secondItem="BvU-Ma-DcR" secondAttribute="top" id="Saq-qd-b7S"/>
+                        <constraint firstItem="ogW-tN-3gu" firstAttribute="top" secondItem="JUl-PQ-ZNn" secondAttribute="bottom" constant="-2" id="UxX-iA-Yok"/>
+                        <constraint firstItem="cna-En-eCw" firstAttribute="width" secondItem="i8P-ab-WKn" secondAttribute="width" id="VIr-dK-Bgz"/>
+                        <constraint firstItem="fWE-Zh-8rP" firstAttribute="centerX" secondItem="zOj-4l-QUh" secondAttribute="centerX" constant="0.5" id="YVN-39-kuH"/>
+                        <constraint firstItem="zOj-4l-QUh" firstAttribute="top" secondItem="ogW-tN-3gu" secondAttribute="bottom" constant="2" id="cHf-wT-z0G"/>
+                        <constraint firstItem="JUl-PQ-ZNn" firstAttribute="leading" secondItem="BvU-Ma-DcR" secondAttribute="leading" id="cIj-TE-9wC"/>
+                        <constraint firstItem="JUl-PQ-ZNn" firstAttribute="width" secondItem="zOj-4l-QUh" secondAttribute="width" id="fWc-eg-WGc"/>
+                        <constraint firstItem="i8P-ab-WKn" firstAttribute="top" secondItem="MtY-Av-tje" secondAttribute="bottom" constant="2" id="h2x-4L-7qn"/>
+                        <constraint firstAttribute="trailing" secondItem="cna-En-eCw" secondAttribute="trailing" id="tUq-xn-Qfe"/>
+                        <constraint firstItem="cna-En-eCw" firstAttribute="top" secondItem="BvU-Ma-DcR" secondAttribute="top" id="xJ9-TP-JHi"/>
+                    </constraints>
+                </customView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="BvU-Ma-DcR" secondAttribute="trailing" id="59Y-Hj-TLj"/>
+                <constraint firstAttribute="top" secondItem="BvU-Ma-DcR" secondAttribute="top" id="GGU-Cf-rv4"/>
+                <constraint firstItem="BvU-Ma-DcR" firstAttribute="leading" secondItem="dHV-ME-csG" secondAttribute="leading" id="NsV-QC-ruk"/>
+                <constraint firstAttribute="bottom" secondItem="BvU-Ma-DcR" secondAttribute="bottom" id="yxj-ow-vcS"/>
+            </constraints>
+            <connections>
+                <outlet property="textField" destination="JUl-PQ-ZNn" id="jwk-0Z-vp2"/>
+            </connections>
+            <point key="canvasLocation" x="724" y="274"/>
         </tableCellView>
     </objects>
     <resources>

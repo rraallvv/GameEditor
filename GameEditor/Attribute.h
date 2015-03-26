@@ -57,6 +57,4 @@
 @property (nonatomic, assign) BOOL editable;
 @property (copy) NSString *type;
 @property (weak) SKNode *node;
-@property NSPoint position;
-@property NSSize size;
 @end

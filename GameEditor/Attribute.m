@@ -156,7 +156,7 @@ editable = _editable;
 	//[self.node unbind:self.name];
 }
 
-#pragma mark - position
+#pragma mark - position accessors
 
 - (void)setX:(float)x {
 	NSPoint position = self.position;
@@ -193,7 +193,7 @@ editable = _editable;
 	return [self.value pointValue];
 }
 
-#pragma mark - size
+#pragma mark - size accessors
 
 - (void)setWidth:(float)width {
 	NSSize size = self.size;
@@ -213,7 +213,7 @@ editable = _editable;
 	}
 }
 - (float)height {
-	return self.position.y;
+	return self.size.height;
 }
 - (void)setSize:(NSSize)size {
 	float width = self.width;
@@ -228,6 +228,71 @@ editable = _editable;
 }
 - (NSSize)size {
 	return [self.value sizeValue];
+}
+
+#pragma mark - rect accessors
+
+- (void)setRectX:(float)x {
+	NSRect rect = self.rect;
+	if (x != rect.origin.x) {
+		rect.origin.x = x;
+		self.rect = rect;
+	}
+}
+- (float)rectX {
+	return self.rect.origin.x;
+}
+- (void)setRectY:(float)y {
+	NSRect rect = self.rect;
+	if (y != rect.origin.y) {
+		rect.origin.y = y;
+		self.rect = rect;
+	}
+}
+- (float)rectY {
+	return self.rect.origin.y;
+}
+- (void)setRectWidth:(float)width {
+	NSRect rect = self.rect;
+	if (width != rect.size.width) {
+		rect.size.width = width;
+		self.rect = rect;
+	}
+}
+- (float)rectWidth {
+	return self.rect.size.width;
+}
+- (void)setRectHeight:(float)height {
+	NSRect rect = self.rect;
+	if (height != rect.size.height) {
+		rect.size.height = height;
+		self.rect = rect;
+	}
+}
+- (float)rectHeight {
+	return self.rect.size.height;
+}
+- (void)setRect:(NSRect)rect {
+	float x = self.rect.origin.x;
+	if (x != rect.origin.x) {
+		self.rectX = x;
+	}
+	float y = self.rect.origin.y;
+	if (y != rect.origin.y) {
+		self.rectHeight = y;
+	}
+	float width = self.rect.size.width;
+	if (width != rect.size.width) {
+		self.rectWidth = width;
+	}
+	float height = self.rect.size.height;
+	if (height != rect.size.height) {
+		self.rectHeight = height;
+	}
+	self.value = [NSValue valueWithRect:rect];
+}
+- (NSRect)rect {
+	return [self.value rectValue];
 }
 
 #pragma mark - value
