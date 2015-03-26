@@ -8,7 +8,7 @@
         <customObject id="-2" userLabel="File's Owner"/>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <tableCellView identifier="{CGPoint=dd}" id="GbV-qK-Vp4">
+        <tableCellView identifier="{CGPoint=dd}" id="GbV-qK-Vp4" userLabel="{CGPoint=dd}">
             <rect key="frame" x="0.0" y="0.0" width="172" height="30"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -93,7 +93,92 @@
             </connections>
             <point key="canvasLocation" x="445" y="508.5"/>
         </tableCellView>
-        <tableCellView identifier="degrees" id="a63-cn-NOW">
+        <tableCellView identifier="{CGSize=dd}" id="jGQ-Ay-x9R" userLabel="{CGSize=dd}">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="30"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="b1j-pz-scH" userLabel="position">
+                    <rect key="frame" x="0.0" y="0.0" width="172" height="30"/>
+                    <subviews>
+                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="2ul-sr-a0h" userLabel="X" customClass="StepperTextField">
+                            <rect key="frame" x="0.0" y="11" width="87" height="19"/>
+                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="Width" bezelStyle="round" id="qJ3-od-1G5">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="AltIncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="DecreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <binding destination="jGQ-Ay-x9R" name="editable" keyPath="objectValue.isEditable" id="qQh-Ve-Ufm"/>
+                                <binding destination="jGQ-Ay-x9R" name="value" keyPath="objectValue.width" id="VQf-37-hGy"/>
+                            </connections>
+                        </textField>
+                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="31z-s0-RPc" userLabel="Y" customClass="StepperTextField">
+                            <rect key="frame" x="87" y="11" width="85" height="19"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Height" bezelStyle="round" id="cgZ-18-TVa">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="AltIncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="DecreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <binding destination="jGQ-Ay-x9R" name="editable" keyPath="objectValue.isEditable" id="saA-rd-JCq"/>
+                                <binding destination="jGQ-Ay-x9R" name="value" keyPath="objectValue.height" id="Pd7-yo-vnU"/>
+                            </connections>
+                        </textField>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="M01-dK-Mhp">
+                            <rect key="frame" x="34" y="-1" width="19" height="14"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="W" id="haQ-6U-PP9">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T9B-bn-J1V">
+                            <rect key="frame" x="121" y="-1" width="17" height="14"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="H" id="AbT-YK-lO0">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="M01-dK-Mhp" firstAttribute="centerX" secondItem="2ul-sr-a0h" secondAttribute="centerX" id="0Ih-IL-xca"/>
+                        <constraint firstItem="M01-dK-Mhp" firstAttribute="top" secondItem="2ul-sr-a0h" secondAttribute="bottom" constant="-2" id="6ep-rn-1HT"/>
+                        <constraint firstItem="T9B-bn-J1V" firstAttribute="centerX" secondItem="31z-s0-RPc" secondAttribute="centerX" id="GR5-vg-O1g"/>
+                        <constraint firstItem="31z-s0-RPc" firstAttribute="top" secondItem="b1j-pz-scH" secondAttribute="top" id="IXX-Q4-aWl"/>
+                        <constraint firstAttribute="trailing" secondItem="31z-s0-RPc" secondAttribute="trailing" id="IrV-W0-axU"/>
+                        <constraint firstAttribute="width" secondItem="2ul-sr-a0h" secondAttribute="width" multiplier="2:1" id="hER-l4-9xJ"/>
+                        <constraint firstAttribute="width" secondItem="31z-s0-RPc" secondAttribute="width" multiplier="2:1" id="hc5-31-VEn"/>
+                        <constraint firstItem="T9B-bn-J1V" firstAttribute="top" secondItem="31z-s0-RPc" secondAttribute="bottom" constant="-2" id="idz-Qf-dFl"/>
+                        <constraint firstItem="2ul-sr-a0h" firstAttribute="leading" secondItem="b1j-pz-scH" secondAttribute="leading" id="jW7-te-r0g"/>
+                        <constraint firstItem="2ul-sr-a0h" firstAttribute="top" secondItem="b1j-pz-scH" secondAttribute="top" id="yEt-2y-yq6"/>
+                    </constraints>
+                </customView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="b1j-pz-scH" secondAttribute="trailing" id="9hG-sS-uCO"/>
+                <constraint firstItem="b1j-pz-scH" firstAttribute="leading" secondItem="jGQ-Ay-x9R" secondAttribute="leading" id="UYA-gO-C3r"/>
+                <constraint firstAttribute="top" secondItem="b1j-pz-scH" secondAttribute="top" id="jul-CZ-Q5e"/>
+                <constraint firstAttribute="bottom" secondItem="b1j-pz-scH" secondAttribute="bottom" id="m6w-M6-gb2"/>
+            </constraints>
+            <connections>
+                <outlet property="textField" destination="2ul-sr-a0h" id="q4q-L9-p5s"/>
+            </connections>
+            <point key="canvasLocation" x="445" y="605"/>
+        </tableCellView>
+        <tableCellView identifier="degrees" id="a63-cn-NOW" userLabel="degrees">
             <rect key="frame" x="0.0" y="0.0" width="172" height="17"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -124,8 +209,9 @@
             <connections>
                 <outlet property="textField" destination="I6W-tz-8MY" id="80r-YF-FEQ"/>
             </connections>
+            <point key="canvasLocation" x="445" y="256.5"/>
         </tableCellView>
-        <tableCellView identifier="d" id="f3Z-oW-3C9">
+        <tableCellView identifier="d" id="f3Z-oW-3C9" userLabel="d">
             <rect key="frame" x="0.0" y="0.0" width="172" height="17"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -157,7 +243,7 @@
                 <outlet property="textField" destination="q6s-Ku-JU0" id="yzm-dT-NHS"/>
             </connections>
         </tableCellView>
-        <tableCellView identifier="c" id="toe-NG-Bn9">
+        <tableCellView identifier="c" id="toe-NG-Bn9" userLabel="c">
             <rect key="frame" x="0.0" y="0.0" width="172" height="17"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>

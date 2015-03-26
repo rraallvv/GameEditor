@@ -155,6 +155,9 @@ editable = _editable;
 	[self unbind:@"value"];
 	//[self.node unbind:self.name];
 }
+
+#pragma mark - position
+
 - (void)setX:(float)x {
 	NSPoint position = self.position;
 	if (x != position.x) {
@@ -189,6 +192,46 @@ editable = _editable;
 - (NSPoint)position {
 	return [self.value pointValue];
 }
+
+#pragma mark - size
+
+- (void)setWidth:(float)width {
+	NSSize size = self.size;
+	if (width != size.width) {
+		size.width = width;
+		self.size = size;
+	}
+}
+- (float)width {
+	return self.size.width;
+}
+- (void)setHeight:(float)height {
+	NSSize size = self.size;
+	if (height != size.height) {
+		size.height = height;
+		self.size = size;
+	}
+}
+- (float)height {
+	return self.position.y;
+}
+- (void)setSize:(NSSize)size {
+	float width = self.width;
+	if (width != size.width) {
+		self.width = width;
+	}
+	float height = self.height;
+	if (height != size.height) {
+		self.height = height;
+	}
+	self.value = [NSValue valueWithSize:size];
+}
+- (NSSize)size {
+	return [self.value sizeValue];
+}
+
+#pragma mark - value
+
 - (void)setValue:(NSValue *)value {
 	_value = value;
 	[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
