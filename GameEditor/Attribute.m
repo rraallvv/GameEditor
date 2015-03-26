@@ -126,8 +126,18 @@ static NSDictionary *attibuteNameTransformer = nil;
 	attribute.node = node;
 	attribute.type = type;
 
-	[attribute bind:@"value" toObject:node withKeyPath:attribute.name options:nil];
-	[node bind:attribute.name toObject:attribute withKeyPath:@"value" options:nil];
+	NSString *setterStr = [NSString stringWithFormat:@"set%@%@:",
+						   [[attribute.name substringToIndex:1] capitalizedString],
+						   [attribute.name substringFromIndex:1]];
+
+	if ([attribute respondsToSelector:NSSelectorFromString(attribute.name)]
+		&& [attribute respondsToSelector:NSSelectorFromString(setterStr)]) {
+		[attribute bind:attribute.name toObject:node withKeyPath:attribute.name options:nil];
+		[node bind:attribute.name toObject:attribute withKeyPath:attribute.name options:nil];
+	} else {
+		[attribute bind:@"value" toObject:node withKeyPath:attribute.name options:nil];
+		[node bind:attribute.name toObject:attribute withKeyPath:@"value" options:nil];
+	}
 
 	return attribute;
 }
@@ -141,36 +151,41 @@ static NSDictionary *attibuteNameTransformer = nil;
 	[self unbind:@"value"];
 	[self.node unbind:self.name];
 }
-- (void)setX:(float)value {
-	NSPoint point = _value.pointValue;
-	if (value != point.x) {
-		point.x = value;
-		self.value = [NSValue valueWithPoint:point];
+- (void)setX:(float)x {
+	NSPoint position = self.position;
+	if (x != position.x) {
+		position.x = x;
+		self.position = position;
 	}
 }
 - (float)x {
-	return _value.pointValue.x;
+	return self.position.x;
 }
-- (void)setY:(float)value {
-	NSPoint point = _value.pointValue;
-	if (value != point.y) {
-		point.y = value;
-		self.value = [NSValue valueWithPoint:point];
+- (void)setY:(float)y {
+	NSPoint position = self.position;
+	if (y != position.y) {
+		position.y = y;
+		self.position = position;
 	}
 }
 - (float)y {
-	return _value.pointValue.y;
+	return self.position.y;
 }
-- (void)setValue:(NSValue *)value {
-	NSPoint point = value.pointValue;
+- (void)setPosition:(NSPoint)position {
 	float x = self.x;
-	if (x != point.x) {
+	if (x != position.x) {
 		self.x = x;
 	}
 	float y = self.y;
-	if (y != point.y) {
+	if (y != position.y) {
 		self.y = y;
 	}
+	self.value = [NSValue valueWithPoint:position];
+}
+- (NSPoint)position {
+	return [self.value pointValue];
+}
+- (void)setValue:(NSValue *)value {
 	_value = value;
 }
 - (NSValue *)value {
