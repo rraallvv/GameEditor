@@ -137,18 +137,31 @@ static NSDictionary *attibuteNameTransformer = nil;
 
 @implementation Attribute {
 	NSValueTransformer *_valueTransformer;
+	NSArray *_labels;
+	NSString *_type;
 }
 
 @synthesize
 name = _name,
-value = _value,
-editable = _editable;
+value = _value;
 
 - (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options {
 	if (self = [super init]) {
 		_name = name;
 		_node = node;
 		_type = type;
+
+		/* Prepare the labels and identifier for the editor */
+		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+			_labels = @[@"X", @"Y"];
+			//_type = @"dd";
+		} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+			_labels = @[@"W", @"H"];
+			//_type = @"dd";
+		} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+			_labels = @[@"X", @"Y", @"W", @"H"];
+			//_type = @"dddd";
+		}
 
 		/* Cache the value transformer */
 		if(options) {
@@ -182,12 +195,29 @@ editable = _editable;
 	return [NSString stringWithFormat:@"%@ %@", _name, _type];
 }
 
+- (NSString *)type {
+	return _type;
+}
+
 - (BOOL)isEditable {
 	return YES;
 }
 
 - (BOOL)isLeaf {
 	return YES;
+}
+
+- (id)valueForUndefinedKey:(NSString *)key {
+	if ([key isEqualToString:@"label1"]) {
+		return _labels[0];
+	} else if ([key isEqualToString:@"label2"]) {
+		return _labels[1];
+	} else if ([key isEqualToString:@"label3"]) {
+		return _labels[2];
+	} else if ([key isEqualToString:@"label4"]) {
+		return _labels[3];
+	}
+	return [super valueForUndefinedKey:key];
 }
 
 - (void)dealloc {

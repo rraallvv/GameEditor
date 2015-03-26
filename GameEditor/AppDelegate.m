@@ -27,7 +27,6 @@
 #import "GameScene.h"
 #import "Attribute.h"
 #import "OutlineView.h"
-#import "FloatsTableCellView.h"
 
 @implementation SKScene (Unarchive)
 
@@ -124,12 +123,6 @@
 		id view = [outlineView makeViewWithIdentifier:type owner:self];
 		if (!view) {
 			return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
-		} else if ([view respondsToSelector:@selector(setLabels:)]) {
-			if ([type isEqualToString:@"{CGSize=dd}"]) {
-				[view setLabels:@[@"W", @"H"]];
-			} else {
-				[view setLabels:@[@"X", @"Y", @"W", @"H"]];
-			}
 		}
 		return view;
 	}
