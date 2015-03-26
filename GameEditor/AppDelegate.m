@@ -115,24 +115,24 @@
 }
 
 - (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
-	id view = nil;
 	if ([self isGroupItem:item]) {
-		view = [outlineView makeViewWithIdentifier:@"group" owner:self];
+		return [outlineView makeViewWithIdentifier:@"group" owner:self];
 	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
-		view = [outlineView makeViewWithIdentifier:@"name" owner:self];
+		return [outlineView makeViewWithIdentifier:@"name" owner:self];
 	} else {
 		NSString *type = [[item representedObject] valueForKey:@"type"];
-		view = [outlineView makeViewWithIdentifier:type owner:self];
-		if (view && [view respondsToSelector:@selector(setLabels:)]) {
-			if([type isEqualToString:@"{CGSize=dd}"])
+		id view = [outlineView makeViewWithIdentifier:type owner:self];
+		if (!view) {
+			return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
+		} else if ([view respondsToSelector:@selector(setLabels:)]) {
+			if ([type isEqualToString:@"{CGSize=dd}"]) {
 				[view setLabels:@[@"W", @"H"]];
-			else
+			} else {
 				[view setLabels:@[@"X", @"Y", @"W", @"H"]];
-		} else {
-			view = [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
+			}
 		}
+		return view;
 	}
-	return view;
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item {
