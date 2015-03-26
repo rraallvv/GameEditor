@@ -144,7 +144,7 @@
 				NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
 				NSString *attributeType = [attibutesArray firstObject];
 				if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:@"degrees"];
+					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:@"degrees" options:[DegreesTransformer transformer]];
 					[children addObject:attribute];
 				} else {
 					BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
@@ -152,7 +152,7 @@
 					editable = editable && [attributeType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
 
 					if (editable) {
-						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType];
+						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:nil];
 						[children addObject:attribute];
 					} else {
 						NSDictionary *attribute = @{@"name": attributeName,

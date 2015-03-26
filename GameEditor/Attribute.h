@@ -51,10 +51,11 @@
 @end
 
 @interface Attribute : NSObject
-+(Attribute *)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
++(Attribute *)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options;
 @property (copy) NSString *name;
 @property (copy) NSValue *value;
 @property (nonatomic, assign) BOOL editable;
 @property (copy) NSString *type;
 @property (weak) SKNode *node;
+@property NSPoint position;
 @end
