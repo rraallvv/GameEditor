@@ -133,10 +133,10 @@ static NSDictionary *attibuteNameTransformer = nil;
 	if ([attribute respondsToSelector:NSSelectorFromString(attribute.name)]
 		&& [attribute respondsToSelector:NSSelectorFromString(setterStr)]) {
 		[attribute bind:attribute.name toObject:node withKeyPath:attribute.name options:nil];
-		[node bind:attribute.name toObject:attribute withKeyPath:attribute.name options:nil];
+		//[node bind:attribute.name toObject:attribute withKeyPath:attribute.name options:nil];
 	} else {
 		[attribute bind:@"value" toObject:node withKeyPath:attribute.name options:nil];
-		[node bind:attribute.name toObject:attribute withKeyPath:@"value" options:nil];
+		//[node bind:attribute.name toObject:attribute withKeyPath:@"value" options:nil];
 	}
 
 	return attribute;
@@ -187,6 +187,7 @@ static NSDictionary *attibuteNameTransformer = nil;
 }
 - (void)setValue:(NSValue *)value {
 	_value = value;
+	[_node setValue:value forKey:_name];
 }
 - (NSValue *)value {
 	return _value;
