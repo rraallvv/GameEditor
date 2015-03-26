@@ -145,6 +145,9 @@ editable = _editable;
 
 	return attribute;
 }
+- (NSString *)description {
+	return [NSString stringWithFormat:@"%@ %@", _name, _type];
+}
 - (BOOL)isEditable {
 	return YES;
 }

@@ -199,11 +199,7 @@
                                                                                 <string key="NSValueTransformerName">AttibuteNameTransformer</string>
                                                                             </dictionary>
                                                                         </binding>
-                                                                        <binding destination="M03-u6-Cp5" name="toolTip" keyPath="objectValue.name" id="D9Z-NE-bje">
-                                                                            <dictionary key="options">
-                                                                                <string key="NSValueTransformerName">AttibuteNameTransformer</string>
-                                                                            </dictionary>
-                                                                        </binding>
+                                                                        <binding destination="M03-u6-Cp5" name="toolTip" keyPath="objectValue.description" id="Hbg-Q6-lM2"/>
                                                                     </connections>
                                                                 </textField>
                                                             </subviews>

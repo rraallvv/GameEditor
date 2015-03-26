@@ -177,13 +177,16 @@
 						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:nil];
 						[children addObject:attribute];
 					} else {
+#if 1// Show non editable properties
 						NSDictionary *attribute = @{@"name": attributeName,
 													@"value": @"(non-editable)",
 													@"type": @"generic attribute",
 													@"node": [NSNull null],
+													@"description": [NSString stringWithFormat:@"%@ %@", attributeName, attributeType],
 													@"isLeaf": @YES,
 													@"isEditable": @NO};
 						[children addObject:attribute];
+#endif
 					}
 				}
 			}
