@@ -61,6 +61,7 @@
 	IBOutlet EditorView *_editorView;
 	IBOutlet NSTreeController *_treeController;
 	IBOutlet NSOutlineView *_outlineView;
+	NSMutableDictionary *_prefferedSizes;
 }
 
 @synthesize window = _window;
@@ -88,11 +89,24 @@
 	_editorView.scene = scene;
 	_editorView.delegate = self;
 
+	/* Prepare the editors for the outline view */
 	NSNib *nib = [[NSNib alloc] initWithNibNamed:@"ValueEditors" bundle:nil];
-	[_outlineView registerNib:nib forIdentifier:@"{CGPoint=dd}"];
-	[_outlineView registerNib:nib forIdentifier:@"degrees"];
-	[_outlineView registerNib:nib forIdentifier:@"d"];
-	[_outlineView registerNib:nib forIdentifier:@"c"];
+	NSArray* objects;
+	[nib instantiateWithOwner:self topLevelObjects:&objects];
+
+	_prefferedSizes = [NSMutableDictionary dictionary];
+
+	for (id object in objects) {
+		if ([object isKindOfClass:[NSTableCellView class]]) {
+			NSTableCellView *tableCelView = object;
+
+			/* Register the identifiers for each editors */
+			[_outlineView registerNib:nib forIdentifier:tableCelView.identifier];
+
+			/* Fetch the preffered size for the editor's view */
+			_prefferedSizes[tableCelView.identifier] = [NSValue valueWithSize:tableCelView.frame.size];
+		}
+	}
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
@@ -118,7 +132,9 @@
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	return 20;
+	NSString *type = [[item representedObject] valueForKey:@"type"];
+	NSSize size = [_prefferedSizes[type] sizeValue];
+	return MAX(20, size.height);
 }
 
 - (BOOL) isGroupItem:(id)item {
