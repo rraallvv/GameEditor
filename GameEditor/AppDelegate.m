@@ -26,6 +26,7 @@
 #import "AppDelegate.h"
 #import "GameScene.h"
 #import "Attribute.h"
+#import "OutlineView.h"
 
 @implementation SKScene (Unarchive)
 
@@ -57,8 +58,6 @@
 @end
 
 @implementation AppDelegate {
-	IBOutlet NSTableView *_tableView;
-	IBOutlet NSArrayController *_arrayController;
 	IBOutlet EditorView *_editorView;
 	IBOutlet NSTreeController *_treeController;
 	IBOutlet NSOutlineView *_outlineView;
@@ -98,7 +97,7 @@
 	if ([self isGroupItem:item]) {
 		return [outlineView makeViewWithIdentifier:@"group" owner:self];
 	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
-		return [outlineView makeViewWithIdentifier:@"key" owner:self];
+		return [outlineView makeViewWithIdentifier:@"name" owner:self];
 	} else {
 		NSString *type = [[item representedObject] valueForKey:@"type"];
 		NSView *view = [outlineView makeViewWithIdentifier:type owner:self];
@@ -113,37 +112,11 @@
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	return 17;
+	return 20;
 }
 
 - (BOOL) isGroupItem:(id)item {
 	return [[item indexPath] length] < 2;
-}
-
-- (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-	if ([self isGroupRow:row]) {
-		return [tableView makeViewWithIdentifier:@"group" owner:self];
-	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
-		return [tableView makeViewWithIdentifier:@"key" owner:self];
-	} else {
-		NSString *type = [[[_arrayController arrangedObjects] objectAtIndex:row] valueForKey:@"type"];
-		NSView *view = [tableView makeViewWithIdentifier:type owner:self];
-		if (!view)
-			return [tableView makeViewWithIdentifier:@"generic property" owner:self];
-		return view;
-	}
-}
-
-- (BOOL)tableView:(NSTableView *)tableView isGroupRow:(NSInteger)row {
-	return [self isGroupRow:row];
-}
-
-- (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row {
-	return 17;
-}
-
-- (BOOL) isGroupRow:(NSInteger)row {
-	return [[[[_arrayController arrangedObjects] objectAtIndex:row] valueForKey:@"type"] isEqualToString:@"group" ];
 }
 
 - (IBAction)saveAction:(id)sender {
@@ -153,7 +126,6 @@
 - (void)selectedNode:(SKNode *)node {
 
 	/* Clear the attibutes table */
-	[_arrayController setContent:nil];
 	[_treeController setContent:nil];
 
 	/* Populate the attibutes table from the selected node's properties */
@@ -163,9 +135,6 @@
 		objc_property_t *properties = class_copyPropertyList(classType, &count);
 
 		if (count) {
-			[_arrayController addObject:@{@"name": [classType description],
-										  @"type": @"group",
-										  @"isEditable": @NO}];
 			NSMutableArray *children = [NSMutableArray array];
 
 			for(unsigned int i = 0; i < count; i++) {
@@ -176,7 +145,6 @@
 				NSString *attributeType = [attibutesArray firstObject];
 				if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:@"degrees"];
-					[_arrayController addObject:attribute];
 					[children addObject:attribute];
 				} else {
 					BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
@@ -185,7 +153,6 @@
 
 					if (editable) {
 						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType];
-						[_arrayController addObject: attribute];
 						[children addObject:attribute];
 					} else {
 						NSDictionary *attribute = @{@"name": attributeName,
@@ -194,7 +161,6 @@
 													@"node": [NSNull null],
 													@"isLeaf": @YES,
 													@"isEditable": @NO};
-						[_arrayController addObject:attribute];
 						[children addObject:attribute];
 					}
 				}
