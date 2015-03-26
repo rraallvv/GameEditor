@@ -28,6 +28,7 @@
 static NSDictionary *pointTransformer = nil;
 
 @implementation PointTransformer
+
 + (NSDictionary *)transformer {
 	if (pointTransformer) {
 		return pointTransformer;
@@ -35,25 +36,31 @@ static NSDictionary *pointTransformer = nil;
 		return pointTransformer = @{ NSValueTransformerBindingOption:[[PointTransformer alloc] init] };
 	}
 }
+
 + (Class)transformedValueClass {
 	return [NSValue class];
 }
+
 + (BOOL)allowsReverseTransformation {
 	return YES;
 }
+
 - (id)transformedValue:(id)value {
 	NSValue *result = value;
 	return result;
 }
+
 - (id)reverseTransformedValue:(id)value {
 	NSValue *result = [NSValue valueWithPoint:NSPointFromString(value)];
 	return result;
 }
+
 @end
 
 static NSDictionary *degreesTransformer = nil;
 
 @implementation DegreesTransformer
+
 + (NSDictionary *)transformer {
 	if (degreesTransformer) {
 		return degreesTransformer;
@@ -61,25 +68,31 @@ static NSDictionary *degreesTransformer = nil;
 		return degreesTransformer = @{ NSValueTransformerBindingOption:[[DegreesTransformer alloc] init] };
 	}
 }
+
 + (Class)transformedValueClass {
 	return [NSNumber class];
 }
+
 + (BOOL)allowsReverseTransformation {
 	return YES;
 }
+
 - (id)transformedValue:(NSNumber *)value {
 	NSNumber *result = @(value.floatValue*180/M_PI);
 	return result;
 }
+
 - (id)reverseTransformedValue:(NSNumber *)value {
 	NSNumber *result = @(value.floatValue*M_PI/180);
 	return result;
 }
+
 @end
 
 static NSDictionary *attibuteNameTransformer = nil;
 
 @implementation AttibuteNameTransformer
+
 + (NSDictionary *)transformer {
 	if (attibuteNameTransformer) {
 		return attibuteNameTransformer;
@@ -87,12 +100,15 @@ static NSDictionary *attibuteNameTransformer = nil;
 		return attibuteNameTransformer = @{ NSValueTransformerBindingOption:[[AttibuteNameTransformer alloc] init] };
 	}
 }
+
 + (Class)transformedValueClass {
 	return [NSString class];
 }
+
 + (BOOL)allowsReverseTransformation {
 	return NO;
 }
+
 - (id)transformedValue:(id)value {
 	NSString *str = value;
 	NSMutableString *str2 = [NSMutableString string];
@@ -116,47 +132,66 @@ static NSDictionary *attibuteNameTransformer = nil;
 
 	return result;
 }
+
 @end
 
-@implementation Attribute
+@implementation Attribute {
+	NSValueTransformer *_valueTransformer;
+}
+
 @synthesize
 name = _name,
 value = _value,
 editable = _editable;
 
-+ (Attribute *)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options {
-	Attribute *attribute = [[Attribute alloc] init];
-	attribute.name = name;
-	attribute.node = node;
-	attribute.type = type;
+- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options {
+	if (self = [super init]) {
+		_name = name;
+		_node = node;
+		_type = type;
 
-	NSString *setterStr = [NSString stringWithFormat:@"set%@%@:",
-						   [[attribute.name substringToIndex:1] capitalizedString],
-						   [attribute.name substringFromIndex:1]];
+		/* Cache the value transformer */
+		if(options) {
+			_valueTransformer = options[NSValueTransformerBindingOption];
+			if((id)_valueTransformer == [NSNull null])
+				_valueTransformer = nil;
+		}
 
-	if ([attribute respondsToSelector:NSSelectorFromString(attribute.name)]
-		&& [attribute respondsToSelector:NSSelectorFromString(setterStr)]) {
-		[attribute bind:attribute.name toObject:node withKeyPath:attribute.name options:options];
-		//[node bind:attribute.name toObject:attribute withKeyPath:attribute.name options:nil];
-	} else {
-		[attribute bind:@"value" toObject:node withKeyPath:attribute.name options:options];
-		//[node bind:attribute.name toObject:attribute withKeyPath:@"value" options:nil];
+		/* The property setter method's name */
+		NSString *setterStr = [NSString stringWithFormat:@"set%@%@:",
+							   [[_name substringToIndex:1] capitalizedString],
+							   [_name substringFromIndex:1]];
+
+		/* Bind the property to available accessors */
+		if ([self respondsToSelector:NSSelectorFromString(_name)]
+			&& [self respondsToSelector:NSSelectorFromString(setterStr)]) {
+			[self bind:_name toObject:node withKeyPath:_name options:options];
+		} else {
+			/* Bind the property to the 'raw' value if there isn't an accessor */
+			[self bind:@"value" toObject:node withKeyPath:_name options:options];
+		}
 	}
-
-	return attribute;
+	return self;
 }
+
++ (Attribute *)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options {
+	return [[Attribute alloc] initWithAttributeWithName:name node:node type:type options:options];
+}
+
 - (NSString *)description {
 	return [NSString stringWithFormat:@"%@ %@", _name, _type];
 }
+
 - (BOOL)isEditable {
 	return YES;
 }
+
 - (BOOL)isLeaf {
 	return YES;
 }
+
 - (void)dealloc {
 	[self unbind:@"value"];
-	//[self.node unbind:self.name];
 }
 
 /* Accessors and Mutators */
@@ -170,9 +205,11 @@ editable = _editable;
 		self.position = position;
 	}
 }
+
 - (float)x {
 	return self.position.x;
 }
+
 - (void)setY:(float)y {
 	NSPoint position = self.position;
 	if (y != position.y) {
@@ -180,9 +217,11 @@ editable = _editable;
 		self.position = position;
 	}
 }
+
 - (float)y {
 	return self.position.y;
 }
+
 - (void)setPosition:(NSPoint)position {
 	float x = self.x;
 	if (x != position.x) {
@@ -194,6 +233,7 @@ editable = _editable;
 	}
 	self.value = [NSValue valueWithPoint:position];
 }
+
 - (NSPoint)position {
 	return [self.value pointValue];
 }
@@ -207,9 +247,11 @@ editable = _editable;
 		self.size = size;
 	}
 }
+
 - (float)width {
 	return self.size.width;
 }
+
 - (void)setHeight:(float)height {
 	NSSize size = self.size;
 	if (height != size.height) {
@@ -217,9 +259,11 @@ editable = _editable;
 		self.size = size;
 	}
 }
+
 - (float)height {
 	return self.size.height;
 }
+
 - (void)setSize:(NSSize)size {
 	float width = self.width;
 	if (width != size.width) {
@@ -231,6 +275,7 @@ editable = _editable;
 	}
 	self.value = [NSValue valueWithSize:size];
 }
+
 - (NSSize)size {
 	return [self.value sizeValue];
 }
@@ -244,9 +289,11 @@ editable = _editable;
 		self.rect = rect;
 	}
 }
+
 - (float)rectX {
 	return self.rect.origin.x;
 }
+
 - (void)setRectY:(float)y {
 	NSRect rect = self.rect;
 	if (y != rect.origin.y) {
@@ -254,9 +301,11 @@ editable = _editable;
 		self.rect = rect;
 	}
 }
+
 - (float)rectY {
 	return self.rect.origin.y;
 }
+
 - (void)setRectWidth:(float)width {
 	NSRect rect = self.rect;
 	if (width != rect.size.width) {
@@ -264,9 +313,11 @@ editable = _editable;
 		self.rect = rect;
 	}
 }
+
 - (float)rectWidth {
 	return self.rect.size.width;
 }
+
 - (void)setRectHeight:(float)height {
 	NSRect rect = self.rect;
 	if (height != rect.size.height) {
@@ -274,9 +325,11 @@ editable = _editable;
 		self.rect = rect;
 	}
 }
+
 - (float)rectHeight {
 	return self.rect.size.height;
 }
+
 - (void)setRect:(NSRect)rect {
 	float x = self.rect.origin.x;
 	if (x != rect.origin.x) {
@@ -296,6 +349,7 @@ editable = _editable;
 	}
 	self.value = [NSValue valueWithRect:rect];
 }
+
 - (NSRect)rect {
 	return [self.value rectValue];
 }
@@ -316,23 +370,19 @@ editable = _editable;
 	_value = value;
 	[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
 }
+
 - (NSValue *)value {
 	return _value;
 }
+
 - (NSValue *)reverseTransformedValue {
-	NSDictionary *bindingInfo = [self infoForBinding: NSValueBinding];
 
 	/* Apply the value transformer, if one has been set */
-	NSDictionary* bindingOptions = bindingInfo[NSOptionsKey];
-	if(bindingOptions){
-		NSValueTransformer* transformer = bindingOptions[NSValueTransformerBindingOption];
-		if(transformer && (id)transformer != [NSNull null]){
-			if([[transformer class] allowsReverseTransformation]){
-				return [transformer reverseTransformedValue:_value];
-			}
-		}
+	if(_valueTransformer && [[_valueTransformer class] allowsReverseTransformation]) {
+		return [_valueTransformer reverseTransformedValue:_value];
 	}
 
+	/* Fallback to the untransformed value */
 	return _value;
 }
 
