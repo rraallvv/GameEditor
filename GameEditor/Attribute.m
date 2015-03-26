@@ -119,8 +119,12 @@ static NSDictionary *attibuteNameTransformer = nil;
 @end
 
 @implementation Attribute
-@synthesize name = _name, value = _value, editable = _editable;
-+ (Attribute *)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
+@synthesize
+name = _name,
+value = _value,
+editable = _editable;
+
++ (Attribute *)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options {
 	Attribute *attribute = [[Attribute alloc] init];
 	attribute.name = name;
 	attribute.node = node;
@@ -132,10 +136,10 @@ static NSDictionary *attibuteNameTransformer = nil;
 
 	if ([attribute respondsToSelector:NSSelectorFromString(attribute.name)]
 		&& [attribute respondsToSelector:NSSelectorFromString(setterStr)]) {
-		[attribute bind:attribute.name toObject:node withKeyPath:attribute.name options:nil];
+		[attribute bind:attribute.name toObject:node withKeyPath:attribute.name options:options];
 		//[node bind:attribute.name toObject:attribute withKeyPath:attribute.name options:nil];
 	} else {
-		[attribute bind:@"value" toObject:node withKeyPath:attribute.name options:nil];
+		[attribute bind:@"value" toObject:node withKeyPath:attribute.name options:options];
 		//[node bind:attribute.name toObject:attribute withKeyPath:@"value" options:nil];
 	}
 
@@ -187,9 +191,26 @@ static NSDictionary *attibuteNameTransformer = nil;
 }
 - (void)setValue:(NSValue *)value {
 	_value = value;
-	[_node setValue:value forKey:_name];
+	[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
 }
 - (NSValue *)value {
 	return _value;
 }
+- (NSValue *)reverseTransformedValue {
+	NSDictionary *bindingInfo = [self infoForBinding: NSValueBinding];
+
+	/* Apply the value transformer, if one has been set */
+	NSDictionary* bindingOptions = bindingInfo[NSOptionsKey];
+	if(bindingOptions){
+		NSValueTransformer* transformer = bindingOptions[NSValueTransformerBindingOption];
+		if(transformer && (id)transformer != [NSNull null]){
+			if([[transformer class] allowsReverseTransformation]){
+				return [transformer reverseTransformedValue:_value];
+			}
+		}
+	}
+
+	return _value;
+}
+
 @end
