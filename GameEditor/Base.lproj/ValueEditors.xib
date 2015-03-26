@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6751"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <tableCellView identifier="{CGPoint=dd}" id="GbV-qK-Vp4">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="65"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="uEH-hB-kyH" userLabel="position">
+                    <rect key="frame" x="0.0" y="0.0" width="172" height="65"/>
+                    <subviews>
+                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="jzj-QV-oE2" userLabel="X" customClass="StepperTextField">
+                            <rect key="frame" x="0.0" y="46" width="86" height="19"/>
+                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="X" bezelStyle="round" id="TVF-ca-BP1">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="AltIncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="DecreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <binding destination="GbV-qK-Vp4" name="editable" keyPath="objectValue.isEditable" id="QLg-ll-xE7"/>
+                                <binding destination="GbV-qK-Vp4" name="value" keyPath="objectValue.x" id="Pd4-o4-LyN"/>
+                            </connections>
+                        </textField>
+                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ut6-h1-1dS" userLabel="Y" customClass="StepperTextField">
+                            <rect key="frame" x="86" y="46" width="86" height="19"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Y" bezelStyle="round" id="ZnM-vW-FvB">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="AltIncreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="DecreaseStepper"/>
+                                <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <binding destination="GbV-qK-Vp4" name="editable" keyPath="objectValue.isEditable" id="jtp-3C-nuZ"/>
+                                <binding destination="GbV-qK-Vp4" name="value" keyPath="objectValue.y" id="ZYv-fa-C9S"/>
+                            </connections>
+                        </textField>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="Ut6-h1-1dS" secondAttribute="width" multiplier="2:1" id="1TV-Y2-sWS"/>
+                        <constraint firstItem="jzj-QV-oE2" firstAttribute="leading" secondItem="uEH-hB-kyH" secondAttribute="leading" id="3Yt-WI-gC5"/>
+                        <constraint firstAttribute="trailing" secondItem="Ut6-h1-1dS" secondAttribute="trailing" id="abb-CN-B63"/>
+                        <constraint firstItem="Ut6-h1-1dS" firstAttribute="top" secondItem="uEH-hB-kyH" secondAttribute="top" id="hNb-IM-Tya"/>
+                        <constraint firstItem="jzj-QV-oE2" firstAttribute="top" secondItem="uEH-hB-kyH" secondAttribute="top" id="o3V-Kt-coO"/>
+                        <constraint firstAttribute="width" secondItem="jzj-QV-oE2" secondAttribute="width" multiplier="2:1" id="ugj-4s-2O6"/>
+                    </constraints>
+                </customView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="top" secondItem="uEH-hB-kyH" secondAttribute="top" id="Fhw-Z0-rdu"/>
+                <constraint firstAttribute="bottom" secondItem="uEH-hB-kyH" secondAttribute="bottom" id="TTU-TO-kvm"/>
+                <constraint firstAttribute="trailing" secondItem="uEH-hB-kyH" secondAttribute="trailing" id="epy-rh-eDX"/>
+                <constraint firstItem="uEH-hB-kyH" firstAttribute="leading" secondItem="GbV-qK-Vp4" secondAttribute="leading" id="xum-kO-GdI"/>
+            </constraints>
+            <connections>
+                <outlet property="textField" destination="jzj-QV-oE2" id="MVN-XN-UTj"/>
+            </connections>
+            <point key="canvasLocation" x="445" y="524.5"/>
+        </tableCellView>
+        <tableCellView identifier="degrees" id="a63-cn-NOW">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="17"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="I6W-tz-8MY" userLabel="angle" customClass="StepperTextField">
+                    <rect key="frame" x="0.0" y="-2" width="172" height="19"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="angle" bezelStyle="round" id="S4B-dx-HbG">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
+                        <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="AltIncreaseStepper"/>
+                        <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="DecreaseStepper"/>
+                        <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <binding destination="a63-cn-NOW" name="editable" keyPath="objectValue.isEditable" id="M95-l4-w93"/>
+                        <binding destination="a63-cn-NOW" name="value" keyPath="objectValue.value" id="vYb-RM-cXt"/>
+                    </connections>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="I6W-tz-8MY" firstAttribute="leading" secondItem="a63-cn-NOW" secondAttribute="leading" id="5tI-eq-8FN"/>
+                <constraint firstItem="I6W-tz-8MY" firstAttribute="top" secondItem="a63-cn-NOW" secondAttribute="top" id="bKf-bP-43F"/>
+                <constraint firstAttribute="trailing" secondItem="I6W-tz-8MY" secondAttribute="trailing" id="ea9-MQ-sMa"/>
+            </constraints>
+            <connections>
+                <outlet property="textField" destination="I6W-tz-8MY" id="80r-YF-FEQ"/>
+            </connections>
+        </tableCellView>
+        <tableCellView identifier="d" id="f3Z-oW-3C9">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="17"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="q6s-Ku-JU0" customClass="StepperTextField">
+                    <rect key="frame" x="0.0" y="-2" width="172" height="19"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="double" bezelStyle="round" id="JnF-7H-4bZ">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
+                        <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="AltIncreaseStepper"/>
+                        <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="DecreaseStepper"/>
+                        <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <binding destination="f3Z-oW-3C9" name="editable" keyPath="objectValue.isEditable" id="KHM-lF-6wx"/>
+                        <binding destination="f3Z-oW-3C9" name="value" keyPath="objectValue.value" id="ZHb-kc-rtO"/>
+                    </connections>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="q6s-Ku-JU0" firstAttribute="top" secondItem="f3Z-oW-3C9" secondAttribute="top" id="F8M-YQ-msb"/>
+                <constraint firstAttribute="trailing" secondItem="q6s-Ku-JU0" secondAttribute="trailing" id="LgW-Ib-GOE"/>
+                <constraint firstItem="q6s-Ku-JU0" firstAttribute="leading" secondItem="f3Z-oW-3C9" secondAttribute="leading" id="mUG-Wk-Vu9"/>
+            </constraints>
+            <connections>
+                <outlet property="textField" destination="q6s-Ku-JU0" id="yzm-dT-NHS"/>
+            </connections>
+        </tableCellView>
+        <tableCellView identifier="c" id="toe-NG-Bn9">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="17"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="YBc-RN-b4y">
+                    <rect key="frame" x="-3" y="2" width="177" height="18"/>
+                    <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="yY3-6y-7Tr">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="toe-NG-Bn9" name="enabled" keyPath="objectValue.isEditable" id="iuy-IZ-0z5"/>
+                        <binding destination="toe-NG-Bn9" name="value" keyPath="objectValue.value" id="LhJ-cI-8Fo"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="YBc-RN-b4y" firstAttribute="top" secondItem="toe-NG-Bn9" secondAttribute="top" id="KpZ-An-sAt"/>
+                <constraint firstAttribute="trailing" secondItem="YBc-RN-b4y" secondAttribute="trailing" id="WAZ-eH-0YJ"/>
+                <constraint firstItem="YBc-RN-b4y" firstAttribute="leading" secondItem="toe-NG-Bn9" secondAttribute="leading" id="WrL-bb-Q9Q"/>
+            </constraints>
+        </tableCellView>
+    </objects>
+    <resources>
+        <image name="AltDecreaseStepper" width="11" height="13"/>
+        <image name="AltIncreaseStepper" width="11" height="13"/>
+        <image name="DecreaseStepper" width="11" height="13"/>
+        <image name="IncreaseStepper" width="11" height="13"/>
+    </resources>
+</document>

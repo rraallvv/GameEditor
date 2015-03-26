@@ -87,6 +87,12 @@
 	/* Setup the editor view */
 	_editorView.scene = scene;
 	_editorView.delegate = self;
+
+	NSNib *nib = [[NSNib alloc] initWithNibNamed:@"ValueEditors" bundle:nil];
+	[_outlineView registerNib:nib forIdentifier:@"{CGPoint=dd}"];
+	[_outlineView registerNib:nib forIdentifier:@"degrees"];
+	[_outlineView registerNib:nib forIdentifier:@"d"];
+	[_outlineView registerNib:nib forIdentifier:@"c"];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
