@@ -119,6 +119,7 @@ typedef enum {
 	NSRect _increaseClickableRect;
 	NSRect _decreaseClickableRect;
 	NSRect _draggableRect;
+	NSTrackingArea *_trackingArea;
 }
 
 @synthesize
@@ -130,16 +131,13 @@ alternateDec = _alternateDecreaseImage;
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
 
-		/* Default values for inspectable peoperties*/
+		/* Default values for inspectable properties*/
 		_increment = 1;
 		_increaseImage = [NSImage imageNamed:NSImageNameAddTemplate];
 		_decreaseImage = [NSImage imageNamed:NSImageNameRemoveTemplate];
 		_alternateIncreaseImage = [NSImage imageNamed:NSImageNameGoRightTemplate];
 		_alternateDecreaseImage = [NSImage imageNamed:NSImageNameGoLeftTemplate];
 		_draggingMult = 1.0;
-
-		/* Calculate the stepper button's rect */
-		[self resizeSubviewsWithOldSize:NSZeroSize];
 
 		/* Change the cell's class to TextFieldCell */
 		NSTextField *oldCell = self.cell;
@@ -151,11 +149,24 @@ alternateDec = _alternateDecreaseImage;
 
 		self.cell = cell;
 
-		/* Add mouse pointer tacking area */
-		NSTrackingArea *area = [[NSTrackingArea alloc] initWithRect:self.bounds options:NSTrackingActiveAlways|NSTrackingMouseMoved owner:self userInfo:nil];
-		[self addTrackingArea:area];
+		/* Update the cell's margin and buttons' bounds */
+		[self updateBounds];
 	}
 	return self;
+}
+
+- (void)updateTrackingAreas {
+	/* Add mouse pointer tacking area */
+	[super updateTrackingAreas];
+	if (_trackingArea == nil) {
+		_trackingArea = [[NSTrackingArea alloc] initWithRect:NSZeroRect
+													 options:NSTrackingInVisibleRect | NSTrackingActiveAlways | NSTrackingMouseMoved | NSTrackingCursorUpdate
+													   owner:self
+													userInfo:nil];
+	}
+	if (![[self trackingAreas] containsObject:_trackingArea]) {
+		[self addTrackingArea:_trackingArea];
+	}
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
@@ -174,6 +185,11 @@ alternateDec = _alternateDecreaseImage;
 	} else {
 		[_decreaseImage drawInRect:_decreaseButtonRect];
 	}
+}
+
+- (void)cursorUpdate:(NSEvent *)event {
+	NSPoint locationInView = [self convertPoint:event.locationInWindow fromView:nil];
+	[self updateCursorForLocation:locationInView];
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
@@ -272,38 +288,45 @@ alternateDec = _alternateDecreaseImage;
 	[bindingInfo[NSObservedObjectKey] setValue:value forKeyPath:bindingInfo[NSObservedKeyPathKey]];
 }
 
-- (void)resizeSubviewsWithOldSize:(NSSize)oldSize {
-	/* Calulate the rectangle where to draw the increase button */
+- (void)setFrame:(NSRect)frame {
+	[super setFrame:frame];
+	[self updateBounds];
+}
+
+- (void)updateBounds {
+	NSRect bounds = self.bounds;
+
+	/* Calculate the rectangle where to draw the increase button */
 	NSRect increaseButtonRect = NSMakeRect(0, 0, _increaseImage.size.width, _increaseImage.size.height);
-	CGFloat rightPadding = (NSHeight(self.bounds) - NSHeight(increaseButtonRect)) / 2;
-	increaseButtonRect.origin.x = NSWidth(self.bounds) - NSWidth(increaseButtonRect) - rightPadding;
+	CGFloat rightPadding = (NSHeight(bounds) - NSHeight(increaseButtonRect)) / 2;
+	increaseButtonRect.origin.x = NSWidth(bounds) - NSWidth(increaseButtonRect) - rightPadding;
 	increaseButtonRect.origin.y = rightPadding;
 	_increaseButtonRect = increaseButtonRect;
 
-	/* Calulate the rectangle where to draw the decrease button */
+	/* Calculate the rectangle where to draw the decrease button */
 	NSRect decreaseButtonRect = NSMakeRect(0, 0, _decreaseImage.size.width, _decreaseImage.size.height);
-	CGFloat leftPadding = (NSHeight(self.bounds) - NSHeight(decreaseButtonRect)) / 2;
+	CGFloat leftPadding = (NSHeight(bounds) - NSHeight(decreaseButtonRect)) / 2;
 	decreaseButtonRect.origin.x = leftPadding;
 	decreaseButtonRect.origin.y = leftPadding;
 	_decreaseButtonRect = decreaseButtonRect;
 
-	/* Calculate the recangle where to change the pointer for dragging the value */
-	_draggableRect = self.bounds;
-	leftPadding = (NSMinX(_decreaseButtonRect) - NSMinX(self.bounds)) + NSWidth(_decreaseButtonRect);
+	/* Calculate the rectangle where to change the pointer for dragging the value */
+	_draggableRect = bounds;
+	leftPadding = (NSMinX(_decreaseButtonRect) - NSMinX(bounds)) + NSWidth(_decreaseButtonRect);
 	_draggableRect.origin.x += leftPadding;
-	rightPadding = (NSMaxX(self.bounds) - NSMaxX(_increaseButtonRect)) + NSWidth(_increaseButtonRect);
+	rightPadding = (NSMaxX(bounds) - NSMaxX(_increaseButtonRect)) + NSWidth(_increaseButtonRect);
 	_draggableRect.size.width -= leftPadding + rightPadding;
 
 	/* calculate the are where the increase and decrease buttons are activated */
-	_increaseClickableRect = NSMakeRect(NSMaxX(_draggableRect), NSMinY(self.bounds), NSMaxX(self.bounds)-NSMaxX(_draggableRect), NSHeight(self.bounds));
-	_decreaseClickableRect = NSMakeRect(0, 0, NSMinX(_draggableRect), NSHeight(self.bounds));
+	_increaseClickableRect = NSMakeRect(NSMaxX(_draggableRect), NSMinY(bounds), NSMaxX(bounds)-NSMaxX(_draggableRect), NSHeight(bounds));
+	_decreaseClickableRect = NSMakeRect(0, 0, NSMinX(_draggableRect), NSHeight(bounds));
 
 	if ([self.cell isKindOfClass:[MarginTextFieldCell class]]) {
 		/* Desired margin */
 		CGFloat margin = (NSWidth(_increaseClickableRect) + NSWidth(_decreaseClickableRect)) / 2;
 
 		/* Compensate for intrinsic margin of the cell */
-		margin -= (self.bounds.size.width - [self.cell drawingRectForBounds:self.bounds].size.width) / 2;
+		margin -= (NSWidth(bounds) - NSWidth([self.cell drawingRectForBounds:bounds])) / 2;
 		[self.cell setMargin:margin];
 	}
 }
