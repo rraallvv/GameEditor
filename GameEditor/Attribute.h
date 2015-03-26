@@ -27,17 +27,6 @@
 #import <objc/runtime.h>
 #import <SpriteKit/SpriteKit.h>
 
-@implementation SKNode (test)
-- (void)setX:(float)value {
-	CGPoint point = self.position;
-	point.x = value;
-	self.position = point;
-}
-- (float)x {
-	return self.position.x;
-}
-@end
-
 @interface PointTransformer : NSValueTransformer
 + (NSDictionary *)transformer;
 @end

@@ -156,7 +156,7 @@ editable = _editable;
 	//[self.node unbind:self.name];
 }
 
-#pragma mark - position accessors
+#pragma mark position accessors
 
 - (void)setX:(float)x {
 	NSPoint position = self.position;
@@ -193,7 +193,7 @@ editable = _editable;
 	return [self.value pointValue];
 }
 
-#pragma mark - size accessors
+#pragma mark size accessors
 
 - (void)setWidth:(float)width {
 	NSSize size = self.size;
@@ -230,7 +230,7 @@ editable = _editable;
 	return [self.value sizeValue];
 }
 
-#pragma mark - rect accessors
+#pragma mark rect accessors
 
 - (void)setRectX:(float)x {
 	NSRect rect = self.rect;
@@ -295,7 +295,7 @@ editable = _editable;
 	return [self.value rectValue];
 }
 
-#pragma mark - value
+#pragma mark value
 
 - (void)setValue:(NSValue *)value {
 	_value = value;
