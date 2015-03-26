@@ -137,7 +137,6 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="16" outlineTableColumn="XrN-W1-UcV" id="zW2-BO-taF" customClass="OutlineView">
-                                    <rect key="frame" x="0.0" y="0.0" width="238" height="134"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="calibratedRGB"/>
@@ -193,12 +192,12 @@
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="M03-u6-Cp5" name="toolTip" keyPath="objectValue.name" id="D9Z-NE-bje">
+                                                                <binding destination="M03-u6-Cp5" name="value" keyPath="objectValue.name" id="5Rn-gn-EYj">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">AttibuteNameTransformer</string>
                                                                     </dictionary>
                                                                 </binding>
-                                                                <binding destination="M03-u6-Cp5" name="value" keyPath="objectValue.name" id="5Rn-gn-EYj">
+                                                                <binding destination="M03-u6-Cp5" name="toolTip" keyPath="objectValue.name" id="D9Z-NE-bje">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">AttibuteNameTransformer</string>
                                                                     </dictionary>
@@ -370,11 +369,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                             <connections>
                                                                 <binding destination="br8-Hk-Tf6" name="editable" keyPath="objectValue.isEditable" id="f2R-Gq-WMj"/>
-                                                                <binding destination="br8-Hk-Tf6" name="value" keyPath="objectValue.value" id="UYb-IO-uDq">
-                                                                    <dictionary key="options">
-                                                                        <string key="NSValueTransformerName">DegreesTransformer</string>
-                                                                    </dictionary>
-                                                                </binding>
+                                                                <binding destination="br8-Hk-Tf6" name="value" keyPath="objectValue.value" id="ubk-20-Xgv"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
@@ -424,7 +419,7 @@
                             <constraint firstAttribute="width" constant="258" id="Zy7-qV-Crx"/>
                         </constraints>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="ixu-WY-daf">
-                            <rect key="frame" x="1" y="118.48321825265884" width="236.85951614379883" height="15"/>
+                            <rect key="frame" x="1" y="118.48321825265884" width="237" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="IRe-Lz-fiY">
