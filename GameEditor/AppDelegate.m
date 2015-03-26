@@ -27,6 +27,7 @@
 #import "GameScene.h"
 #import "Attribute.h"
 #import "OutlineView.h"
+#import "FloatsTableCellView.h"
 
 @implementation SKScene (Unarchive)
 
@@ -114,17 +115,24 @@
 }
 
 - (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
+	id view = nil;
 	if ([self isGroupItem:item]) {
-		return [outlineView makeViewWithIdentifier:@"group" owner:self];
+		view = [outlineView makeViewWithIdentifier:@"group" owner:self];
 	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
-		return [outlineView makeViewWithIdentifier:@"name" owner:self];
+		view = [outlineView makeViewWithIdentifier:@"name" owner:self];
 	} else {
 		NSString *type = [[item representedObject] valueForKey:@"type"];
-		NSView *view = [outlineView makeViewWithIdentifier:type owner:self];
-		if (!view)
-			return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
-		return view;
+		view = [outlineView makeViewWithIdentifier:type owner:self];
+		if (view && [view respondsToSelector:@selector(setLabels:)]) {
+			if([type isEqualToString:@"{CGSize=dd}"])
+				[view setLabels:@[@"W", @"H"]];
+			else
+				[view setLabels:@[@"X", @"Y", @"W", @"H"]];
+		} else {
+			view = [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
+		}
 	}
+	return view;
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item {
