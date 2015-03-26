@@ -174,7 +174,7 @@ editable = _editable;
 	return self;
 }
 
-+ (Attribute *)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options {
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options {
 	return [[Attribute alloc] initWithAttributeWithName:name node:node type:type options:options];
 }
 
@@ -352,16 +352,6 @@ editable = _editable;
 
 - (NSRect)rect {
 	return [self.value rectValue];
-}
-
-#pragma mark value
-
-- (void)setColor:(NSColor *)color {
-	self.value = color;
-}
-
-- (NSColor *)color {
-	return self.value;
 }
 
 #pragma mark value
