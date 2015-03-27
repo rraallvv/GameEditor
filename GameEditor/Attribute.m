@@ -208,15 +208,18 @@ value = _value;
 }
 
 - (id)valueForUndefinedKey:(NSString *)key {
-	if ([key isEqualToString:@"label1"]) {
-		return _labels[0];
-	} else if ([key isEqualToString:@"label2"]) {
-		return _labels[1];
-	} else if ([key isEqualToString:@"label3"]) {
-		return _labels[2];
-	} else if ([key isEqualToString:@"label4"]) {
-		return _labels[3];
+
+	/* Retrieve properties with subindex */
+	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
+	NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
+
+	NSString *name = [key substringWithRange:[result rangeAtIndex:1]];
+	NSInteger subindex = [[key substringWithRange:[result rangeAtIndex:2]] integerValue];
+
+	if ([name isEqualToString:@"label"]) {
+		return _labels[subindex - 1]; // labels have 1-based subindex (label1, label2, etc.)
 	}
+
 	return [super valueForUndefinedKey:key];
 }
 
