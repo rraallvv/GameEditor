@@ -277,46 +277,30 @@ name = _name;
 		_value = value;
 		[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
 
+		NSInteger componentsCount = 0;
+		CGFloat *components = NULL;
+
 		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+			componentsCount = 2;
 			CGPoint point = [[self valueForKey:@"value"] pointValue];
-
-			[self willChangeValueForKey:@"value1"];
-			[self setValue:@(point.x) forKey:@"value1"];
-			[self didChangeValueForKey:@"value1"];
-
-			[self willChangeValueForKey:@"value2"];
-			[self setValue:@(point.y) forKey:@"value2"];
-			[self didChangeValueForKey:@"value2"];
+			components = (CGFloat*)&point;
 
 		} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+			componentsCount = 2;
 			CGSize size = [[self valueForKey:@"value"] sizeValue];
-
-			[self willChangeValueForKey:@"value1"];
-			[self setValue:@(size.width) forKey:@"value1"];
-			[self didChangeValueForKey:@"value1"];
-
-			[self willChangeValueForKey:@"value2"];
-			[self setValue:@(size.height) forKey:@"value2"];
-			[self didChangeValueForKey:@"value2"];
+			components = (CGFloat*)&size;
 
 		} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+			componentsCount = 4;
 			CGRect rect = [[self valueForKey:@"value"] rectValue];
+			components = (CGFloat*)&rect;
+		}
 
-			[self willChangeValueForKey:@"value1"];
-			[self setValue:@(rect.origin.x) forKey:@"value1"];
-			[self didChangeValueForKey:@"value1"];
-
-			[self willChangeValueForKey:@"value2"];
-			[self setValue:@(rect.origin.y) forKey:@"value2"];
-			[self didChangeValueForKey:@"value2"];
-
-			[self willChangeValueForKey:@"value3"];
-			[self setValue:@(rect.size.width) forKey:@"value3"];
-			[self didChangeValueForKey:@"value3"];
-
-			[self willChangeValueForKey:@"value4"];
-			[self setValue:@(rect.size.height) forKey:@"value4"];
-			[self didChangeValueForKey:@"value4"];
+		for (int index = 0; index < componentsCount; ++index) {
+			NSString *valueWithSubindex = [NSString stringWithFormat:@"value%d", index + 1];
+			[self willChangeValueForKey:valueWithSubindex];
+			[self setValue:@(components[index]) forKey:valueWithSubindex];
+			[self didChangeValueForKey:valueWithSubindex];
 		}
 
 	} else {
