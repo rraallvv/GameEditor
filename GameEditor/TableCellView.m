@@ -36,24 +36,31 @@
 	_textFields = [NSMutableArray array];
 
 	if ([objectValue isKindOfClass:[Attribute class]]) {
-		//NSValueTransformer *transformer = [objectValue numberFormatter];
 		[self listTextFields:self];
+		for (NSTextField *textField in _textFields) {
+			textField.formatter = [objectValue formatter];
+		}
 	}
+
+	if (_textFields.count == 0)
+		_textFields = nil;
 }
 
 - (void)listTextFields:(id)view {
 	for (id subview in [view subviews]) {
 		if ([subview isKindOfClass:[NSTextField class]]) {
-			[self bindingInfoForObject:subview];
-			[_textFields addObject:subview];
+			NSString *observedKey = [self observedKeyForObject:subview];
+			if (observedKey && [observedKey rangeOfString:@"(\\.|^)value\\d*$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				[_textFields addObject:subview];
+			}
 		}
 		[self listTextFields:subview];
 	}
 }
 
-- (void) bindingInfoForObject:(id)object {
+- (NSString *)observedKeyForObject:(id)object {
 	NSDictionary *bindingInfo = [object infoForBinding: NSValueBinding];
-	NSLog(@"%@", bindingInfo[NSObservedKeyPathKey]);
+	return bindingInfo[NSObservedKeyPathKey];
 }
 
 @end

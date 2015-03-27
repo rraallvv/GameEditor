@@ -45,5 +45,5 @@
 @property (copy) NSString *name;
 @property (nonatomic, assign) BOOL editable;
 @property (weak) SKNode *node;
-@property NSNumberFormatter *numberFormatter;
+@property id formatter;
 @end

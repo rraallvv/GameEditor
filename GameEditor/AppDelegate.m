@@ -169,10 +169,18 @@
 
 				if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:[DegreesTransformer transformer]];
+
+					NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+					formatter.numberStyle = NSNumberFormatterDecimalStyle;
+					formatter.negativeFormat = formatter.positiveFormat = @"#.###º";
+					attribute.formatter = formatter;
+
 					[children addObject:attribute];
+
 				} else if ([attributeName rangeOfString:@"color" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:nil];
 					[children addObject:attribute];
+
 				} else {
 					BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
 					NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
