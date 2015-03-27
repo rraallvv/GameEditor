@@ -28,6 +28,7 @@
 static NSDictionary *pointTransformer = nil;
 
 @implementation PointTransformer
+
 + (NSDictionary *)transformer {
 	if (pointTransformer) {
 		return pointTransformer;
@@ -35,25 +36,31 @@ static NSDictionary *pointTransformer = nil;
 		return pointTransformer = @{ NSValueTransformerBindingOption:[[PointTransformer alloc] init] };
 	}
 }
+
 + (Class)transformedValueClass {
 	return [NSValue class];
 }
+
 + (BOOL)allowsReverseTransformation {
 	return YES;
 }
+
 - (id)transformedValue:(id)value {
 	NSValue *result = value;
 	return result;
 }
+
 - (id)reverseTransformedValue:(id)value {
 	NSValue *result = [NSValue valueWithPoint:NSPointFromString(value)];
 	return result;
 }
+
 @end
 
 static NSDictionary *degreesTransformer = nil;
 
 @implementation DegreesTransformer
+
 + (NSDictionary *)transformer {
 	if (degreesTransformer) {
 		return degreesTransformer;
@@ -61,25 +68,31 @@ static NSDictionary *degreesTransformer = nil;
 		return degreesTransformer = @{ NSValueTransformerBindingOption:[[DegreesTransformer alloc] init] };
 	}
 }
+
 + (Class)transformedValueClass {
 	return [NSNumber class];
 }
+
 + (BOOL)allowsReverseTransformation {
 	return YES;
 }
+
 - (id)transformedValue:(NSNumber *)value {
 	NSNumber *result = @(value.floatValue*180/M_PI);
 	return result;
 }
+
 - (id)reverseTransformedValue:(NSNumber *)value {
 	NSNumber *result = @(value.floatValue*M_PI/180);
 	return result;
 }
+
 @end
 
 static NSDictionary *attibuteNameTransformer = nil;
 
 @implementation AttibuteNameTransformer
+
 + (NSDictionary *)transformer {
 	if (attibuteNameTransformer) {
 		return attibuteNameTransformer;
@@ -87,12 +100,15 @@ static NSDictionary *attibuteNameTransformer = nil;
 		return attibuteNameTransformer = @{ NSValueTransformerBindingOption:[[AttibuteNameTransformer alloc] init] };
 	}
 }
+
 + (Class)transformedValueClass {
 	return [NSString class];
 }
+
 + (BOOL)allowsReverseTransformation {
 	return NO;
 }
+
 - (id)transformedValue:(id)value {
 	NSString *str = value;
 	NSMutableString *str2 = [NSMutableString string];
@@ -116,101 +132,222 @@ static NSDictionary *attibuteNameTransformer = nil;
 
 	return result;
 }
+
 @end
 
-@implementation Attribute
-@synthesize
-name = _name,
-value = _value,
-editable = _editable;
-
-+ (Attribute *)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options {
-	Attribute *attribute = [[Attribute alloc] init];
-	attribute.name = name;
-	attribute.node = node;
-	attribute.type = type;
-
-	NSString *setterStr = [NSString stringWithFormat:@"set%@%@:",
-						   [[attribute.name substringToIndex:1] capitalizedString],
-						   [attribute.name substringFromIndex:1]];
-
-	if ([attribute respondsToSelector:NSSelectorFromString(attribute.name)]
-		&& [attribute respondsToSelector:NSSelectorFromString(setterStr)]) {
-		[attribute bind:attribute.name toObject:node withKeyPath:attribute.name options:options];
-		//[node bind:attribute.name toObject:attribute withKeyPath:attribute.name options:nil];
-	} else {
-		[attribute bind:@"value" toObject:node withKeyPath:attribute.name options:options];
-		//[node bind:attribute.name toObject:attribute withKeyPath:@"value" options:nil];
-	}
-
-	return attribute;
+@implementation Attribute {
+	NSValueTransformer *_valueTransformer;
+	NSArray *_labels;
+	NSString *_type;
+	id _value;
 }
+
+@synthesize
+name = _name;
+
+- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options {
+	if (self = [super init]) {
+		_name = name;
+		_node = node;
+		_type = type;
+
+		/* Prepare the labels and identifier for the editor */
+		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+			_labels = @[@"X", @"Y"];
+		} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+			_labels = @[@"W", @"H"];
+		} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+			_labels = @[@"X", @"Y", @"W", @"H"];
+		}
+
+		/* Cache the value transformer */
+		if(options) {
+			_valueTransformer = options[NSValueTransformerBindingOption];
+			if((id)_valueTransformer == [NSNull null])
+				_valueTransformer = nil;
+		}
+
+		/* The property setter method's name */
+		NSString *setterStr = [NSString stringWithFormat:@"set%@%@:",
+							   [[_name substringToIndex:1] capitalizedString],
+							   [_name substringFromIndex:1]];
+
+		/* Bind the property to available accessors */
+		if ([self respondsToSelector:NSSelectorFromString(_name)]
+			&& [self respondsToSelector:NSSelectorFromString(setterStr)]) {
+			[self bind:@"value" toObject:node withKeyPath:_name options:options];
+		} else {
+			/* Bind the property to the 'raw' value if there isn't an accessor */
+			[self bind:@"value" toObject:node withKeyPath:_name options:options];
+		}
+	}
+	return self;
+}
+
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options {
+	return [[Attribute alloc] initWithAttributeWithName:name node:node type:type options:options];
+}
+
+- (NSString *)description {
+	return [NSString stringWithFormat:@"%@ %@", _name, _type];
+}
+
+- (NSString *)editor {
+	if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+		return @"dd";
+	} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+		return @"dd";
+	} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+		return @"dddd";
+	}
+	return _type;
+}
+
+- (NSString *)type {
+	return _type;
+}
+
 - (BOOL)isEditable {
 	return YES;
 }
+
 - (BOOL)isLeaf {
 	return YES;
 }
+
 - (void)dealloc {
 	[self unbind:@"value"];
-	[self.node unbind:self.name];
 }
-- (void)setX:(float)x {
-	NSPoint position = self.position;
-	if (x != position.x) {
-		position.x = x;
-		self.position = position;
-	}
-}
-- (float)x {
-	return self.position.x;
-}
-- (void)setY:(float)y {
-	NSPoint position = self.position;
-	if (y != position.y) {
-		position.y = y;
-		self.position = position;
-	}
-}
-- (float)y {
-	return self.position.y;
-}
-- (void)setPosition:(NSPoint)position {
-	float x = self.x;
-	if (x != position.x) {
-		self.x = x;
-	}
-	float y = self.y;
-	if (y != position.y) {
-		self.y = y;
-	}
-	self.value = [NSValue valueWithPoint:position];
-}
-- (NSPoint)position {
-	return [self.value pointValue];
-}
-- (void)setValue:(NSValue *)value {
-	_value = value;
-	[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
-}
-- (NSValue *)value {
-	return _value;
-}
+
+#pragma mark value
+
 - (NSValue *)reverseTransformedValue {
-	NSDictionary *bindingInfo = [self infoForBinding: NSValueBinding];
 
 	/* Apply the value transformer, if one has been set */
-	NSDictionary* bindingOptions = bindingInfo[NSOptionsKey];
-	if(bindingOptions){
-		NSValueTransformer* transformer = bindingOptions[NSValueTransformerBindingOption];
-		if(transformer && (id)transformer != [NSNull null]){
-			if([[transformer class] allowsReverseTransformation]){
-				return [transformer reverseTransformedValue:_value];
+	if(_valueTransformer && [[_valueTransformer class] allowsReverseTransformation]) {
+		return [_valueTransformer reverseTransformedValue:_value];
+	}
+
+	/* Fallback to the untransformed value */
+	return _value;
+}
+
+- (id)valueForKey:(NSString *)key {
+	if ([key isEqualToString:@"value"]) {
+		return _value;
+	} else {
+		/* Try to get a subindex from the key */
+		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
+		NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
+
+		NSString *name = [key substringWithRange:[result rangeAtIndex:1]];
+		NSInteger subindex = [[key substringWithRange:[result rangeAtIndex:2]] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
+
+		if ([name isEqualToString:@"label"]) {
+
+			/* The key is a subindex of label */
+			return _labels[subindex];
+
+		} else if ([name isEqualToString:@"value"]) {
+
+			/* The key is a subindex of value */
+
+			if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+				CGPoint point = [_value pointValue];
+				return @(((CGFloat*)&point)[subindex]);
+
+			} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+				CGSize size = [_value sizeValue];
+				return @(((CGFloat*)&size)[subindex]);
+
+			} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+				CGRect rect = [_value rectValue];
+				return @(((CGFloat*)&rect)[subindex]);
 			}
 		}
 	}
+	return [super valueForKey:key];
+}
 
-	return _value;
+- (void)setValue:(id)value forKey:(NSString *)key {
+
+	if ([key isEqualToString:@"value"]) {
+
+		/* Do nothing if the value hasn't changed */
+		if ([_value isEqual:value])
+			return;
+
+		_value = value;
+
+		/* Update the bound object's property value */
+		[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
+
+		/* Get a pointer to the raw data if it's a compound value */
+		NSInteger componentsCount = 0;
+		CGFloat *components = NULL;
+
+		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+			componentsCount = 2;
+			CGPoint point = [[self valueForKey:@"value"] pointValue];
+			components = (CGFloat*)&point;
+
+		} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+			componentsCount = 2;
+			CGSize size = [[self valueForKey:@"value"] sizeValue];
+			components = (CGFloat*)&size;
+
+		} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+			componentsCount = 4;
+			CGRect rect = [[self valueForKey:@"value"] rectValue];
+			components = (CGFloat*)&rect;
+		}
+
+		/* Traverse the value subindexes and update each component */
+		for (int index = 0; index < componentsCount; ++index) {
+			NSString *valueWithSubindex = [NSString stringWithFormat:@"value%d", index + 1];
+			[self willChangeValueForKey:valueWithSubindex];
+			[self setValue:@(components[index]) forKey:valueWithSubindex];
+			[self didChangeValueForKey:valueWithSubindex];
+		}
+
+	} else {
+
+		/* Retrieve the subindex */
+		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
+		NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
+
+		NSString *name = [key substringWithRange:[result rangeAtIndex:1]];
+		NSInteger subindex = [[key substringWithRange:[result rangeAtIndex:2]] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
+
+		if ([name isEqualToString:@"value"]) {
+
+			/* Update the value component for the given subindex */
+
+			if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+				CGPoint point = [[self valueForKey:@"value"] pointValue];
+				CGFloat *components = (CGFloat*)&point;
+				components[subindex] = [value floatValue];
+				[self setValue:[NSValue valueWithPoint:point] forKey:@"value"];
+
+			} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+				CGSize size = [[self valueForKey:@"value"] sizeValue];
+				CGFloat *components = (CGFloat*)&size;
+				components[subindex] = [value floatValue];
+				[self setValue:[NSValue valueWithSize:size] forKey:@"value"];
+
+			} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+				CGRect rect = [[self valueForKey:@"value"] rectValue];
+				CGFloat *components = (CGFloat*)&rect;
+				components[subindex] = [value floatValue];
+				[self setValue:[NSValue valueWithRect:rect] forKey:@"value"];
+			}
+
+		} else {
+
+			/* Fall back to the superclass default behavior if the key is not a value */
+			[super setValue:value forKey:key];
+		}
+	}
 }
 
 @end
