@@ -195,8 +195,10 @@ name = _name;
 - (NSString *)editor {
 	if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
 		return @"dd";
-	} else 	if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+	} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
 		return @"dd";
+	} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+		return @"dddd";
 	}
 	return _type;
 }
@@ -218,80 +220,6 @@ name = _name;
 }
 
 /* Accessors and Mutators */
-
-#pragma mark rect accessors
-
-- (void)setRectX:(float)x {
-	NSRect rect = self.rect;
-	if (x != rect.origin.x) {
-		rect.origin.x = x;
-		self.rect = rect;
-	}
-}
-
-- (float)rectX {
-	return self.rect.origin.x;
-}
-
-- (void)setRectY:(float)y {
-	NSRect rect = self.rect;
-	if (y != rect.origin.y) {
-		rect.origin.y = y;
-		self.rect = rect;
-	}
-}
-
-- (float)rectY {
-	return self.rect.origin.y;
-}
-
-- (void)setRectWidth:(float)width {
-	NSRect rect = self.rect;
-	if (width != rect.size.width) {
-		rect.size.width = width;
-		self.rect = rect;
-	}
-}
-
-- (float)rectWidth {
-	return self.rect.size.width;
-}
-
-- (void)setRectHeight:(float)height {
-	NSRect rect = self.rect;
-	if (height != rect.size.height) {
-		rect.size.height = height;
-		self.rect = rect;
-	}
-}
-
-- (float)rectHeight {
-	return self.rect.size.height;
-}
-
-- (void)setRect:(NSRect)rect {
-	float x = self.rect.origin.x;
-	if (x != rect.origin.x) {
-		self.rectX = x;
-	}
-	float y = self.rect.origin.y;
-	if (y != rect.origin.y) {
-		self.rectHeight = y;
-	}
-	float width = self.rect.size.width;
-	if (width != rect.size.width) {
-		self.rectWidth = width;
-	}
-	float height = self.rect.size.height;
-	if (height != rect.size.height) {
-		self.rectHeight = height;
-	}
-	[self setValue:[NSValue valueWithRect:rect] forKey:@"value"];
-}
-
-- (NSRect)rect {
-	return [[self valueForKey:@"value"] rectValue];
-}
 
 #pragma mark value
 
@@ -319,16 +247,22 @@ name = _name;
 
 		if ([name isEqualToString:@"label"]) {
 			return _labels[subindex];
+
 		} else if ([name isEqualToString:@"value"]) {
+
 			if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
 				CGPoint point = [_value pointValue];
 				return @(((CGFloat*)&point)[subindex]);
 			} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
 				CGSize size = [_value sizeValue];
 				return @(((CGFloat*)&size)[subindex]);
+			} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+				CGRect rect = [_value rectValue];
+				return @(((CGFloat*)&rect)[subindex]);
 			} else {
 				return [super valueForKey:key];
 			}
+
 		} else {
 			return [super valueForKey:key];
 		}
@@ -353,6 +287,7 @@ name = _name;
 			[self willChangeValueForKey:@"value2"];
 			[self setValue:@(point.y) forKey:@"value2"];
 			[self didChangeValueForKey:@"value2"];
+
 		} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
 			CGSize size = [[self valueForKey:@"value"] sizeValue];
 
@@ -363,9 +298,29 @@ name = _name;
 			[self willChangeValueForKey:@"value2"];
 			[self setValue:@(size.height) forKey:@"value2"];
 			[self didChangeValueForKey:@"value2"];
+
+		} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+			CGRect rect = [[self valueForKey:@"value"] rectValue];
+
+			[self willChangeValueForKey:@"value1"];
+			[self setValue:@(rect.origin.x) forKey:@"value1"];
+			[self didChangeValueForKey:@"value1"];
+
+			[self willChangeValueForKey:@"value2"];
+			[self setValue:@(rect.origin.y) forKey:@"value2"];
+			[self didChangeValueForKey:@"value2"];
+
+			[self willChangeValueForKey:@"value3"];
+			[self setValue:@(rect.size.width) forKey:@"value3"];
+			[self didChangeValueForKey:@"value3"];
+
+			[self willChangeValueForKey:@"value4"];
+			[self setValue:@(rect.size.height) forKey:@"value4"];
+			[self didChangeValueForKey:@"value4"];
 		}
 
 	} else {
+
 		/* Retrieve the subindex */
 		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
 		NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
@@ -374,17 +329,26 @@ name = _name;
 		NSInteger subindex = [[key substringWithRange:[result rangeAtIndex:2]] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
 
 		if ([name isEqualToString:@"value"]) {
+
 			if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
 				CGPoint point = [[self valueForKey:@"value"] pointValue];
 				CGFloat *components = (CGFloat*)&point;
 				components[subindex] = [value floatValue];
 				[self setValue:[NSValue valueWithPoint:point] forKey:@"value"];
+
 			} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
 				CGSize size = [[self valueForKey:@"value"] sizeValue];
 				CGFloat *components = (CGFloat*)&size;
 				components[subindex] = [value floatValue];
 				[self setValue:[NSValue valueWithSize:size] forKey:@"value"];
+
+			} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+				CGRect rect = [[self valueForKey:@"value"] rectValue];
+				CGFloat *components = (CGFloat*)&rect;
+				components[subindex] = [value floatValue];
+				[self setValue:[NSValue valueWithRect:rect] forKey:@"value"];
 			}
+
 		} else {
 			[super setValue:value forKey:key];
 		}
