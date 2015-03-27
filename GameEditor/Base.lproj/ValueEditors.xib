@@ -8,16 +8,16 @@
         <customObject id="-2" userLabel="File's Owner"/>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <tableCellView identifier="{CGPoint=dd}" id="GbV-qK-Vp4" userLabel="{CGPoint=dd}">
+        <tableCellView identifier="dd" id="GbV-qK-Vp4" userLabel="dd">
             <rect key="frame" x="0.0" y="0.0" width="172" height="30"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <customView translatesAutoresizingMaskIntoConstraints="NO" id="uEH-hB-kyH" userLabel="position">
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="uEH-hB-kyH">
                     <rect key="frame" x="0.0" y="0.0" width="172" height="30"/>
                     <subviews>
-                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="jzj-QV-oE2" userLabel="X" customClass="StepperTextField">
+                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="jzj-QV-oE2" userLabel="Value" customClass="StepperTextField">
                             <rect key="frame" x="0.0" y="11" width="87" height="19"/>
-                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="X" bezelStyle="round" id="TVF-ca-BP1">
+                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" bezelStyle="round" id="TVF-ca-BP1">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -30,12 +30,12 @@
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <binding destination="GbV-qK-Vp4" name="editable" keyPath="objectValue.isEditable" id="QLg-ll-xE7"/>
-                                <binding destination="GbV-qK-Vp4" name="value" keyPath="objectValue.x" id="Pd4-o4-LyN"/>
+                                <binding destination="GbV-qK-Vp4" name="value" keyPath="objectValue.value1" id="BhX-Tm-cUs"/>
                             </connections>
                         </textField>
-                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ut6-h1-1dS" userLabel="Y" customClass="StepperTextField">
+                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ut6-h1-1dS" userLabel="Value" customClass="StepperTextField">
                             <rect key="frame" x="87" y="11" width="85" height="19"/>
-                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" title="Y" bezelStyle="round" id="ZnM-vW-FvB">
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" bezelStyle="round" id="ZnM-vW-FvB">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -48,7 +48,7 @@
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <binding destination="GbV-qK-Vp4" name="editable" keyPath="objectValue.isEditable" id="jtp-3C-nuZ"/>
-                                <binding destination="GbV-qK-Vp4" name="value" keyPath="objectValue.y" id="ZYv-fa-C9S"/>
+                                <binding destination="GbV-qK-Vp4" name="value" keyPath="objectValue.value2" id="2qV-Ll-tOk"/>
                             </connections>
                         </textField>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pEa-Ah-cwv">

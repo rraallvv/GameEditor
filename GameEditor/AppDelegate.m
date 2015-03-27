@@ -119,7 +119,7 @@
 	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
 		return [outlineView makeViewWithIdentifier:@"name" owner:self];
 	} else {
-		NSString *type = [[item representedObject] valueForKey:@"type"];
+		NSString *type = [[item representedObject] valueForKey:@"editor"];
 		id view = [outlineView makeViewWithIdentifier:type owner:self];
 		if (!view) {
 			return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
@@ -133,7 +133,7 @@
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	NSString *type = [[item representedObject] valueForKey:@"type"];
+	NSString *type = [[item representedObject] valueForKey:@"editor"];
 	NSSize size = [_prefferedSizes[type] sizeValue];
 	return MAX(20, size.height);
 }
@@ -185,7 +185,7 @@
 #if 1// Show non editable properties
 						NSDictionary *attribute = @{@"name": attributeName,
 													@"value": @"(non-editable)",
-													@"type": @"generic attribute",
+													@"editor": @"generic attribute",
 													@"node": [NSNull null],
 													@"description": [NSString stringWithFormat:@"%@ %@", attributeName, attributeType],
 													@"isLeaf": @YES,

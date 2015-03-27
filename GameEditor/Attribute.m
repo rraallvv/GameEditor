@@ -154,13 +154,10 @@ name = _name;
 		/* Prepare the labels and identifier for the editor */
 		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
 			_labels = @[@"X", @"Y"];
-			//_type = @"dd";
 		} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
 			_labels = @[@"W", @"H"];
-			//_type = @"dd";
 		} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
 			_labels = @[@"X", @"Y", @"W", @"H"];
-			//_type = @"dddd";
 		}
 
 		/* Cache the value transformer */
@@ -178,7 +175,7 @@ name = _name;
 		/* Bind the property to available accessors */
 		if ([self respondsToSelector:NSSelectorFromString(_name)]
 			&& [self respondsToSelector:NSSelectorFromString(setterStr)]) {
-			[self bind:_name toObject:node withKeyPath:_name options:options];
+			[self bind:@"value" toObject:node withKeyPath:_name options:options];
 		} else {
 			/* Bind the property to the 'raw' value if there isn't an accessor */
 			[self bind:@"value" toObject:node withKeyPath:_name options:options];
@@ -193,6 +190,13 @@ name = _name;
 
 - (NSString *)description {
 	return [NSString stringWithFormat:@"%@ %@", _name, _type];
+}
+
+- (NSString *)editor {
+	if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+		return @"dd";
+	}
+	return _type;
 }
 
 - (NSString *)type {
@@ -212,48 +216,6 @@ name = _name;
 }
 
 /* Accessors and Mutators */
-
-#pragma mark position accessors
-
-- (void)setX:(float)x {
-	NSPoint position = self.position;
-	if (x != position.x) {
-		position.x = x;
-		self.position = position;
-	}
-}
-
-- (float)x {
-	return self.position.x;
-}
-
-- (void)setY:(float)y {
-	NSPoint position = self.position;
-	if (y != position.y) {
-		position.y = y;
-		self.position = position;
-	}
-}
-
-- (float)y {
-	return self.position.y;
-}
-
-- (void)setPosition:(NSPoint)position {
-	float x = self.x;
-	if (x != position.x) {
-		self.x = x;
-	}
-	float y = self.y;
-	if (y != position.y) {
-		self.y = y;
-	}
-	[self setValue:[NSValue valueWithPoint:position] forKey:@"value"];
-}
-
-- (NSPoint)position {
-	return [[self valueForKey:@"value"] pointValue];
-}
 
 #pragma mark size accessors
 
@@ -399,7 +361,7 @@ name = _name;
 			return _labels[subindex];
 		} else if ([name isEqualToString:@"value"]) {
 			if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
-				CGPoint point = self.position;
+				CGPoint point = [_value pointValue];
 				return @(((CGFloat*)&point)[subindex]);
 			} else {
 				return [super valueForKey:key];
@@ -413,8 +375,22 @@ name = _name;
 
 - (void)setValue:(id)value forKey:(NSString *)key {
 	if ([key isEqualToString:@"value"]) {
+		if ([_value isEqualToValue:value])
+			return;
 		_value = value;
 		[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
+
+		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+			CGPoint point = [[self valueForKey:@"value"] pointValue];
+
+			[self willChangeValueForKey:@"value1"];
+			[self setValue:@(point.x) forKey:@"value1"];
+			[self didChangeValueForKey:@"value1"];
+
+			[self willChangeValueForKey:@"value2"];
+			[self setValue:@(point.y) forKey:@"value2"];
+			[self didChangeValueForKey:@"value2"];
+		}
 	} else {
 		/* Retrieve the subindex */
 		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
@@ -426,8 +402,9 @@ name = _name;
 		if ([name isEqualToString:@"value"]) {
 			if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
 				CGPoint point = [[self valueForKey:@"value"] pointValue];
-				((CGFloat*)(&point))[subindex] = [value floatValue];
-				self.position = point;
+				CGFloat *components = (CGFloat*)&point;
+				components[subindex] = [value floatValue];
+				[self setValue:[NSValue valueWithPoint:point] forKey:@"value"];
 			}
 		} else {
 			[super setValue:value forKey:key];
