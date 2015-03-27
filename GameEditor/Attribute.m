@@ -277,7 +277,9 @@ name = _name;
 		if ([_value isEqual:value])
 			return;
 
+		[self willChangeValueForKey:@"value"];
 		_value = value;
+		[self didChangeValueForKey:@"value"];
 
 		/* Update the bound object's property value */
 		[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
