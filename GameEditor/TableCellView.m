@@ -1,5 +1,5 @@
 /*
- * Attribute.h
+ * TableCellView.m
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,27 +23,37 @@
  * THE SOFTWARE.
  */
 
-#import <AppKit/AppKit.h>
-#import <objc/runtime.h>
-#import <SpriteKit/SpriteKit.h>
+#import "TableCellView.h"
+#import "Attribute.h"
 
-@interface PointTransformer : NSValueTransformer
-+ (NSDictionary *)transformer;
-@end
+@implementation TableCellView {
+	NSMutableArray *_textFields;
+}
 
-@interface DegreesTransformer : NSValueTransformer
-+ (NSDictionary *)transformer;
-@end
+- (void)setObjectValue:(id)objectValue {
+	[super setObjectValue:objectValue];
 
-@interface AttibuteNameTransformer : NSValueTransformer
-+ (NSDictionary *)transformer;
-@end
+	_textFields = [NSMutableArray array];
 
-@interface Attribute : NSObject
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options;
-- (NSString *)type;
-@property (copy) NSString *name;
-@property (nonatomic, assign) BOOL editable;
-@property (weak) SKNode *node;
-@property NSNumberFormatter *numberFormatter;
+	if ([objectValue isKindOfClass:[Attribute class]]) {
+		//NSValueTransformer *transformer = [objectValue numberFormatter];
+		[self listTextFields:self];
+	}
+}
+
+- (void)listTextFields:(id)view {
+	for (id subview in [view subviews]) {
+		if ([subview isKindOfClass:[NSTextField class]]) {
+			[self bindingInfoForObject:subview];
+			[_textFields addObject:subview];
+		}
+		[self listTextFields:subview];
+	}
+}
+
+- (void) bindingInfoForObject:(id)object {
+	NSDictionary *bindingInfo = [object infoForBinding: NSValueBinding];
+	NSLog(@"%@", bindingInfo[NSObservedKeyPathKey]);
+}
+
 @end
