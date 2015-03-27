@@ -207,22 +207,6 @@ value = _value;
 	return YES;
 }
 
-- (id)valueForUndefinedKey:(NSString *)key {
-
-	/* Retrieve properties with subindex */
-	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
-	NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
-
-	NSString *name = [key substringWithRange:[result rangeAtIndex:1]];
-	NSInteger subindex = [[key substringWithRange:[result rangeAtIndex:2]] integerValue];
-
-	if ([name isEqualToString:@"label"]) {
-		return _labels[subindex - 1]; // labels have 1-based subindex (label1, label2, etc.)
-	}
-
-	return [super valueForUndefinedKey:key];
-}
-
 - (void)dealloc {
 	[self unbind:@"value"];
 }
@@ -407,6 +391,47 @@ value = _value;
 
 	/* Fallback to the untransformed value */
 	return _value;
+}
+
+- (id)valueForUndefinedKey:(NSString *)key {
+
+	/* Retrieve the subindex */
+	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
+	NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
+
+	NSString *name = [key substringWithRange:[result rangeAtIndex:1]];
+	NSInteger subindex = [[key substringWithRange:[result rangeAtIndex:2]] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
+
+	if ([name isEqualToString:@"label"]) {
+		return _labels[subindex];
+	} else if ([name isEqualToString:@"value"]) {
+		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+			CGPoint point = self.position;
+			return @(((CGFloat*)&point)[subindex]);
+		}
+	}
+
+	return [super valueForUndefinedKey:key];
+}
+
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
+
+	/* Retrieve the subindex */
+	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
+	NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
+
+	NSString *name = [key substringWithRange:[result rangeAtIndex:1]];
+	NSInteger subindex = [[key substringWithRange:[result rangeAtIndex:2]] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
+
+	if ([name isEqualToString:@"value"]) {
+		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+			CGPoint point = [self.value pointValue];
+			((CGFloat*)(&point))[subindex] = [value floatValue];
+			self.position = point;
+		}
+	} else {
+		[super setValue:value forUndefinedKey:key];
+	}
 }
 
 @end
