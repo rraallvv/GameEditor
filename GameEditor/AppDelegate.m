@@ -61,6 +61,7 @@
 	IBOutlet EditorView *_editorView;
 	IBOutlet NSTreeController *_treeController;
 	IBOutlet NSOutlineView *_outlineView;
+	NSMutableDictionary *_prefferedSizes;
 }
 
 @synthesize window = _window;
@@ -87,6 +88,25 @@
 	/* Setup the editor view */
 	_editorView.scene = scene;
 	_editorView.delegate = self;
+
+	/* Prepare the editors for the outline view */
+	NSNib *nib = [[NSNib alloc] initWithNibNamed:@"ValueEditors" bundle:nil];
+	NSArray* objects;
+	[nib instantiateWithOwner:self topLevelObjects:&objects];
+
+	_prefferedSizes = [NSMutableDictionary dictionary];
+
+	for (id object in objects) {
+		if ([object isKindOfClass:[NSTableCellView class]]) {
+			NSTableCellView *tableCelView = object;
+
+			/* Register the identifiers for each editors */
+			[_outlineView registerNib:nib forIdentifier:tableCelView.identifier];
+
+			/* Fetch the preffered size for the editor's view */
+			_prefferedSizes[tableCelView.identifier] = [NSValue valueWithSize:tableCelView.frame.size];
+		}
+	}
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
@@ -99,10 +119,11 @@
 	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
 		return [outlineView makeViewWithIdentifier:@"name" owner:self];
 	} else {
-		NSString *type = [[item representedObject] valueForKey:@"type"];
-		NSView *view = [outlineView makeViewWithIdentifier:type owner:self];
-		if (!view)
+		NSString *type = [[item representedObject] valueForKey:@"editor"];
+		id view = [outlineView makeViewWithIdentifier:type owner:self];
+		if (!view) {
 			return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
+		}
 		return view;
 	}
 }
@@ -112,7 +133,9 @@
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	return 20;
+	NSString *type = [[item representedObject] valueForKey:@"editor"];
+	NSSize size = [_prefferedSizes[type] sizeValue];
+	return MAX(20, size.height);
 }
 
 - (BOOL) isGroupItem:(id)item {
@@ -143,8 +166,12 @@
 				NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
 				NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
 				NSString *attributeType = [attibutesArray firstObject];
+
 				if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:@"degrees" options:[DegreesTransformer transformer]];
+					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:[DegreesTransformer transformer]];
+					[children addObject:attribute];
+				} else if ([attributeName rangeOfString:@"color" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:nil];
 					[children addObject:attribute];
 				} else {
 					BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
@@ -155,13 +182,16 @@
 						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:nil];
 						[children addObject:attribute];
 					} else {
+#if 1// Show non editable properties
 						NSDictionary *attribute = @{@"name": attributeName,
 													@"value": @"(non-editable)",
-													@"type": @"generic attribute",
+													@"editor": @"generic attribute",
 													@"node": [NSNull null],
+													@"description": [NSString stringWithFormat:@"%@ %@", attributeName, attributeType],
 													@"isLeaf": @YES,
 													@"isEditable": @NO};
 						[children addObject:attribute];
+#endif
 					}
 				}
 			}

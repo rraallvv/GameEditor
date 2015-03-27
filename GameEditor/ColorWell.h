@@ -1,5 +1,5 @@
 /*
- * Attribute.h
+ * ColorWell.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,26 +23,8 @@
  * THE SOFTWARE.
  */
 
-#import <AppKit/AppKit.h>
-#import <objc/runtime.h>
-#import <SpriteKit/SpriteKit.h>
+#import <Cocoa/Cocoa.h>
 
-@interface PointTransformer : NSValueTransformer
-+ (NSDictionary *)transformer;
-@end
+@interface ColorWell : NSColorWell
 
-@interface DegreesTransformer : NSValueTransformer
-+ (NSDictionary *)transformer;
-@end
-
-@interface AttibuteNameTransformer : NSValueTransformer
-+ (NSDictionary *)transformer;
-@end
-
-@interface Attribute : NSObject
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options;
-- (NSString *)type;
-@property (copy) NSString *name;
-@property (nonatomic, assign) BOOL editable;
-@property (weak) SKNode *node;
 @end

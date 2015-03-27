@@ -1,0 +1,7 @@
+git checkout master && \
+git merge --squash develop && \
+git commit && \
+git checkout develop && \
+git merge master --no-edit
+
+
