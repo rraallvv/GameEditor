@@ -168,7 +168,7 @@
 				NSString *attributeType = [attibutesArray firstObject];
 
 				if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:@"degrees" options:[DegreesTransformer transformer]];
+					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:[DegreesTransformer transformer]];
 					[children addObject:attribute];
 				} else if ([attributeName rangeOfString:@"color" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:nil];

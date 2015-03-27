@@ -219,8 +219,6 @@ name = _name;
 	[self unbind:@"value"];
 }
 
-/* Accessors and Mutators */
-
 #pragma mark value
 
 - (NSValue *)reverseTransformedValue {
@@ -272,7 +270,7 @@ name = _name;
 
 - (void)setValue:(id)value forKey:(NSString *)key {
 	if ([key isEqualToString:@"value"]) {
-		if ([_value isEqualToValue:value])
+		if ([_value isEqual:value])
 			return;
 		_value = value;
 		[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
