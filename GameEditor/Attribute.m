@@ -139,11 +139,11 @@ static NSDictionary *attibuteNameTransformer = nil;
 	NSValueTransformer *_valueTransformer;
 	NSArray *_labels;
 	NSString *_type;
+	id _value;
 }
 
 @synthesize
-name = _name,
-value = _value;
+name = _name;
 
 - (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options {
 	if (self = [super init]) {
@@ -248,11 +248,11 @@ value = _value;
 	if (y != position.y) {
 		self.y = y;
 	}
-	self.value = [NSValue valueWithPoint:position];
+	[self setValue:[NSValue valueWithPoint:position] forKey:@"value"];
 }
 
 - (NSPoint)position {
-	return [self.value pointValue];
+	return [[self valueForKey:@"value"] pointValue];
 }
 
 #pragma mark size accessors
@@ -290,11 +290,11 @@ value = _value;
 	if (height != size.height) {
 		self.height = height;
 	}
-	self.value = [NSValue valueWithSize:size];
+	[self setValue:[NSValue valueWithSize:size] forKey:@"value"];
 }
 
 - (NSSize)size {
-	return [self.value sizeValue];
+	return [[self valueForKey:@"value"] sizeValue];
 }
 
 #pragma mark rect accessors
@@ -364,23 +364,14 @@ value = _value;
 	if (height != rect.size.height) {
 		self.rectHeight = height;
 	}
-	self.value = [NSValue valueWithRect:rect];
+	[self setValue:[NSValue valueWithRect:rect] forKey:@"value"];
 }
 
 - (NSRect)rect {
-	return [self.value rectValue];
+	return [[self valueForKey:@"value"] rectValue];
 }
 
 #pragma mark value
-
-- (void)setValue:(NSValue *)value {
-	_value = value;
-	[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
-}
-
-- (NSValue *)value {
-	return _value;
-}
 
 - (NSValue *)reverseTransformedValue {
 
@@ -393,44 +384,54 @@ value = _value;
 	return _value;
 }
 
-- (id)valueForUndefinedKey:(NSString *)key {
+- (id)valueForKey:(NSString *)key {
+	if ([key isEqualToString:@"value"]) {
+		return _value;
+	} else {
+		/* Retrieve the subindex */
+		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
+		NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
 
-	/* Retrieve the subindex */
-	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
-	NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
+		NSString *name = [key substringWithRange:[result rangeAtIndex:1]];
+		NSInteger subindex = [[key substringWithRange:[result rangeAtIndex:2]] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
 
-	NSString *name = [key substringWithRange:[result rangeAtIndex:1]];
-	NSInteger subindex = [[key substringWithRange:[result rangeAtIndex:2]] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
-
-	if ([name isEqualToString:@"label"]) {
-		return _labels[subindex];
-	} else if ([name isEqualToString:@"value"]) {
-		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
-			CGPoint point = self.position;
-			return @(((CGFloat*)&point)[subindex]);
+		if ([name isEqualToString:@"label"]) {
+			return _labels[subindex];
+		} else if ([name isEqualToString:@"value"]) {
+			if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+				CGPoint point = self.position;
+				return @(((CGFloat*)&point)[subindex]);
+			} else {
+				return [super valueForKey:key];
+			}
+		} else {
+			return [super valueForKey:key];
 		}
 	}
-
-	return [super valueForUndefinedKey:key];
+	return [super valueForKey:key];
 }
 
-- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
-
-	/* Retrieve the subindex */
-	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
-	NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
-
-	NSString *name = [key substringWithRange:[result rangeAtIndex:1]];
-	NSInteger subindex = [[key substringWithRange:[result rangeAtIndex:2]] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
-
-	if ([name isEqualToString:@"value"]) {
-		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
-			CGPoint point = [self.value pointValue];
-			((CGFloat*)(&point))[subindex] = [value floatValue];
-			self.position = point;
-		}
+- (void)setValue:(id)value forKey:(NSString *)key {
+	if ([key isEqualToString:@"value"]) {
+		_value = value;
+		[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
 	} else {
-		[super setValue:value forUndefinedKey:key];
+		/* Retrieve the subindex */
+		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
+		NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
+
+		NSString *name = [key substringWithRange:[result rangeAtIndex:1]];
+		NSInteger subindex = [[key substringWithRange:[result rangeAtIndex:2]] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
+
+		if ([name isEqualToString:@"value"]) {
+			if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+				CGPoint point = [[self valueForKey:@"value"] pointValue];
+				((CGFloat*)(&point))[subindex] = [value floatValue];
+				self.position = point;
+			}
+		} else {
+			[super setValue:value forKey:key];
+		}
 	}
 }
 
