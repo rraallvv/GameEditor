@@ -195,6 +195,8 @@ name = _name;
 - (NSString *)editor {
 	if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
 		return @"dd";
+	} else 	if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+		return @"dd";
 	}
 	return _type;
 }
@@ -216,48 +218,6 @@ name = _name;
 }
 
 /* Accessors and Mutators */
-
-#pragma mark size accessors
-
-- (void)setWidth:(float)width {
-	NSSize size = self.size;
-	if (width != size.width) {
-		size.width = width;
-		self.size = size;
-	}
-}
-
-- (float)width {
-	return self.size.width;
-}
-
-- (void)setHeight:(float)height {
-	NSSize size = self.size;
-	if (height != size.height) {
-		size.height = height;
-		self.size = size;
-	}
-}
-
-- (float)height {
-	return self.size.height;
-}
-
-- (void)setSize:(NSSize)size {
-	float width = self.width;
-	if (width != size.width) {
-		self.width = width;
-	}
-	float height = self.height;
-	if (height != size.height) {
-		self.height = height;
-	}
-	[self setValue:[NSValue valueWithSize:size] forKey:@"value"];
-}
-
-- (NSSize)size {
-	return [[self valueForKey:@"value"] sizeValue];
-}
 
 #pragma mark rect accessors
 
@@ -363,6 +323,9 @@ name = _name;
 			if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
 				CGPoint point = [_value pointValue];
 				return @(((CGFloat*)&point)[subindex]);
+			} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+				CGSize size = [_value sizeValue];
+				return @(((CGFloat*)&size)[subindex]);
 			} else {
 				return [super valueForKey:key];
 			}
@@ -390,7 +353,18 @@ name = _name;
 			[self willChangeValueForKey:@"value2"];
 			[self setValue:@(point.y) forKey:@"value2"];
 			[self didChangeValueForKey:@"value2"];
+		} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+			CGSize size = [[self valueForKey:@"value"] sizeValue];
+
+			[self willChangeValueForKey:@"value1"];
+			[self setValue:@(size.width) forKey:@"value1"];
+			[self didChangeValueForKey:@"value1"];
+
+			[self willChangeValueForKey:@"value2"];
+			[self setValue:@(size.height) forKey:@"value2"];
+			[self didChangeValueForKey:@"value2"];
 		}
+
 	} else {
 		/* Retrieve the subindex */
 		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
@@ -405,6 +379,11 @@ name = _name;
 				CGFloat *components = (CGFloat*)&point;
 				components[subindex] = [value floatValue];
 				[self setValue:[NSValue valueWithPoint:point] forKey:@"value"];
+			} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+				CGSize size = [[self valueForKey:@"value"] sizeValue];
+				CGFloat *components = (CGFloat*)&size;
+				components[subindex] = [value floatValue];
+				[self setValue:[NSValue valueWithSize:size] forKey:@"value"];
 			}
 		} else {
 			[super setValue:value forKey:key];
