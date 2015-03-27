@@ -109,7 +109,7 @@
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <binding destination="GbV-qK-Vp4" name="editable" keyPath="objectValue.isEditable" id="QLg-ll-xE7"/>
-                                <binding destination="GbV-qK-Vp4" name="value" keyPath="objectValue.value1" id="BhX-Tm-cUs"/>
+                                <binding destination="GbV-qK-Vp4" name="value" keyPath="objectValue.value1" id="vou-Kt-aKf"/>
                             </connections>
                         </textField>
                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ut6-h1-1dS" userLabel="Value" customClass="StepperTextField">
@@ -254,7 +254,7 @@
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <binding destination="dHV-ME-csG" name="editable" keyPath="objectValue.isEditable" id="4PC-8p-RXe"/>
-                                <binding destination="dHV-ME-csG" name="value" keyPath="objectValue.value4" id="qEf-Xy-IAt"/>
+                                <binding destination="dHV-ME-csG" name="value" keyPath="objectValue.value4" id="2CG-zK-rS6"/>
                             </connections>
                         </textField>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ogW-tN-3gu">
