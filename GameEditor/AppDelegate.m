@@ -179,7 +179,7 @@
 
 				} else if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType
-														 bindingOptions:@{NSValueTransformerBindingOption: [NSValueTransformer valueTransformerForName:DegreesTransformer.description]}];
+														 bindingOptions:@{NSValueTransformerBindingOption: [NSValueTransformer valueTransformerForName:NSStringFromClass([DegreesTransformer class])]}];
 
 					NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 					formatter.numberStyle = NSNumberFormatterDecimalStyle;
@@ -202,6 +202,7 @@
 						attribute.formatter = formatter;
 
 						[children addObject:attribute];
+
 					} else {
 #if 1// Show non editable properties
 						NSDictionary *attribute = @{@"name": attributeName,

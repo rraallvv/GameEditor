@@ -123,10 +123,12 @@ typedef enum {
 }
 
 @synthesize
+stepperInc = _increment,
 increase = _increaseImage,
 decrease = _decreaseImage,
 alternateInc = _alternateIncreaseImage,
-alternateDec = _alternateDecreaseImage;
+alternateDec = _alternateDecreaseImage,
+draggingMult = _sensitivity;
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
@@ -137,7 +139,7 @@ alternateDec = _alternateDecreaseImage;
 		_decreaseImage = [NSImage imageNamed:NSImageNameRemoveTemplate];
 		_alternateIncreaseImage = [NSImage imageNamed:NSImageNameGoRightTemplate];
 		_alternateDecreaseImage = [NSImage imageNamed:NSImageNameGoLeftTemplate];
-		_draggingMult = 1.0;
+		_sensitivity = 1.0;
 
 		/* Change the cell's class to TextFieldCell */
 		NSTextField *oldCell = self.cell;
@@ -230,7 +232,7 @@ alternateDec = _alternateDecreaseImage;
 		if (!_dragging) {
 			[self.window disableCursorRects];
 		}
-		self.floatValue += self.draggingMult * theEvent.deltaX;
+		self.floatValue += _sensitivity * theEvent.deltaX;
 		
 		[self updateBindingValue];
 	}
@@ -257,13 +259,13 @@ alternateDec = _alternateDecreaseImage;
 
 - (void)increaseButtonPressed {
 	_activatedButton = ActivatedButtonIncrease;
-	self.floatValue += self.increment;
+	self.floatValue += _increment;
 	[self updateBindingValue];
 }
 
 - (void)decreaseButtonPressed {
 	_activatedButton = ActivatedButtonDecrease;
-	self.floatValue -= self.increment;
+	self.floatValue -= _increment;
 	[self updateBindingValue];
 }
 
