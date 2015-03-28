@@ -28,19 +28,16 @@
 #import <SpriteKit/SpriteKit.h>
 
 @interface PointTransformer : NSValueTransformer
-+ (NSDictionary *)transformer;
 @end
 
 @interface DegreesTransformer : NSValueTransformer
-+ (NSDictionary *)transformer;
 @end
 
 @interface AttibuteNameTransformer : NSValueTransformer
-+ (NSDictionary *)transformer;
 @end
 
 @interface Attribute : NSObject
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options;
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type bindingOptions:(NSDictionary *)bindingOptions;
 - (NSString *)type;
 @property (copy) NSString *name;
 @property (nonatomic, assign) BOOL editable;

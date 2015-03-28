@@ -25,112 +25,125 @@
 
 #import "Attribute.h"
 
-@implementation PointTransformer
+@interface NSValueTransformer (Blocks)
++ (void)initializeWithTransformedValueClass:(Class)class
+				allowsReverseTransformation:(BOOL)allowsReverseTransformation
+					  transformedValueBlock:(id (^)(id value))transformedValueBlock
+			   reverseTransformedValueBlock:(id (^)(id value))reverseTransformedValueBlock;
+@end
 
-+ (NSDictionary *)transformer {
-	static NSDictionary *transformer = nil;
+@implementation NSValueTransformer (Blocks)
 
-	if (transformer) {
-		return transformer;
-	} else {
-		return transformer = @{ NSValueTransformerBindingOption:[[PointTransformer alloc] init] };
++ (void)initializeWithTransformedValueClass:(Class)class
+				allowsReverseTransformation:(BOOL)allowsReverseTransformation
+					  transformedValueBlock:(id (^)(id value))transformedValueBlock
+			   reverseTransformedValueBlock:(id (^)(id value))reverseTransformedValueBlock
+{
+
+	Class metaClass = objc_getMetaClass(class_getName(self));
+
+	if (metaClass != objc_getMetaClass("NSValueTransformer")) {
+
+		SEL selector1 = @selector(transformedValueClass);
+		class_addMethod(metaClass,
+						selector1,
+						imp_implementationWithBlock(^Class {
+							return class;
+						}),
+						method_getTypeEncoding(class_getClassMethod(metaClass, selector1)));
+
+
+		SEL selector2 = @selector(allowsReverseTransformation);
+		class_addMethod(metaClass,
+						selector2,
+						imp_implementationWithBlock(^BOOL {
+							return allowsReverseTransformation;
+						}),
+						method_getTypeEncoding(class_getClassMethod(metaClass, selector2)));
+
+		SEL selector3 = @selector(transformedValue:);
+		class_addMethod(self,
+						selector3,
+						imp_implementationWithBlock(^id (id __unused _self, id _value){
+							return transformedValueBlock(_value);
+						}),
+						method_getTypeEncoding(class_getInstanceMethod(self, selector3)));
+
+		SEL selector4 = @selector(reverseTransformedValue:);
+		class_addMethod(self,
+						selector4,
+						imp_implementationWithBlock(^id (id __unused _self, id _value){
+							return reverseTransformedValueBlock(_value);
+						}),
+						method_getTypeEncoding(class_getInstanceMethod(self, selector4)));
+
+		[self setValueTransformer:[[self alloc] init] forName:self.description];
 	}
 }
 
-+ (Class)transformedValueClass {
-	return [NSValue class];
-}
+@end
 
-+ (BOOL)allowsReverseTransformation {
-	return YES;
-}
+@implementation PointTransformer
 
-- (id)transformedValue:(id)value {
-	NSValue *result = value;
-	return result;
-}
-
-- (id)reverseTransformedValue:(id)value {
-	NSValue *result = [NSValue valueWithPoint:NSPointFromString(value)];
-	return result;
++ (void)initialize {
+	[self initializeWithTransformedValueClass:[NSValue class]
+				  allowsReverseTransformation:YES
+						transformedValueBlock:^(id value){
+							return value;
+						}
+				 reverseTransformedValueBlock:^(id value){
+							return [NSValue valueWithPoint:NSPointFromString(value)];
+						}];
 }
 
 @end
 
 @implementation DegreesTransformer
 
-+ (NSDictionary *)transformer {
-	static NSDictionary *transformer = nil;
-
-	if (transformer) {
-		return transformer;
-	} else {
-		return transformer = @{ NSValueTransformerBindingOption:[[DegreesTransformer alloc] init] };
-	}
-}
-
-+ (Class)transformedValueClass {
-	return [NSNumber class];
-}
-
-+ (BOOL)allowsReverseTransformation {
-	return YES;
-}
-
-- (id)transformedValue:(NSNumber *)value {
-	NSNumber *result = @(value.floatValue*180/M_PI);
-	return result;
-}
-
-- (id)reverseTransformedValue:(NSNumber *)value {
-	NSNumber *result = @(value.floatValue*M_PI/180);
-	return result;
++ (void)initialize {
+	[self initializeWithTransformedValueClass:[NSNumber class]
+				  allowsReverseTransformation:YES
+						transformedValueBlock:^(NSNumber *value){
+							NSNumber *result = @(value.floatValue*180/M_PI);
+							return result;
+						}
+				 reverseTransformedValueBlock:^(NSNumber *value){
+							NSNumber *result = @(value.floatValue*M_PI/180);
+							return result;
+						}];
 }
 
 @end
 
 @implementation AttibuteNameTransformer
 
-+ (NSDictionary *)transformer {
-	static NSDictionary *transformer = nil;
++ (void)initialize {
+	[self initializeWithTransformedValueClass:[NSString class]
+				  allowsReverseTransformation:NO
+						transformedValueBlock:^(id value){
+							NSString *str = value;
+							NSMutableString *str2 = [NSMutableString string];
 
-	if (transformer) {
-		return transformer;
-	} else {
-		return transformer = @{ NSValueTransformerBindingOption:[[AttibuteNameTransformer alloc] init] };
-	}
-}
-
-+ (Class)transformedValueClass {
-	return [NSString class];
-}
-
-+ (BOOL)allowsReverseTransformation {
-	return NO;
-}
-
-- (id)transformedValue:(id)value {
-	NSString *str = value;
-	NSMutableString *str2 = [NSMutableString string];
-
-	for (NSInteger i=0; i<str.length; i++){
-		NSString *ch = [str substringWithRange:NSMakeRange(i, 1)];
-		if ([ch rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]].location != NSNotFound) {
-			[str2 appendString:@" "];
-		} else if ([ch isEqualToString:@"_"]) {
-			if (i == 0)
-				continue;
-			else
-				[str2 appendString:@" "];
-		} else if ([ch isEqualToString:@"-"]) {
-			[str2 appendString:@" "];
-		}
-		[str2 appendString:ch];
-	}
-
-	NSString * result = str2.capitalizedString;
-
-	return result;
+							for (NSInteger i=0; i<str.length; i++){
+								NSString *ch = [str substringWithRange:NSMakeRange(i, 1)];
+								if ([ch rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]].location != NSNotFound) {
+									[str2 appendString:@" "];
+								} else if ([ch isEqualToString:@"_"]) {
+									if (i == 0)
+										continue;
+									else
+										[str2 appendString:@" "];
+								} else if ([ch isEqualToString:@"-"]) {
+									[str2 appendString:@" "];
+								}
+								[str2 appendString:ch];
+							}
+							
+							NSString * result = str2.capitalizedString;
+							
+							return result;
+						}
+				 reverseTransformedValueBlock:nil];
 }
 
 @end
@@ -145,7 +158,7 @@
 @synthesize
 name = _name;
 
-- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options {
+- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type bindingOptions:(NSDictionary *)bindingOptions {
 	if (self = [super init]) {
 		_name = name;
 		_node = node;
@@ -161,31 +174,20 @@ name = _name;
 		}
 
 		/* Cache the value transformer */
-		if(options) {
-			_valueTransformer = options[NSValueTransformerBindingOption];
+		if(bindingOptions) {
+			_valueTransformer = bindingOptions[NSValueTransformerBindingOption];
 			if((id)_valueTransformer == [NSNull null])
 				_valueTransformer = nil;
 		}
 
-		/* The property setter method's name */
-		NSString *setterStr = [NSString stringWithFormat:@"set%@%@:",
-							   [[_name substringToIndex:1] capitalizedString],
-							   [_name substringFromIndex:1]];
-
-		/* Bind the property to available accessors */
-		if ([self respondsToSelector:NSSelectorFromString(_name)]
-			&& [self respondsToSelector:NSSelectorFromString(setterStr)]) {
-			[self bind:@"value" toObject:node withKeyPath:_name options:options];
-		} else {
-			/* Bind the property to the 'raw' value if there isn't an accessor */
-			[self bind:@"value" toObject:node withKeyPath:_name options:options];
-		}
+		/* Bind the property to the 'raw' value if there isn't an accessor */
+		[self bind:@"value" toObject:node withKeyPath:_name options:bindingOptions];
 	}
 	return self;
 }
 
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type options:(NSDictionary *)options {
-	return [[Attribute alloc] initWithAttributeWithName:name node:node type:type options:options];
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type bindingOptions:(NSDictionary *)bindingOptions {
+	return [[Attribute alloc] initWithAttributeWithName:name node:node type:type bindingOptions:bindingOptions];
 }
 
 - (NSString *)description {

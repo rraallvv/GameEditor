@@ -168,7 +168,12 @@
 				NSString *attributeType = [attibutesArray firstObject];
 
 				if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:[DegreesTransformer transformer]];
+					Attribute *attribute = [Attribute attributeWithName:attributeName
+																   node:node
+																   type:attributeType
+														 bindingOptions:@{ NSValueTransformerBindingOption:
+																			   [NSValueTransformer valueTransformerForName:DegreesTransformer.description]
+																		   }];
 
 					NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 					formatter.numberStyle = NSNumberFormatterDecimalStyle;
@@ -178,7 +183,7 @@
 					[children addObject:attribute];
 
 				} else if ([attributeName rangeOfString:@"color" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:nil];
+					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType bindingOptions:nil];
 					[children addObject:attribute];
 
 				} else {
@@ -187,7 +192,7 @@
 					editable = editable && [attributeType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
 
 					if (editable) {
-						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:nil];
+						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType bindingOptions:nil];
 						[children addObject:attribute];
 					} else {
 #if 1// Show non editable properties
