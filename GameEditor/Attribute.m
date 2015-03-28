@@ -25,15 +25,15 @@
 
 #import "Attribute.h"
 
-static NSDictionary *pointTransformer = nil;
-
 @implementation PointTransformer
 
 + (NSDictionary *)transformer {
-	if (pointTransformer) {
-		return pointTransformer;
+	static NSDictionary *transformer = nil;
+
+	if (transformer) {
+		return transformer;
 	} else {
-		return pointTransformer = @{ NSValueTransformerBindingOption:[[PointTransformer alloc] init] };
+		return transformer = @{ NSValueTransformerBindingOption:[[PointTransformer alloc] init] };
 	}
 }
 
@@ -57,15 +57,15 @@ static NSDictionary *pointTransformer = nil;
 
 @end
 
-static NSDictionary *degreesTransformer = nil;
-
 @implementation DegreesTransformer
 
 + (NSDictionary *)transformer {
-	if (degreesTransformer) {
-		return degreesTransformer;
+	static NSDictionary *transformer = nil;
+
+	if (transformer) {
+		return transformer;
 	} else {
-		return degreesTransformer = @{ NSValueTransformerBindingOption:[[DegreesTransformer alloc] init] };
+		return transformer = @{ NSValueTransformerBindingOption:[[DegreesTransformer alloc] init] };
 	}
 }
 
@@ -89,15 +89,15 @@ static NSDictionary *degreesTransformer = nil;
 
 @end
 
-static NSDictionary *attibuteNameTransformer = nil;
-
 @implementation AttibuteNameTransformer
 
 + (NSDictionary *)transformer {
-	if (attibuteNameTransformer) {
-		return attibuteNameTransformer;
+	static NSDictionary *transformer = nil;
+
+	if (transformer) {
+		return transformer;
 	} else {
-		return attibuteNameTransformer = @{ NSValueTransformerBindingOption:[[AttibuteNameTransformer alloc] init] };
+		return transformer = @{ NSValueTransformerBindingOption:[[AttibuteNameTransformer alloc] init] };
 	}
 }
 
