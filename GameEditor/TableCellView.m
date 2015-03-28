@@ -28,6 +28,7 @@
 
 @implementation TableCellView {
 	NSMutableArray *_textFields;
+	IBOutlet NSPopover *_popover;
 }
 
 - (void)setObjectValue:(id)objectValue {
@@ -61,6 +62,24 @@
 - (NSString *)observedKeyForObject:(id)object {
 	NSDictionary *bindingInfo = [object infoForBinding: NSValueBinding];
 	return bindingInfo[NSObservedKeyPathKey];
+}
+
+- (void)presentError:(NSError *)error modalForWindow:(NSWindow *)window delegate:(id)delegate didPresentSelector:(SEL)didPresentSelector contextInfo:(void *)contextInfo {
+
+	NSBeep();
+
+	NSLog(@"Error: %@", error.localizedDescription);
+
+#if 0
+	if (_popover == nil) {
+		_popover = [[NSPopover alloc] init];
+		_popover.behavior = NSPopoverBehaviorSemitransient;
+	}
+
+	[_popover.contentViewController.view.subviews.firstObject setStringValue:error.localizedDescription];
+	[_popover showRelativeToRect:[self bounds] ofView:self preferredEdge:NSMinXEdge];
+#endif
+
 }
 
 @end
