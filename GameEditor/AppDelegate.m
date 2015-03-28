@@ -167,7 +167,17 @@
 				NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
 				NSString *attributeType = [attibutesArray firstObject];
 
-				if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+				/* Try to get a class name from the attribute type */
+				NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"@\"(\\w*)\"" options:0 error:NULL];
+				NSTextCheckingResult *result = [regex firstMatchInString:attributeType options:0 range:NSMakeRange(0, attributeType.length)];
+
+				NSString *className = [attributeType substringWithRange:[result rangeAtIndex:1]];
+
+				if (NSClassFromString(className) == [NSColor class]) {
+					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType bindingOptions:nil];
+					[children addObject:attribute];
+
+				} else if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 					Attribute *attribute = [Attribute attributeWithName:attributeName
 																   node:node
 																   type:attributeType
@@ -182,10 +192,6 @@
 
 					[children addObject:attribute];
 
-				} else if ([attributeName rangeOfString:@"color" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType bindingOptions:nil];
-					[children addObject:attribute];
-
 				} else {
 					BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
 					NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
@@ -193,6 +199,12 @@
 
 					if (editable) {
 						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType bindingOptions:nil];
+
+						NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+						formatter.numberStyle = NSNumberFormatterDecimalStyle;
+						formatter.negativeFormat = formatter.positiveFormat = @"#.###";
+						attribute.formatter = formatter;
+
 						[children addObject:attribute];
 					} else {
 #if 1// Show non editable properties
