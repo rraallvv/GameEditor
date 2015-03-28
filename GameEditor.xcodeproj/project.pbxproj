@@ -84,6 +84,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E40813A01AC64C7600F54824 /* AttributesInspector */ = {
+			isa = PBXGroup;
+			children = (
+				E4ABDB701AB3BCA700AAE82E /* Attribute.h */,
+				E4ABDB711AB3BCA700AAE82E /* Attribute.m */,
+				E408138D1AC228F400F54824 /* OutlineView.h */,
+				E408138E1AC228F400F54824 /* OutlineView.m */,
+				E40813991AC572E900F54824 /* TableCellView.h */,
+				E408139A1AC572E900F54824 /* TableCellView.m */,
+				E4BFF4AE1AB78E24002DADD3 /* StepperTextField.h */,
+				E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */,
+				E40813931AC42FFF00F54824 /* ColorWell.h */,
+				E40813941AC42FFF00F54824 /* ColorWell.m */,
+			);
+			name = AttributesInspector;
+			sourceTree = "<group>";
+		};
 		E4ABDB3F1AB3933900AAE82E = {
 			isa = PBXGroup;
 			children = (
@@ -109,16 +126,7 @@
 				E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */,
 				E4ABDB521AB3933900AAE82E /* GameScene.h */,
 				E4ABDB531AB3933900AAE82E /* GameScene.m */,
-				E4ABDB701AB3BCA700AAE82E /* Attribute.h */,
-				E4ABDB711AB3BCA700AAE82E /* Attribute.m */,
-				E408138D1AC228F400F54824 /* OutlineView.h */,
-				E408138E1AC228F400F54824 /* OutlineView.m */,
-				E40813991AC572E900F54824 /* TableCellView.h */,
-				E408139A1AC572E900F54824 /* TableCellView.m */,
-				E4BFF4AE1AB78E24002DADD3 /* StepperTextField.h */,
-				E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */,
-				E40813931AC42FFF00F54824 /* ColorWell.h */,
-				E40813941AC42FFF00F54824 /* ColorWell.m */,
+				E40813A01AC64C7600F54824 /* AttributesInspector */,
 				E4BB58AC1ABB510A0021A467 /* EditorView.h */,
 				E4BB58AD1ABB510A0021A467 /* EditorView.m */,
 				E4ABDB591AB3933900AAE82E /* MainMenu.xib */,
