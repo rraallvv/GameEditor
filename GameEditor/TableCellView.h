@@ -1,5 +1,5 @@
 /*
- * Attribute.h
+ * TableCellView.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,24 +23,8 @@
  * THE SOFTWARE.
  */
 
-#import <AppKit/AppKit.h>
-#import <objc/runtime.h>
-#import <SpriteKit/SpriteKit.h>
+#import <Cocoa/Cocoa.h>
 
-@interface PointTransformer : NSValueTransformer
-@end
+@interface TableCellView : NSTableCellView
 
-@interface DegreesTransformer : NSValueTransformer
-@end
-
-@interface AttibuteNameTransformer : NSValueTransformer
-@end
-
-@interface Attribute : NSObject
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type bindingOptions:(NSDictionary *)bindingOptions;
-- (NSString *)type;
-@property (copy) NSString *name;
-@property (nonatomic, assign) BOOL editable;
-@property (weak) SKNode *node;
-@property id formatter;
 @end
