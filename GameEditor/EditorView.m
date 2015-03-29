@@ -25,6 +25,7 @@
 
 #import "EditorView.h"
 #import <GLKit/GLKit.h>
+#import <objc/runtime.h>
 
 const CGFloat kRotationHandleDistance = 25.0;
 const CGFloat kHandleRadius = 4.5;
@@ -192,6 +193,14 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)setSize:(CGSize)size {
+
+	if ([_node isKindOfClass:[SKShapeNode class]]) {
+		SKShapeNode *shapeNode = (SKShapeNode *)_node;
+		CGPathRef pathRef = [shapeNode path];
+		CGRect rect = CGPathGetPathBoundingBox(pathRef);
+		size = CGSizeMake(rect.size.width * shapeNode.xScale, rect.size.height * shapeNode.yScale);
+	}
+
 	_size = [_scene convertSizeToView:size];
 	[self setNeedsDisplay:YES];
 }
@@ -201,6 +210,23 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)setAnchorPoint:(CGPoint)anchorPoint {
+
+	if ([_node isKindOfClass:[SKShapeNode class]]) {
+		SKShapeNode *shapeNode = (SKShapeNode *)_node;
+		CGPathRef pathRef = [shapeNode path];
+		CGRect rect = CGPathGetPathBoundingBox(pathRef);
+		if (rect.size.width == 0) {
+			anchorPoint.x = 0;
+		} else {
+			anchorPoint.x = -rect.origin.x/rect.size.width;
+		}
+		if (rect.size.height == 0) {
+			anchorPoint.y = 0;
+		} else {
+			anchorPoint.y = -rect.origin.y/rect.size.height;
+		}
+	}
+
 	_anchorPoint = anchorPoint;
 	[self setNeedsDisplay:YES];
 }
@@ -214,42 +240,16 @@ anchorPoint = _anchorPoint;
 		return;
 
 	/* Clear the properties bindings*/
-	[self unbind:@"position"];
-	[self unbind:@"size"];
-	[self unbind:@"zRotation"];
-	[self unbind:@"anchorPoint"];
+	[self unbindToNode:_node];
 
 	_node = node;
 	self.scene = _node.scene;
 
 	/* Craete the new bindings */
-	[self bind:@"position" toObject:_node withKeyPath:@"position" options:nil];
-	[self bind:@"size" toObject:_node withKeyPath:@"size" options:nil];
-	[self bind:@"zRotation" toObject:_node withKeyPath:@"zRotation" options:nil];
-	[self bind:@"anchorPoint" toObject:_node withKeyPath:@"anchorPoint" options:nil];
+	[self bindToNode:_node];
 
 	/* Nofify the delegate */
 	[self.delegate selectedNode:(SKNode *)node];
-
-	/* Extract dimensions from the path if the node is a shape node */
-	if ([_node isKindOfClass:[SKShapeNode class]]) {
-		SKShapeNode *shapeNode = (SKShapeNode *)_node;
-		CGPathRef pathRef = [shapeNode path];
-		CGRect rect = CGPathGetPathBoundingBox(pathRef);
-		self.size = CGSizeMake(rect.size.width * shapeNode.xScale, rect.size.height * shapeNode.yScale);
-		CGPoint anchorPoint;
-		if (rect.size.width == 0) {
-			anchorPoint.x = 0;
-		} else {
-			anchorPoint.x = -rect.origin.x/rect.size.width;
-		}
-		if (rect.size.height == 0) {
-			anchorPoint.y = 0;
-		} else {
-			anchorPoint.y = -rect.origin.y/rect.size.height;
-		}
-		self.anchorPoint = anchorPoint;
-	}
 }
 
 - (SKNode *)node {
@@ -461,6 +461,53 @@ anchorPoint = _anchorPoint;
 
 - (SKScene *)scene {
 	return _scene;
+}
+
+- (void)bindToNode:(SKNode *)node {
+	/* Populate the attibutes table from the selected node's properties */
+	Class classType = [node class];
+	do {
+		unsigned int count;
+		objc_property_t *properties = class_copyPropertyList(classType, &count);
+
+		if (count) {
+			for(unsigned int i = 0; i < count; i++) {
+				NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
+				[node addObserver:self forKeyPath:key options:0 context:nil];
+			}
+			free(properties);
+		}
+
+		classType = [classType superclass];
+	} while (classType != nil && classType != [SKNode superclass]);
+}
+
+- (void)unbindToNode:(SKNode *)node {
+	/* Populate the attibutes table from the selected node's properties */
+	Class classType = [node class];
+	do {
+		unsigned int count;
+		objc_property_t *properties = class_copyPropertyList(classType, &count);
+
+		if (count) {
+			for(unsigned int i = 0; i < count; i++) {
+				NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
+				[node removeObserver:self forKeyPath:key];
+			}
+			free(properties);
+		}
+
+		classType = [classType superclass];
+	} while (classType != nil && classType != [SKNode superclass]);
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if (object == _node) {
+		[self setValue:[_node valueForKey:@"position"] forKey:@"position"];
+		[self setValue:[_node valueForKey:@"size"] forKey:@"size"];
+		[self setValue:[_node valueForKey:@"zRotation"] forKey:@"zRotation"];
+		[self setValue:[_node valueForKey:@"anchorPoint"] forKey:@"anchorPoint"];
+	}
 }
 
 @end
