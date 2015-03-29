@@ -27,7 +27,7 @@
 
 IB_DESIGNABLE
 @interface StepperTextField : NSTextField
-@property (nonatomic) IBInspectable CGFloat increment;
+@property (nonatomic) IBInspectable CGFloat stepperInc;
 @property (nonatomic, strong) IBInspectable NSImage *increase;
 @property (nonatomic, strong) IBInspectable NSImage *alternateInc;
 @property (nonatomic, strong) IBInspectable NSImage *decrease;

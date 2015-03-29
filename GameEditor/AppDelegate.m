@@ -167,20 +167,40 @@
 				NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
 				NSString *attributeType = [attibutesArray firstObject];
 
-				if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:[DegreesTransformer transformer]];
+				/* Try to get a class name from the attribute type */
+				NSRange range = [attributeType rangeOfString:@"(?<=@\")(\\w*)(?=\")" options:NSRegularExpressionSearch];
+				NSString *className = range.location != NSNotFound ? [attributeType substringWithRange:range] : nil;
+
+				if (NSClassFromString(className) == [NSColor class]) {
+					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType bindingOptions:nil];
 					[children addObject:attribute];
-				} else if ([attributeName rangeOfString:@"color" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:nil];
+
+				} else if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType
+														 bindingOptions:@{NSValueTransformerBindingOption: [NSValueTransformer valueTransformerForName:NSStringFromClass([DegreesTransformer class])]}];
+
+					NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+					formatter.numberStyle = NSNumberFormatterDecimalStyle;
+					formatter.negativeFormat = formatter.positiveFormat = @"#.###º";
+					attribute.formatter = formatter;
+
 					[children addObject:attribute];
+
 				} else {
 					BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
 					NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
 					editable = editable && [attributeType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
 
 					if (editable) {
-						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType options:nil];
+						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType bindingOptions:nil];
+
+						NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+						formatter.numberStyle = NSNumberFormatterDecimalStyle;
+						formatter.negativeFormat = formatter.positiveFormat = @"#.###";
+						attribute.formatter = formatter;
+
 						[children addObject:attribute];
+
 					} else {
 #if 1// Show non editable properties
 						NSDictionary *attribute = @{@"name": attributeName,
