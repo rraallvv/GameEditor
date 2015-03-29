@@ -263,32 +263,6 @@ name = _name;
 
 	/* Update the bound object's property value */
 	[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
-
-	/* Get a pointer to the raw data if it's a compound value */
-	NSInteger componentsCount = 0;
-	CGFloat *components = NULL;
-
-	if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
-		componentsCount = 2;
-		CGPoint point = [self.value pointValue];
-		components = (CGFloat*)&point;
-
-	} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
-		componentsCount = 2;
-		CGSize size = [self.value sizeValue];
-		components = (CGFloat*)&size;
-
-	} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
-		componentsCount = 4;
-		CGRect rect = [self.value rectValue];
-		components = (CGFloat*)&rect;
-	}
-
-	/* Traverse the value subindexes and update each component */
-	for (int index = 0; index < componentsCount; ++index) {
-		NSString *valueWithSubindex = [NSString stringWithFormat:@"value%d", index + 1];
-		[self setValue:@(components[index]) forKey:valueWithSubindex];
-	}
 }
 
 - (id)value {
