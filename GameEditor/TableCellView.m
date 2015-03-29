@@ -50,18 +50,14 @@
 - (void)listTextFields:(id)view {
 	for (id subview in [view subviews]) {
 		if ([subview isKindOfClass:[NSTextField class]]) {
-			NSString *observedKey = [self observedKeyForObject:subview];
+			NSDictionary *bindingInfo = [subview infoForBinding: NSValueBinding];
+			NSString *observedKey = bindingInfo[NSObservedKeyPathKey];
 			if (observedKey && [observedKey rangeOfString:@"(\\.|^)value\\d*$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				[_textFields addObject:subview];
 			}
 		}
 		[self listTextFields:subview];
 	}
-}
-
-- (NSString *)observedKeyForObject:(id)object {
-	NSDictionary *bindingInfo = [object infoForBinding: NSValueBinding];
-	return bindingInfo[NSObservedKeyPathKey];
 }
 
 - (void)presentError:(NSError *)error modalForWindow:(NSWindow *)window delegate:(id)delegate didPresentSelector:(SEL)didPresentSelector contextInfo:(void *)contextInfo {

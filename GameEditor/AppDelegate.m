@@ -168,10 +168,8 @@
 				NSString *attributeType = [attibutesArray firstObject];
 
 				/* Try to get a class name from the attribute type */
-				NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"@\"(\\w*)\"" options:0 error:NULL];
-				NSTextCheckingResult *result = [regex firstMatchInString:attributeType options:0 range:NSMakeRange(0, attributeType.length)];
-
-				NSString *className = [attributeType substringWithRange:[result rangeAtIndex:1]];
+				NSRange range = [attributeType rangeOfString:@"(?<=@\")(\\w*)(?=\")" options:NSRegularExpressionSearch];
+				NSString *className = range.location != NSNotFound ? [attributeType substringWithRange:range] : nil;
 
 				if (NSClassFromString(className) == [NSColor class]) {
 					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType bindingOptions:nil];
