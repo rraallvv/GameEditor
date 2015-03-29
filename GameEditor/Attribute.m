@@ -232,123 +232,118 @@ name = _name;
 	return _value;
 }
 
+- (void)setValue:(id)value {
+	/* Do nothing if the value hasn't changed */
+	if ([_value isEqual:value])
+		return;
+
+	_value = value;
+
+	/* Update the bound object's property value */
+	[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
+
+	/* Get a pointer to the raw data if it's a compound value */
+	NSInteger componentsCount = 0;
+	CGFloat *components = NULL;
+
+	if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+		componentsCount = 2;
+		CGPoint point = [[self valueForKey:@"value"] pointValue];
+		components = (CGFloat*)&point;
+
+	} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+		componentsCount = 2;
+		CGSize size = [[self valueForKey:@"value"] sizeValue];
+		components = (CGFloat*)&size;
+
+	} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+		componentsCount = 4;
+		CGRect rect = [[self valueForKey:@"value"] rectValue];
+		components = (CGFloat*)&rect;
+	}
+
+	/* Traverse the value subindexes and update each component */
+	for (int index = 0; index < componentsCount; ++index) {
+		NSString *valueWithSubindex = [NSString stringWithFormat:@"value%d", index + 1];
+		[self willChangeValueForKey:valueWithSubindex];
+		[self setValue:@(components[index]) forKey:valueWithSubindex];
+		[self didChangeValueForKey:valueWithSubindex];
+	}
+}
+
+- (id)value {
+	return _value;
+}
+
 - (void)setValue:(id)value forKey:(NSString *)key {
+	/* Try to get a subindex from the key */
+	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
+	NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
 
-	if ([key isEqualToString:@"value"]) {
+	NSString *name = [key substringWithRange:[result rangeAtIndex:1]];
+	NSInteger subindex = [[key substringWithRange:[result rangeAtIndex:2]] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
 
-		/* Do nothing if the value hasn't changed */
-		if ([_value isEqual:value])
-			return;
+	if ([name isEqualToString:@"value"]) {
 
-		[self willChangeValueForKey:@"value"];
-		_value = value;
-		[self didChangeValueForKey:@"value"];
-
-		/* Update the bound object's property value */
-		[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
-
-		/* Get a pointer to the raw data if it's a compound value */
-		NSInteger componentsCount = 0;
-		CGFloat *components = NULL;
+		/* Update the value component for the given subindex */
 
 		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
-			componentsCount = 2;
 			CGPoint point = [[self valueForKey:@"value"] pointValue];
-			components = (CGFloat*)&point;
+			CGFloat *components = (CGFloat*)&point;
+			components[subindex] = [value floatValue];
+			[self setValue:[NSValue valueWithPoint:point] forKey:@"value"];
 
 		} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
-			componentsCount = 2;
 			CGSize size = [[self valueForKey:@"value"] sizeValue];
-			components = (CGFloat*)&size;
+			CGFloat *components = (CGFloat*)&size;
+			components[subindex] = [value floatValue];
+			[self setValue:[NSValue valueWithSize:size] forKey:@"value"];
 
 		} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
-			componentsCount = 4;
 			CGRect rect = [[self valueForKey:@"value"] rectValue];
-			components = (CGFloat*)&rect;
-		}
-
-		/* Traverse the value subindexes and update each component */
-		for (int index = 0; index < componentsCount; ++index) {
-			NSString *valueWithSubindex = [NSString stringWithFormat:@"value%d", index + 1];
-			[self willChangeValueForKey:valueWithSubindex];
-			[self setValue:@(components[index]) forKey:valueWithSubindex];
-			[self didChangeValueForKey:valueWithSubindex];
+			CGFloat *components = (CGFloat*)&rect;
+			components[subindex] = [value floatValue];
+			[self setValue:[NSValue valueWithRect:rect] forKey:@"value"];
 		}
 
 	} else {
 
-		/* Retrieve the subindex */
-		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
-		NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
-
-		NSString *name = [key substringWithRange:[result rangeAtIndex:1]];
-		NSInteger subindex = [[key substringWithRange:[result rangeAtIndex:2]] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
-
-		if ([name isEqualToString:@"value"]) {
-
-			/* Update the value component for the given subindex */
-
-			if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
-				CGPoint point = [[self valueForKey:@"value"] pointValue];
-				CGFloat *components = (CGFloat*)&point;
-				components[subindex] = [value floatValue];
-				[self setValue:[NSValue valueWithPoint:point] forKey:@"value"];
-
-			} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
-				CGSize size = [[self valueForKey:@"value"] sizeValue];
-				CGFloat *components = (CGFloat*)&size;
-				components[subindex] = [value floatValue];
-				[self setValue:[NSValue valueWithSize:size] forKey:@"value"];
-
-			} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
-				CGRect rect = [[self valueForKey:@"value"] rectValue];
-				CGFloat *components = (CGFloat*)&rect;
-				components[subindex] = [value floatValue];
-				[self setValue:[NSValue valueWithRect:rect] forKey:@"value"];
-			}
-
-		} else {
-
-			/* Fall back to the superclass default behavior if the key is not a value */
-			[super setValue:value forKey:key];
-		}
+		/* Fall back to the superclass default behavior if the key is not a value */
+		[super setValue:value forKey:key];
 	}
 }
 
 - (id)valueForKey:(NSString *)key {
-	if ([key isEqualToString:@"value"]) {
-		return _value;
-	} else {
-		/* Try to get a subindex from the key */
-		NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
-		NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
+	/* Try to get a subindex from the key */
+	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
+	NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
 
-		NSString *name = [key substringWithRange:[result rangeAtIndex:1]];
-		NSInteger subindex = [[key substringWithRange:[result rangeAtIndex:2]] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
+	NSString *name = [key substringWithRange:[result rangeAtIndex:1]];
+	NSInteger subindex = [[key substringWithRange:[result rangeAtIndex:2]] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
 
-		if ([name isEqualToString:@"label"]) {
+	if ([name isEqualToString:@"label"]) {
 
-			/* The key is a subindex of label */
-			return _labels[subindex];
+		/* The key is a subindex of label */
+		return _labels[subindex];
 
-		} else if ([name isEqualToString:@"value"]) {
+	} else if ([name isEqualToString:@"value"]) {
 
-			/* The key is a subindex of value */
+		/* The key is a subindex of value */
 
-			if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
-				CGPoint point = [_value pointValue];
-				return @(((CGFloat*)&point)[subindex]);
+		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+			CGPoint point = [_value pointValue];
+			return @(((CGFloat*)&point)[subindex]);
 
-			} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
-				CGSize size = [_value sizeValue];
-				return @(((CGFloat*)&size)[subindex]);
+		} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+			CGSize size = [_value sizeValue];
+			return @(((CGFloat*)&size)[subindex]);
 
-			} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
-				CGRect rect = [_value rectValue];
-				return @(((CGFloat*)&rect)[subindex]);
-			}
+		} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+			CGRect rect = [_value rectValue];
+			return @(((CGFloat*)&rect)[subindex]);
 		}
 	}
+
 	return [super valueForKey:key];
 }
 
