@@ -34,10 +34,43 @@
 - (void)setObjectValue:(id)objectValue {
 	_textFields = [NSMutableArray array];
 
+	/* If the table cell is an attribute try to update it's text fields with the appropriate trasformer and formatter */
 	if ([objectValue isKindOfClass:[Attribute class]]) {
+
+		Attribute *attribute = (Attribute *)objectValue;
+
+		/* Get all the text fields in the table cell*/
 		[self listTextFields:self];
+
+		/* Walk the text fields */
 		for (NSTextField *textField in _textFields) {
-			textField.formatter = [objectValue formatter];
+
+			/* Get the binding information */
+			NSMutableDictionary *bindingInfo = [textField infoForBinding: NSValueBinding].mutableCopy;
+			NSString *observedKey = bindingInfo[NSObservedKeyPathKey];
+
+			/* Get the keyPath relative to the attibute object */
+			NSRange range = [observedKey rangeOfString:@"(?<=\\.|^)value\\d*$" options:NSRegularExpressionSearch];
+			NSString *key = range.location != NSNotFound ? [observedKey substringWithRange:range] : nil;
+
+			if (key) {
+				/* Update the binding with the attribute's value transformer */
+				NSMutableDictionary *options = bindingInfo[NSOptionsKey];
+				NSValueTransformer *valueTransformer = attribute.valueTransformer;
+
+				if (valueTransformer) {
+					options[NSValueTransformerBindingOption] = valueTransformer;
+				} else {
+					[options removeObjectForKey:NSValueTransformerBindingOption];
+				}
+
+				/* Clear and re-create the binding to update its value transformer */
+				[textField unbind:NSValueBinding];
+				[textField bind:NSValueBinding toObject:attribute withKeyPath:key options:options];
+
+				/* Set the appropriate number formater */
+				textField.formatter = attribute.formatter;
+			}
 		}
 	}
 
@@ -48,13 +81,11 @@
 }
 
 - (void)listTextFields:(id)view {
+
+	/* Recursivelly retrieve all text fields in the table cell */
 	for (id subview in [view subviews]) {
 		if ([subview isKindOfClass:[NSTextField class]]) {
-			NSDictionary *bindingInfo = [subview infoForBinding: NSValueBinding];
-			NSString *observedKey = bindingInfo[NSObservedKeyPathKey];
-			if (observedKey && [observedKey rangeOfString:@"(\\.|^)value\\d*$" options:NSRegularExpressionSearch].location != NSNotFound) {
-				[_textFields addObject:subview];
-			}
+			[_textFields addObject:subview];
 		}
 		[self listTextFields:subview];
 	}

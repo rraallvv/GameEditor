@@ -172,17 +172,17 @@
 				NSString *className = range.location != NSNotFound ? [attributeType substringWithRange:range] : nil;
 
 				if (NSClassFromString(className) == [NSColor class]) {
-					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType bindingOptions:nil];
+					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType];
 					[children addObject:attribute];
 
 				} else if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType
-														 bindingOptions:@{NSValueTransformerBindingOption: [NSValueTransformer valueTransformerForName:NSStringFromClass([DegreesTransformer class])]}];
+					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType];
 
 					NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 					formatter.numberStyle = NSNumberFormatterDecimalStyle;
 					formatter.negativeFormat = formatter.positiveFormat = @"#.###º";
 					attribute.formatter = formatter;
+					attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([DegreesTransformer class])];
 
 					[children addObject:attribute];
 
@@ -192,7 +192,7 @@
 					editable = editable && [attributeType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
 
 					if (editable) {
-						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType bindingOptions:nil];
+						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType];
 
 						NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 						formatter.numberStyle = NSNumberFormatterDecimalStyle;

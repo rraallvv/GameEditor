@@ -169,7 +169,6 @@
 @end
 
 @implementation Attribute {
-	NSValueTransformer *_valueTransformer;
 	NSArray *_labels;
 	NSString *_type;
 	id _value;
@@ -178,7 +177,7 @@
 @synthesize
 name = _name;
 
-- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type bindingOptions:(NSDictionary *)bindingOptions {
+- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
 	if (self = [super init]) {
 		_name = name;
 		_node = node;
@@ -193,21 +192,14 @@ name = _name;
 			_labels = @[@"X", @"Y", @"W", @"H"];
 		}
 
-		/* Cache the value transformer */
-		if(bindingOptions) {
-			_valueTransformer = bindingOptions[NSValueTransformerBindingOption];
-			if((id)_valueTransformer == [NSNull null])
-				_valueTransformer = nil;
-		}
-
 		/* Bind the property to the 'raw' value if there isn't an accessor */
-		[self bind:@"value" toObject:node withKeyPath:_name options:bindingOptions];
+		[self bind:@"value" toObject:node withKeyPath:_name options:nil];
 	}
 	return self;
 }
 
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type bindingOptions:(NSDictionary *)bindingOptions {
-	return [[Attribute alloc] initWithAttributeWithName:name node:node type:type bindingOptions:bindingOptions];
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
+	return [[Attribute alloc] initWithAttributeWithName:name node:node type:type];
 }
 
 - (NSString *)description {
@@ -243,17 +235,6 @@ name = _name;
 
 #pragma mark value
 
-- (NSValue *)reverseTransformedValue {
-
-	/* Apply the value transformer, if one has been set */
-	if(_valueTransformer && [[_valueTransformer class] allowsReverseTransformation]) {
-		return [_valueTransformer reverseTransformedValue:_value];
-	}
-
-	/* Fallback to the untransformed value */
-	return _value;
-}
-
 - (void)setValue:(id)value {
 	/* Do nothing if the value hasn't changed */
 	if ([_value isEqual:value])
@@ -262,7 +243,7 @@ name = _name;
 	_value = value;
 
 	/* Update the bound object's property value */
-	[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
+	[_node setValue:_value forKeyPath:_name];
 }
 
 - (id)value {
