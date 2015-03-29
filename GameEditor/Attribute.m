@@ -265,15 +265,15 @@ name = _name;
 	/* Traverse the value subindexes and update each component */
 	for (int index = 0; index < componentsCount; ++index) {
 		NSString *valueWithSubindex = [NSString stringWithFormat:@"value%d", index + 1];
-		[self willChangeValueForKey:valueWithSubindex];
 		[self setValue:@(components[index]) forKey:valueWithSubindex];
-		[self didChangeValueForKey:valueWithSubindex];
 	}
 }
 
 - (id)value {
 	return _value;
 }
+
+#pragma mark value with subindex
 
 - (void)setValue:(id)value forKey:(NSString *)key {
 	/* Try to get a subindex from the key */
@@ -345,6 +345,22 @@ name = _name;
 	}
 
 	return [super valueForKey:key];
+}
+
++ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
+	NSSet *keyPaths = [super keyPathsForValuesAffectingValueForKey:key];
+
+	/* Try to get the key without subindex */
+	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
+	NSTextCheckingResult *result = [regex firstMatchInString:key options:0 range:NSMakeRange(0, key.length)];
+
+	NSString *name = [key substringWithRange:[result rangeAtIndex:1]];
+
+	if ([name isEqualToString:@"value"]) {
+		keyPaths = [keyPaths setByAddingObject:@"value"];
+	}
+
+	return keyPaths;
 }
 
 @end
