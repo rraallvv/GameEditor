@@ -103,16 +103,18 @@
 
 @end
 
-@implementation PointTransformer
+@implementation PrecisionTransformer
 
 + (void)initialize {
-	[self initializeWithTransformedValueClass:[NSValue class]
+	[self initializeWithTransformedValueClass:[NSNumber class]
 				  allowsReverseTransformation:YES
-						transformedValueBlock:^(id value){
-							return value;
+						transformedValueBlock:^(NSNumber *value){
+							NSNumber *result = @(value.floatValue*100.0);
+							return result;
 						}
-				 reverseTransformedValueBlock:^(id value){
-							return [NSValue valueWithPoint:NSPointFromString(value)];
+				 reverseTransformedValueBlock:^(NSNumber *value){
+							NSNumber *result = @(value.floatValue*0.01);
+							return result;
 						}];
 }
 

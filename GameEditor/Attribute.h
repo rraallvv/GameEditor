@@ -27,7 +27,7 @@
 #import <objc/runtime.h>
 #import <SpriteKit/SpriteKit.h>
 
-@interface PointTransformer : NSValueTransformer
+@interface PrecisionTransformer : NSValueTransformer
 @end
 
 @interface DegreesTransformer : NSValueTransformer

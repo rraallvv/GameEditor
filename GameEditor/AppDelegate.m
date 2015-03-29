@@ -197,7 +197,9 @@
 						NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 						formatter.numberStyle = NSNumberFormatterDecimalStyle;
 						formatter.negativeFormat = formatter.positiveFormat = @"#.###";
+						formatter.multiplier = @(0.01);
 						attribute.formatter = formatter;
+						attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([PrecisionTransformer class])];
 
 						[children addObject:attribute];
 
