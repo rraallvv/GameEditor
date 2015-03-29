@@ -32,8 +32,6 @@
 }
 
 - (void)setObjectValue:(id)objectValue {
-	[super setObjectValue:objectValue];
-
 	_textFields = [NSMutableArray array];
 
 	if ([objectValue isKindOfClass:[Attribute class]]) {
@@ -45,6 +43,8 @@
 
 	if (_textFields.count == 0)
 		_textFields = nil;
+
+	[super setObjectValue:objectValue];
 }
 
 - (void)listTextFields:(id)view {
