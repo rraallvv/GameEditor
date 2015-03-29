@@ -38,10 +38,7 @@
 
 @interface Attribute : NSObject
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
-- (NSString *)type;
 @property (copy) NSString *name;
-@property (nonatomic, assign) BOOL editable;
-@property (weak) SKNode *node;
 @property id formatter;
 @property id valueTransformer;
 @end

@@ -174,6 +174,7 @@
 	NSArray *_labels;
 	NSString *_type;
 	id _value;
+	SKNode *_node;
 }
 
 @synthesize
