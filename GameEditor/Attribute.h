@@ -44,8 +44,8 @@
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
 + (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode* )node;
 + (instancetype)attributeForRotationAngleWithName:(NSString *)name node:(SKNode* )node;
-+ (instancetype)attributeForHighPrecisionWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
-+ (instancetype)attributeForNormalPrecisionWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
++ (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
++ (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
 + (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
 @property (copy) NSString *name;
 @property id formatter;

@@ -246,7 +246,7 @@ increment = _increment;
 	return attribute;
 }
 
-+ (instancetype)attributeForHighPrecisionWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
++ (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
 	Attribute *attribute = [Attribute attributeWithName:name node:node type:type];
 
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
@@ -260,7 +260,7 @@ increment = _increment;
 	return attribute;
 }
 
-+ (instancetype)attributeForNormalPrecisionWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
++ (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
 	Attribute *attribute = [Attribute attributeWithName:name node:node type:type];
 
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
@@ -272,7 +272,7 @@ increment = _increment;
 }
 
 + (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	Attribute *attribute = [Attribute attributeForHighPrecisionWithName:name node:node type:type];
+	Attribute *attribute = [Attribute attributeForHighPrecisionValueWithName:name node:node type:type];
 
 	NSNumberFormatter *formatter = attribute.formatter;
 	formatter.minimum = @(0.0);

@@ -180,16 +180,16 @@
 
 					if (editable) {
 
-						if ([attributeName containsString:@"anchorPoint"]
-							&& [attributeName containsString:@"centerRect"]
+						if (![attributeName containsString:@"anchorPoint"]
+							&& ![attributeName containsString:@"centerRect"]
 							&& ([attributeType isEqualToEncodedType:@encode(CGPoint)]
 								|| [attributeType isEqualToEncodedType:@encode(CGSize)]
 								|| [attributeType isEqualToEncodedType:@encode(CGRect)])) {
-								[children addObject:[Attribute attributeForNormalPrecisionWithName:attributeName node:node type:attributeType]];
+								[children addObject:[Attribute attributeForNormalPrecisionValueWithName:attributeName node:node type:attributeType]];
 							} else if ([attributeName containsString:@"colorBlendFactor"]) {
 								[children addObject:[Attribute attributeForNormalizedValueWithName:attributeName node:node type:attributeType]];
 							} else {
-								[children addObject:[Attribute attributeForHighPrecisionWithName:attributeName node:node type:attributeType]];
+								[children addObject:[Attribute attributeForHighPrecisionValueWithName:attributeName node:node type:attributeType]];
 							}
 						
 					}
