@@ -180,16 +180,19 @@
 
 					if (editable) {
 
-						if ([attributeType isEqualToEncodedType:@encode(CGPoint)]
-							|| [attributeType isEqualToEncodedType:@encode(CGSize)]
-							|| [attributeType isEqualToEncodedType:@encode(CGRect)]) {
-							[children addObject:[Attribute attributeForNormalPrecisionWithName:attributeName node:node type:attributeType]];
-						} else {
-							[children addObject:[Attribute attributeForHighPrecisionWithName:attributeName node:node type:attributeType]];
-						}
-
-					} else {
+						if ([attributeName rangeOfString:@"anchorPoint"].location == NSNotFound
+							&& [attributeName rangeOfString:@"centerRect"].location == NSNotFound
+							&& ([attributeType isEqualToEncodedType:@encode(CGPoint)]
+								|| [attributeType isEqualToEncodedType:@encode(CGSize)]
+								|| [attributeType isEqualToEncodedType:@encode(CGRect)])) {
+								[children addObject:[Attribute attributeForNormalPrecisionWithName:attributeName node:node type:attributeType]];
+							} else {
+								[children addObject:[Attribute attributeForHighPrecisionWithName:attributeName node:node type:attributeType]];
+							}
+						
+					}
 #if 1// Show non editable properties
+					else {
 						NSDictionary *attribute = @{@"name": attributeName,
 													@"value": @"(non-editable)",
 													@"editor": @"generic attribute",
@@ -198,8 +201,8 @@
 													@"isLeaf": @YES,
 													@"isEditable": @NO};
 						[children addObject:attribute];
-#endif
 					}
+#endif
 				}
 			}
 			free(properties);
