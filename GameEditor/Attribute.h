@@ -41,4 +41,6 @@
 @property (copy) NSString *name;
 @property id formatter;
 @property id valueTransformer;
+@property CGFloat sensitivity;
+@property CGFloat increment;
 @end

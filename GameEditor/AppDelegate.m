@@ -183,6 +183,7 @@
 					formatter.negativeFormat = formatter.positiveFormat = @"#.###º";
 					attribute.formatter = formatter;
 					attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([DegreesTransformer class])];
+					attribute.sensitivity = GLKMathRadiansToDegrees(0.001);
 
 					[children addObject:attribute];
 

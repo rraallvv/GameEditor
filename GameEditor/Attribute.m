@@ -47,6 +47,8 @@
 }
 @end
 
+#pragma mark - Value transformers
+
 @interface NSValueTransformer (Blocks)
 + (void)initializeWithTransformedValueClass:(Class)class
 				allowsReverseTransformation:(BOOL)allowsReverseTransformation
@@ -126,11 +128,11 @@
 	[self initializeWithTransformedValueClass:[NSNumber class]
 				  allowsReverseTransformation:YES
 						transformedValueBlock:^(NSNumber *value){
-							NSNumber *result = @(value.floatValue*180/M_PI);
+							NSNumber *result = @(GLKMathRadiansToDegrees(value.floatValue));
 							return result;
 						}
 				 reverseTransformedValueBlock:^(NSNumber *value){
-							NSNumber *result = @(value.floatValue*M_PI/180);
+							NSNumber *result = @(GLKMathDegreesToRadians(value.floatValue));
 							return result;
 						}];
 }
@@ -170,6 +172,8 @@
 
 @end
 
+#pragma mark - Attribute
+
 @implementation Attribute {
 	NSArray *_labels;
 	NSString *_type;
@@ -178,13 +182,17 @@
 }
 
 @synthesize
-name = _name;
+name = _name,
+sensitivity = _sensitivity,
+increment = _increment;
 
 - (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
 	if (self = [super init]) {
 		_name = name;
 		_node = node;
 		_type = type;
+		_sensitivity = 1.0;
+		_increment = 1.0;
 
 		/* Prepare the labels and identifier for the editor */
 		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {

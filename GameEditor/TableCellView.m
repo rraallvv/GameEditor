@@ -25,6 +25,7 @@
 
 #import "TableCellView.h"
 #import "Attribute.h"
+#import "StepperTextField.h"
 
 @implementation TableCellView {
 	NSMutableArray *_textFields;
@@ -70,6 +71,13 @@
 
 				/* Set the appropriate number formater */
 				textField.formatter = attribute.formatter;
+
+				/* Set the parameters for the stepper text field */
+				if ([textField isKindOfClass:[StepperTextField class]]) {
+					StepperTextField *stepper = (StepperTextField *)textField;
+					stepper.stepperInc = attribute.increment;
+					stepper.draggingMult = attribute.sensitivity;
+				}
 			}
 		}
 	}
