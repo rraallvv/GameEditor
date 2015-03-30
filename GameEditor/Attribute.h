@@ -27,6 +27,10 @@
 #import <objc/runtime.h>
 #import <SpriteKit/SpriteKit.h>
 
+@interface NSString (Types)
+- (BOOL)isEqualToEncodedType:(const char*)type;
+@end
+
 @interface PrecisionTransformer : NSValueTransformer
 @end
 

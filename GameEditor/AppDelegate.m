@@ -183,7 +183,14 @@
 					editable = editable && [attributeType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
 
 					if (editable) {
-						[children addObject:[Attribute attributeForPrecisionWithName:attributeName node:node type:attributeType]];
+
+						if ([attributeType isEqualToEncodedType:@encode(CGPoint)]
+							|| [attributeType isEqualToEncodedType:@encode(CGSize)]
+							|| [attributeType isEqualToEncodedType:@encode(CGRect)]) {
+							[children addObject:[Attribute attributeWithName:attributeName node:node type:attributeType]];
+						} else {
+							[children addObject:[Attribute attributeForPrecisionWithName:attributeName node:node type:attributeType]];
+						}
 
 					} else {
 #if 1// Show non editable properties

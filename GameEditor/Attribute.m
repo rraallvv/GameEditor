@@ -25,6 +25,12 @@
 
 #import "Attribute.h"
 
+@implementation NSString (Types)
+- (BOOL)isEqualToEncodedType:(const char*)type {
+	return [self isEqualToString:[NSString stringWithUTF8String:type]];
+}
+@end
+
 @interface NSString (Regex)
 - (NSArray *)substringsWithRegularExpressionWithPattern:(NSString *)pattern options:(NSRegularExpressionOptions)options error:(NSError **)error;
 @end
