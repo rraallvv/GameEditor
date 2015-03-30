@@ -183,9 +183,9 @@
 						if ([attributeType isEqualToEncodedType:@encode(CGPoint)]
 							|| [attributeType isEqualToEncodedType:@encode(CGSize)]
 							|| [attributeType isEqualToEncodedType:@encode(CGRect)]) {
-							[children addObject:[Attribute attributeWithName:attributeName node:node type:attributeType]];
+							[children addObject:[Attribute attributeForNormalPrecisionWithName:attributeName node:node type:attributeType]];
 						} else {
-							[children addObject:[Attribute attributeForPrecisionWithName:attributeName node:node type:attributeType]];
+							[children addObject:[Attribute attributeForHighPrecisionWithName:attributeName node:node type:attributeType]];
 						}
 
 					} else {

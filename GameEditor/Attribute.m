@@ -211,11 +211,11 @@ increment = _increment;
 		_increment = 1.0;
 
 		/* Prepare the labels and identifier for the editor */
-		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+		if ([_type isEqualToEncodedType:@encode(CGPoint)]) {
 			_labels = @[@"X", @"Y"];
-		} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+		} else if ([_type isEqualToEncodedType:@encode(CGSize)]) {
 			_labels = @[@"W", @"H"];
-		} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
 			_labels = @[@"X", @"Y", @"W", @"H"];
 		}
 
@@ -246,7 +246,7 @@ increment = _increment;
 	return attribute;
 }
 
-+ (instancetype)attributeForPrecisionWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
++ (instancetype)attributeForHighPrecisionWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
 	Attribute *attribute = [Attribute attributeWithName:name node:node type:type];
 
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
@@ -260,16 +260,27 @@ increment = _increment;
 	return attribute;
 }
 
++ (instancetype)attributeForNormalPrecisionWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
+	Attribute *attribute = [Attribute attributeWithName:name node:node type:type];
+
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
+	attribute.formatter = formatter;
+
+	return attribute;
+}
+
 - (NSString *)description {
 	return [NSString stringWithFormat:@"%@ %@", _name, _type];
 }
 
 - (NSString *)editor {
-	if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+	if ([_type isEqualToEncodedType:@encode(CGPoint)]) {
 		return @"dd";
-	} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+	} else if ([_type isEqualToEncodedType:@encode(CGSize)]) {
 		return @"dd";
-	} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+	} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
 		return @"dddd";
 	}
 	return _type;
@@ -321,19 +332,19 @@ increment = _increment;
 
 		/* Update the value component for the given subindex */
 
-		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+		if ([_type isEqualToEncodedType:@encode(CGPoint)]) {
 			CGPoint point = [self.value pointValue];
 			CGFloat *components = (CGFloat*)&point;
 			components[subindex] = [value floatValue];
 			self.value = [NSValue valueWithPoint:point];
 
-		} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+		} else if ([_type isEqualToEncodedType:@encode(CGSize)]) {
 			CGSize size = [self.value sizeValue];
 			CGFloat *components = (CGFloat*)&size;
 			components[subindex] = [value floatValue];
 			self.value = [NSValue valueWithSize:size];
 
-		} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
 			CGRect rect = [self.value rectValue];
 			CGFloat *components = (CGFloat*)&rect;
 			components[subindex] = [value floatValue];
@@ -363,15 +374,15 @@ increment = _increment;
 
 		/* The key is a subindex of value */
 
-		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+		if ([_type isEqualToEncodedType:@encode(CGPoint)]) {
 			CGPoint point = [_value pointValue];
 			return @(((CGFloat*)&point)[subindex]);
 
-		} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+		} else if ([_type isEqualToEncodedType:@encode(CGSize)]) {
 			CGSize size = [_value sizeValue];
 			return @(((CGFloat*)&size)[subindex]);
 
-		} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
 			CGRect rect = [_value rectValue];
 			return @(((CGFloat*)&rect)[subindex]);
 		}
