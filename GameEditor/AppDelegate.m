@@ -186,7 +186,8 @@
 								|| [attributeType isEqualToEncodedType:@encode(CGSize)]
 								|| [attributeType isEqualToEncodedType:@encode(CGRect)])) {
 								[children addObject:[Attribute attributeForNormalPrecisionValueWithName:attributeName node:node type:attributeType]];
-							} else if ([attributeName containsString:@"colorBlendFactor"]) {
+							} else if ([attributeName containsString:@"colorBlendFactor"]
+									   || [attributeName containsString:@"alpha"]) {
 								[children addObject:[Attribute attributeForNormalizedValueWithName:attributeName node:node type:attributeType]];
 							} else {
 								[children addObject:[Attribute attributeForHighPrecisionValueWithName:attributeName node:node type:attributeType]];
