@@ -68,7 +68,7 @@
             </constraints>
             <point key="canvasLocation" x="436" y="332.5"/>
         </tableCellView>
-        <tableCellView identifier="@&quot;NSColor&quot;" id="Nhn-ML-Yi0" userLabel="@&quot;NSColor&quot;">
+        <tableCellView identifier="color" id="Nhn-ML-Yi0" userLabel="color">
             <rect key="frame" x="0.0" y="0.0" width="172" height="17"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>

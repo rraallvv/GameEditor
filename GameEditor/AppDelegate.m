@@ -172,20 +172,10 @@
 				NSString *className = range.location != NSNotFound ? [attributeType substringWithRange:range] : nil;
 
 				if (NSClassFromString(className) == [NSColor class]) {
-					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType];
-					[children addObject:attribute];
+					[children addObject:[Attribute attributeForColorWithName:attributeName node:node]];
 
 				} else if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType];
-
-					NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-					formatter.numberStyle = NSNumberFormatterDecimalStyle;
-					formatter.negativeFormat = formatter.positiveFormat = @"#.###º";
-					attribute.formatter = formatter;
-					attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([DegreesTransformer class])];
-					attribute.sensitivity = GLKMathRadiansToDegrees(0.001);
-
-					[children addObject:attribute];
+					[children addObject:[Attribute  attributeForRotationAngleWithName:attributeName node:node]];
 
 				} else {
 					BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
@@ -193,16 +183,7 @@
 					editable = editable && [attributeType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
 
 					if (editable) {
-						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType];
-
-						NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-						formatter.numberStyle = NSNumberFormatterDecimalStyle;
-						formatter.negativeFormat = formatter.positiveFormat = @"#.###";
-						formatter.multiplier = @(0.01);
-						attribute.formatter = formatter;
-						attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([PrecisionTransformer class])];
-
-						[children addObject:attribute];
+						[children addObject:[Attribute attributeForPrecisionWithName:attributeName node:node type:attributeType]];
 
 					} else {
 #if 1// Show non editable properties

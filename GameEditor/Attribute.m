@@ -213,6 +213,37 @@ increment = _increment;
 	return [[Attribute alloc] initWithAttributeWithName:name node:node type:type];
 }
 
++ (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode* )node {
+	return [[Attribute alloc] initWithAttributeWithName:name node:node type:@"color"];
+}
+
++ (instancetype)attributeForRotationAngleWithName:name node:(SKNode* )node {
+	Attribute *attribute = [Attribute attributeWithName:name node:node type:@"d"];
+
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.negativeFormat = formatter.positiveFormat = @"#.###º";
+	attribute.formatter = formatter;
+	attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([DegreesTransformer class])];
+	attribute.sensitivity = GLKMathRadiansToDegrees(0.001);
+
+	return attribute;
+}
+
++ (instancetype)attributeForPrecisionWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
+	Attribute *attribute = [Attribute attributeWithName:name node:node type:type];
+
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
+	formatter.multiplier = @(0.01);
+	attribute.formatter = formatter;
+	attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([PrecisionTransformer class])];
+	attribute.increment = 10.0;
+
+	return attribute;
+}
+
 - (NSString *)description {
 	return [NSString stringWithFormat:@"%@ %@", _name, _type];
 }
