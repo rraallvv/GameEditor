@@ -24,10 +24,20 @@
  */
 
 #import "Attribute.h"
+#import <objc/runtime.h>
 
 @implementation NSString (Types)
 - (BOOL)isEqualToEncodedType:(const char*)type {
-	return [self isEqualToString:[NSString stringWithUTF8String:type]];
+
+	/* Try to get a class name from the attribute type */
+	NSRange range = [self rangeOfString:@"(?<=@\")(\\w*)(?=\")" options:NSRegularExpressionSearch];
+	NSString *className = range.location != NSNotFound ? [self substringWithRange:range] : nil;
+
+	if (className) {
+		return [[NSString stringWithFormat:@"{%@=#}", className] isEqualToString:[NSString stringWithUTF8String:type]];
+	} else {
+		return [self isEqualToString:[NSString stringWithUTF8String:type]];
+	}
 }
 @end
 

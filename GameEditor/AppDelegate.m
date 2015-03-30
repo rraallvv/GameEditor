@@ -167,11 +167,7 @@
 				NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
 				NSString *attributeType = [attibutesArray firstObject];
 
-				/* Try to get a class name from the attribute type */
-				NSRange range = [attributeType rangeOfString:@"(?<=@\")(\\w*)(?=\")" options:NSRegularExpressionSearch];
-				NSString *className = range.location != NSNotFound ? [attributeType substringWithRange:range] : nil;
-
-				if (NSClassFromString(className) == [NSColor class]) {
+				if ([attributeType isEqualToEncodedType:@encode(NSColor)]) {
 					[children addObject:[Attribute attributeForColorWithName:attributeName node:node]];
 
 				} else if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
