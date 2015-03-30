@@ -46,6 +46,7 @@
 + (instancetype)attributeForRotationAngleWithName:(NSString *)name node:(SKNode* )node;
 + (instancetype)attributeForHighPrecisionWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
 + (instancetype)attributeForNormalPrecisionWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
++ (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
 @property (copy) NSString *name;
 @property id formatter;
 @property id valueTransformer;

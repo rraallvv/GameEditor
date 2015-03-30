@@ -271,6 +271,16 @@ increment = _increment;
 	return attribute;
 }
 
++ (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
+	Attribute *attribute = [Attribute attributeForHighPrecisionWithName:name node:node type:type];
+
+	NSNumberFormatter *formatter = attribute.formatter;
+	formatter.minimum = @(0.0);
+	formatter.maximum = @(100.0);
+
+	return attribute;
+}
+
 - (NSString *)description {
 	return [NSString stringWithFormat:@"%@ %@", _name, _type];
 }

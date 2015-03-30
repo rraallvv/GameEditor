@@ -180,27 +180,28 @@
 
 					if (editable) {
 
-						if ([attributeName rangeOfString:@"anchorPoint"].location == NSNotFound
-							&& [attributeName rangeOfString:@"centerRect"].location == NSNotFound
+						if ([attributeName containsString:@"anchorPoint"]
+							&& [attributeName containsString:@"centerRect"]
 							&& ([attributeType isEqualToEncodedType:@encode(CGPoint)]
 								|| [attributeType isEqualToEncodedType:@encode(CGSize)]
 								|| [attributeType isEqualToEncodedType:@encode(CGRect)])) {
 								[children addObject:[Attribute attributeForNormalPrecisionWithName:attributeName node:node type:attributeType]];
+							} else if ([attributeName containsString:@"colorBlendFactor"]) {
+								[children addObject:[Attribute attributeForNormalizedValueWithName:attributeName node:node type:attributeType]];
 							} else {
 								[children addObject:[Attribute attributeForHighPrecisionWithName:attributeName node:node type:attributeType]];
 							}
 						
 					}
-#if 1// Show non editable properties
+#if 1// Show a dummy attibute for non-editable properties
 					else {
-						NSDictionary *attribute = @{@"name": attributeName,
-													@"value": @"(non-editable)",
-													@"editor": @"generic attribute",
-													@"node": [NSNull null],
-													@"description": [NSString stringWithFormat:@"%@ %@", attributeName, attributeType],
-													@"isLeaf": @YES,
-													@"isEditable": @NO};
-						[children addObject:attribute];
+						[children addObject:@{@"name": attributeName,
+											  @"value": @"(non-editable)",
+											  @"editor": @"generic attribute",
+											  @"node": [NSNull null],
+											  @"description": [NSString stringWithFormat:@"%@ %@", attributeName, attributeType],
+											  @"isLeaf": @YES,
+											  @"isEditable": @NO}];
 					}
 #endif
 				}
