@@ -278,6 +278,7 @@ increment = _increment;
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
 	formatter.minimum = @(0.0);
 	formatter.maximum = @(100.0);
+	attribute.formatter = formatter;
 
 	return attribute;
 }
@@ -285,11 +286,12 @@ increment = _increment;
 + (instancetype)attributeForUnsignedIntegerValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
 	Attribute *attribute = [Attribute attributeWithName:name node:node type:type];
 
-	NSNumberFormatter *formatter = attribute.formatter;
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
 	formatter.minimum = @(0.0);
 	formatter.roundingIncrement = @(1.0);
-	
+	attribute.formatter = formatter;
+
 	return attribute;
 }
 
