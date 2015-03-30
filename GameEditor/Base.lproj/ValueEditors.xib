@@ -347,6 +347,49 @@
                 <outlet property="contentViewController" destination="Nuf-d3-4cB" id="dDf-N7-ObG"/>
             </connections>
         </popover>
+        <tableCellView identifier="I" id="a61-EY-A6P" userLabel="I" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="17"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tJ6-rj-LJu">
+                    <rect key="frame" x="0.0" y="-2" width="161" height="19"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" placeholderString="Value" bezelStyle="round" id="4Dn-y0-9HB">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
+                        <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="AltIncreaseStepper"/>
+                        <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="DecreaseStepper"/>
+                        <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <binding destination="a61-EY-A6P" name="editable" keyPath="objectValue.isEditable" id="hVd-Cm-55O"/>
+                        <binding destination="a61-EY-A6P" name="value" keyPath="objectValue.value" id="5E3-rz-qmj"/>
+                    </connections>
+                </textField>
+                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="92Z-gQ-5cC">
+                    <rect key="frame" x="159" y="-4" width="15" height="22"/>
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="100" id="hFQ-qm-ITK"/>
+                    <connections>
+                        <binding destination="a61-EY-A6P" name="value" keyPath="objectValue.value" id="zEh-hh-jaP"/>
+                    </connections>
+                </stepper>
+            </subviews>
+            <constraints>
+                <constraint firstItem="92Z-gQ-5cC" firstAttribute="leading" secondItem="tJ6-rj-LJu" secondAttribute="trailing" id="7hW-GE-fKt"/>
+                <constraint firstAttribute="trailing" secondItem="92Z-gQ-5cC" secondAttribute="trailing" id="LuT-Om-kdU"/>
+                <constraint firstItem="92Z-gQ-5cC" firstAttribute="centerY" secondItem="tJ6-rj-LJu" secondAttribute="centerY" id="Omx-sD-yDQ"/>
+                <constraint firstItem="tJ6-rj-LJu" firstAttribute="top" secondItem="a61-EY-A6P" secondAttribute="top" id="Y5E-cS-8eK"/>
+                <constraint firstItem="tJ6-rj-LJu" firstAttribute="leading" secondItem="a61-EY-A6P" secondAttribute="leading" id="kNp-WM-VjX"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="zc9-lW-e7P"/>
+                <outlet property="textField" destination="tJ6-rj-LJu" id="Zlk-Bu-Yf1"/>
+            </connections>
+            <point key="canvasLocation" x="726" y="453.5"/>
+        </tableCellView>
     </objects>
     <resources>
         <image name="AltDecreaseStepper" width="11" height="13"/>
