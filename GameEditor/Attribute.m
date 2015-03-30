@@ -29,7 +29,7 @@
 @implementation NSString (Types)
 - (BOOL)isEqualToEncodedType:(const char*)type {
 
-	/* Try to get a class name from the attribute type */
+	/* Try to get a class name from the type */
 	NSRange range = [self rangeOfString:@"(?<=@\")(\\w*)(?=\")" options:NSRegularExpressionSearch];
 	NSString *className = range.location != NSNotFound ? [self substringWithRange:range] : nil;
 
@@ -275,9 +275,21 @@ increment = _increment;
 	Attribute *attribute = [Attribute attributeForHighPrecisionValueWithName:name node:node type:type];
 
 	NSNumberFormatter *formatter = attribute.formatter;
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
 	formatter.minimum = @(0.0);
 	formatter.maximum = @(100.0);
 
+	return attribute;
+}
+
++ (instancetype)attributeForUnsignedIntegerValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
+	Attribute *attribute = [Attribute attributeWithName:name node:node type:type];
+
+	NSNumberFormatter *formatter = attribute.formatter;
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.minimum = @(0.0);
+	formatter.roundingIncrement = @(1.0);
+	
 	return attribute;
 }
 

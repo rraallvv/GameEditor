@@ -358,12 +358,6 @@
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="image" keyPath="increase" value="IncreaseStepper"/>
-                        <userDefinedRuntimeAttribute type="image" keyPath="alternateInc" value="AltIncreaseStepper"/>
-                        <userDefinedRuntimeAttribute type="image" keyPath="decrease" value="DecreaseStepper"/>
-                        <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
-                    </userDefinedRuntimeAttributes>
                     <connections>
                         <binding destination="a61-EY-A6P" name="editable" keyPath="objectValue.isEditable" id="hVd-Cm-55O"/>
                         <binding destination="a61-EY-A6P" name="value" keyPath="objectValue.value" id="5E3-rz-qmj"/>

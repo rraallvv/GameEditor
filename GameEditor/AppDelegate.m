@@ -189,6 +189,8 @@
 							} else if ([attributeName containsString:@"colorBlendFactor"]
 									   || [attributeName containsString:@"alpha"]) {
 								[children addObject:[Attribute attributeForNormalizedValueWithName:attributeName node:node type:attributeType]];
+							} if ([attributeType isEqualToEncodedType:@encode(unsigned int)]) {
+								[children addObject:[Attribute attributeForUnsignedIntegerValueWithName:attributeName node:node type:attributeType]];
 							} else {
 								[children addObject:[Attribute attributeForHighPrecisionValueWithName:attributeName node:node type:attributeType]];
 							}
