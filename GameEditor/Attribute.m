@@ -356,23 +356,18 @@ increment = _increment;
 
 		/* Update the value component for the given subindex */
 
-		if ([_type isEqualToEncodedType:@encode(CGPoint)]) {
-			CGPoint point = [self.value pointValue];
-			CGFloat *components = (CGFloat*)&point;
-			components[subindex] = [value floatValue];
-			self.value = [NSValue valueWithPoint:point];
-
-		} else if ([_type isEqualToEncodedType:@encode(CGSize)]) {
-			CGSize size = [self.value sizeValue];
-			CGFloat *components = (CGFloat*)&size;
-			components[subindex] = [value floatValue];
-			self.value = [NSValue valueWithSize:size];
+		if ([_type isEqualToEncodedType:@encode(CGPoint)]
+			|| [_type isEqualToEncodedType:@encode(CGSize)]) {
+			CGFloat data[2];
+			[self.value getValue:&data];
+			data[subindex] = [value floatValue];
+			self.value = [NSValue value:&data withObjCType:_type.UTF8String];
 
 		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
-			CGRect rect = [self.value rectValue];
-			CGFloat *components = (CGFloat*)&rect;
-			components[subindex] = [value floatValue];
-			self.value = [NSValue valueWithRect:rect];
+			CGFloat data[4];
+			[self.value getValue:&data];
+			data[subindex] = [value floatValue];
+			self.value = [NSValue value:&data withObjCType:_type.UTF8String];
 		}
 
 	} else {
@@ -398,17 +393,16 @@ increment = _increment;
 
 		/* The key is a subindex of value */
 
-		if ([_type isEqualToEncodedType:@encode(CGPoint)]) {
-			CGPoint point = [_value pointValue];
-			return @(((CGFloat*)&point)[subindex]);
-
-		} else if ([_type isEqualToEncodedType:@encode(CGSize)]) {
-			CGSize size = [_value sizeValue];
-			return @(((CGFloat*)&size)[subindex]);
+		if ([_type isEqualToEncodedType:@encode(CGPoint)]
+			|| [_type isEqualToEncodedType:@encode(CGSize)]) {
+			CGFloat data[2];
+			[_value getValue:&data];
+			return @(data[subindex]);
 
 		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
-			CGRect rect = [_value rectValue];
-			return @(((CGFloat*)&rect)[subindex]);
+			CGFloat data[4];
+			[_value getValue:&data];
+			return @(data[subindex]);
 		}
 	}
 
