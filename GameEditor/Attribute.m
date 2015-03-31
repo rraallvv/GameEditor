@@ -215,6 +215,8 @@ increment = _increment;
 			_labels = @[@"X", @"Y"];
 		} else if ([_type isEqualToEncodedType:@encode(CGSize)]) {
 			_labels = @[@"W", @"H"];
+		} else if ([_type isEqualToEncodedType:@encode(CGVector)]) {
+			_labels = @[@"dX", @"dY"];
 		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
 			_labels = @[@"X", @"Y", @"W", @"H"];
 		}
@@ -346,7 +348,8 @@ increment = _increment;
 		/* Update the value component for the given subindex */
 
 		if ([_type isEqualToEncodedType:@encode(CGPoint)]
-			|| [_type isEqualToEncodedType:@encode(CGSize)]) {
+			|| [_type isEqualToEncodedType:@encode(CGSize)]
+			|| [_type isEqualToEncodedType:@encode(CGVector)]) {
 			CGFloat data[2];
 			[self.value getValue:&data];
 			data[subindex] = [value floatValue];
@@ -383,7 +386,8 @@ increment = _increment;
 		/* The key is a subindex of value */
 
 		if ([_type isEqualToEncodedType:@encode(CGPoint)]
-			|| [_type isEqualToEncodedType:@encode(CGSize)]) {
+			|| [_type isEqualToEncodedType:@encode(CGSize)]
+			|| [_type isEqualToEncodedType:@encode(CGVector)]) {
 			CGFloat data[2];
 			[_value getValue:&data];
 			return @(data[subindex]);
