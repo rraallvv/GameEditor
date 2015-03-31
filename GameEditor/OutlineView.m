@@ -62,7 +62,12 @@
 }
 - (void)setFrame:(NSRect)frame {
 	[super setFrame:frame];
-	if (self.isGroupRowStyle) {
+
+	OutlineView *outlineView = (OutlineView *)[self superview];
+	NSInteger row = [outlineView rowForView:self];
+	NSUInteger indexPathLength = [[[outlineView itemAtRow:row] indexPath] length];
+
+	if (self.isGroupRowStyle && indexPathLength == 1) {
 		if (!_hideGroupButton) {
 
 			NSBundle *bundle = [NSBundle bundleForClass:[NSApplication class]];
@@ -199,6 +204,15 @@ static const CGFloat kIndentationPerLevel = 0.0;
 	return [_actualDelegate outlineView:outlineView heightOfRowByItem:item];
 }
 - (NSRect)frameOfOutlineCellAtRow:(NSInteger)row {
+
+	id item = [self itemAtRow:row];
+
+	if ([item indexPath].length > 1 && ![[[item representedObject] valueForKey:@"isLeaf"] boolValue]) {
+		NSRect rect = [super frameOfOutlineCellAtRow:row];
+		rect.origin.x = 0;
+		return rect;
+	}
+
 	return NSZeroRect; // Remove the disclosure triangle
 }
 @end
