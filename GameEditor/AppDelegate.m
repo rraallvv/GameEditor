@@ -120,9 +120,13 @@
 
 - (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
 	if ([self isGroupItem:item]) {
-		return [outlineView makeViewWithIdentifier:@"group" owner:self];
+		if ([item indexPath].length == 1) {
+			return [outlineView makeViewWithIdentifier:@"class" owner:self];
+		} else {
+			return [outlineView makeViewWithIdentifier:@"expandable" owner:self];
+		}
 	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
-		return [outlineView makeViewWithIdentifier:@"name" owner:self];
+		return [outlineView makeViewWithIdentifier:@"attribute" owner:self];
 	} else {
 		NSString *type = [[item representedObject] valueForKey:@"type"];
 		for (NSString *identifier in _editorIdentifiers) {

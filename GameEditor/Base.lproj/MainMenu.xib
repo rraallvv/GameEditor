@@ -154,12 +154,12 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
-                                                <tableCellView identifier="group" id="yfL-tc-DAf">
-                                                    <rect key="frame" x="1" y="1" width="78" height="17"/>
+                                                <tableCellView identifier="class" id="yfL-tc-DAf">
+                                                    <rect key="frame" x="1" y="1" width="78" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="3fy-Ty-hse">
-                                                            <rect key="frame" x="3" y="3" width="77" height="14"/>
+                                                            <rect key="frame" x="3" y="6" width="77" height="14"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Class" id="0qY-r9-dez">
                                                                 <font key="font" metaFont="smallSystemBold"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -179,13 +179,13 @@
                                                         <outlet property="textField" destination="3fy-Ty-hse" id="Bno-BJ-7NH"/>
                                                     </connections>
                                                 </tableCellView>
-                                                <tableCellView identifier="name" id="M03-u6-Cp5">
+                                                <tableCellView identifier="expandable" id="M03-u6-Cp5">
                                                     <rect key="frame" x="1" y="20" width="78" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="XZg-ys-F6V" userLabel="attribute">
+                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="XZg-ys-F6V">
                                                             <rect key="frame" x="4" y="3" width="70" height="14"/>
-                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="attribute" id="rkw-uf-tbh">
+                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="expandable" id="rkw-uf-tbh">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -207,6 +207,36 @@
                                                     </constraints>
                                                     <connections>
                                                         <outlet property="textField" destination="XZg-ys-F6V" id="QqW-U5-rg1"/>
+                                                    </connections>
+                                                </tableCellView>
+                                                <tableCellView identifier="attribute" id="v2I-yi-2VH">
+                                                    <rect key="frame" x="1" y="20" width="78" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="lnd-kE-zyo" userLabel="attribute">
+                                                            <rect key="frame" x="4" y="3" width="70" height="14"/>
+                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="attribute" id="OJD-0N-FdK">
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                            <connections>
+                                                                <binding destination="v2I-yi-2VH" name="toolTip" keyPath="objectValue.description" id="Pdq-OO-hD3"/>
+                                                                <binding destination="v2I-yi-2VH" name="value" keyPath="objectValue.name" id="M73-1v-8Su">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">AttibuteNameTransformer</string>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
+                                                        </textField>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="top" secondItem="lnd-kE-zyo" secondAttribute="bottom" constant="-17" id="DkW-yk-JSx"/>
+                                                        <constraint firstAttribute="trailing" secondItem="lnd-kE-zyo" secondAttribute="trailing" constant="6" id="K9M-xf-wlW"/>
+                                                        <constraint firstItem="lnd-kE-zyo" firstAttribute="leading" secondItem="v2I-yi-2VH" secondAttribute="leading" constant="6" id="LwT-Sc-XwA"/>
+                                                    </constraints>
+                                                    <connections>
+                                                        <outlet property="textField" destination="lnd-kE-zyo" id="EWT-Pz-G3v"/>
                                                     </connections>
                                                 </tableCellView>
                                             </prototypeCellViews>
