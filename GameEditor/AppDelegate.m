@@ -158,95 +158,98 @@
 
 - (void)selectedNode:(id)node {
 	/* Replace the attributes table */
-	[_treeController setContent:[self attributesWithNode:node]];
+	[_treeController setContent:[self attributesForAllClassesWithNode:node]];
 
 	// Expand all the groups
 	[_outlineView expandItem:nil expandChildren:YES];
 	[_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
 }
 
-- (NSMutableArray *)attributesWithNode:(id)node {
+- (NSMutableArray *)attributesForAllClassesWithNode:(id)node {
 	
-	NSMutableArray *attributesArray = [NSMutableArray array];
+	NSMutableArray *classesArray = [NSMutableArray array];
 
-	/* Populate the attributes table from the selected node's properties */
 	Class classType = [node class];
+
 	do {
-		unsigned int count;
-		objc_property_t *properties = class_copyPropertyList(classType, &count);
-
-		if (count) {
-			NSMutableArray *children = [NSMutableArray array];
-
-			for(unsigned int i = 0; i < count; i++) {
-				//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
-				NSString *attributeName = [NSString stringWithUTF8String:property_getName(properties[i])];
-				NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
-				NSArray *attributesArray = [attributes componentsSeparatedByString:@","];
-				NSString *attributeType = [attributesArray firstObject];
-
-				if ([attributeType isEqualToEncodedType:@encode(NSColor)]) {
-					[children addObject:[Attribute attributeForColorWithName:attributeName node:node]];
-
-				} else if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-					[children addObject:[Attribute  attributeForRotationAngleWithName:attributeName node:node]];
-
-				} else {
-					BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
-					NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
-					editable = editable && [attributeType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
-
-					if (editable) {
-
-						if (![attributeName containsString:@"anchorPoint"]
-							&& ![attributeName containsString:@"centerRect"]
-							&& ([attributeType isEqualToEncodedType:@encode(CGPoint)]
-								|| [attributeType isEqualToEncodedType:@encode(CGSize)]
-								|| [attributeType isEqualToEncodedType:@encode(CGRect)])) {
-							[children addObject:[Attribute attributeForNormalPrecisionValueWithName:attributeName node:node type:attributeType]];
-						} else if ([attributeName containsString:@"colorBlendFactor"]
-								   || [attributeName containsString:@"alpha"]) {
-							[children addObject:[Attribute attributeForNormalizedValueWithName:attributeName node:node type:attributeType]];
-						} else if ([attributeType isEqualToEncodedType:@encode(short)]
-								   || [attributeType isEqualToEncodedType:@encode(int)]
-								   || [attributeType isEqualToEncodedType:@encode(long)]
-								   || [attributeType isEqualToEncodedType:@encode(long long)]
-								   || [attributeType isEqualToEncodedType:@encode(unsigned short)]
-								   || [attributeType isEqualToEncodedType:@encode(unsigned int)]
-								   || [attributeType isEqualToEncodedType:@encode(unsigned long)]
-								   || [attributeType isEqualToEncodedType:@encode(unsigned long long)]) {
-							[children addObject:[Attribute attributeForIntegerValueWithName:attributeName node:node type:attributeType]];
-						} else {
-							[children addObject:[Attribute attributeForHighPrecisionValueWithName:attributeName node:node type:attributeType]];
-						}
-
-					}
-#if 1// Show a dummy attribute for non-editable properties
-					else {
-						[children addObject:@{@"name": attributeName,
-											  @"value": @"(non-editable)",
-											  @"type": @"generic attribute",
-											  @"node": [NSNull null],
-											  @"description": [NSString stringWithFormat:@"%@\n%@", attributeName, attributeType],
-											  @"isLeaf": @YES,
-											  @"isEditable": @NO}];
-					}
-#endif
-				}
-			}
-			free(properties);
-
-			[attributesArray addObject:@{@"name": [classType description],
-										 @"isLeaf": @NO,
-										 @"isEditable": @NO,
-										 @"children":children}];
-		}
+		[classesArray addObject:@{@"name": [classType description],
+								  @"isLeaf": @NO,
+								  @"isEditable": @NO,
+								  @"children":[self attibutesForClass:classType node:node]}];
 
 		classType = [classType superclass];
 		
 	} while (classType != nil
 			 && classType != [SKNode superclass]
 			 && classType != [NSObject class]);
+
+	return classesArray;
+}
+
+- (NSMutableArray *)attibutesForClass:(Class)classType node:(id)node {
+	unsigned int count;
+	objc_property_t *properties = class_copyPropertyList(classType, &count);
+
+	NSMutableArray *attributesArray = [NSMutableArray array];
+
+	if (count) {
+		for(unsigned int i = 0; i < count; i++) {
+			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
+			NSString *propertyName = [NSString stringWithUTF8String:property_getName(properties[i])];
+			NSString *propertyAttributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
+			NSString *propertyType = [[propertyAttributes componentsSeparatedByString:@","] firstObject];
+
+			if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
+				[attributesArray addObject:[Attribute attributeForColorWithName:propertyName node:node]];
+
+			} else if ([propertyName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+				[attributesArray addObject:[Attribute  attributeForRotationAngleWithName:propertyName node:node]];
+
+			} else {
+				BOOL editable = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
+				NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
+				editable = editable && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
+
+				if (editable) {
+
+					if (![propertyName containsString:@"anchorPoint"]
+						&& ![propertyName containsString:@"centerRect"]
+						&& ([propertyType isEqualToEncodedType:@encode(CGPoint)]
+							|| [propertyType isEqualToEncodedType:@encode(CGSize)]
+							|| [propertyType isEqualToEncodedType:@encode(CGRect)])) {
+							[attributesArray addObject:[Attribute attributeForNormalPrecisionValueWithName:propertyName node:node type:propertyType]];
+						} else if ([propertyName containsString:@"colorBlendFactor"]
+								   || [propertyName containsString:@"alpha"]) {
+							[attributesArray addObject:[Attribute attributeForNormalizedValueWithName:propertyName node:node type:propertyType]];
+						} else if ([propertyType isEqualToEncodedType:@encode(short)]
+								   || [propertyType isEqualToEncodedType:@encode(int)]
+								   || [propertyType isEqualToEncodedType:@encode(long)]
+								   || [propertyType isEqualToEncodedType:@encode(long long)]
+								   || [propertyType isEqualToEncodedType:@encode(unsigned short)]
+								   || [propertyType isEqualToEncodedType:@encode(unsigned int)]
+								   || [propertyType isEqualToEncodedType:@encode(unsigned long)]
+								   || [propertyType isEqualToEncodedType:@encode(unsigned long long)]) {
+							[attributesArray addObject:[Attribute attributeForIntegerValueWithName:propertyName node:node type:propertyType]];
+						} else {
+							[attributesArray addObject:[Attribute attributeForHighPrecisionValueWithName:propertyName node:node type:propertyType]];
+						}
+
+				}
+#if 1// Show a dummy attribute for non-editable properties
+				else {
+					[attributesArray addObject:@{@"name": propertyName,
+											  @"value": @"(non-editable)",
+											  @"type": @"generic attribute",
+											  @"node": [NSNull null],
+											  @"description": [NSString stringWithFormat:@"%@\n%@", propertyName, propertyType],
+											  @"isLeaf": @YES,
+											  @"isEditable": @NO}];
+				}
+#endif
+			}
+		}
+		free(properties);
+	}
 
 	return attributesArray;
 }
