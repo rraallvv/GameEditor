@@ -156,12 +156,11 @@
 	[SKScene archiveScene:self.skView.scene toFile:@"GameScene"];
 }
 
-- (void)selectedNode:(SKNode *)node {
+- (void)selectedNode:(id)node {
 
-	/* Clear the attibutes table */
-	[_treeController setContent:nil];
+	NSMutableArray *parent = [NSMutableArray array];
 
-	/* Populate the attibutes table from the selected node's properties */
+	/* Populate the attributes table from the selected node's properties */
 	Class classType = [node class];
 	do {
 		unsigned int count;
@@ -174,8 +173,8 @@
 				//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
 				NSString *attributeName = [NSString stringWithUTF8String:property_getName(properties[i])];
 				NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
-				NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
-				NSString *attributeType = [attibutesArray firstObject];
+				NSArray *attributesArray = [attributes componentsSeparatedByString:@","];
+				NSString *attributeType = [attributesArray firstObject];
 
 				if ([attributeType isEqualToEncodedType:@encode(NSColor)]) {
 					[children addObject:[Attribute attributeForColorWithName:attributeName node:node]];
@@ -228,7 +227,7 @@
 			}
 			free(properties);
 
-			[_treeController addObject:@{@"name": [classType description],
+			[parent addObject:@{@"name": [classType description],
 										 @"isLeaf": @NO,
 										 @"isEditable": @NO,
 										 @"children":children}];
@@ -239,6 +238,9 @@
 	} while (classType != nil
 			 && classType != [SKNode superclass]
 			 && classType != [NSObject class]);
+
+	/* Replace the attributes table */
+	[_treeController setContent:parent];
 
 	// Expand all the groups
 	[_outlineView expandItem:nil expandChildren:YES];
