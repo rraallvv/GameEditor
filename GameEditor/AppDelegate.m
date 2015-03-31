@@ -157,8 +157,17 @@
 }
 
 - (void)selectedNode:(id)node {
+	/* Replace the attributes table */
+	[_treeController setContent:[self attributesWithNode:node]];
 
-	NSMutableArray *parent = [NSMutableArray array];
+	// Expand all the groups
+	[_outlineView expandItem:nil expandChildren:YES];
+	[_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
+}
+
+- (NSMutableArray *)attributesWithNode:(id)node {
+	
+	NSMutableArray *attributesArray = [NSMutableArray array];
 
 	/* Populate the attributes table from the selected node's properties */
 	Class classType = [node class];
@@ -227,7 +236,7 @@
 			}
 			free(properties);
 
-			[parent addObject:@{@"name": [classType description],
+			[attributesArray addObject:@{@"name": [classType description],
 										 @"isLeaf": @NO,
 										 @"isEditable": @NO,
 										 @"children":children}];
@@ -239,12 +248,7 @@
 			 && classType != [SKNode superclass]
 			 && classType != [NSObject class]);
 
-	/* Replace the attributes table */
-	[_treeController setContent:parent];
-
-	// Expand all the groups
-	[_outlineView expandItem:nil expandChildren:YES];
-	[_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
+	return attributesArray;
 }
 
 @end

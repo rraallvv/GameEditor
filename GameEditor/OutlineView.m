@@ -46,10 +46,12 @@
 	
 	[[NSColor lightGrayColor] set];
 
+	/* Place the sepparator at the top of the cell */
 	if (self.isGroupRowStyle && row > 0) {
 		NSRectFill(NSMakeRect(0, 0, NSWidth(dirtyRect), 1));
 	}
 
+	/* Place the sepparator at the bottom of the cell */
 	if (row == [outlineView numberOfRows] - 1) {
 		NSRectFill(NSMakeRect(0, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect), 1));
 	}
