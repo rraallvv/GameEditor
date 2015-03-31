@@ -219,7 +219,7 @@
 											  @"value": @"(non-editable)",
 											  @"type": @"generic attribute",
 											  @"node": [NSNull null],
-											  @"description": [NSString stringWithFormat:@"%@ %@", attributeName, attributeType],
+											  @"description": [NSString stringWithFormat:@"%@\n%@", attributeName, attributeType],
 											  @"isLeaf": @YES,
 											  @"isEditable": @NO}];
 					}
@@ -235,7 +235,10 @@
 		}
 
 		classType = [classType superclass];
-	} while (classType != nil && classType != [SKNode superclass]);
+		
+	} while (classType != nil
+			 && classType != [SKNode superclass]
+			 && classType != [NSObject class]);
 
 	// Expand all the groups
 	[_outlineView expandItem:nil expandChildren:YES];
