@@ -62,6 +62,7 @@
 	IBOutlet NSTreeController *_treeController;
 	IBOutlet NSOutlineView *_outlineView;
 	NSMutableDictionary *_prefferedSizes;
+	NSMutableArray *_editorIdentifiers;
 }
 
 @synthesize window = _window;
@@ -94,6 +95,7 @@
 	NSArray* objects;
 	[nib instantiateWithOwner:self topLevelObjects:&objects];
 
+	_editorIdentifiers = [NSMutableArray array];
 	_prefferedSizes = [NSMutableDictionary dictionary];
 
 	for (id object in objects) {
@@ -105,6 +107,9 @@
 
 			/* Fetch the preffered size for the editor's view */
 			_prefferedSizes[tableCelView.identifier] = [NSValue valueWithSize:tableCelView.frame.size];
+
+			/* Store the available indentifiers */
+			[_editorIdentifiers addObject:tableCelView.identifier];
 		}
 	}
 }
@@ -119,12 +124,13 @@
 	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
 		return [outlineView makeViewWithIdentifier:@"name" owner:self];
 	} else {
-		NSString *type = [[item representedObject] valueForKey:@"editor"];
-		id view = [outlineView makeViewWithIdentifier:type owner:self];
-		if (!view) {
-			return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
+		NSString *type = [[item representedObject] valueForKey:@"type"];
+		for (NSString *identifier in _editorIdentifiers) {
+			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
+				return [outlineView makeViewWithIdentifier:identifier owner:self];
+			}
 		}
-		return view;
+		return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
 	}
 }
 
@@ -133,9 +139,13 @@
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	NSString *type = [[item representedObject] valueForKey:@"editor"];
-	NSSize size = [_prefferedSizes[type] sizeValue];
-	return MAX(20, size.height);
+	NSString *type = [[item representedObject] valueForKey:@"type"];
+	for (NSString *identifier in _editorIdentifiers) {
+		if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
+			return [_prefferedSizes[identifier] sizeValue].height;
+		}
+	}
+	return 20;
 }
 
 - (BOOL) isGroupItem:(id)item {
@@ -200,7 +210,7 @@
 					else {
 						[children addObject:@{@"name": attributeName,
 											  @"value": @"(non-editable)",
-											  @"editor": @"generic attribute",
+											  @"type": @"generic attribute",
 											  @"node": [NSNull null],
 											  @"description": [NSString stringWithFormat:@"%@ %@", attributeName, attributeType],
 											  @"isLeaf": @YES,

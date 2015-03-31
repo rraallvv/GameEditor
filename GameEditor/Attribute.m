@@ -296,18 +296,7 @@ increment = _increment;
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"%@ %@", _name, _type];
-}
-
-- (NSString *)editor {
-	if ([_type isEqualToEncodedType:@encode(CGPoint)]) {
-		return @"dd";
-	} else if ([_type isEqualToEncodedType:@encode(CGSize)]) {
-		return @"dd";
-	} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
-		return @"dddd";
-	}
-	return _type;
+	return [NSString stringWithFormat:@"%@\n%@", _name, _type];
 }
 
 - (NSString *)type {
