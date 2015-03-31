@@ -283,13 +283,13 @@ increment = _increment;
 	return attribute;
 }
 
-+ (instancetype)attributeForUnsignedIntegerValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
++ (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
 	Attribute *attribute = [Attribute attributeWithName:name node:node type:type];
 
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
-	formatter.minimum = @(0.0);
 	formatter.roundingIncrement = @(1.0);
+	formatter.usesGroupingSeparator = NO;
 	attribute.formatter = formatter;
 
 	return attribute;

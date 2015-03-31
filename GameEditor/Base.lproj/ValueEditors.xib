@@ -9,11 +9,11 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <tableCellView identifier="d" id="f3Z-oW-3C9" userLabel="d" customClass="TableCellView">
-            <rect key="frame" x="0.0" y="0.0" width="172" height="17"/>
+            <rect key="frame" x="0.0" y="0.0" width="172" height="19"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="q6s-Ku-JU0" customClass="StepperTextField">
-                    <rect key="frame" x="0.0" y="-2" width="172" height="19"/>
+                    <rect key="frame" x="0.0" y="0.0" width="172" height="19"/>
                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" placeholderString="Value" bezelStyle="round" id="JnF-7H-4bZ">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -271,11 +271,11 @@
             <point key="canvasLocation" x="726" y="274"/>
         </tableCellView>
         <tableCellView identifier="c" id="toe-NG-Bn9" userLabel="c">
-            <rect key="frame" x="0.0" y="0.0" width="172" height="17"/>
+            <rect key="frame" x="0.0" y="0.0" width="172" height="19"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="YBc-RN-b4y">
-                    <rect key="frame" x="-3" y="-5" width="177" height="25"/>
+                    <rect key="frame" x="-3" y="-3" width="177" height="25"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="19" id="KSu-Ra-wRy"/>
                     </constraints>
@@ -297,11 +297,11 @@
             <point key="canvasLocation" x="436" y="332.5"/>
         </tableCellView>
         <tableCellView identifier="color" id="Nhn-ML-Yi0" userLabel="color">
-            <rect key="frame" x="0.0" y="0.0" width="172" height="17"/>
+            <rect key="frame" x="0.0" y="0.0" width="172" height="19"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <colorWell translatesAutoresizingMaskIntoConstraints="NO" id="7B1-9n-jPd" customClass="ColorWell">
-                    <rect key="frame" x="0.0" y="0.0" width="172" height="17"/>
+                    <rect key="frame" x="0.0" y="0.0" width="172" height="19"/>
                     <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
                         <binding destination="Nhn-ML-Yi0" name="value" keyPath="objectValue.value" id="i5v-Q3-TQ6"/>
@@ -327,11 +327,11 @@
             </connections>
         </popover>
         <tableCellView identifier="[islqISLQ]" id="a61-EY-A6P" userLabel="integer" customClass="TableCellView">
-            <rect key="frame" x="0.0" y="0.0" width="172" height="17"/>
+            <rect key="frame" x="0.0" y="0.0" width="172" height="19"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tJ6-rj-LJu">
-                    <rect key="frame" x="0.0" y="-2" width="161" height="19"/>
+                    <rect key="frame" x="0.0" y="0.0" width="161" height="19"/>
                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" placeholderString="Value" bezelStyle="round" id="4Dn-y0-9HB">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -343,8 +343,8 @@
                     </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="92Z-gQ-5cC">
-                    <rect key="frame" x="159" y="-4" width="15" height="22"/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="100" id="hFQ-qm-ITK"/>
+                    <rect key="frame" x="159" y="-2" width="15" height="22"/>
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-9.2233720368547758e+18" maxValue="9.2233720368547758e+18" id="hFQ-qm-ITK"/>
                     <connections>
                         <binding destination="a61-EY-A6P" name="value" keyPath="objectValue.value" id="zEh-hh-jaP"/>
                     </connections>

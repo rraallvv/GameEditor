@@ -195,18 +195,25 @@
 							&& ([attributeType isEqualToEncodedType:@encode(CGPoint)]
 								|| [attributeType isEqualToEncodedType:@encode(CGSize)]
 								|| [attributeType isEqualToEncodedType:@encode(CGRect)])) {
-								[children addObject:[Attribute attributeForNormalPrecisionValueWithName:attributeName node:node type:attributeType]];
-							} else if ([attributeName containsString:@"colorBlendFactor"]
-									   || [attributeName containsString:@"alpha"]) {
-								[children addObject:[Attribute attributeForNormalizedValueWithName:attributeName node:node type:attributeType]];
-							} else if ([attributeType isEqualToEncodedType:@encode(unsigned int)]) {
-								[children addObject:[Attribute attributeForUnsignedIntegerValueWithName:attributeName node:node type:attributeType]];
-							} else {
-								[children addObject:[Attribute attributeForHighPrecisionValueWithName:attributeName node:node type:attributeType]];
-							}
-						
+							[children addObject:[Attribute attributeForNormalPrecisionValueWithName:attributeName node:node type:attributeType]];
+						} else if ([attributeName containsString:@"colorBlendFactor"]
+								   || [attributeName containsString:@"alpha"]) {
+							[children addObject:[Attribute attributeForNormalizedValueWithName:attributeName node:node type:attributeType]];
+						} else if ([attributeType isEqualToEncodedType:@encode(short)]
+								   || [attributeType isEqualToEncodedType:@encode(int)]
+								   || [attributeType isEqualToEncodedType:@encode(long)]
+								   || [attributeType isEqualToEncodedType:@encode(long long)]
+								   || [attributeType isEqualToEncodedType:@encode(unsigned short)]
+								   || [attributeType isEqualToEncodedType:@encode(unsigned int)]
+								   || [attributeType isEqualToEncodedType:@encode(unsigned long)]
+								   || [attributeType isEqualToEncodedType:@encode(unsigned long long)]) {
+							[children addObject:[Attribute attributeForIntegerValueWithName:attributeName node:node type:attributeType]];
+						} else {
+							[children addObject:[Attribute attributeForHighPrecisionValueWithName:attributeName node:node type:attributeType]];
+						}
+
 					}
-#if 1// Show a dummy attibute for non-editable properties
+#if 1// Show a dummy attribute for non-editable properties
 					else {
 						[children addObject:@{@"name": attributeName,
 											  @"value": @"(non-editable)",
