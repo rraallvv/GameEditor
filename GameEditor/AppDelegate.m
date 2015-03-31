@@ -149,7 +149,7 @@
 }
 
 - (BOOL) isGroupItem:(id)item {
-	return [[item indexPath] length] < 2;
+	return ![[[item representedObject] valueForKey:@"isLeaf"] boolValue];
 }
 
 - (IBAction)saveAction:(id)sender {
