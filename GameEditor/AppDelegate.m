@@ -165,8 +165,9 @@
 	[_treeController setContent:[self attributesForAllClassesWithNode:node]];
 
 	// Expand all the groups
-	[_outlineView expandItem:nil expandChildren:YES];
-	[_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
+	for (id item in [[_treeController arrangedObjects] childNodes])
+		[_outlineView expandItem:item expandChildren:NO];
+	//[_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
 }
 
 - (NSMutableArray *)attributesForAllClassesWithNode:(id)node {

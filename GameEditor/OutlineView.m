@@ -36,6 +36,7 @@
 	NSButton *_hideGroupButton;
 	NSTrackingArea *_trackingArea;
 }
+
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
 	[self.backgroundColor set];
 	NSRectFill(dirtyRect);
@@ -60,6 +61,7 @@
 		}
 	}
 }
+
 - (void)setFrame:(NSRect)frame {
 	[super setFrame:frame];
 
@@ -117,6 +119,7 @@
 		 */
 	}
 }
+
 - (void)toggleGroupVisibility {
 	OutlineView *outlineView = (OutlineView *)[self superview];
 	id item = [outlineView itemAtRow:[outlineView rowForView:self]];
@@ -130,6 +133,7 @@
 		[outlineView expandItem:item];
 	}
 }
+
 - (void)updateTrackingAreas {
 	[super updateTrackingAreas];
 	if (_trackingArea == nil) {
@@ -142,67 +146,85 @@
 		[self addTrackingArea:_trackingArea];
 	}
 }
+
 - (void)mouseEntered:(NSEvent *)theEvent {
 	_hideGroupButton.hidden = NO;
 }
+
 - (void)mouseExited:(NSEvent *)theEvent {
 	_hideGroupButton.hidden = YES;
 }
+
 @end
 
 static const CGFloat kIndentationPerLevel = 0.0;
 
+@interface OutlineView () <NSOutlineViewDelegate>
+@end
+
 @implementation OutlineView {
 	id _actualDelegate;
 }
+
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
 		self.indentationPerLevel = kIndentationPerLevel;
 	}
 	return self;
 }
+
 - (void) expandItem:(id)item expandChildren:(BOOL)expandChildren {
 	[NSAnimationContext beginGrouping];
 	[[NSAnimationContext currentContext] setDuration:0.0];
 	[super expandItem:item expandChildren:expandChildren];
 	[NSAnimationContext endGrouping];
 }
+
 - (void)collapseItem:(id)item collapseChildren:(BOOL)collapseChildren {
 	[NSAnimationContext beginGrouping];
 	[[NSAnimationContext currentContext] setDuration:0.0];
 	[super collapseItem:item collapseChildren:collapseChildren];
 	[NSAnimationContext endGrouping];
 }
+
 - (NSTableViewSelectionHighlightStyle)selectionHighlightStyle {
 	return NSTableViewSelectionHighlightStyleNone;
 }
+
 - (void)setIndentationPerLevel:(CGFloat)indentationPerLevel {
 	[super setIndentationPerLevel:kIndentationPerLevel];
 }
+
 - (NSTableRowView *)outlineView:(NSOutlineView *)outlineView rowViewForItem:(id)item {
 	return [[TableRowView alloc] init];
 }
+
 - (void)setDelegate:(id)newDelegate {
 	[super setDelegate:nil];
 	_actualDelegate = newDelegate;
 	[super setDelegate:(id)self];
 }
+
 - (id)delegate {
 	return self;
 }
+
 - (id)forwardingTargetForSelector:(SEL)aSelector {
 	if ([_actualDelegate respondsToSelector:aSelector]) { return _actualDelegate; }
 	return [super forwardingTargetForSelector:aSelector];
 }
+
 - (BOOL)respondsToSelector:(SEL)aSelector {
 	return [super respondsToSelector:aSelector] || [_actualDelegate respondsToSelector:aSelector];
 }
+
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
 	if (![[[item representedObject] valueForKey:@"isLeaf"] boolValue]) {
 		return [[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]] boundingRectForFont].size.height - 1;
 	}
 	return [_actualDelegate outlineView:outlineView heightOfRowByItem:item];
 }
+
 - (NSRect)frameOfOutlineCellAtRow:(NSInteger)row {
 
 	id item = [self itemAtRow:row];
@@ -215,4 +237,5 @@ static const CGFloat kIndentationPerLevel = 0.0;
 
 	return NSZeroRect; // Remove the disclosure triangle
 }
+
 @end
