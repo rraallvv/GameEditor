@@ -191,7 +191,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 	return [super respondsToSelector:aSelector] || [_actualDelegate respondsToSelector:aSelector];
 }
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	if ([[item indexPath] length] < 2) {
+	if (![[[item representedObject] valueForKey:@"isLeaf"] boolValue]) {
 		return [[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]] boundingRectForFont].size.height - 1;
 	}
 	return [_actualDelegate outlineView:outlineView heightOfRowByItem:item];
