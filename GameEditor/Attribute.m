@@ -222,7 +222,9 @@ increment = _increment;
 		}
 
 		/* Bind the property to the 'raw' value if there isn't an accessor */
-		[self bind:@"value" toObject:node withKeyPath:_name options:nil];
+		if (node) {
+			[self bind:@"value" toObject:node withKeyPath:_name options:nil];
+		}
 	}
 	return self;
 }
@@ -306,7 +308,7 @@ increment = _increment;
 }
 
 - (BOOL)isEditable {
-	return YES;
+	return _node != nil;
 }
 
 - (BOOL)isLeaf {

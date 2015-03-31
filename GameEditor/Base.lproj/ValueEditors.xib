@@ -304,6 +304,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="172" height="19"/>
                     <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
+                        <binding destination="Nhn-ML-Yi0" name="enabled" keyPath="objectValue.isEditable" id="HIZ-U2-HYx"/>
                         <binding destination="Nhn-ML-Yi0" name="value" keyPath="objectValue.value" id="i5v-Q3-TQ6"/>
                     </connections>
                 </colorWell>
@@ -346,6 +347,7 @@
                     <rect key="frame" x="159" y="-2" width="15" height="22"/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-9.2233720368547758e+18" maxValue="9.2233720368547758e+18" id="hFQ-qm-ITK"/>
                     <connections>
+                        <binding destination="a61-EY-A6P" name="enabled" keyPath="objectValue.isEditable" id="BCx-5l-OPm"/>
                         <binding destination="a61-EY-A6P" name="value" keyPath="objectValue.value" id="zEh-hh-jaP"/>
                     </connections>
                 </stepper>

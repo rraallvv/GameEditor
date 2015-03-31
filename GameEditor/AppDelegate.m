@@ -202,6 +202,11 @@
 			if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
 				[attributesArray addObject:[Attribute attributeForColorWithName:propertyName node:node]];
 
+			} else if ([propertyType isEqualToEncodedType:@encode(SKTexture)]) {
+				[attributesArray addObject:@{@"name": propertyName,
+											 @"isLeaf": @NO,
+											 @"isEditable": @NO,
+											 @"children":[self attibutesForClass:[SKTexture class] node:[node valueForKey:propertyName]]}];
 			} else if ([propertyName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 				[attributesArray addObject:[Attribute  attributeForRotationAngleWithName:propertyName node:node]];
 
