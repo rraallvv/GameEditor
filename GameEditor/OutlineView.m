@@ -72,7 +72,7 @@
 	} else {
 		/* Sepparator at the top of a non-expandable node following an expandable node */
 		[[NSColor lightGrayColor] set];
-		if (![[[outlineView itemAtRow:row - 1] valueForKey:@"isLeaf"] boolValue]
+		if ([(id)outlineView outlineView:outlineView isGroupItem:[outlineView itemAtRow:row - 1]]
 			&& [[[outlineView itemAtRow:row - 1] indexPath] length] == indexPathLength) {
 			NSRectFill(NSMakeRect(separatorMargin, 0, NSWidth(dirtyRect) - separatorMargin, 1));
 		}
@@ -236,9 +236,6 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	if (![[[item representedObject] valueForKey:@"isLeaf"] boolValue]) {
-		return [[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]] boundingRectForFont].size.height - 1;
-	}
 	return [_actualDelegate outlineView:outlineView heightOfRowByItem:item];
 }
 
@@ -246,7 +243,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 
 	id item = [self itemAtRow:row];
 
-	if ([item indexPath].length > 1 && ![[[item representedObject] valueForKey:@"isLeaf"] boolValue]) {
+	if ([item indexPath].length > 1 && [_actualDelegate outlineView:self isGroupItem:item]) {
 		NSRect rect = [super frameOfOutlineCellAtRow:row];
 		rect.origin.x = 0;
 		return rect;
