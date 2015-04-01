@@ -27,12 +27,20 @@
 #import <objc/runtime.h>
 
 @implementation NSString (Types)
-- (BOOL)isEqualToEncodedType:(const char*)type {
-
+- (NSString *)extractClassName {
 	/* Try to get a class name from the type */
 	NSRange range = [self rangeOfString:@"(?<=@\")(\\w*)(?=\")" options:NSRegularExpressionSearch];
-	NSString *className = range.location != NSNotFound ? [self substringWithRange:range] : nil;
-
+	return range.location != NSNotFound ? [self substringWithRange:range] : nil;
+}
+- (Class)classType {
+	NSString *className = [self extractClassName];
+	if (className) {
+		return NSClassFromString(className);
+	}
+	return nil;
+}
+- (BOOL)isEqualToEncodedType:(const char*)type {
+	NSString *className = [self extractClassName];
 	if (className) {
 		return [[NSString stringWithFormat:@"{%@=#}", className] isEqualToString:[NSString stringWithUTF8String:type]];
 	} else {

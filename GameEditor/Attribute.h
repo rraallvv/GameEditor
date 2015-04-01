@@ -28,6 +28,8 @@
 #import <SpriteKit/SpriteKit.h>
 
 @interface NSString (Types)
+- (NSString *)extractClassName;
+- (Class)classType;
 - (BOOL)isEqualToEncodedType:(const char*)type;
 @end
 
