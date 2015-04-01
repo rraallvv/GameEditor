@@ -38,26 +38,47 @@
 }
 
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
-	[self.backgroundColor set];
-	NSRectFill(dirtyRect);
 
 	OutlineView *outlineView = (OutlineView *)[self superview];
 
 	NSInteger row = [outlineView rowForView:self];
 	NSUInteger indexPathLength = [[[outlineView itemAtRow:row] indexPath] length];
-	
+
+	if (indexPathLength > 2 && !self.isGroupRowStyle) {
+		NSColor *backgroundColor = self.backgroundColor;
+		[[NSColor colorWithRed:0.9375*backgroundColor.redComponent
+						 green:0.9375*backgroundColor.greenComponent
+						  blue:0.9375*backgroundColor.blueComponent
+						 alpha:backgroundColor.alphaComponent] set];
+	} else {
+		[self.backgroundColor set];
+	}
+
+	NSRectFill(dirtyRect);
+
 	[[NSColor lightGrayColor] set];
 
+	CGFloat separatorMargin = (indexPathLength - 1) * 16;
+
 	/* Only draw the separator for the root nodes */
-	if (indexPathLength == 1) {
-		/* Place the sepparator at the top of the cell */
+	if (self.isGroupRowStyle) {
+		/* Sepparator at the top of an expandable */
+		[[NSColor redColor] set];
 		if (self.isGroupRowStyle && row > 0) {
-			NSRectFill(NSMakeRect(0, 0, NSWidth(dirtyRect), 1));
+			NSRectFill(NSMakeRect(separatorMargin, 0, NSWidth(dirtyRect) - separatorMargin, 1));
 		}
 
-		/* Place the sepparator at the bottom of the cell */
+		/* Sepparator at the bottom of the last expandable node */
+		[[NSColor cyanColor] set];
 		if (row == [outlineView numberOfRows] - 1) {
-			NSRectFill(NSMakeRect(0, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect), 1));
+			NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 4));
+		}
+	} else {
+		/* Sepparator at the top of a non-expandable node following an expandable node */
+		[[NSColor blueColor] set];
+		if (![[[outlineView itemAtRow:row - 1] valueForKey:@"isLeaf"] boolValue]
+			&& [[[outlineView itemAtRow:row - 1] indexPath] length] == indexPathLength) {
+			NSRectFill(NSMakeRect(separatorMargin, 0, NSWidth(dirtyRect) - separatorMargin, 1));
 		}
 	}
 }
