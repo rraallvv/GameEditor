@@ -38,22 +38,7 @@
 }
 
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
-
-	OutlineView *outlineView = (OutlineView *)[self superview];
-
-	NSInteger row = [outlineView rowForView:self];
-	NSUInteger indexPathLength = [[[outlineView itemAtRow:row] indexPath] length];
-
-	if (indexPathLength > 2 && !self.isGroupRowStyle) {
-		NSColor *backgroundColor = self.backgroundColor;
-		[[NSColor colorWithRed:0.95*backgroundColor.redComponent
-						 green:0.95*backgroundColor.greenComponent
-						  blue:0.95*backgroundColor.blueComponent
-						 alpha:backgroundColor.alphaComponent] set];
-	} else {
-		[self.backgroundColor set];
-	}
-
+	[self.backgroundColor set];
 	NSRectFill(dirtyRect);
 }
 
