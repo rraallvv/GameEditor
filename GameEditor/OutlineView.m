@@ -46,9 +46,9 @@
 
 	if (indexPathLength > 2 && !self.isGroupRowStyle) {
 		NSColor *backgroundColor = self.backgroundColor;
-		[[NSColor colorWithRed:0.9375*backgroundColor.redComponent
-						 green:0.9375*backgroundColor.greenComponent
-						  blue:0.9375*backgroundColor.blueComponent
+		[[NSColor colorWithRed:0.95*backgroundColor.redComponent
+						 green:0.95*backgroundColor.greenComponent
+						  blue:0.95*backgroundColor.blueComponent
 						 alpha:backgroundColor.alphaComponent] set];
 	} else {
 		[self.backgroundColor set];
@@ -257,6 +257,11 @@ static const CGFloat kIndentationPerLevel = 0.0;
 	}
 
 	return NSZeroRect; // Remove the disclosure triangle
+}
+
+- (void)drawRect:(NSRect)dirtyRect {
+	[self.backgroundColor set];
+	NSRectFill(dirtyRect);
 }
 
 @end
