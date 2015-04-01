@@ -212,6 +212,7 @@
 											 @"isLeaf": @NO,
 											 @"isEditable": @NO,
 											 @"children":[self attibutesForClass:[SKTexture class] node:[node valueForKey:propertyName]]}];
+
 			} else if ([propertyName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 				[attributesArray addObject:[Attribute  attributeForRotationAngleWithName:propertyName node:node]];
 

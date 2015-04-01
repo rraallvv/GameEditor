@@ -139,6 +139,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="calibratedRGB"/>
+                                    <tableViewGridLines key="gridStyleMask" horizontal="YES"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
                                         <tableColumn identifier="key" width="77.9453125" minWidth="40" maxWidth="1000" id="XrN-W1-UcV">
@@ -159,7 +160,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="3fy-Ty-hse">
-                                                            <rect key="frame" x="3" y="5" width="77" height="14"/>
+                                                            <rect key="frame" x="3" y="3" width="77" height="14"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Class" id="0qY-r9-dez">
                                                                 <font key="font" metaFont="smallSystemBold"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -172,7 +173,7 @@
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="3fy-Ty-hse" secondAttribute="trailing" id="2d1-aV-pOT"/>
-                                                        <constraint firstAttribute="top" secondItem="3fy-Ty-hse" secondAttribute="bottom" constant="-15" id="jeX-kZ-yTx"/>
+                                                        <constraint firstAttribute="top" secondItem="3fy-Ty-hse" secondAttribute="bottom" constant="-17" id="jeX-kZ-yTx"/>
                                                         <constraint firstItem="3fy-Ty-hse" firstAttribute="leading" secondItem="yfL-tc-DAf" secondAttribute="leading" constant="5" id="pJV-YD-vHC"/>
                                                     </constraints>
                                                     <connections>
