@@ -64,36 +64,32 @@
 	NSInteger row = [outlineView rowForView:self];
 	NSUInteger indexPathLength = [[[outlineView itemAtRow:row] indexPath] length];
 
-	[[NSColor lightGrayColor] set];
-
 	CGFloat separatorMargin = (indexPathLength - 1) * 16;
 
 	/* Only draw the separator for the root nodes */
 	if (self.isGroupRowStyle) {
+		
+		if (indexPathLength == 1) {
+			[[NSColor blackColor] set];
+		} else {
+			[[NSColor lightGrayColor] set];
+		}
+
 		/* Sepparator at the top of an expandable */
-		[[NSColor redColor] set];
 		if (self.isGroupRowStyle && row > 0) {
 			NSRectFill(NSMakeRect(separatorMargin, 0, NSWidth(dirtyRect) - separatorMargin, 1));
 		}
 
 		/* Sepparator at the bottom of the last expandable node */
-		[[NSColor cyanColor] set];
 		if (row == [outlineView numberOfRows] - 1) {
-			NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
-		}
-
-		/* Sepparator at the top of a non-expandable node following an expandable node */
-		[[NSColor blueColor] set];
-		if ([[[outlineView itemAtRow:row + 1] valueForKey:@"isLeaf"] boolValue]
-			&& [[[outlineView itemAtRow:row + 1] indexPath] length] == indexPathLength) {
 			NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
 		}
 	} else {
 		/* Sepparator at the top of a non-expandable node following an expandable node */
-		[[NSColor blueColor] set];
+		[[NSColor lightGrayColor] set];
 		if (![[[outlineView itemAtRow:row - 1] valueForKey:@"isLeaf"] boolValue]
 			&& [[[outlineView itemAtRow:row - 1] indexPath] length] == indexPathLength) {
-			//NSRectFill(NSMakeRect(separatorMargin, 0, NSWidth(dirtyRect) - separatorMargin, 1));
+			NSRectFill(NSMakeRect(separatorMargin, 0, NSWidth(dirtyRect) - separatorMargin, 1));
 		}
 	}
 }
