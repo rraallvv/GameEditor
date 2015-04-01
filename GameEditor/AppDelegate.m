@@ -144,9 +144,11 @@
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
 	NSString *type = [[item representedObject] valueForKey:@"type"];
-	for (NSString *identifier in _editorIdentifiers) {
-		if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
-			return [_prefferedSizes[identifier] sizeValue].height;
+	if (type) {
+		for (NSString *identifier in _editorIdentifiers) {
+			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
+				return [_prefferedSizes[identifier] sizeValue].height;
+			}
 		}
 	}
 	return 20;
