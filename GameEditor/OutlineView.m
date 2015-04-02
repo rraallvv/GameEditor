@@ -66,6 +66,13 @@
 	[NSBezierPath setDefaultLineWidth:1.0];
 	CGFloat pixelOffset = 0.5;
 
+	CGPoint topLeft = NSMakePoint(0,  pixelOffset);
+	CGPoint topRight = NSMakePoint(NSWidth(dirtyRect), pixelOffset);
+	CGPoint bottomLeft = NSMakePoint(0,  NSMaxY(dirtyRect) - 1 + pixelOffset);
+	CGPoint bottomRight = NSMakePoint(NSWidth(dirtyRect), NSMaxY(dirtyRect) - 1 + pixelOffset);
+
+	CGPoint marginBottomLeft = NSMakePoint(bottomLeft.x + separatorMargin,  bottomLeft.y);
+
 	/* Only draw the separator for the root nodes */
 	if (self.isGroupRowStyle) {
 
@@ -74,14 +81,12 @@
 
 			/* Separator at the top of a root group */
 			if (row > 0) {
-				[NSBezierPath strokeLineFromPoint:NSMakePoint(0,  pixelOffset)
-										  toPoint:NSMakePoint(NSWidth(dirtyRect), pixelOffset)];
+				[NSBezierPath strokeLineFromPoint:topLeft toPoint:topRight];
 			}
 
 			/* Separator at the bottom of the last root group */
 			if (row == [outlineView numberOfRows] - 1) {
-				[NSBezierPath strokeLineFromPoint:NSMakePoint(0,  NSMaxY(dirtyRect) - 1 + pixelOffset)
-										  toPoint:NSMakePoint(NSWidth(dirtyRect), NSMaxY(dirtyRect) - 1 + pixelOffset)];
+				[NSBezierPath strokeLineFromPoint:bottomLeft toPoint:bottomRight];
 			}
 
 			[groupNodeSeparatorColor set];
@@ -89,8 +94,7 @@
 			/* Separator between a root group a non-root group node */
 			if (indexPathLength < nextIndexPathLength
 				&& nextItemIsGroup) {
-				[NSBezierPath strokeLineFromPoint:NSMakePoint(separatorMargin,  NSMaxY(dirtyRect) - 1 + pixelOffset)
-										  toPoint:NSMakePoint(NSWidth(dirtyRect), NSMaxY(dirtyRect) - 1 + pixelOffset)];
+				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
 			}
 
 		} else {
@@ -98,8 +102,7 @@
 
 			/* Separator between two non-root group node */
 			if (indexPathLength == nextIndexPathLength) {
-				[NSBezierPath strokeLineFromPoint:NSMakePoint(separatorMargin,  NSMaxY(dirtyRect) - 1 + pixelOffset)
-										  toPoint:NSMakePoint(NSWidth(dirtyRect), NSMaxY(dirtyRect) - 1 + pixelOffset)];
+				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
 			}
 		}
 
@@ -109,15 +112,13 @@
 		/* Separator at the bottom of a leaf node followed by a non-root group node */
 		if (nextIndexPathLength > 1
 			&& nextItemIsGroup) {
-			[NSBezierPath strokeLineFromPoint:NSMakePoint(separatorMargin,  NSMaxY(dirtyRect) - 1 + pixelOffset)
-									  toPoint:NSMakePoint(NSWidth(dirtyRect), NSMaxY(dirtyRect) - 1 + pixelOffset)];
+			[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
 		}
 
 		/* Separator at the bottom of a leaf node followed by a leaf node */
 		if (nextIndexPathLength < indexPathLength
 			&& !nextItemIsGroup) {
-			[NSBezierPath strokeLineFromPoint:NSMakePoint(separatorMargin,  NSMaxY(dirtyRect) - 1 + pixelOffset)
-									  toPoint:NSMakePoint(NSWidth(dirtyRect), NSMaxY(dirtyRect) - 1 + pixelOffset)];
+			[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
 		}
 	}
 }
