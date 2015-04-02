@@ -179,10 +179,14 @@
 	Class classType = [node class];
 
 	do {
-		[classesArray addObject:@{@"name": [classType description],
-								  @"isLeaf": @NO,
-								  @"isEditable": @NO,
-								  @"children":[self attibutesForClass:classType node:node]}];
+		NSMutableArray *attributesArray = [self attibutesForClass:classType node:node];
+
+		if (attributesArray.count > 0) {
+			[classesArray addObject:@{@"name": [classType description],
+									  @"isLeaf": @NO,
+									  @"isEditable": @NO,
+									  @"children":attributesArray}];
+		}
 
 		classType = [classType superclass];
 		
