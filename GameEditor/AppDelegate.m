@@ -63,8 +63,6 @@
 	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet NSOutlineView *_attributesView;
 	IBOutlet NSOutlineView *_navigatorView;
-	NSMutableDictionary *_prefferedSizes;
-	NSMutableArray *_editorIdentifiers;
 }
 
 @synthesize window = _window;
@@ -94,73 +92,10 @@
 	/* Setup the editor view */
 	_editorView.scene = scene;
 	_editorView.delegate = self;
-
-	/* Prepare the editors for the outline view */
-	NSNib *nib = [[NSNib alloc] initWithNibNamed:@"ValueEditors" bundle:nil];
-	NSArray* objects;
-	[nib instantiateWithOwner:self topLevelObjects:&objects];
-
-	_editorIdentifiers = [NSMutableArray array];
-	_prefferedSizes = [NSMutableDictionary dictionary];
-
-	for (id object in objects) {
-		if ([object isKindOfClass:[NSTableCellView class]]) {
-			NSTableCellView *tableCelView = object;
-
-			/* Register the identifiers for each editors */
-			[_attributesView registerNib:nib forIdentifier:tableCelView.identifier];
-
-			/* Fetch the preffered size for the editor's view */
-			_prefferedSizes[tableCelView.identifier] = [NSValue valueWithSize:tableCelView.frame.size];
-
-			/* Store the available indentifiers */
-			[_editorIdentifiers addObject:tableCelView.identifier];
-		}
-	}
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
     return YES;
-}
-
-- (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
-	if ([self isGroupItem:item]) {
-		if ([item indexPath].length == 1) {
-			return [outlineView makeViewWithIdentifier:@"class" owner:self];
-		} else {
-			return [outlineView makeViewWithIdentifier:@"expandable" owner:self];
-		}
-	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
-		return [outlineView makeViewWithIdentifier:@"attribute" owner:self];
-	} else {
-		NSString *type = [[item representedObject] valueForKey:@"type"];
-		for (NSString *identifier in _editorIdentifiers) {
-			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
-				return [outlineView makeViewWithIdentifier:identifier owner:self];
-			}
-		}
-		return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
-	}
-}
-
-- (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item {
-	return [self isGroupItem:item];
-}
-
-- (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	NSString *type = [[item representedObject] valueForKey:@"type"];
-	if (type) {
-		for (NSString *identifier in _editorIdentifiers) {
-			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
-				return [_prefferedSizes[identifier] sizeValue].height;
-			}
-		}
-	}
-	return 20;
-}
-
-- (BOOL) isGroupItem:(id)item {
-	return ![[[item representedObject] valueForKey:@"isLeaf"] boolValue];
 }
 
 - (IBAction)saveAction:(id)sender {

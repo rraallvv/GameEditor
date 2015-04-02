@@ -225,11 +225,36 @@ static const CGFloat kIndentationPerLevel = 0.0;
 
 @implementation OutlineView {
 	id _actualDelegate;
+	NSMutableDictionary *_prefferedSizes;
+	NSMutableArray *_editorIdentifiers;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
 		self.indentationPerLevel = kIndentationPerLevel;
+
+		/* Prepare the editors for the outline view */
+		NSNib *nib = [[NSNib alloc] initWithNibNamed:@"ValueEditors" bundle:nil];
+		NSArray* objects;
+		[nib instantiateWithOwner:self topLevelObjects:&objects];
+
+		_editorIdentifiers = [NSMutableArray array];
+		_prefferedSizes = [NSMutableDictionary dictionary];
+
+		for (id object in objects) {
+			if ([object isKindOfClass:[NSTableCellView class]]) {
+				NSTableCellView *tableCelView = object;
+
+				/* Register the identifiers for each editors */
+				[self registerNib:nib forIdentifier:tableCelView.identifier];
+
+				/* Fetch the preffered size for the editor's view */
+				_prefferedSizes[tableCelView.identifier] = [NSValue valueWithSize:tableCelView.frame.size];
+
+				/* Store the available indentifiers */
+				[_editorIdentifiers addObject:tableCelView.identifier];
+			}
+		}
 	}
 	return self;
 }
@@ -280,14 +305,22 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	return [_actualDelegate outlineView:outlineView heightOfRowByItem:item];
+	NSString *type = [[item representedObject] valueForKey:@"type"];
+	if (type) {
+		for (NSString *identifier in _editorIdentifiers) {
+			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
+				return [_prefferedSizes[identifier] sizeValue].height;
+			}
+		}
+	}
+	return 20;
 }
 
 - (NSRect)frameOfOutlineCellAtRow:(NSInteger)row {
 
 	id item = [self itemAtRow:row];
 
-	if ([item indexPath].length > 1 && [_actualDelegate outlineView:self isGroupItem:item]) {
+	if ([item indexPath].length > 1 && [self outlineView:self isGroupItem:item]) {
 		NSRect rect = [super frameOfOutlineCellAtRow:row];
 		rect.origin.x = 2;
 		return rect;
@@ -302,6 +335,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (void)outlineView:(NSOutlineView *)outlineView didRemoveRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+	// TODO: find a be a better way to repaint a node after it's been collapsed
 	for (NSView *view in outlineView.subviews) {
 		NSInteger row = [outlineView rowForView:view];
 		id item = [outlineView itemAtRow:row];
@@ -312,6 +346,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+	// TODO: find a be a better way to repaint a node after it's been expanded
 	for (NSView *view in outlineView.subviews) {
 		NSInteger row = [outlineView rowForView:view];
 		id item = [outlineView itemAtRow:row];
@@ -319,6 +354,30 @@ static const CGFloat kIndentationPerLevel = 0.0;
 			[view setNeedsDisplay:YES];
 		}
 	}
+}
+
+- (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
+	if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
+		if ([item indexPath].length == 1) {
+			return [outlineView makeViewWithIdentifier:@"class" owner:self];
+		} else {
+			return [outlineView makeViewWithIdentifier:@"expandable" owner:self];
+		}
+	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
+		return [outlineView makeViewWithIdentifier:@"attribute" owner:self];
+	} else {
+		NSString *type = [[item representedObject] valueForKey:@"type"];
+		for (NSString *identifier in _editorIdentifiers) {
+			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
+				return [outlineView makeViewWithIdentifier:identifier owner:self];
+			}
+		}
+		return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
+	}
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item {
+	return ![[[item representedObject] valueForKey:@"isLeaf"] boolValue];
 }
 
 @end
