@@ -50,7 +50,7 @@
 			NSMutableDictionary *bindingInfo = [textField infoForBinding: NSValueBinding].mutableCopy;
 			NSString *observedKey = bindingInfo[NSObservedKeyPathKey];
 
-			/* Get the keyPath relative to the attibute object */
+			/* Get the keyPath relative to the attribute object */
 			NSRange range = [observedKey rangeOfString:@"(?<=\\.|^)value\\d*$" options:NSRegularExpressionSearch];
 			NSString *key = range.location != NSNotFound ? [observedKey substringWithRange:range] : nil;
 

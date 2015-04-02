@@ -60,7 +60,7 @@
 @implementation AppDelegate {
 	IBOutlet EditorView *_editorView;
 	IBOutlet NSTreeController *_treeController;
-	IBOutlet NSOutlineView *_outlineView;
+	IBOutlet NSOutlineView *_attributesView;
 	NSMutableDictionary *_prefferedSizes;
 	NSMutableArray *_editorIdentifiers;
 }
@@ -103,7 +103,7 @@
 			NSTableCellView *tableCelView = object;
 
 			/* Register the identifiers for each editors */
-			[_outlineView registerNib:nib forIdentifier:tableCelView.identifier];
+			[_attributesView registerNib:nib forIdentifier:tableCelView.identifier];
 
 			/* Fetch the preffered size for the editor's view */
 			_prefferedSizes[tableCelView.identifier] = [NSValue valueWithSize:tableCelView.frame.size];
@@ -168,7 +168,7 @@
 
 	// Expand all the groups
 	for (id item in [[_treeController arrangedObjects] childNodes])
-		[_outlineView expandItem:item expandChildren:NO];
+		[_attributesView expandItem:item expandChildren:NO];
 	//[_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
 }
 
@@ -179,7 +179,7 @@
 	Class classType = [node class];
 
 	do {
-		NSMutableArray *attributesArray = [self attibutesForClass:classType node:node];
+		NSMutableArray *attributesArray = [self attributesForClass:classType node:node];
 
 		if (attributesArray.count > 0) {
 			[classesArray addObject:@{@"name": [classType description],
@@ -197,7 +197,7 @@
 	return classesArray;
 }
 
-- (NSMutableArray *)attibutesForClass:(Class)classType node:(id)node {
+- (NSMutableArray *)attributesForClass:(Class)classType node:(id)node {
 	unsigned int count;
 	objc_property_t *properties = class_copyPropertyList(classType, &count);
 
@@ -222,7 +222,7 @@
 				[attributesArray addObject:@{@"name": propertyName,
 											 @"isLeaf": @NO,
 											 @"isEditable": @NO,
-											 @"children":[self attibutesForClass:propertyClass node:[node valueForKey:propertyName]]}];
+											 @"children":[self attributesForClass:propertyClass node:[node valueForKey:propertyName]]}];
 
 			} else if ([propertyName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 				[attributesArray addObject:[Attribute  attributeForRotationAngleWithName:propertyName node:node]];

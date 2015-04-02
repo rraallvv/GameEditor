@@ -39,7 +39,7 @@
 @interface DegreesTransformer : NSValueTransformer
 @end
 
-@interface AttibuteNameTransformer : NSValueTransformer
+@interface AttributeNameTransformer : NSValueTransformer
 @end
 
 @interface Attribute : NSObject

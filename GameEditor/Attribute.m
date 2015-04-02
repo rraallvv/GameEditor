@@ -163,7 +163,7 @@
 
 @end
 
-@implementation AttibuteNameTransformer
+@implementation AttributeNameTransformer
 
 + (void)initialize {
 	[self initializeWithTransformedValueClass:[NSString class]
