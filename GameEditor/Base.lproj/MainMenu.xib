@@ -433,6 +433,21 @@
                     <constraint firstItem="zp9-ka-bca" firstAttribute="leading" secondItem="372" secondAttribute="leading" id="olD-Uk-tfJ"/>
                 </constraints>
             </view>
+            <toolbar key="toolbar" implicitIdentifier="7639A0E4-A44A-455E-A7E8-8FC7E1770C38" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="zEv-vT-y1D">
+                <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="7cB-9t-bOh"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="d6E-0M-fsV"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarPrintItem" id="mru-LD-XPv"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="JgN-bn-UOC"/>
+                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="RoS-y0-6oM"/>
+                </allowedToolbarItems>
+                <defaultToolbarItems>
+                    <toolbarItem reference="7cB-9t-bOh"/>
+                    <toolbarItem reference="d6E-0M-fsV"/>
+                    <toolbarItem reference="RoS-y0-6oM"/>
+                    <toolbarItem reference="mru-LD-XPv"/>
+                </defaultToolbarItems>
+            </toolbar>
             <point key="canvasLocation" x="428" y="449"/>
         </window>
         <customObject id="494" customClass="AppDelegate">

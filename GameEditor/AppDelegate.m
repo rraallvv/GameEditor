@@ -68,9 +68,8 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	/* Main window appearance */
-	self.window.styleMask = self.window.styleMask | NSFullSizeContentViewWindowMask;
+	self.window.styleMask = self.window.styleMask;
 	self.window.titleVisibility = NSWindowTitleHidden;
-	self.window.titlebarAppearsTransparent = YES;
 
 	/* Pick the scene */
     GameScene *scene = [GameScene unarchiveFromFile:@"GameScene"];
