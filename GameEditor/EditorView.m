@@ -81,7 +81,9 @@ anchorPoint = _anchorPoint;
 
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
-	[self drawRectangleOutline];
+	if (_node) {
+		[self drawRectangleOutline];
+	}
 }
 
 - (void)drawRectangleOutline {
