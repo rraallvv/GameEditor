@@ -238,4 +238,16 @@
 	return navigationTree;
 }
 
+- (IBAction)rowSelected:(id)sender
+{
+	NSInteger selectedRow = [_navigatorView selectedRow];
+
+	if (selectedRow != -1) {
+		NSLog(@"%@ selected", [[[_navigatorView itemAtRow:selectedRow] representedObject] valueForKey:@"name"]);
+	}
+	else {
+		// No row was selected
+	}
+}
+
 @end
