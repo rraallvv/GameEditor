@@ -217,7 +217,8 @@
 
 			} else if (propertyClass == [SKTexture class]
 					   || propertyClass == [SKShader class]
-					   || propertyClass == [SKPhysicsBody class]) {
+					   || propertyClass == [SKPhysicsBody class]
+					   || propertyClass == [SKPhysicsWorld class]) {
 				[attributesArray addObject:@{@"name": propertyName,
 											 @"isLeaf": @NO,
 											 @"isEditable": @NO,
