@@ -24,6 +24,106 @@
  */
 
 #import "AttributesView.h"
+#import "StepperTextField.h"
+
+#pragma mark TableCellView
+
+@interface TableCellView : NSTableCellView
+@end
+
+@implementation TableCellView {
+	NSMutableArray *_textFields;
+	IBOutlet NSPopover *_popover;
+}
+
+- (void)setObjectValue:(id)objectValue {
+	_textFields = [NSMutableArray array];
+
+	/* If the table cell is an attribute try to update it's text fields with the appropriate trasformer and formatter */
+	if ([objectValue isKindOfClass:[AttributeNode class]]) {
+
+		AttributeNode *attribute = (AttributeNode *)objectValue;
+
+		/* Get all the text fields in the table cell*/
+		[self listTextFields:self];
+
+		/* Walk the text fields */
+		for (NSTextField *textField in _textFields) {
+
+			/* Get the binding information */
+			NSMutableDictionary *bindingInfo = [textField infoForBinding: NSValueBinding].mutableCopy;
+			NSString *observedKey = bindingInfo[NSObservedKeyPathKey];
+
+			/* Get the keyPath relative to the attribute object */
+			NSRange range = [observedKey rangeOfString:@"(?<=\\.|^)value\\d*$" options:NSRegularExpressionSearch];
+			NSString *key = range.location != NSNotFound ? [observedKey substringWithRange:range] : nil;
+
+			if (key) {
+				/* Update the binding with the attribute's value transformer */
+				NSMutableDictionary *options = bindingInfo[NSOptionsKey];
+				NSValueTransformer *valueTransformer = attribute.valueTransformer;
+
+				if (valueTransformer) {
+					options[NSValueTransformerBindingOption] = valueTransformer;
+				} else {
+					[options removeObjectForKey:NSValueTransformerBindingOption];
+				}
+
+				/* Clear and re-create the binding to update its value transformer */
+				[textField unbind:NSValueBinding];
+				[textField bind:NSValueBinding toObject:attribute withKeyPath:key options:options];
+
+				/* Set the appropriate number formater */
+				textField.formatter = attribute.formatter;
+
+				/* Set the parameters for the stepper text field */
+				if ([textField isKindOfClass:[StepperTextField class]]) {
+					StepperTextField *stepper = (StepperTextField *)textField;
+					stepper.stepperInc = attribute.increment;
+					stepper.draggingMult = attribute.sensitivity;
+				}
+			}
+		}
+	}
+
+	if (_textFields.count == 0)
+		_textFields = nil;
+
+	[super setObjectValue:objectValue];
+}
+
+- (void)listTextFields:(id)view {
+
+	/* Recursivelly retrieve all text fields in the table cell */
+	for (id subview in [view subviews]) {
+		if ([subview isKindOfClass:[NSTextField class]]) {
+			[_textFields addObject:subview];
+		}
+		[self listTextFields:subview];
+	}
+}
+
+- (void)presentError:(NSError *)error modalForWindow:(NSWindow *)window delegate:(id)delegate didPresentSelector:(SEL)didPresentSelector contextInfo:(void *)contextInfo {
+
+	NSBeep();
+
+	NSLog(@"Error: %@", error.localizedDescription);
+
+#if 0
+	if (_popover == nil) {
+		_popover = [[NSPopover alloc] init];
+		_popover.behavior = NSPopoverBehaviorSemitransient;
+	}
+
+	[_popover.contentViewController.view.subviews.firstObject setStringValue:error.localizedDescription];
+	[_popover showRelativeToRect:[self bounds] ofView:self preferredEdge:NSMinXEdge];
+#endif
+	
+}
+
+@end
+
+#pragma mark TableRowView
 
 @interface TableRowView : NSTableRowView
 @end
@@ -217,6 +317,8 @@
 }
 
 @end
+
+#pragma mark AttributesView
 
 static const CGFloat kIndentationPerLevel = 0.0;
 

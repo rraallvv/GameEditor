@@ -199,12 +199,12 @@
 #if 1// Show a dummy attribute for non-editable properties
 				else {
 					[attributesArray addObject:@{@"name": propertyName,
-											  @"value": @"(non-editable)",
-											  @"type": @"generic attribute",
-											  @"node": [NSNull null],
-											  @"description": [NSString stringWithFormat:@"%@\n%@", propertyName, propertyType],
-											  @"isLeaf": @YES,
-											  @"isEditable": @NO}];
+												 @"value": @"(non-editable)",
+												 @"type": @"generic attribute",
+												 @"node": [NSNull null],
+												 @"description": [NSString stringWithFormat:@"%@\n%@", propertyName, propertyType],
+												 @"isLeaf": @YES,
+												 @"isEditable": @NO}];
 				}
 #endif
 			}
