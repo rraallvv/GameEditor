@@ -22,6 +22,7 @@
 		E4BB58AE1ABB510A0021A467 /* EditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BB58AD1ABB510A0021A467 /* EditorView.m */; };
 		E4BB58B01ABB659C0021A467 /* SpaceshipTest.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BB58AF1ABB659C0021A467 /* SpaceshipTest.png */; };
 		E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */; };
+		E4F3B6A71ACD7EC4001482D2 /* NavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F3B6A61ACD7EC4001482D2 /* NavigationNode.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,8 @@
 		E4BB58AF1ABB659C0021A467 /* SpaceshipTest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SpaceshipTest.png; sourceTree = "<group>"; };
 		E4BFF4AE1AB78E24002DADD3 /* StepperTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StepperTextField.h; sourceTree = "<group>"; };
 		E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StepperTextField.m; sourceTree = "<group>"; };
+		E4F3B6A51ACD7EC4001482D2 /* NavigationNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationNode.h; sourceTree = "<group>"; };
+		E4F3B6A61ACD7EC4001482D2 /* NavigationNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationNode.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +125,7 @@
 				E4ABDB521AB3933900AAE82E /* GameScene.h */,
 				E4ABDB531AB3933900AAE82E /* GameScene.m */,
 				E40813A01AC64C7600F54824 /* AttributesInspector */,
+				E4F3B6A81ACD7ECA001482D2 /* Navigator */,
 				E4BB58AC1ABB510A0021A467 /* EditorView.h */,
 				E4BB58AD1ABB510A0021A467 /* EditorView.m */,
 				E4ABDB591AB3933900AAE82E /* MainMenu.xib */,
@@ -159,6 +163,15 @@
 				E4ABDB651AB3933900AAE82E /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E4F3B6A81ACD7ECA001482D2 /* Navigator */ = {
+			isa = PBXGroup;
+			children = (
+				E4F3B6A51ACD7EC4001482D2 /* NavigationNode.h */,
+				E4F3B6A61ACD7EC4001482D2 /* NavigationNode.m */,
+			);
+			name = Navigator;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,6 +281,7 @@
 				E4ABDB511AB3933900AAE82E /* main.m in Sources */,
 				E4ABDB541AB3933900AAE82E /* GameScene.m in Sources */,
 				E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */,
+				E4F3B6A71ACD7EC4001482D2 /* NavigationNode.m in Sources */,
 				E4ABDB761AB47BB700AAE82E /* AttributeNode.m in Sources */,
 				E408138F1AC228F400F54824 /* AttributesView.m in Sources */,
 				E4ABDB4F1AB3933900AAE82E /* AppDelegate.m in Sources */,

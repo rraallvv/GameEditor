@@ -26,6 +26,7 @@
 #import "AppDelegate.h"
 #import "GameScene.h"
 #import "AttributesView.h"
+#import "NavigationNode.h"
 
 @implementation SKScene (Unarchive)
 
@@ -230,20 +231,18 @@
 		[childrenArray addObject:[self navigationTreeWithNode:child]];
 	}
 
-	id navigationTree = @{@"name": [self nameWithNode:node],
-						  @"isLeaf": @(childrenArray.count == 0),
-						  @"isEditable": @NO,
-						  @"children":childrenArray};
+	NavigationNode *navigationNode = [[NavigationNode alloc] init];
+	navigationNode.node = node;
+	navigationNode.children = childrenArray;
 
-	return navigationTree;
+	return navigationNode;
 }
 
-- (IBAction)rowSelected:(id)sender
-{
+- (IBAction)rowSelected:(id)sender {
 	NSInteger selectedRow = [_navigatorView selectedRow];
-
 	if (selectedRow != -1) {
-		NSLog(@"%@ selected", [[[_navigatorView itemAtRow:selectedRow] representedObject] valueForKey:@"name"]);
+		[_editorView setNode:[[[_navigatorView itemAtRow:selectedRow] representedObject] node]];
+		//NSLog(@"%@ selected", [[[_navigatorView itemAtRow:selectedRow] representedObject] valueForKey:@"name"]);
 	}
 	else {
 		// No row was selected
