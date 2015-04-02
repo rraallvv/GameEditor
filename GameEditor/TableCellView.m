@@ -24,7 +24,7 @@
  */
 
 #import "TableCellView.h"
-#import "Attribute.h"
+#import "AttributeNode.h"
 #import "StepperTextField.h"
 
 @implementation TableCellView {
@@ -36,9 +36,9 @@
 	_textFields = [NSMutableArray array];
 
 	/* If the table cell is an attribute try to update it's text fields with the appropriate trasformer and formatter */
-	if ([objectValue isKindOfClass:[Attribute class]]) {
+	if ([objectValue isKindOfClass:[AttributeNode class]]) {
 
-		Attribute *attribute = (Attribute *)objectValue;
+		AttributeNode *attribute = (AttributeNode *)objectValue;
 
 		/* Get all the text fields in the table cell*/
 		[self listTextFields:self];

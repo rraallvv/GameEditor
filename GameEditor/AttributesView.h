@@ -24,7 +24,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "Attribute.h"
+#import "AttributeNode.h"
 
 @interface AttributesView : NSOutlineView
 @end

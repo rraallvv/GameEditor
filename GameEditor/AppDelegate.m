@@ -152,7 +152,7 @@
 			Class propertyClass = [propertyType classType];
 
 			if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
-				[attributesArray addObject:[Attribute attributeForColorWithName:propertyName node:node]];
+				[attributesArray addObject:[AttributeNode attributeForColorWithName:propertyName node:node]];
 
 			} else if (propertyClass == [SKTexture class]
 					   || propertyClass == [SKShader class]
@@ -164,7 +164,7 @@
 											 @"children":[self attributesForClass:propertyClass node:[node valueForKey:propertyName]]}];
 
 			} else if ([propertyName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-				[attributesArray addObject:[Attribute  attributeForRotationAngleWithName:propertyName node:node]];
+				[attributesArray addObject:[AttributeNode  attributeForRotationAngleWithName:propertyName node:node]];
 
 			} else {
 				BOOL editable = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
@@ -178,10 +178,10 @@
 						&& ([propertyType isEqualToEncodedType:@encode(CGPoint)]
 							|| [propertyType isEqualToEncodedType:@encode(CGSize)]
 							|| [propertyType isEqualToEncodedType:@encode(CGRect)])) {
-							[attributesArray addObject:[Attribute attributeForNormalPrecisionValueWithName:propertyName node:node type:propertyType]];
+							[attributesArray addObject:[AttributeNode attributeForNormalPrecisionValueWithName:propertyName node:node type:propertyType]];
 						} else if ([propertyName containsString:@"colorBlendFactor"]
 								   || [propertyName containsString:@"alpha"]) {
-							[attributesArray addObject:[Attribute attributeForNormalizedValueWithName:propertyName node:node type:propertyType]];
+							[attributesArray addObject:[AttributeNode attributeForNormalizedValueWithName:propertyName node:node type:propertyType]];
 						} else if ([propertyType isEqualToEncodedType:@encode(short)]
 								   || [propertyType isEqualToEncodedType:@encode(int)]
 								   || [propertyType isEqualToEncodedType:@encode(long)]
@@ -190,9 +190,9 @@
 								   || [propertyType isEqualToEncodedType:@encode(unsigned int)]
 								   || [propertyType isEqualToEncodedType:@encode(unsigned long)]
 								   || [propertyType isEqualToEncodedType:@encode(unsigned long long)]) {
-							[attributesArray addObject:[Attribute attributeForIntegerValueWithName:propertyName node:node type:propertyType]];
+							[attributesArray addObject:[AttributeNode attributeForIntegerValueWithName:propertyName node:node type:propertyType]];
 						} else {
-							[attributesArray addObject:[Attribute attributeForHighPrecisionValueWithName:propertyName node:node type:propertyType]];
+							[attributesArray addObject:[AttributeNode attributeForHighPrecisionValueWithName:propertyName node:node type:propertyType]];
 						}
 
 				}

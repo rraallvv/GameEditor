@@ -1,5 +1,5 @@
 /*
- * Attribute.h
+ * AttributeNode.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -42,7 +42,7 @@
 @interface AttributeNameTransformer : NSValueTransformer
 @end
 
-@interface Attribute : NSObject
+@interface AttributeNode : NSObject
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
 + (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode* )node;
 + (instancetype)attributeForRotationAngleWithName:(NSString *)name node:(SKNode* )node;

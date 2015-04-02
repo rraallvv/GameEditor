@@ -18,7 +18,7 @@
 		E4ABDB581AB3933900AAE82E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4ABDB571AB3933900AAE82E /* Images.xcassets */; };
 		E4ABDB5B1AB3933900AAE82E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4ABDB591AB3933900AAE82E /* MainMenu.xib */; };
 		E4ABDB671AB3933900AAE82E /* GameEditorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB661AB3933900AAE82E /* GameEditorTests.m */; };
-		E4ABDB761AB47BB700AAE82E /* Attribute.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB711AB3BCA700AAE82E /* Attribute.m */; };
+		E4ABDB761AB47BB700AAE82E /* AttributeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB711AB3BCA700AAE82E /* AttributeNode.m */; };
 		E4BB58AB1ABB4D4B0021A467 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BB58AA1ABB4D4B0021A467 /* Spaceship.png */; };
 		E4BB58AE1ABB510A0021A467 /* EditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BB58AD1ABB510A0021A467 /* EditorView.m */; };
 		E4BB58B01ABB659C0021A467 /* SpaceshipTest.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BB58AF1ABB659C0021A467 /* SpaceshipTest.png */; };
@@ -56,8 +56,8 @@
 		E4ABDB601AB3933900AAE82E /* GameEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GameEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4ABDB651AB3933900AAE82E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4ABDB661AB3933900AAE82E /* GameEditorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameEditorTests.m; sourceTree = "<group>"; };
-		E4ABDB701AB3BCA700AAE82E /* Attribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attribute.h; sourceTree = "<group>"; };
-		E4ABDB711AB3BCA700AAE82E /* Attribute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Attribute.m; sourceTree = "<group>"; };
+		E4ABDB701AB3BCA700AAE82E /* AttributeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributeNode.h; sourceTree = "<group>"; };
+		E4ABDB711AB3BCA700AAE82E /* AttributeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributeNode.m; sourceTree = "<group>"; };
 		E4BB58AA1ABB4D4B0021A467 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
 		E4BB58AC1ABB510A0021A467 /* EditorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorView.h; sourceTree = "<group>"; };
 		E4BB58AD1ABB510A0021A467 /* EditorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorView.m; sourceTree = "<group>"; };
@@ -87,8 +87,8 @@
 		E40813A01AC64C7600F54824 /* AttributesInspector */ = {
 			isa = PBXGroup;
 			children = (
-				E4ABDB701AB3BCA700AAE82E /* Attribute.h */,
-				E4ABDB711AB3BCA700AAE82E /* Attribute.m */,
+				E4ABDB701AB3BCA700AAE82E /* AttributeNode.h */,
+				E4ABDB711AB3BCA700AAE82E /* AttributeNode.m */,
 				E408138D1AC228F400F54824 /* AttributesView.h */,
 				E408138E1AC228F400F54824 /* AttributesView.m */,
 				E40813991AC572E900F54824 /* TableCellView.h */,
@@ -274,7 +274,7 @@
 				E4ABDB511AB3933900AAE82E /* main.m in Sources */,
 				E4ABDB541AB3933900AAE82E /* GameScene.m in Sources */,
 				E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */,
-				E4ABDB761AB47BB700AAE82E /* Attribute.m in Sources */,
+				E4ABDB761AB47BB700AAE82E /* AttributeNode.m in Sources */,
 				E408138F1AC228F400F54824 /* AttributesView.m in Sources */,
 				E4ABDB4F1AB3933900AAE82E /* AppDelegate.m in Sources */,
 			);
