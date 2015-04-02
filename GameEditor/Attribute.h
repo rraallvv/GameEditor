@@ -27,7 +27,13 @@
 #import <objc/runtime.h>
 #import <SpriteKit/SpriteKit.h>
 
-@interface PointTransformer : NSValueTransformer
+@interface NSString (Types)
+- (NSString *)extractClassName;
+- (Class)classType;
+- (BOOL)isEqualToEncodedType:(const char*)type;
+@end
+
+@interface PrecisionTransformer : NSValueTransformer
 @end
 
 @interface DegreesTransformer : NSValueTransformer
@@ -37,10 +43,16 @@
 @end
 
 @interface Attribute : NSObject
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type bindingOptions:(NSDictionary *)bindingOptions;
-- (NSString *)type;
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
++ (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode* )node;
++ (instancetype)attributeForRotationAngleWithName:(NSString *)name node:(SKNode* )node;
++ (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
++ (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
++ (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
++ (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
 @property (copy) NSString *name;
-@property (nonatomic, assign) BOOL editable;
-@property (weak) SKNode *node;
 @property id formatter;
+@property id valueTransformer;
+@property CGFloat sensitivity;
+@property CGFloat increment;
 @end

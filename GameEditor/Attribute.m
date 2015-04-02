@@ -24,6 +24,30 @@
  */
 
 #import "Attribute.h"
+#import <objc/runtime.h>
+
+@implementation NSString (Types)
+- (NSString *)extractClassName {
+	/* Try to get a class name from the type */
+	NSRange range = [self rangeOfString:@"(?<=@\")(\\w*)(?=\")" options:NSRegularExpressionSearch];
+	return range.location != NSNotFound ? [self substringWithRange:range] : nil;
+}
+- (Class)classType {
+	NSString *className = [self extractClassName];
+	if (className) {
+		return NSClassFromString(className);
+	}
+	return nil;
+}
+- (BOOL)isEqualToEncodedType:(const char*)type {
+	NSString *className = [self extractClassName];
+	if (className) {
+		return [[NSString stringWithFormat:@"{%@=#}", className] isEqualToString:[NSString stringWithUTF8String:type]];
+	} else {
+		return [self isEqualToString:[NSString stringWithUTF8String:type]];
+	}
+}
+@end
 
 @interface NSString (Regex)
 - (NSArray *)substringsWithRegularExpressionWithPattern:(NSString *)pattern options:(NSRegularExpressionOptions)options error:(NSError **)error;
@@ -46,6 +70,8 @@
 	return results;
 }
 @end
+
+#pragma mark - Value transformers
 
 @interface NSValueTransformer (Blocks)
 + (void)initializeWithTransformedValueClass:(Class)class
@@ -103,16 +129,18 @@
 
 @end
 
-@implementation PointTransformer
+@implementation PrecisionTransformer
 
 + (void)initialize {
-	[self initializeWithTransformedValueClass:[NSValue class]
+	[self initializeWithTransformedValueClass:[NSNumber class]
 				  allowsReverseTransformation:YES
-						transformedValueBlock:^(id value){
-							return value;
+						transformedValueBlock:^(NSNumber *value){
+							NSNumber *result = @(value.floatValue*100.0);
+							return result;
 						}
-				 reverseTransformedValueBlock:^(id value){
-							return [NSValue valueWithPoint:NSPointFromString(value)];
+				 reverseTransformedValueBlock:^(NSNumber *value){
+							NSNumber *result = @(value.floatValue*0.01);
+							return result;
 						}];
 }
 
@@ -124,11 +152,11 @@
 	[self initializeWithTransformedValueClass:[NSNumber class]
 				  allowsReverseTransformation:YES
 						transformedValueBlock:^(NSNumber *value){
-							NSNumber *result = @(value.floatValue*180/M_PI);
+							NSNumber *result = @(GLKMathRadiansToDegrees(value.floatValue));
 							return result;
 						}
 				 reverseTransformedValueBlock:^(NSNumber *value){
-							NSNumber *result = @(value.floatValue*M_PI/180);
+							NSNumber *result = @(GLKMathDegreesToRadians(value.floatValue));
 							return result;
 						}];
 }
@@ -168,61 +196,119 @@
 
 @end
 
+#pragma mark - Attribute
+
 @implementation Attribute {
-	NSValueTransformer *_valueTransformer;
 	NSArray *_labels;
 	NSString *_type;
 	id _value;
+	SKNode *_node;
 }
 
 @synthesize
-name = _name;
+name = _name,
+sensitivity = _sensitivity,
+increment = _increment;
 
-- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type bindingOptions:(NSDictionary *)bindingOptions {
+- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
 	if (self = [super init]) {
 		_name = name;
 		_node = node;
 		_type = type;
+		_sensitivity = 1.0;
+		_increment = 1.0;
 
 		/* Prepare the labels and identifier for the editor */
-		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
+		if ([_type isEqualToEncodedType:@encode(CGPoint)]) {
 			_labels = @[@"X", @"Y"];
-		} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
+		} else if ([_type isEqualToEncodedType:@encode(CGSize)]) {
 			_labels = @[@"W", @"H"];
-		} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
+		} else if ([_type isEqualToEncodedType:@encode(CGVector)]) {
+			_labels = @[@"dX", @"dY"];
+		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
 			_labels = @[@"X", @"Y", @"W", @"H"];
 		}
 
-		/* Cache the value transformer */
-		if(bindingOptions) {
-			_valueTransformer = bindingOptions[NSValueTransformerBindingOption];
-			if((id)_valueTransformer == [NSNull null])
-				_valueTransformer = nil;
-		}
-
 		/* Bind the property to the 'raw' value if there isn't an accessor */
-		[self bind:@"value" toObject:node withKeyPath:_name options:bindingOptions];
+		if (node) {
+			[self bind:@"value" toObject:node withKeyPath:_name options:nil];
+		}
 	}
 	return self;
 }
 
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type bindingOptions:(NSDictionary *)bindingOptions {
-	return [[Attribute alloc] initWithAttributeWithName:name node:node type:type bindingOptions:bindingOptions];
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
+	return [[Attribute alloc] initWithAttributeWithName:name node:node type:type];
+}
+
++ (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode* )node {
+	return [[Attribute alloc] initWithAttributeWithName:name node:node type:@"color"];
+}
+
++ (instancetype)attributeForRotationAngleWithName:name node:(SKNode* )node {
+	Attribute *attribute = [Attribute attributeWithName:name node:node type:@"d"];
+
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.negativeFormat = formatter.positiveFormat = @"#.###º";
+	attribute.formatter = formatter;
+	attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([DegreesTransformer class])];
+	attribute.sensitivity = GLKMathRadiansToDegrees(0.001);
+
+	return attribute;
+}
+
++ (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
+	Attribute *attribute = [Attribute attributeWithName:name node:node type:type];
+
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
+	formatter.multiplier = @(0.01);
+	attribute.formatter = formatter;
+	attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([PrecisionTransformer class])];
+	attribute.increment = 10.0;
+
+	return attribute;
+}
+
++ (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
+	Attribute *attribute = [Attribute attributeWithName:name node:node type:type];
+
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
+	attribute.formatter = formatter;
+
+	return attribute;
+}
+
++ (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
+	Attribute *attribute = [Attribute attributeForHighPrecisionValueWithName:name node:node type:type];
+
+	NSNumberFormatter *formatter = attribute.formatter;
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.minimum = @(0.0);
+	formatter.maximum = @(100.0);
+	attribute.formatter = formatter;
+
+	return attribute;
+}
+
++ (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
+	Attribute *attribute = [Attribute attributeWithName:name node:node type:type];
+
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.roundingIncrement = @(1.0);
+	formatter.usesGroupingSeparator = NO;
+	attribute.formatter = formatter;
+
+	return attribute;
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"%@ %@", _name, _type];
-}
-
-- (NSString *)editor {
-	if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
-		return @"dd";
-	} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
-		return @"dd";
-	} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
-		return @"dddd";
-	}
-	return _type;
+	return [NSString stringWithFormat:@"%@\n%@", _name, _type];
 }
 
 - (NSString *)type {
@@ -230,7 +316,7 @@ name = _name;
 }
 
 - (BOOL)isEditable {
-	return YES;
+	return _node != nil;
 }
 
 - (BOOL)isLeaf {
@@ -243,17 +329,6 @@ name = _name;
 
 #pragma mark value
 
-- (NSValue *)reverseTransformedValue {
-
-	/* Apply the value transformer, if one has been set */
-	if(_valueTransformer && [[_valueTransformer class] allowsReverseTransformation]) {
-		return [_valueTransformer reverseTransformedValue:_value];
-	}
-
-	/* Fallback to the untransformed value */
-	return _value;
-}
-
 - (void)setValue:(id)value {
 	/* Do nothing if the value hasn't changed */
 	if ([_value isEqual:value])
@@ -262,7 +337,7 @@ name = _name;
 	_value = value;
 
 	/* Update the bound object's property value */
-	[_node setValue:[self reverseTransformedValue] forKeyPath:_name];
+	[_node setValue:_value forKeyPath:_name];
 }
 
 - (id)value {
@@ -282,23 +357,19 @@ name = _name;
 
 		/* Update the value component for the given subindex */
 
-		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
-			CGPoint point = [self.value pointValue];
-			CGFloat *components = (CGFloat*)&point;
-			components[subindex] = [value floatValue];
-			self.value = [NSValue valueWithPoint:point];
+		if ([_type isEqualToEncodedType:@encode(CGPoint)]
+			|| [_type isEqualToEncodedType:@encode(CGSize)]
+			|| [_type isEqualToEncodedType:@encode(CGVector)]) {
+			CGFloat data[2];
+			[self.value getValue:&data];
+			data[subindex] = [value floatValue];
+			self.value = [NSValue value:&data withObjCType:_type.UTF8String];
 
-		} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
-			CGSize size = [self.value sizeValue];
-			CGFloat *components = (CGFloat*)&size;
-			components[subindex] = [value floatValue];
-			self.value = [NSValue valueWithSize:size];
-
-		} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
-			CGRect rect = [self.value rectValue];
-			CGFloat *components = (CGFloat*)&rect;
-			components[subindex] = [value floatValue];
-			self.value = [NSValue valueWithRect:rect];
+		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
+			CGFloat data[4];
+			[self.value getValue:&data];
+			data[subindex] = [value floatValue];
+			self.value = [NSValue value:&data withObjCType:_type.UTF8String];
 		}
 
 	} else {
@@ -324,17 +395,17 @@ name = _name;
 
 		/* The key is a subindex of value */
 
-		if (strcmp(_type.UTF8String, @encode(CGPoint)) == 0) {
-			CGPoint point = [_value pointValue];
-			return @(((CGFloat*)&point)[subindex]);
+		if ([_type isEqualToEncodedType:@encode(CGPoint)]
+			|| [_type isEqualToEncodedType:@encode(CGSize)]
+			|| [_type isEqualToEncodedType:@encode(CGVector)]) {
+			CGFloat data[2];
+			[_value getValue:&data];
+			return @(data[subindex]);
 
-		} else if (strcmp(_type.UTF8String, @encode(CGSize)) == 0) {
-			CGSize size = [_value sizeValue];
-			return @(((CGFloat*)&size)[subindex]);
-
-		} else if (strcmp(_type.UTF8String, @encode(CGRect)) == 0) {
-			CGRect rect = [_value rectValue];
-			return @(((CGFloat*)&rect)[subindex]);
+		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
+			CGFloat data[4];
+			[_value getValue:&data];
+			return @(data[subindex]);
 		}
 	}
 

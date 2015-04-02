@@ -36,27 +36,88 @@
 	NSButton *_hideGroupButton;
 	NSTrackingArea *_trackingArea;
 }
+
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
 	[self.backgroundColor set];
 	NSRectFill(dirtyRect);
+}
+
+- (void)drawSeparatorInRect:(NSRect)dirtyRect {
 
 	OutlineView *outlineView = (OutlineView *)[self superview];
 
 	NSInteger row = [outlineView rowForView:self];
-	
-	[[NSColor lightGrayColor] set];
+	id item = [outlineView itemAtRow:row];
+	NSUInteger indexPathLength = [[item indexPath] length];
 
-	if (self.isGroupRowStyle && row > 0) {
-		NSRectFill(NSMakeRect(0, 0, NSWidth(dirtyRect), 1));
-	}
+	//id prevItem = [outlineView itemAtRow:row - 1];
+	//NSUInteger prevIndexPathLength = [[prevItem indexPath] length];
+	//BOOL prevItemIsGroup = [(id)outlineView outlineView:outlineView isGroupItem:prevItem];
 
-	if (row == [outlineView numberOfRows] - 1) {
-		NSRectFill(NSMakeRect(0, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect), 1));
+	id nextItem = [outlineView itemAtRow:row + 1];
+	NSUInteger nextIndexPathLength = [[nextItem indexPath] length];
+	BOOL nextItemIsGroup = [(id)outlineView outlineView:outlineView isGroupItem:nextItem];
+
+	CGFloat separatorMargin = 16;
+
+	/* Only draw the separator for the root nodes */
+	if (self.isGroupRowStyle) {
+
+		if (indexPathLength == 1) {
+			[[NSColor blackColor] set];
+
+			/* Separator at the top of a root group */
+			if (row > 0) {
+				NSRectFill(NSMakeRect(0, 0, NSWidth(dirtyRect), 1));
+			}
+
+			/* Separator at the bottom of the last root group */
+			if (row == [outlineView numberOfRows] - 1) {
+				NSRectFill(NSMakeRect(0, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect), 1));
+			}
+
+			[[NSColor lightGrayColor] set];
+
+			/* Separator between a root group a non-root group node */
+			if (indexPathLength < nextIndexPathLength
+				&& nextItemIsGroup) {
+				NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
+			}
+
+		} else {
+			[[NSColor lightGrayColor] set];
+
+			/* Separator between two non-root group node */
+			if (indexPathLength == nextIndexPathLength) {
+				NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
+			}
+		}
+
+	} else {
+		[[NSColor lightGrayColor] set];
+
+		/* Separator at the bottom of a leaf node followed by a non-root group node */
+		if (nextIndexPathLength > 1
+			&& nextItemIsGroup) {
+			NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
+		}
+
+		/* Separator at the bottom of a leaf node followed by a leaf node */
+		if (nextIndexPathLength < indexPathLength
+			&& !nextItemIsGroup) {
+			NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
+		}
 	}
 }
+
 - (void)setFrame:(NSRect)frame {
 	[super setFrame:frame];
-	if (self.isGroupRowStyle) {
+
+	OutlineView *outlineView = (OutlineView *)[self superview];
+	NSInteger row = [outlineView rowForView:self];
+	NSUInteger indexPathLength = [[[outlineView itemAtRow:row] indexPath] length];
+
+	if (self.isGroupRowStyle && indexPathLength == 1) {
 		if (!_hideGroupButton) {
 
 			NSBundle *bundle = [NSBundle bundleForClass:[NSApplication class]];
@@ -96,14 +157,17 @@
 		[_hideGroupButton sizeToFit];
 		NSSize size = _hideGroupButton.frame.size;
 		_hideGroupButton.frame = NSMakeRect(NSMaxX(frame) - size.width, frame.size.height - size.height, size.width, size.height);
+		/*
 		for (NSControl *control in self.subviews) {
 			if ([control isKindOfClass:[NSTableCellView class]]) {
 				NSSize size = control.frame.size;
 				control.frame = NSMakeRect(frame.origin.x, frame.size.height - size.height, size.width, size.height);
 			}
 		}
+		 */
 	}
 }
+
 - (void)toggleGroupVisibility {
 	OutlineView *outlineView = (OutlineView *)[self superview];
 	id item = [outlineView itemAtRow:[outlineView rowForView:self]];
@@ -117,6 +181,7 @@
 		[outlineView expandItem:item];
 	}
 }
+
 - (void)updateTrackingAreas {
 	[super updateTrackingAreas];
 	if (_trackingArea == nil) {
@@ -129,68 +194,118 @@
 		[self addTrackingArea:_trackingArea];
 	}
 }
+
 - (void)mouseEntered:(NSEvent *)theEvent {
 	_hideGroupButton.hidden = NO;
 }
+
 - (void)mouseExited:(NSEvent *)theEvent {
 	_hideGroupButton.hidden = YES;
 }
+
 @end
 
 static const CGFloat kIndentationPerLevel = 0.0;
 
+@interface OutlineView () <NSOutlineViewDelegate>
+@end
+
 @implementation OutlineView {
 	id _actualDelegate;
 }
+
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
 		self.indentationPerLevel = kIndentationPerLevel;
 	}
 	return self;
 }
+
 - (void) expandItem:(id)item expandChildren:(BOOL)expandChildren {
 	[NSAnimationContext beginGrouping];
 	[[NSAnimationContext currentContext] setDuration:0.0];
 	[super expandItem:item expandChildren:expandChildren];
 	[NSAnimationContext endGrouping];
 }
+
 - (void)collapseItem:(id)item collapseChildren:(BOOL)collapseChildren {
 	[NSAnimationContext beginGrouping];
 	[[NSAnimationContext currentContext] setDuration:0.0];
 	[super collapseItem:item collapseChildren:collapseChildren];
 	[NSAnimationContext endGrouping];
 }
+
 - (NSTableViewSelectionHighlightStyle)selectionHighlightStyle {
 	return NSTableViewSelectionHighlightStyleNone;
 }
+
 - (void)setIndentationPerLevel:(CGFloat)indentationPerLevel {
 	[super setIndentationPerLevel:kIndentationPerLevel];
 }
+
 - (NSTableRowView *)outlineView:(NSOutlineView *)outlineView rowViewForItem:(id)item {
 	return [[TableRowView alloc] init];
 }
+
 - (void)setDelegate:(id)newDelegate {
 	[super setDelegate:nil];
 	_actualDelegate = newDelegate;
 	[super setDelegate:(id)self];
 }
+
 - (id)delegate {
 	return self;
 }
+
 - (id)forwardingTargetForSelector:(SEL)aSelector {
 	if ([_actualDelegate respondsToSelector:aSelector]) { return _actualDelegate; }
 	return [super forwardingTargetForSelector:aSelector];
 }
+
 - (BOOL)respondsToSelector:(SEL)aSelector {
 	return [super respondsToSelector:aSelector] || [_actualDelegate respondsToSelector:aSelector];
 }
+
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	if ([[item indexPath] length] < 2) {
-		return [[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]] boundingRectForFont].size.height - 1;
-	}
 	return [_actualDelegate outlineView:outlineView heightOfRowByItem:item];
 }
+
 - (NSRect)frameOfOutlineCellAtRow:(NSInteger)row {
+
+	id item = [self itemAtRow:row];
+
+	if ([item indexPath].length > 1 && [_actualDelegate outlineView:self isGroupItem:item]) {
+		NSRect rect = [super frameOfOutlineCellAtRow:row];
+		rect.origin.x = 2;
+		return rect;
+	}
+
 	return NSZeroRect; // Remove the disclosure triangle
 }
+
+- (void)drawRect:(NSRect)dirtyRect {
+	[self.backgroundColor set];
+	NSRectFill(dirtyRect);
+}
+
+- (void)outlineView:(NSOutlineView *)outlineView didRemoveRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+	for (NSView *view in outlineView.subviews) {
+		NSInteger row = [outlineView rowForView:view];
+		id item = [outlineView itemAtRow:row];
+		if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
+			[view setNeedsDisplay:YES];
+		}
+	}
+}
+
+- (void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+	for (NSView *view in outlineView.subviews) {
+		NSInteger row = [outlineView rowForView:view];
+		id item = [outlineView itemAtRow:row];
+		if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
+			[view setNeedsDisplay:YES];
+		}
+	}
+}
+
 @end
