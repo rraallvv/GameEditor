@@ -25,8 +25,7 @@
 
 #import "AppDelegate.h"
 #import "GameScene.h"
-#import "Attribute.h"
-#import "OutlineView.h"
+#import "AttributesView.h"
 
 @implementation SKScene (Unarchive)
 
@@ -61,7 +60,7 @@
 	IBOutlet EditorView *_editorView;
 	IBOutlet NSTreeController *_attributesTreeController;
 	IBOutlet NSTreeController *_navigatorTreeController;
-	IBOutlet NSOutlineView *_attributesView;
+	IBOutlet AttributesView *_attributesView;
 	IBOutlet NSOutlineView *_navigatorView;
 }
 

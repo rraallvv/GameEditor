@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E408138F1AC228F400F54824 /* OutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = E408138E1AC228F400F54824 /* OutlineView.m */; };
+		E408138F1AC228F400F54824 /* AttributesView.m in Sources */ = {isa = PBXBuildFile; fileRef = E408138E1AC228F400F54824 /* AttributesView.m */; };
 		E40813921AC3C45300F54824 /* ValueEditors.xib in Resources */ = {isa = PBXBuildFile; fileRef = E40813901AC3C45300F54824 /* ValueEditors.xib */; };
 		E40813951AC42FFF00F54824 /* ColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = E40813941AC42FFF00F54824 /* ColorWell.m */; };
 		E408139B1AC572E900F54824 /* TableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = E408139A1AC572E900F54824 /* TableCellView.m */; };
@@ -36,8 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E408138D1AC228F400F54824 /* OutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutlineView.h; sourceTree = "<group>"; };
-		E408138E1AC228F400F54824 /* OutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutlineView.m; sourceTree = "<group>"; };
+		E408138D1AC228F400F54824 /* AttributesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributesView.h; sourceTree = "<group>"; };
+		E408138E1AC228F400F54824 /* AttributesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributesView.m; sourceTree = "<group>"; };
 		E40813911AC3C45300F54824 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ValueEditors.xib; sourceTree = "<group>"; };
 		E40813931AC42FFF00F54824 /* ColorWell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorWell.h; sourceTree = "<group>"; };
 		E40813941AC42FFF00F54824 /* ColorWell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorWell.m; sourceTree = "<group>"; };
@@ -89,8 +89,8 @@
 			children = (
 				E4ABDB701AB3BCA700AAE82E /* Attribute.h */,
 				E4ABDB711AB3BCA700AAE82E /* Attribute.m */,
-				E408138D1AC228F400F54824 /* OutlineView.h */,
-				E408138E1AC228F400F54824 /* OutlineView.m */,
+				E408138D1AC228F400F54824 /* AttributesView.h */,
+				E408138E1AC228F400F54824 /* AttributesView.m */,
 				E40813991AC572E900F54824 /* TableCellView.h */,
 				E408139A1AC572E900F54824 /* TableCellView.m */,
 				E4BFF4AE1AB78E24002DADD3 /* StepperTextField.h */,
@@ -275,7 +275,7 @@
 				E4ABDB541AB3933900AAE82E /* GameScene.m in Sources */,
 				E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */,
 				E4ABDB761AB47BB700AAE82E /* Attribute.m in Sources */,
-				E408138F1AC228F400F54824 /* OutlineView.m in Sources */,
+				E408138F1AC228F400F54824 /* AttributesView.m in Sources */,
 				E4ABDB4F1AB3933900AAE82E /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

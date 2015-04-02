@@ -1,5 +1,5 @@
 /*
- * OutlineView.h
+ * AttributesView.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -24,6 +24,7 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "Attribute.h"
 
-@interface OutlineView : NSOutlineView
+@interface AttributesView : NSOutlineView
 @end

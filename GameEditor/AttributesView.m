@@ -1,5 +1,5 @@
 /*
- * OutlineView.m
+ * AttributesView.m
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-#import "OutlineView.h"
+#import "AttributesView.h"
 
 @interface TableRowView : NSTableRowView
 @end
@@ -44,7 +44,7 @@
 
 - (void)drawSeparatorInRect:(NSRect)dirtyRect {
 
-	OutlineView *outlineView = (OutlineView *)[self superview];
+	AttributesView *outlineView = (AttributesView *)[self superview];
 
 	NSInteger row = [outlineView rowForView:self];
 	id item = [outlineView itemAtRow:row];
@@ -126,7 +126,7 @@
 - (void)setFrame:(NSRect)frame {
 	[super setFrame:frame];
 
-	OutlineView *outlineView = (OutlineView *)[self superview];
+	AttributesView *outlineView = (AttributesView *)[self superview];
 	NSInteger row = [outlineView rowForView:self];
 	NSUInteger indexPathLength = [[[outlineView itemAtRow:row] indexPath] length];
 
@@ -182,7 +182,7 @@
 }
 
 - (void)toggleGroupVisibility {
-	OutlineView *outlineView = (OutlineView *)[self superview];
+	AttributesView *outlineView = (AttributesView *)[self superview];
 	id item = [outlineView itemAtRow:[outlineView rowForView:self]];
 	if ([outlineView isItemExpanded:item]) {
 		_hideGroupButton.attributedTitle = _showAttributedString;
@@ -220,10 +220,10 @@
 
 static const CGFloat kIndentationPerLevel = 0.0;
 
-@interface OutlineView () <NSOutlineViewDelegate>
+@interface AttributesView () <NSOutlineViewDelegate>
 @end
 
-@implementation OutlineView {
+@implementation AttributesView {
 	id _actualDelegate;
 	NSMutableDictionary *_prefferedSizes;
 	NSMutableArray *_editorIdentifiers;
