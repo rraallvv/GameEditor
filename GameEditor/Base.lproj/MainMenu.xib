@@ -428,6 +428,7 @@
             <connections>
                 <outlet property="_attributesView" destination="zW2-BO-taF" id="19t-eI-oFU"/>
                 <outlet property="_editorView" destination="suo-YO-fqM" id="D5W-Hu-pTw"/>
+                <outlet property="_navigatorView" destination="Y4L-tX-zfk" id="Gju-ZL-6rD"/>
                 <outlet property="_treeController" destination="IEK-xe-ugr" id="TYh-UN-I2P"/>
                 <outlet property="skView" destination="BAm-0B-vb9" id="MCo-T6-F5E"/>
                 <outlet property="window" destination="371" id="532"/>

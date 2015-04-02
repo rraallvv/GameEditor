@@ -61,6 +61,7 @@
 	IBOutlet EditorView *_editorView;
 	IBOutlet NSTreeController *_treeController;
 	IBOutlet NSOutlineView *_attributesView;
+	IBOutlet NSOutlineView *_navigatorView;
 	NSMutableDictionary *_prefferedSizes;
 	NSMutableArray *_editorIdentifiers;
 }
