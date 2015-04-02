@@ -60,52 +60,64 @@
 
 	CGFloat separatorMargin = 16;
 
+	NSColor *rootNodeSeparatorColor = [NSColor darkGrayColor];
+	NSColor *groupNodeSeparatorColor = [NSColor darkGrayColor];
+
+	[NSBezierPath setDefaultLineWidth:1.0];
+	CGFloat pixelOffset = 0.5;
+
 	/* Only draw the separator for the root nodes */
 	if (self.isGroupRowStyle) {
 
 		if (indexPathLength == 1) {
-			[[NSColor blackColor] set];
+			[rootNodeSeparatorColor set];
 
 			/* Separator at the top of a root group */
 			if (row > 0) {
-				NSRectFill(NSMakeRect(0, 0, NSWidth(dirtyRect), 1));
+				[NSBezierPath strokeLineFromPoint:NSMakePoint(0,  pixelOffset)
+										  toPoint:NSMakePoint(NSWidth(dirtyRect), pixelOffset)];
 			}
 
 			/* Separator at the bottom of the last root group */
 			if (row == [outlineView numberOfRows] - 1) {
-				NSRectFill(NSMakeRect(0, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect), 1));
+				[NSBezierPath strokeLineFromPoint:NSMakePoint(0,  NSMaxY(dirtyRect) - 1 + pixelOffset)
+										  toPoint:NSMakePoint(NSWidth(dirtyRect), NSMaxY(dirtyRect) - 1 + pixelOffset)];
 			}
 
-			[[NSColor lightGrayColor] set];
+			[groupNodeSeparatorColor set];
 
 			/* Separator between a root group a non-root group node */
 			if (indexPathLength < nextIndexPathLength
 				&& nextItemIsGroup) {
-				NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
+				[NSBezierPath strokeLineFromPoint:NSMakePoint(separatorMargin,  NSMaxY(dirtyRect) - 1 + pixelOffset)
+										  toPoint:NSMakePoint(NSWidth(dirtyRect), NSMaxY(dirtyRect) - 1 + pixelOffset)];
 			}
 
 		} else {
-			[[NSColor lightGrayColor] set];
+			[groupNodeSeparatorColor set];
 
 			/* Separator between two non-root group node */
 			if (indexPathLength == nextIndexPathLength) {
-				NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
+				[NSBezierPath strokeLineFromPoint:NSMakePoint(separatorMargin,  NSMaxY(dirtyRect) - 1 + pixelOffset)
+										  toPoint:NSMakePoint(NSWidth(dirtyRect), NSMaxY(dirtyRect) - 1 + pixelOffset)];
 			}
 		}
 
 	} else {
-		[[NSColor lightGrayColor] set];
+		[groupNodeSeparatorColor set];
 
 		/* Separator at the bottom of a leaf node followed by a non-root group node */
 		if (nextIndexPathLength > 1
 			&& nextItemIsGroup) {
-			NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
+			[NSBezierPath strokeLineFromPoint:NSMakePoint(separatorMargin,  NSMaxY(dirtyRect) - 1 + pixelOffset)
+									  toPoint:NSMakePoint(NSWidth(dirtyRect), NSMaxY(dirtyRect) - 1 + pixelOffset)];
 		}
 
 		/* Separator at the bottom of a leaf node followed by a leaf node */
 		if (nextIndexPathLength < indexPathLength
 			&& !nextItemIsGroup) {
-			NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
+			[NSBezierPath strokeLineFromPoint:NSMakePoint(separatorMargin,  NSMaxY(dirtyRect) - 1 + pixelOffset)
+									  toPoint:NSMakePoint(NSWidth(dirtyRect), NSMaxY(dirtyRect) - 1 + pixelOffset)];
 		}
 	}
 }
