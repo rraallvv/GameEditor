@@ -185,7 +185,7 @@
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="XZg-ys-F6V">
-                                                            <rect key="frame" x="13" y="3" width="61" height="14"/>
+                                                            <rect key="frame" x="18" y="3" width="56" height="14"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="expandable" id="rkw-uf-tbh">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -203,7 +203,7 @@
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstAttribute="top" secondItem="XZg-ys-F6V" secondAttribute="bottom" constant="-17" id="9QJ-cr-O6a"/>
-                                                        <constraint firstItem="XZg-ys-F6V" firstAttribute="leading" secondItem="M03-u6-Cp5" secondAttribute="leading" constant="15" id="gzU-Ja-nbj"/>
+                                                        <constraint firstItem="XZg-ys-F6V" firstAttribute="leading" secondItem="M03-u6-Cp5" secondAttribute="leading" constant="20" id="gzU-Ja-nbj"/>
                                                         <constraint firstAttribute="trailing" secondItem="XZg-ys-F6V" secondAttribute="trailing" constant="6" id="hex-ko-8Gh"/>
                                                     </constraints>
                                                     <connections>

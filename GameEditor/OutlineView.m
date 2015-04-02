@@ -47,34 +47,65 @@
 	OutlineView *outlineView = (OutlineView *)[self superview];
 
 	NSInteger row = [outlineView rowForView:self];
-	NSUInteger indexPathLength = [[[outlineView itemAtRow:row] indexPath] length];
+	id item = [outlineView itemAtRow:row];
+	NSUInteger indexPathLength = [[item indexPath] length];
 
-	CGFloat separatorMargin = (indexPathLength - 1) * 16;
+	//id prevItem = [outlineView itemAtRow:row - 1];
+	//NSUInteger prevIndexPathLength = [[prevItem indexPath] length];
+	//BOOL prevItemIsGroup = [(id)outlineView outlineView:outlineView isGroupItem:prevItem];
+
+	id nextItem = [outlineView itemAtRow:row + 1];
+	NSUInteger nextIndexPathLength = [[nextItem indexPath] length];
+	BOOL nextItemIsGroup = [(id)outlineView outlineView:outlineView isGroupItem:nextItem];
+
+	CGFloat separatorMargin = 16;
 
 	/* Only draw the separator for the root nodes */
 	if (self.isGroupRowStyle) {
-		
+
 		if (indexPathLength == 1) {
 			[[NSColor blackColor] set];
+
+			/* Separator at the top of a root group */
+			if (row > 0) {
+				NSRectFill(NSMakeRect(0, 0, NSWidth(dirtyRect), 1));
+			}
+
+			/* Separator at the bottom of the last root group */
+			if (row == [outlineView numberOfRows] - 1) {
+				NSRectFill(NSMakeRect(0, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect), 1));
+			}
+
+			[[NSColor lightGrayColor] set];
+
+			/* Separator between a root group a non-root group node */
+			if (indexPathLength < nextIndexPathLength
+				&& nextItemIsGroup) {
+				NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
+			}
+
 		} else {
 			[[NSColor lightGrayColor] set];
+
+			/* Separator between two non-root group node */
+			if (indexPathLength == nextIndexPathLength) {
+				NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
+			}
 		}
 
-		/* Sepparator at the top of an expandable */
-		if (self.isGroupRowStyle && row > 0) {
-			NSRectFill(NSMakeRect(separatorMargin, 0, NSWidth(dirtyRect) - separatorMargin, 1));
-		}
+	} else {
+		[[NSColor lightGrayColor] set];
 
-		/* Sepparator at the bottom of the last expandable node */
-		if (row == [outlineView numberOfRows] - 1) {
+		/* Separator at the bottom of a leaf node followed by a non-root group node */
+		if (nextIndexPathLength > 1
+			&& nextItemIsGroup) {
 			NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
 		}
-	} else {
-		/* Sepparator at the top of a non-expandable node following an expandable node */
-		[[NSColor lightGrayColor] set];
-		if ([(id)outlineView outlineView:outlineView isGroupItem:[outlineView itemAtRow:row - 1]]
-			&& [[[outlineView itemAtRow:row - 1] indexPath] length] == indexPathLength) {
-			NSRectFill(NSMakeRect(separatorMargin, 0, NSWidth(dirtyRect) - separatorMargin, 1));
+
+		/* Separator at the bottom of a leaf node followed by a leaf node */
+		if (nextIndexPathLength < indexPathLength
+			&& !nextItemIsGroup) {
+			NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
 		}
 	}
 }
@@ -245,7 +276,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 
 	if ([item indexPath].length > 1 && [_actualDelegate outlineView:self isGroupItem:item]) {
 		NSRect rect = [super frameOfOutlineCellAtRow:row];
-		rect.origin.x = 0;
+		rect.origin.x = 2;
 		return rect;
 	}
 
@@ -255,6 +286,26 @@ static const CGFloat kIndentationPerLevel = 0.0;
 - (void)drawRect:(NSRect)dirtyRect {
 	[self.backgroundColor set];
 	NSRectFill(dirtyRect);
+}
+
+- (void)outlineView:(NSOutlineView *)outlineView didRemoveRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+	for (NSView *view in outlineView.subviews) {
+		NSInteger row = [outlineView rowForView:view];
+		id item = [outlineView itemAtRow:row];
+		if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
+			[view setNeedsDisplay:YES];
+		}
+	}
+}
+
+- (void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+	for (NSView *view in outlineView.subviews) {
+		NSInteger row = [outlineView rowForView:view];
+		id item = [outlineView itemAtRow:row];
+		if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
+			[view setNeedsDisplay:YES];
+		}
+	}
 }
 
 @end

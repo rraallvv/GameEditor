@@ -302,6 +302,9 @@
             <subviews>
                 <colorWell translatesAutoresizingMaskIntoConstraints="NO" id="7B1-9n-jPd" customClass="ColorWell">
                     <rect key="frame" x="0.0" y="0.0" width="172" height="19"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="G6J-B3-5Y3"/>
+                    </constraints>
                     <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
                         <binding destination="Nhn-ML-Yi0" name="enabled" keyPath="objectValue.isEditable" id="HIZ-U2-HYx"/>
@@ -313,7 +316,6 @@
                 <constraint firstAttribute="trailing" secondItem="7B1-9n-jPd" secondAttribute="trailing" id="aDq-8h-cuf"/>
                 <constraint firstItem="7B1-9n-jPd" firstAttribute="top" secondItem="Nhn-ML-Yi0" secondAttribute="top" id="jpO-mr-ASZ"/>
                 <constraint firstItem="7B1-9n-jPd" firstAttribute="leading" secondItem="Nhn-ML-Yi0" secondAttribute="leading" id="rOd-Rc-tv7"/>
-                <constraint firstAttribute="bottom" secondItem="7B1-9n-jPd" secondAttribute="bottom" id="uxa-2X-XDO"/>
             </constraints>
             <point key="canvasLocation" x="726" y="371.5"/>
         </tableCellView>
