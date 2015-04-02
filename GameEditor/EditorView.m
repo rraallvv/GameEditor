@@ -464,7 +464,7 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)bindToNode:(SKNode *)node {
-	/* Populate the attibutes table from the selected node's properties */
+	/* Populate the attributes table from the selected node's properties */
 	Class classType = [node class];
 	do {
 		unsigned int count;
@@ -483,7 +483,7 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)unbindToNode:(SKNode *)node {
-	/* Populate the attibutes table from the selected node's properties */
+	/* Populate the attributes table from the selected node's properties */
 	Class classType = [node class];
 	do {
 		unsigned int count;

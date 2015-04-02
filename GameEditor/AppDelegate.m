@@ -62,6 +62,7 @@
 	IBOutlet NSTreeController *_treeController;
 	IBOutlet NSOutlineView *_outlineView;
 	NSMutableDictionary *_prefferedSizes;
+	NSMutableArray *_editorIdentifiers;
 }
 
 @synthesize window = _window;
@@ -94,6 +95,7 @@
 	NSArray* objects;
 	[nib instantiateWithOwner:self topLevelObjects:&objects];
 
+	_editorIdentifiers = [NSMutableArray array];
 	_prefferedSizes = [NSMutableDictionary dictionary];
 
 	for (id object in objects) {
@@ -105,6 +107,9 @@
 
 			/* Fetch the preffered size for the editor's view */
 			_prefferedSizes[tableCelView.identifier] = [NSValue valueWithSize:tableCelView.frame.size];
+
+			/* Store the available indentifiers */
+			[_editorIdentifiers addObject:tableCelView.identifier];
 		}
 	}
 }
@@ -115,16 +120,21 @@
 
 - (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
 	if ([self isGroupItem:item]) {
-		return [outlineView makeViewWithIdentifier:@"group" owner:self];
-	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
-		return [outlineView makeViewWithIdentifier:@"name" owner:self];
-	} else {
-		NSString *type = [[item representedObject] valueForKey:@"editor"];
-		id view = [outlineView makeViewWithIdentifier:type owner:self];
-		if (!view) {
-			return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
+		if ([item indexPath].length == 1) {
+			return [outlineView makeViewWithIdentifier:@"class" owner:self];
+		} else {
+			return [outlineView makeViewWithIdentifier:@"expandable" owner:self];
 		}
-		return view;
+	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
+		return [outlineView makeViewWithIdentifier:@"attribute" owner:self];
+	} else {
+		NSString *type = [[item representedObject] valueForKey:@"type"];
+		for (NSString *identifier in _editorIdentifiers) {
+			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
+				return [outlineView makeViewWithIdentifier:identifier owner:self];
+			}
+		}
+		return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
 	}
 }
 
@@ -133,102 +143,132 @@
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	NSString *type = [[item representedObject] valueForKey:@"editor"];
-	NSSize size = [_prefferedSizes[type] sizeValue];
-	return MAX(20, size.height);
+	NSString *type = [[item representedObject] valueForKey:@"type"];
+	if (type) {
+		for (NSString *identifier in _editorIdentifiers) {
+			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
+				return [_prefferedSizes[identifier] sizeValue].height;
+			}
+		}
+	}
+	return 20;
 }
 
 - (BOOL) isGroupItem:(id)item {
-	return [[item indexPath] length] < 2;
+	return ![[[item representedObject] valueForKey:@"isLeaf"] boolValue];
 }
 
 - (IBAction)saveAction:(id)sender {
 	[SKScene archiveScene:self.skView.scene toFile:@"GameScene"];
 }
 
-- (void)selectedNode:(SKNode *)node {
-
-	/* Clear the attibutes table */
-	[_treeController setContent:nil];
-
-	/* Populate the attibutes table from the selected node's properties */
-	Class classType = [node class];
-	do {
-		unsigned int count;
-		objc_property_t *properties = class_copyPropertyList(classType, &count);
-
-		if (count) {
-			NSMutableArray *children = [NSMutableArray array];
-
-			for(unsigned int i = 0; i < count; i++) {
-				//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
-				NSString *attributeName = [NSString stringWithUTF8String:property_getName(properties[i])];
-				NSString *attributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
-				NSArray *attibutesArray = [attributes componentsSeparatedByString:@","];
-				NSString *attributeType = [attibutesArray firstObject];
-
-				/* Try to get a class name from the attribute type */
-				NSRange range = [attributeType rangeOfString:@"(?<=@\")(\\w*)(?=\")" options:NSRegularExpressionSearch];
-				NSString *className = range.location != NSNotFound ? [attributeType substringWithRange:range] : nil;
-
-				if (NSClassFromString(className) == [NSColor class]) {
-					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType bindingOptions:nil];
-					[children addObject:attribute];
-
-				} else if ([attributeName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-					Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType
-														 bindingOptions:@{NSValueTransformerBindingOption: [NSValueTransformer valueTransformerForName:NSStringFromClass([DegreesTransformer class])]}];
-
-					NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-					formatter.numberStyle = NSNumberFormatterDecimalStyle;
-					formatter.negativeFormat = formatter.positiveFormat = @"#.###º";
-					attribute.formatter = formatter;
-
-					[children addObject:attribute];
-
-				} else {
-					BOOL editable = [attributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
-					NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
-					editable = editable && [attributeType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
-
-					if (editable) {
-						Attribute *attribute = [Attribute attributeWithName:attributeName node:node type:attributeType bindingOptions:nil];
-
-						NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-						formatter.numberStyle = NSNumberFormatterDecimalStyle;
-						formatter.negativeFormat = formatter.positiveFormat = @"#.###";
-						attribute.formatter = formatter;
-
-						[children addObject:attribute];
-
-					} else {
-#if 1// Show non editable properties
-						NSDictionary *attribute = @{@"name": attributeName,
-													@"value": @"(non-editable)",
-													@"editor": @"generic attribute",
-													@"node": [NSNull null],
-													@"description": [NSString stringWithFormat:@"%@ %@", attributeName, attributeType],
-													@"isLeaf": @YES,
-													@"isEditable": @NO};
-						[children addObject:attribute];
-#endif
-					}
-				}
-			}
-			free(properties);
-
-			[_treeController addObject:@{@"name": [classType description],
-										 @"isLeaf": @NO,
-										 @"isEditable": @NO,
-										 @"children":children}];
-		}
-
-		classType = [classType superclass];
-	} while (classType != nil && classType != [SKNode superclass]);
+- (void)selectedNode:(id)node {
+	/* Replace the attributes table */
+	[_treeController setContent:[self attributesForAllClassesWithNode:node]];
 
 	// Expand all the groups
-	[_outlineView expandItem:nil expandChildren:YES];
-	[_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
+	for (id item in [[_treeController arrangedObjects] childNodes])
+		[_outlineView expandItem:item expandChildren:NO];
+	//[_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
+}
+
+- (NSMutableArray *)attributesForAllClassesWithNode:(id)node {
+	
+	NSMutableArray *classesArray = [NSMutableArray array];
+
+	Class classType = [node class];
+
+	do {
+		[classesArray addObject:@{@"name": [classType description],
+								  @"isLeaf": @NO,
+								  @"isEditable": @NO,
+								  @"children":[self attibutesForClass:classType node:node]}];
+
+		classType = [classType superclass];
+		
+	} while (classType != nil
+			 && classType != [SKNode superclass]
+			 && classType != [NSObject class]);
+
+	return classesArray;
+}
+
+- (NSMutableArray *)attibutesForClass:(Class)classType node:(id)node {
+	unsigned int count;
+	objc_property_t *properties = class_copyPropertyList(classType, &count);
+
+	NSMutableArray *attributesArray = [NSMutableArray array];
+
+	if (count) {
+		for(unsigned int i = 0; i < count; i++) {
+			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
+			NSString *propertyName = [NSString stringWithUTF8String:property_getName(properties[i])];
+			NSString *propertyAttributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
+			NSString *propertyType = [[propertyAttributes componentsSeparatedByString:@","] firstObject];
+
+			Class propertyClass = [propertyType classType];
+
+			if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
+				[attributesArray addObject:[Attribute attributeForColorWithName:propertyName node:node]];
+
+			} else if (propertyClass == [SKTexture class]
+					   || propertyClass == [SKShader class]
+					   || propertyClass == [SKPhysicsBody class]) {
+				[attributesArray addObject:@{@"name": propertyName,
+											 @"isLeaf": @NO,
+											 @"isEditable": @NO,
+											 @"children":[self attibutesForClass:propertyClass node:[node valueForKey:propertyName]]}];
+
+			} else if ([propertyName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+				[attributesArray addObject:[Attribute  attributeForRotationAngleWithName:propertyName node:node]];
+
+			} else {
+				BOOL editable = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
+				NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
+				editable = editable && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
+
+				if (editable) {
+
+					if (![propertyName containsString:@"anchorPoint"]
+						&& ![propertyName containsString:@"centerRect"]
+						&& ([propertyType isEqualToEncodedType:@encode(CGPoint)]
+							|| [propertyType isEqualToEncodedType:@encode(CGSize)]
+							|| [propertyType isEqualToEncodedType:@encode(CGRect)])) {
+							[attributesArray addObject:[Attribute attributeForNormalPrecisionValueWithName:propertyName node:node type:propertyType]];
+						} else if ([propertyName containsString:@"colorBlendFactor"]
+								   || [propertyName containsString:@"alpha"]) {
+							[attributesArray addObject:[Attribute attributeForNormalizedValueWithName:propertyName node:node type:propertyType]];
+						} else if ([propertyType isEqualToEncodedType:@encode(short)]
+								   || [propertyType isEqualToEncodedType:@encode(int)]
+								   || [propertyType isEqualToEncodedType:@encode(long)]
+								   || [propertyType isEqualToEncodedType:@encode(long long)]
+								   || [propertyType isEqualToEncodedType:@encode(unsigned short)]
+								   || [propertyType isEqualToEncodedType:@encode(unsigned int)]
+								   || [propertyType isEqualToEncodedType:@encode(unsigned long)]
+								   || [propertyType isEqualToEncodedType:@encode(unsigned long long)]) {
+							[attributesArray addObject:[Attribute attributeForIntegerValueWithName:propertyName node:node type:propertyType]];
+						} else {
+							[attributesArray addObject:[Attribute attributeForHighPrecisionValueWithName:propertyName node:node type:propertyType]];
+						}
+
+				}
+#if 1// Show a dummy attribute for non-editable properties
+				else {
+					[attributesArray addObject:@{@"name": propertyName,
+											  @"value": @"(non-editable)",
+											  @"type": @"generic attribute",
+											  @"node": [NSNull null],
+											  @"description": [NSString stringWithFormat:@"%@\n%@", propertyName, propertyType],
+											  @"isLeaf": @YES,
+											  @"isEditable": @NO}];
+				}
+#endif
+			}
+		}
+		free(properties);
+	}
+
+	return attributesArray;
 }
 
 @end

@@ -26,6 +26,37 @@
 #import "StepperTextField.h"
 #import <AppKit/AppKit.h>
 
+#pragma mark - StepperNumberFormatter
+
+@interface StepperNumberFormatter : NSNumberFormatter
+@end
+
+@implementation StepperNumberFormatter
+
+- (NSAttributedString *)attributedStringForObjectValue:(id)value withDefaultAttributes:(NSDictionary *)defaultAttributes {
+#if 0
+	NSString *string = [self stringForObjectValue:value];
+
+	if  (!string) {
+		return nil;
+	}
+	
+	NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:string attributes:defaultAttributes];
+
+	[attributedString addAttribute:NSForegroundColorAttributeName
+							 value:[NSColor headerColor]
+							 range:[string rangeOfString:@"º"]];
+
+	return attributedString;
+#else
+	return nil;
+#endif
+}
+
+@end
+
+#pragma mark - MarginTextFieldCell
+
 IB_DESIGNABLE
 @interface MarginTextFieldCell : NSTextFieldCell
 @property IBInspectable CGFloat margin;
@@ -105,6 +136,8 @@ IB_DESIGNABLE
 
 @end
 
+#pragma mark - StepperTextField
+
 typedef enum {
 	ActivatedButtonNone,
 	ActivatedButtonIncrease,
@@ -155,6 +188,16 @@ draggingMult = _sensitivity;
 		[self updateBounds];
 	}
 	return self;
+}
+
+- (void)setFormatter:(id)formatter {
+	/* Change the number formatter's class to StepperNumberFormatter */
+	NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:[NSKeyedArchiver archivedDataWithRootObject:formatter]];
+	[arch setClass:[StepperNumberFormatter class] forClassName:@"NSNumberFormatter"];
+	StepperNumberFormatter *stepperNumberFormatter = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
+	[arch finishDecoding];
+
+	[super setFormatter:stepperNumberFormatter];
 }
 
 - (void)updateTrackingAreas {
