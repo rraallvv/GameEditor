@@ -60,8 +60,8 @@
 
 	CGFloat separatorMargin = 16;
 
-	NSColor *rootNodeSeparatorColor = [NSColor darkGrayColor];
-	NSColor *groupNodeSeparatorColor = [NSColor darkGrayColor];
+	NSColor *rootNodeSeparatorColor = [NSColor lightGrayColor];
+	NSColor *groupNodeSeparatorColor = [NSColor lightGrayColor];
 
 	[NSBezierPath setDefaultLineWidth:1.0];
 	CGFloat pixelOffset = 0.5;

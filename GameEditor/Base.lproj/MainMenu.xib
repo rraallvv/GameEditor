@@ -332,7 +332,7 @@
                                     <constraint firstItem="WEo-lF-8ul" firstAttribute="leading" secondItem="JhP-CH-4pm" secondAttribute="leading" id="PA2-ql-B5l"/>
                                     <constraint firstItem="WEo-lF-8ul" firstAttribute="top" secondItem="JhP-CH-4pm" secondAttribute="top" id="S8X-Ae-iTP"/>
                                     <constraint firstAttribute="bottom" secondItem="k1U-YT-dMh" secondAttribute="bottom" constant="20" symbolic="YES" id="YKG-iw-rQX"/>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="260" id="g08-yi-m9J"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="260" id="g08-yi-m9J"/>
                                     <constraint firstAttribute="trailing" secondItem="k1U-YT-dMh" secondAttribute="trailing" constant="20" symbolic="YES" id="hKO-A9-yxi"/>
                                 </constraints>
                             </customView>
