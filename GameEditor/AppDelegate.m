@@ -105,10 +105,9 @@
 	/* Replace the attributes table */
 	[_attributesTreeController setContent:[self attributesForAllClassesWithNode:node]];
 
-	// Expand all the groups
+	/* Expand all the root nodes in the attributes view */
 	for (id item in [[_attributesTreeController arrangedObjects] childNodes])
 		[_attributesView expandItem:item expandChildren:NO];
-	//[_attributesView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
 
 	/* Update the selection in the navigator view */
 	[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:[_navigatorView rowForItem:[self navigationNodeOfObject:node]]]
@@ -198,22 +197,22 @@
 						&& ([propertyType isEqualToEncodedType:@encode(CGPoint)]
 							|| [propertyType isEqualToEncodedType:@encode(CGSize)]
 							|| [propertyType isEqualToEncodedType:@encode(CGRect)])) {
-							[attributesArray addObject:[AttributeNode attributeForNormalPrecisionValueWithName:propertyName node:node type:propertyType]];
-						} else if ([propertyName containsString:@"colorBlendFactor"]
-								   || [propertyName containsString:@"alpha"]) {
-							[attributesArray addObject:[AttributeNode attributeForNormalizedValueWithName:propertyName node:node type:propertyType]];
-						} else if ([propertyType isEqualToEncodedType:@encode(short)]
-								   || [propertyType isEqualToEncodedType:@encode(int)]
-								   || [propertyType isEqualToEncodedType:@encode(long)]
-								   || [propertyType isEqualToEncodedType:@encode(long long)]
-								   || [propertyType isEqualToEncodedType:@encode(unsigned short)]
-								   || [propertyType isEqualToEncodedType:@encode(unsigned int)]
-								   || [propertyType isEqualToEncodedType:@encode(unsigned long)]
-								   || [propertyType isEqualToEncodedType:@encode(unsigned long long)]) {
-							[attributesArray addObject:[AttributeNode attributeForIntegerValueWithName:propertyName node:node type:propertyType]];
-						} else {
-							[attributesArray addObject:[AttributeNode attributeForHighPrecisionValueWithName:propertyName node:node type:propertyType]];
-						}
+						[attributesArray addObject:[AttributeNode attributeForNormalPrecisionValueWithName:propertyName node:node type:propertyType]];
+					} else if ([propertyName containsString:@"colorBlendFactor"]
+							   || [propertyName containsString:@"alpha"]) {
+						[attributesArray addObject:[AttributeNode attributeForNormalizedValueWithName:propertyName node:node type:propertyType]];
+					} else if ([propertyType isEqualToEncodedType:@encode(short)]
+							   || [propertyType isEqualToEncodedType:@encode(int)]
+							   || [propertyType isEqualToEncodedType:@encode(long)]
+							   || [propertyType isEqualToEncodedType:@encode(long long)]
+							   || [propertyType isEqualToEncodedType:@encode(unsigned short)]
+							   || [propertyType isEqualToEncodedType:@encode(unsigned int)]
+							   || [propertyType isEqualToEncodedType:@encode(unsigned long)]
+							   || [propertyType isEqualToEncodedType:@encode(unsigned long long)]) {
+						[attributesArray addObject:[AttributeNode attributeForIntegerValueWithName:propertyName node:node type:propertyType]];
+					} else {
+						[attributesArray addObject:[AttributeNode attributeForHighPrecisionValueWithName:propertyName node:node type:propertyType]];
+					}
 
 				}
 #if 1// Show a dummy attribute for non-editable properties
