@@ -124,10 +124,10 @@
                                             <rect key="frame" x="1" y="0.0" width="238" height="134"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="16" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="16" outlineTableColumn="fZm-TB-kfy" id="Y4L-tX-zfk">
+                                                <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" rowHeight="16" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="16" outlineTableColumn="fZm-TB-kfy" id="Y4L-tX-zfk" customClass="NavigatorView">
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                     <tableColumns>
                                                         <tableColumn width="184.7109375" minWidth="40" maxWidth="1000" id="fZm-TB-kfy">
@@ -383,7 +383,6 @@
                                                     </tableColumns>
                                                     <connections>
                                                         <binding destination="IEK-xe-ugr" name="content" keyPath="arrangedObjects.objectValue" id="YX3-iT-NnT"/>
-                                                        <outlet property="delegate" destination="494" id="wTh-p6-eZR"/>
                                                     </connections>
                                                 </outlineView>
                                             </subviews>

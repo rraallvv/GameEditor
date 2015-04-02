@@ -123,12 +123,12 @@
 
 @end
 
-#pragma mark TableRowView
+#pragma mark AttributesTableRowView
 
-@interface TableRowView : NSTableRowView
+@interface AttributesTableRowView : NSTableRowView
 @end
 
-@implementation TableRowView {
+@implementation AttributesTableRowView {
 	NSAttributedString *_showAttributedString;
 	NSAttributedString *_hideAttributedString;
 	NSAttributedString *_showAlternateAttributedString;
@@ -384,7 +384,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (NSTableRowView *)outlineView:(NSOutlineView *)outlineView rowViewForItem:(id)item {
-	return [[TableRowView alloc] init];
+	return [[AttributesTableRowView alloc] init];
 }
 
 - (void)setDelegate:(id)newDelegate {
