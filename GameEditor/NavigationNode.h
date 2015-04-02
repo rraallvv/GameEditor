@@ -26,7 +26,8 @@
 #import <Foundation/Foundation.h>
 
 @interface NavigationNode : NSObject
++ (instancetype)navigationNodeWithNode:(id)node;
 @property id node;
 @property NSString *name;
-@property NSMutableArray *children;
+@property (readonly) NSMutableArray *children;
 @end

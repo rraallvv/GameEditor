@@ -25,7 +25,36 @@
 
 #import "NavigationNode.h"
 
-@implementation NavigationNode
+@implementation NavigationNode {
+	NSMutableArray *_childrenNavigationNodes;
+}
+
+@synthesize node = _node;
+
++ (instancetype)navigationNodeWithNode:(id)node {
+	NavigationNode *navigationNode = [[NavigationNode alloc] init];
+	navigationNode.node = node;
+	return navigationNode;
+}
+
+- (void)setNode:(id)node {
+	_childrenNavigationNodes = [NSMutableArray array];
+
+	for (id child in [node children]) {
+		NavigationNode *childNavigationNode = [NavigationNode navigationNodeWithNode:child];
+		[_childrenNavigationNodes addObject:childNavigationNode];
+	}
+
+	_node = node;
+}
+
+- (id)node {
+	return _node;
+}
+
+- (NSMutableArray *)children {
+	return _childrenNavigationNodes;
+}
 
 - (void)setName:(NSString *)name {
 	[self.node setName:name];

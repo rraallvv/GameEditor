@@ -74,7 +74,7 @@
 
 	/* Pick the scene */
     GameScene *scene = [GameScene unarchiveFromFile:@"GameScene"];
-	[_navigatorTreeController setContent:[self navigationTreeWithNode:scene]];
+	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
 	[_navigatorView expandItem:nil expandChildren:YES];
 
     /* Set the scale mode to scale to fit the window */
@@ -108,7 +108,7 @@
 	// Expand all the groups
 	for (id item in [[_attributesTreeController arrangedObjects] childNodes])
 		[_attributesView expandItem:item expandChildren:NO];
-	//[_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
+	//[_attributesView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
 }
 
 - (NSMutableArray *)attributesForAllClassesWithNode:(id)node {
@@ -213,29 +213,6 @@
 	}
 
 	return attributesArray;
-}
-
-- (NSString *)nameWithNode:(id)node {
-	if ([node respondsToSelector:@selector(name)]) {
-		NSString *name = [node name];
-		if (name && ![name isEqualToString:@""])
-			return name;
-	}
-	return [NSString stringWithFormat:@"<%@>", [node className]];
-}
-
-- (id)navigationTreeWithNode:(id)node {
-	NSMutableArray *childrenArray = [NSMutableArray array];
-
-	for (id child in [node children]) {
-		[childrenArray addObject:[self navigationTreeWithNode:child]];
-	}
-
-	NavigationNode *navigationNode = [[NavigationNode alloc] init];
-	navigationNode.node = node;
-	navigationNode.children = childrenArray;
-
-	return navigationNode;
 }
 
 - (IBAction)rowSelected:(id)sender {
