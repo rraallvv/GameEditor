@@ -59,7 +59,8 @@
 
 @implementation AppDelegate {
 	IBOutlet EditorView *_editorView;
-	IBOutlet NSTreeController *_treeController;
+	IBOutlet NSTreeController *_attributesTreeController;
+	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet NSOutlineView *_attributesView;
 	IBOutlet NSOutlineView *_navigatorView;
 	NSMutableDictionary *_prefferedSizes;
@@ -165,10 +166,10 @@
 
 - (void)selectedNode:(id)node {
 	/* Replace the attributes table */
-	[_treeController setContent:[self attributesForAllClassesWithNode:node]];
+	[_attributesTreeController setContent:[self attributesForAllClassesWithNode:node]];
 
 	// Expand all the groups
-	for (id item in [[_treeController arrangedObjects] childNodes])
+	for (id item in [[_attributesTreeController arrangedObjects] childNodes])
 		[_attributesView expandItem:item expandChildren:NO];
 	//[_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
 }
