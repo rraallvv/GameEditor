@@ -24,6 +24,8 @@
  */
 
 #import "NavigationNode.h"
+#import <AppKit/AppKit.h>
+#import <SpriteKit/SpriteKit.h>
 
 @implementation NavigationNode {
 	NSMutableArray *_childrenNavigationNodes;
@@ -57,7 +59,7 @@
 }
 
 - (void)setName:(NSString *)name {
-	[self.node setName:name];
+	[(SKNode *)self.node setName:name];
 }
 
 - (NSString *)name {
@@ -75,6 +77,16 @@
 
 - (BOOL)isEditable {
 	return NO;
+}
+
+- (NSImage *)image {
+	if ([self.node isKindOfClass:[SKScene class]]) {
+		return [NSImage imageNamed:@"SKScene"];
+	} else if ([self.node isKindOfClass:[SKShapeNode class]]) {
+		return [NSImage imageNamed:@"SKShapeNode"];
+	} else {
+		return [NSImage imageNamed:@"SKSpriteNode"];
+	}
 }
 
 @end
