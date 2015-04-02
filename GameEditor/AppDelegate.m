@@ -75,7 +75,10 @@
 	self.window.titleVisibility = NSWindowTitleHidden;
 	self.window.titlebarAppearsTransparent = YES;
 
+	/* Pick the scene */
     GameScene *scene = [GameScene unarchiveFromFile:@"GameScene"];
+	[_navigatorTreeController setContent:[self navigationTreeWithNode:scene]];
+	[_navigatorView expandItem:nil expandChildren:YES];
 
     /* Set the scale mode to scale to fit the window */
     scene.scaleMode = SKSceneScaleModeAspectFit;
@@ -276,6 +279,30 @@
 	}
 
 	return attributesArray;
+}
+
+- (NSString *)nameWithNode:(id)node {
+	if ([node respondsToSelector:@selector(name)]) {
+		NSString *name = [node name];
+		if (name && ![name isEqualToString:@""])
+			return name;
+	}
+	return [NSString stringWithFormat:@"<%@>", [node className]];
+}
+
+- (id)navigationTreeWithNode:(id)node {
+	NSMutableArray *childrenArray = [NSMutableArray array];
+
+	for (id child in [node children]) {
+		[childrenArray addObject:[self navigationTreeWithNode:child]];
+	}
+
+	id navigationTree = @{@"name": [self nameWithNode:node],
+						  @"isLeaf": @(childrenArray.count == 0),
+						  @"isEditable": @NO,
+						  @"children":childrenArray};
+
+	return navigationTree;
 }
 
 @end
