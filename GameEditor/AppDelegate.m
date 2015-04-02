@@ -109,10 +109,30 @@
 	for (id item in [[_attributesTreeController arrangedObjects] childNodes])
 		[_attributesView expandItem:item expandChildren:NO];
 	//[_attributesView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
+
+	/* Update the selection in the navigator view */
+	[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:[_navigatorView rowForItem:[self navigationNodeOfObject:node]]]
+				byExtendingSelection:NO];
+}
+
+- (id)navigationNodeOfObject:(id)anObject {
+	return [self navigationNodeOfObject:anObject inNodes:[[_navigatorTreeController arrangedObjects] childNodes]];
+}
+
+- (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray*)nodes {
+	for(NSTreeNode* node in nodes) {
+		if([[[node representedObject] node] isEqual:anObject]) {
+			return node;
+		}
+		if([[node childNodes] count]) {
+			return [self navigationNodeOfObject:anObject inNodes:[node childNodes]];
+		}
+	}
+	return nil;
 }
 
 - (NSMutableArray *)attributesForAllClassesWithNode:(id)node {
-	
+
 	NSMutableArray *classesArray = [NSMutableArray array];
 
 	Class classType = [node class];
