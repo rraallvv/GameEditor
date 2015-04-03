@@ -1,5 +1,5 @@
 /*
- * Attribute.m
+ * AttributeNode.m
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-#import "Attribute.h"
+#import "AttributeNode.h"
 #import <objc/runtime.h>
 
 @implementation NSString (Types)
@@ -163,7 +163,7 @@
 
 @end
 
-@implementation AttibuteNameTransformer
+@implementation AttributeNameTransformer
 
 + (void)initialize {
 	[self initializeWithTransformedValueClass:[NSString class]
@@ -196,9 +196,9 @@
 
 @end
 
-#pragma mark - Attribute
+#pragma mark - AttributeNode
 
-@implementation Attribute {
+@implementation AttributeNode {
 	NSArray *_labels;
 	NSString *_type;
 	id _value;
@@ -238,15 +238,15 @@ increment = _increment;
 }
 
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	return [[Attribute alloc] initWithAttributeWithName:name node:node type:type];
+	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:type];
 }
 
 + (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode* )node {
-	return [[Attribute alloc] initWithAttributeWithName:name node:node type:@"color"];
+	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:@"color"];
 }
 
 + (instancetype)attributeForRotationAngleWithName:name node:(SKNode* )node {
-	Attribute *attribute = [Attribute attributeWithName:name node:node type:@"d"];
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:@"d"];
 
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
@@ -259,7 +259,7 @@ increment = _increment;
 }
 
 + (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	Attribute *attribute = [Attribute attributeWithName:name node:node type:type];
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type];
 
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
@@ -273,7 +273,7 @@ increment = _increment;
 }
 
 + (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	Attribute *attribute = [Attribute attributeWithName:name node:node type:type];
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type];
 
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
@@ -284,7 +284,7 @@ increment = _increment;
 }
 
 + (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	Attribute *attribute = [Attribute attributeForHighPrecisionValueWithName:name node:node type:type];
+	AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:name node:node type:type];
 
 	NSNumberFormatter *formatter = attribute.formatter;
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
@@ -296,7 +296,7 @@ increment = _increment;
 }
 
 + (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	Attribute *attribute = [Attribute attributeWithName:name node:node type:type];
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type];
 
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;

@@ -1,5 +1,5 @@
 /*
- * OutlineView.m
+ * AttributesView.m
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,12 +23,112 @@
  * THE SOFTWARE.
  */
 
-#import "OutlineView.h"
+#import "AttributesView.h"
+#import "StepperTextField.h"
 
-@interface TableRowView : NSTableRowView
+#pragma mark TableCellView
+
+@interface TableCellView : NSTableCellView
 @end
 
-@implementation TableRowView {
+@implementation TableCellView {
+	NSMutableArray *_textFields;
+	IBOutlet NSPopover *_popover;
+}
+
+- (void)setObjectValue:(id)objectValue {
+	_textFields = [NSMutableArray array];
+
+	/* If the table cell is an attribute try to update it's text fields with the appropriate trasformer and formatter */
+	if ([objectValue isKindOfClass:[AttributeNode class]]) {
+
+		AttributeNode *attribute = (AttributeNode *)objectValue;
+
+		/* Get all the text fields in the table cell*/
+		[self listTextFields:self];
+
+		/* Walk the text fields */
+		for (NSTextField *textField in _textFields) {
+
+			/* Get the binding information */
+			NSMutableDictionary *bindingInfo = [textField infoForBinding: NSValueBinding].mutableCopy;
+			NSString *observedKey = bindingInfo[NSObservedKeyPathKey];
+
+			/* Get the keyPath relative to the attribute object */
+			NSRange range = [observedKey rangeOfString:@"(?<=\\.|^)value\\d*$" options:NSRegularExpressionSearch];
+			NSString *key = range.location != NSNotFound ? [observedKey substringWithRange:range] : nil;
+
+			if (key) {
+				/* Update the binding with the attribute's value transformer */
+				NSMutableDictionary *options = bindingInfo[NSOptionsKey];
+				NSValueTransformer *valueTransformer = attribute.valueTransformer;
+
+				if (valueTransformer) {
+					options[NSValueTransformerBindingOption] = valueTransformer;
+				} else {
+					[options removeObjectForKey:NSValueTransformerBindingOption];
+				}
+
+				/* Clear and re-create the binding to update its value transformer */
+				[textField unbind:NSValueBinding];
+				[textField bind:NSValueBinding toObject:attribute withKeyPath:key options:options];
+
+				/* Set the appropriate number formater */
+				textField.formatter = attribute.formatter;
+
+				/* Set the parameters for the stepper text field */
+				if ([textField isKindOfClass:[StepperTextField class]]) {
+					StepperTextField *stepper = (StepperTextField *)textField;
+					stepper.stepperInc = attribute.increment;
+					stepper.draggingMult = attribute.sensitivity;
+				}
+			}
+		}
+	}
+
+	if (_textFields.count == 0)
+		_textFields = nil;
+
+	[super setObjectValue:objectValue];
+}
+
+- (void)listTextFields:(id)view {
+
+	/* Recursivelly retrieve all text fields in the table cell */
+	for (id subview in [view subviews]) {
+		if ([subview isKindOfClass:[NSTextField class]]) {
+			[_textFields addObject:subview];
+		}
+		[self listTextFields:subview];
+	}
+}
+
+- (void)presentError:(NSError *)error modalForWindow:(NSWindow *)window delegate:(id)delegate didPresentSelector:(SEL)didPresentSelector contextInfo:(void *)contextInfo {
+
+	NSBeep();
+
+	NSLog(@"Error: %@", error.localizedDescription);
+
+#if 0
+	if (_popover == nil) {
+		_popover = [[NSPopover alloc] init];
+		_popover.behavior = NSPopoverBehaviorSemitransient;
+	}
+
+	[_popover.contentViewController.view.subviews.firstObject setStringValue:error.localizedDescription];
+	[_popover showRelativeToRect:[self bounds] ofView:self preferredEdge:NSMinXEdge];
+#endif
+	
+}
+
+@end
+
+#pragma mark AttributesTableRowView
+
+@interface AttributesTableRowView : NSTableRowView
+@end
+
+@implementation AttributesTableRowView {
 	NSAttributedString *_showAttributedString;
 	NSAttributedString *_hideAttributedString;
 	NSAttributedString *_showAlternateAttributedString;
@@ -44,7 +144,7 @@
 
 - (void)drawSeparatorInRect:(NSRect)dirtyRect {
 
-	OutlineView *outlineView = (OutlineView *)[self superview];
+	AttributesView *outlineView = (AttributesView *)[self superview];
 
 	NSInteger row = [outlineView rowForView:self];
 	id item = [outlineView itemAtRow:row];
@@ -60,52 +160,65 @@
 
 	CGFloat separatorMargin = 16;
 
+	NSColor *rootNodeSeparatorColor = [NSColor lightGrayColor];
+	NSColor *groupNodeSeparatorColor = [NSColor lightGrayColor];
+
+	[NSBezierPath setDefaultLineWidth:1.0];
+	CGFloat pixelOffset = 0.5;
+
+	CGPoint topLeft = NSMakePoint(0,  pixelOffset);
+	CGPoint topRight = NSMakePoint(NSWidth(dirtyRect), pixelOffset);
+	CGPoint bottomLeft = NSMakePoint(0,  NSMaxY(dirtyRect) - 1 + pixelOffset);
+	CGPoint bottomRight = NSMakePoint(NSWidth(dirtyRect), NSMaxY(dirtyRect) - 1 + pixelOffset);
+
+	CGPoint marginBottomLeft = NSMakePoint(bottomLeft.x + separatorMargin,  bottomLeft.y);
+
 	/* Only draw the separator for the root nodes */
 	if (self.isGroupRowStyle) {
 
 		if (indexPathLength == 1) {
-			[[NSColor blackColor] set];
+			[rootNodeSeparatorColor set];
 
 			/* Separator at the top of a root group */
 			if (row > 0) {
-				NSRectFill(NSMakeRect(0, 0, NSWidth(dirtyRect), 1));
+				[NSBezierPath strokeLineFromPoint:topLeft toPoint:topRight];
 			}
 
 			/* Separator at the bottom of the last root group */
 			if (row == [outlineView numberOfRows] - 1) {
-				NSRectFill(NSMakeRect(0, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect), 1));
+				[NSBezierPath strokeLineFromPoint:bottomLeft toPoint:bottomRight];
 			}
 
-			[[NSColor lightGrayColor] set];
+			[groupNodeSeparatorColor set];
 
 			/* Separator between a root group a non-root group node */
 			if (indexPathLength < nextIndexPathLength
 				&& nextItemIsGroup) {
-				NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
+				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
 			}
 
 		} else {
-			[[NSColor lightGrayColor] set];
+			[groupNodeSeparatorColor set];
 
 			/* Separator between two non-root group node */
 			if (indexPathLength == nextIndexPathLength) {
-				NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
+				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
 			}
 		}
 
 	} else {
-		[[NSColor lightGrayColor] set];
+		[groupNodeSeparatorColor set];
 
 		/* Separator at the bottom of a leaf node followed by a non-root group node */
 		if (nextIndexPathLength > 1
 			&& nextItemIsGroup) {
-			NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
+			[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
 		}
 
 		/* Separator at the bottom of a leaf node followed by a leaf node */
 		if (nextIndexPathLength < indexPathLength
 			&& !nextItemIsGroup) {
-			NSRectFill(NSMakeRect(separatorMargin, NSMaxY(dirtyRect) - 1, NSWidth(dirtyRect) - separatorMargin, 1));
+			[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
 		}
 	}
 }
@@ -113,7 +226,7 @@
 - (void)setFrame:(NSRect)frame {
 	[super setFrame:frame];
 
-	OutlineView *outlineView = (OutlineView *)[self superview];
+	AttributesView *outlineView = (AttributesView *)[self superview];
 	NSInteger row = [outlineView rowForView:self];
 	NSUInteger indexPathLength = [[[outlineView itemAtRow:row] indexPath] length];
 
@@ -169,7 +282,7 @@
 }
 
 - (void)toggleGroupVisibility {
-	OutlineView *outlineView = (OutlineView *)[self superview];
+	AttributesView *outlineView = (AttributesView *)[self superview];
 	id item = [outlineView itemAtRow:[outlineView rowForView:self]];
 	if ([outlineView isItemExpanded:item]) {
 		_hideGroupButton.attributedTitle = _showAttributedString;
@@ -205,18 +318,45 @@
 
 @end
 
+#pragma mark AttributesView
+
 static const CGFloat kIndentationPerLevel = 0.0;
 
-@interface OutlineView () <NSOutlineViewDelegate>
+@interface AttributesView () <NSOutlineViewDelegate>
 @end
 
-@implementation OutlineView {
+@implementation AttributesView {
 	id _actualDelegate;
+	NSMutableDictionary *_prefferedSizes;
+	NSMutableArray *_editorIdentifiers;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
 		self.indentationPerLevel = kIndentationPerLevel;
+
+		/* Prepare the editors for the outline view */
+		NSNib *nib = [[NSNib alloc] initWithNibNamed:@"ValueEditors" bundle:nil];
+		NSArray* objects;
+		[nib instantiateWithOwner:self topLevelObjects:&objects];
+
+		_editorIdentifiers = [NSMutableArray array];
+		_prefferedSizes = [NSMutableDictionary dictionary];
+
+		for (id object in objects) {
+			if ([object isKindOfClass:[NSTableCellView class]]) {
+				NSTableCellView *tableCelView = object;
+
+				/* Register the identifiers for each editors */
+				[self registerNib:nib forIdentifier:tableCelView.identifier];
+
+				/* Fetch the preffered size for the editor's view */
+				_prefferedSizes[tableCelView.identifier] = [NSValue valueWithSize:tableCelView.frame.size];
+
+				/* Store the available indentifiers */
+				[_editorIdentifiers addObject:tableCelView.identifier];
+			}
+		}
 	}
 	return self;
 }
@@ -244,7 +384,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (NSTableRowView *)outlineView:(NSOutlineView *)outlineView rowViewForItem:(id)item {
-	return [[TableRowView alloc] init];
+	return [[AttributesTableRowView alloc] init];
 }
 
 - (void)setDelegate:(id)newDelegate {
@@ -267,14 +407,22 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	return [_actualDelegate outlineView:outlineView heightOfRowByItem:item];
+	NSString *type = [[item representedObject] valueForKey:@"type"];
+	if (type) {
+		for (NSString *identifier in _editorIdentifiers) {
+			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
+				return [_prefferedSizes[identifier] sizeValue].height;
+			}
+		}
+	}
+	return 20;
 }
 
 - (NSRect)frameOfOutlineCellAtRow:(NSInteger)row {
 
 	id item = [self itemAtRow:row];
 
-	if ([item indexPath].length > 1 && [_actualDelegate outlineView:self isGroupItem:item]) {
+	if ([item indexPath].length > 1 && [self outlineView:self isGroupItem:item]) {
 		NSRect rect = [super frameOfOutlineCellAtRow:row];
 		rect.origin.x = 2;
 		return rect;
@@ -289,23 +437,53 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (void)outlineView:(NSOutlineView *)outlineView didRemoveRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+	// TODO: find a be a better way to repaint a node after it's been collapsed
 	for (NSView *view in outlineView.subviews) {
-		NSInteger row = [outlineView rowForView:view];
-		id item = [outlineView itemAtRow:row];
-		if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
-			[view setNeedsDisplay:YES];
+		NSInteger testRow = [outlineView rowForView:view];
+		if (testRow < row) {
+			id item = [outlineView itemAtRow:testRow];
+			if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
+				[view setNeedsDisplay:YES];
+			}
 		}
 	}
 }
 
 - (void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+	// TODO: find a be a better way to repaint a node after it's been expanded
 	for (NSView *view in outlineView.subviews) {
-		NSInteger row = [outlineView rowForView:view];
-		id item = [outlineView itemAtRow:row];
-		if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
-			[view setNeedsDisplay:YES];
+		NSInteger testRow = [outlineView rowForView:view];
+		if (testRow < row) {
+			id item = [outlineView itemAtRow:testRow];
+			if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
+				[view setNeedsDisplay:YES];
+			}
 		}
 	}
+}
+
+- (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
+	if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
+		if ([item indexPath].length == 1) {
+			return [outlineView makeViewWithIdentifier:@"class" owner:self];
+		} else {
+			return [outlineView makeViewWithIdentifier:@"expandable" owner:self];
+		}
+	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
+		return [outlineView makeViewWithIdentifier:@"attribute" owner:self];
+	} else {
+		NSString *type = [[item representedObject] valueForKey:@"type"];
+		for (NSString *identifier in _editorIdentifiers) {
+			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
+				return [outlineView makeViewWithIdentifier:identifier owner:self];
+			}
+		}
+		return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
+	}
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item {
+	return ![[[item representedObject] valueForKey:@"isLeaf"] boolValue];
 }
 
 @end

@@ -1,5 +1,5 @@
 /*
- * OutlineView.h
+ * NavigationNode.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,7 +23,11 @@
  * THE SOFTWARE.
  */
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
-@interface OutlineView : NSOutlineView
+@interface NavigationNode : NSObject
++ (instancetype)navigationNodeWithNode:(id)node;
+@property id node;
+@property NSString *name;
+@property (readonly) NSMutableArray *children;
 @end
