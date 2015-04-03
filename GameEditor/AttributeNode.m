@@ -71,6 +71,38 @@
 }
 @end
 
+@implementation NSString (AttributeName)
+- (NSArray *)componentsSeparatedInWords {
+	NSMutableArray *substrings = [NSMutableArray array];
+	NSMutableString *tempStr = [NSMutableString string];
+
+	for (NSInteger i=0; i<self.length; i++){
+		NSString *ch = [self substringWithRange:NSMakeRange(i, 1)];
+		if ([ch rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]].location != NSNotFound) {
+			[substrings addObject:tempStr];
+			tempStr = [NSMutableString string];
+		} else if ([ch isEqualToString:@"_"]) {
+			if (i == 0) {
+				continue;
+			}
+			else {
+				[substrings addObject:tempStr];
+				tempStr = [NSMutableString string];
+			}
+		} else if ([ch isEqualToString:@"-"]) {
+			[substrings addObject:tempStr];
+			tempStr = [NSMutableString string];
+		}
+		[tempStr appendString:ch];
+	}
+	if ([tempStr length]) {
+		[substrings addObject:tempStr];
+	}
+
+	return substrings;
+}
+@end
+
 #pragma mark - Value transformers
 
 @interface NSValueTransformer (Blocks)
@@ -169,26 +201,8 @@
 	[self initializeWithTransformedValueClass:[NSString class]
 				  allowsReverseTransformation:NO
 						transformedValueBlock:^(id value){
-							NSString *str = value;
-							NSMutableString *str2 = [NSMutableString string];
-
-							for (NSInteger i=0; i<str.length; i++){
-								NSString *ch = [str substringWithRange:NSMakeRange(i, 1)];
-								if ([ch rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]].location != NSNotFound) {
-									[str2 appendString:@" "];
-								} else if ([ch isEqualToString:@"_"]) {
-									if (i == 0)
-										continue;
-									else
-										[str2 appendString:@" "];
-								} else if ([ch isEqualToString:@"-"]) {
-									[str2 appendString:@" "];
-								}
-								[str2 appendString:ch];
-							}
-							
-							NSString * result = str2.capitalizedString;
-							
+							NSString *string = value;
+							NSString * result = [[string componentsSeparatedInWords] componentsJoinedByString:@" "].capitalizedString;
 							return result;
 						}
 				 reverseTransformedValueBlock:nil];

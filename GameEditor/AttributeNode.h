@@ -33,6 +33,10 @@
 - (BOOL)isEqualToEncodedType:(const char*)type;
 @end
 
+@interface NSString (AttributeName)
+- (NSArray *)componentsSeparatedInWords;
+@end
+
 @interface PrecisionTransformer : NSValueTransformer
 @end
 
