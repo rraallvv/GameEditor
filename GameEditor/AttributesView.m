@@ -55,8 +55,8 @@
 			NSString *observedKey = bindingInfo[NSObservedKeyPathKey];
 
 			/* Get the keyPath relative to the attribute object */
-			NSRange range = [observedKey rangeOfString:@"(?<=\\.|^)value\\d*$" options:NSRegularExpressionSearch];
-			NSString *key = range.location != NSNotFound ? [observedKey substringWithRange:range] : nil;
+			NSArray *results = [observedKey substringsWithRegularExpressionWithPattern:@"(?<=\\.|^)value(\\d*)$" options:0 error:NULL];
+			NSString *key = results[0];
 
 			if (key) {
 				/* Update the binding with the attribute's value transformer */

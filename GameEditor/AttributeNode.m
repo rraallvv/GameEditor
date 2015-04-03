@@ -49,10 +49,6 @@
 }
 @end
 
-@interface NSString (Regex)
-- (NSArray *)substringsWithRegularExpressionWithPattern:(NSString *)pattern options:(NSRegularExpressionOptions)options error:(NSError **)error;
-@end
-
 @implementation NSString (Regex)
 - (NSArray *)substringsWithRegularExpressionWithPattern:(NSString *)pattern options:(NSRegularExpressionOptions)options error:(NSError **)error {
 	NSMutableArray *results = [NSMutableArray array];

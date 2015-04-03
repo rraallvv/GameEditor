@@ -33,6 +33,10 @@
 - (BOOL)isEqualToEncodedType:(const char*)type;
 @end
 
+@interface NSString (Regex)
+- (NSArray *)substringsWithRegularExpressionWithPattern:(NSString *)pattern options:(NSRegularExpressionOptions)options error:(NSError **)error;
+@end
+
 @interface NSString (AttributeName)
 - (NSArray *)componentsSeparatedInWords;
 @end
