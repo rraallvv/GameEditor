@@ -217,6 +217,8 @@
 	NSString *_type;
 	id _value;
 	SKNode *_node;
+	BOOL _splitValue;
+	NSArray *_splitNames;
 }
 
 @synthesize
@@ -231,6 +233,7 @@ increment = _increment;
 		_type = type;
 		_sensitivity = 1.0;
 		_increment = 1.0;
+		_splitValue = NO;
 
 		/* Prepare the labels and identifier for the editor */
 		if ([_type isEqualToEncodedType:@encode(CGPoint)]) {
@@ -245,7 +248,19 @@ increment = _increment;
 
 		/* Bind the property to the 'raw' value if there isn't an accessor */
 		if (node) {
-			[self bind:@"value" toObject:node withKeyPath:_name options:nil];
+			_splitNames = [name componentsSeparatedByString:@","];
+			if (_splitNames.count > 1) {
+				_name = @"z";
+				_type = @"{xx=dd}";
+				_splitValue = YES;
+				_value = [NSMutableArray arrayWithObjects:@(0.0), @(0.0), nil];
+				_labels = @[@"Position", @"Rotation"];
+				[self bind:@"value1" toObject:node withKeyPath:_splitNames[0] options:nil];
+				[self bind:@"value2" toObject:node withKeyPath:_splitNames[1] options:nil];
+
+			} else {
+				[self bind:@"value" toObject:node withKeyPath:_name options:nil];
+			}
 		}
 	}
 	return self;
@@ -350,8 +365,10 @@ increment = _increment;
 
 	_value = value;
 
-	/* Update the bound object's property value */
-	[_node setValue:_value forKeyPath:_name];
+	if (!_splitValue) {
+		/* Update the bound object's property value */
+		[_node setValue:_value forKeyPath:_name];
+	}
 }
 
 - (id)value {
@@ -371,19 +388,23 @@ increment = _increment;
 
 		/* Update the value component for the given subindex */
 
-		if ([_type isEqualToEncodedType:@encode(CGPoint)]
-			|| [_type isEqualToEncodedType:@encode(CGSize)]
-			|| [_type isEqualToEncodedType:@encode(CGVector)]) {
-			CGFloat data[2];
-			[self.value getValue:&data];
-			data[subindex] = [value floatValue];
-			self.value = [NSValue value:&data withObjCType:_type.UTF8String];
+		if (_splitValue) {
+			[_node setValue:value forKeyPath:_splitNames[subindex]];
+		} else {
+			if ([_type isEqualToEncodedType:@encode(CGPoint)]
+				|| [_type isEqualToEncodedType:@encode(CGSize)]
+				|| [_type isEqualToEncodedType:@encode(CGVector)]) {
+				CGFloat data[2];
+				[self.value getValue:&data];
+				data[subindex] = [value floatValue];
+				self.value = [NSValue value:&data withObjCType:_type.UTF8String];
 
-		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
-			CGFloat data[4];
-			[self.value getValue:&data];
-			data[subindex] = [value floatValue];
-			self.value = [NSValue value:&data withObjCType:_type.UTF8String];
+			} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
+				CGFloat data[4];
+				[self.value getValue:&data];
+				data[subindex] = [value floatValue];
+				self.value = [NSValue value:&data withObjCType:_type.UTF8String];
+			}
 		}
 
 	} else {
@@ -409,17 +430,21 @@ increment = _increment;
 
 		/* The key is a subindex of value */
 
-		if ([_type isEqualToEncodedType:@encode(CGPoint)]
-			|| [_type isEqualToEncodedType:@encode(CGSize)]
-			|| [_type isEqualToEncodedType:@encode(CGVector)]) {
-			CGFloat data[2];
-			[_value getValue:&data];
-			return @(data[subindex]);
+		if (_splitValue) {
+			return [_node valueForKeyPath:_splitNames[subindex]];
+		} else {
+			if ([_type isEqualToEncodedType:@encode(CGPoint)]
+				|| [_type isEqualToEncodedType:@encode(CGSize)]
+				|| [_type isEqualToEncodedType:@encode(CGVector)]) {
+				CGFloat data[2];
+				[_value getValue:&data];
+				return @(data[subindex]);
 
-		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
-			CGFloat data[4];
-			[_value getValue:&data];
-			return @(data[subindex]);
+			} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
+				CGFloat data[4];
+				[_value getValue:&data];
+				return @(data[subindex]);
+			}
 		}
 	}
 

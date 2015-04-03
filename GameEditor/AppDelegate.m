@@ -161,6 +161,8 @@
 
 	NSMutableArray *attributesArray = [NSMutableArray array];
 
+	NSMutableArray *propertiesArray = [NSMutableArray array];
+
 	if (count) {
 		for(unsigned int i = 0; i < count; i++) {
 			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
@@ -168,35 +170,61 @@
 			NSString *propertyAttributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
 			NSString *propertyType = [[propertyAttributes componentsSeparatedByString:@","] firstObject];
 
-			Class propertyClass = [propertyType classType];
+			NSMutableDictionary *property = [NSMutableDictionary dictionary];
+			property[@"Name"] = propertyName;
+			property[@"Attributes"] = propertyAttributes;
+			property[@"Type"] = propertyType;
+			property[@"NameComponents"] = [propertyName componentsSeparatedInWords];
+			[propertiesArray addObject:property];
+		}
+		free(properties);
+	}
 
-			if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
-				[attributesArray addObject:[AttributeNode attributeForColorWithName:propertyName node:node]];
+	BOOL hasZ = NO;
 
-			} else if (propertyClass == [SKTexture class]
-					   || propertyClass == [SKShader class]
-					   || propertyClass == [SKPhysicsBody class]
-					   || propertyClass == [SKPhysicsWorld class]) {
-				[attributesArray addObject:@{@"name": propertyName,
-											 @"isLeaf": @NO,
-											 @"isEditable": @NO,
-											 @"children":[self attributesForClass:propertyClass node:[node valueForKey:propertyName]]}];
+	for (NSMutableDictionary *property in propertiesArray) {
+		NSString *propertyName = property[@"Name"];
+		NSString *propertyAttributes = property[@"Attributes"];
+		NSString *propertyType  = property[@"Type"];
+		NSMutableArray *propertyNameComponents = property[@"NameComponents"];
 
-			} else if ([propertyName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-				[attributesArray addObject:[AttributeNode  attributeForRotationAngleWithName:propertyName node:node]];
+		if ([propertyNameComponents[0] isEqualToString:@"z"]) {
+			if (!hasZ) {
+				[attributesArray addObject:[AttributeNode attributeForRotationAngleWithName:@"zPosition,zRotation" node:node]];
+			}
+			hasZ = YES;
+			continue;
+		}
 
-			} else {
-				BOOL editable = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
-				NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
-				editable = editable && ![propertyType isEqualToString:@""] && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
+		Class propertyClass = [propertyType classType];
 
-				if (editable) {
+		if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
+			[attributesArray addObject:[AttributeNode attributeForColorWithName:propertyName node:node]];
 
-					if (![propertyName containsString:@"anchorPoint"]
-						&& ![propertyName containsString:@"centerRect"]
-						&& ([propertyType isEqualToEncodedType:@encode(CGPoint)]
-							|| [propertyType isEqualToEncodedType:@encode(CGSize)]
-							|| [propertyType isEqualToEncodedType:@encode(CGRect)])) {
+		} else if (propertyClass == [SKTexture class]
+				   || propertyClass == [SKShader class]
+				   || propertyClass == [SKPhysicsBody class]
+				   || propertyClass == [SKPhysicsWorld class]) {
+			[attributesArray addObject:@{@"name": propertyName,
+										 @"isLeaf": @NO,
+										 @"isEditable": @NO,
+										 @"children":[self attributesForClass:propertyClass node:[node valueForKey:propertyName]]}];
+
+		} else if ([propertyName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+			[attributesArray addObject:[AttributeNode  attributeForRotationAngleWithName:propertyName node:node]];
+
+		} else {
+			BOOL editable = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
+			NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
+			editable = editable && ![propertyType isEqualToString:@""] && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
+
+			if (editable) {
+
+				if (![propertyName containsString:@"anchorPoint"]
+					&& ![propertyName containsString:@"centerRect"]
+					&& ([propertyType isEqualToEncodedType:@encode(CGPoint)]
+						|| [propertyType isEqualToEncodedType:@encode(CGSize)]
+						|| [propertyType isEqualToEncodedType:@encode(CGRect)])) {
 						[attributesArray addObject:[AttributeNode attributeForNormalPrecisionValueWithName:propertyName node:node type:propertyType]];
 					} else if ([propertyName containsString:@"colorBlendFactor"]
 							   || [propertyName containsString:@"alpha"]) {
@@ -214,21 +242,19 @@
 						[attributesArray addObject:[AttributeNode attributeForHighPrecisionValueWithName:propertyName node:node type:propertyType]];
 					}
 
-				}
-#if 1// Show a dummy attribute for non-editable properties
-				else {
-					[attributesArray addObject:@{@"name": propertyName,
-												 @"value": @"(non-editable)",
-												 @"type": @"generic attribute",
-												 @"node": [NSNull null],
-												 @"description": [NSString stringWithFormat:@"%@\n%@", propertyName, propertyType],
-												 @"isLeaf": @YES,
-												 @"isEditable": @NO}];
-				}
-#endif
 			}
+#if 1// Show a dummy attribute for non-editable properties
+			else {
+				[attributesArray addObject:@{@"name": propertyName,
+											 @"value": @"(non-editable)",
+											 @"type": @"generic attribute",
+											 @"node": [NSNull null],
+											 @"description": [NSString stringWithFormat:@"%@\n%@", propertyName, propertyType],
+											 @"isLeaf": @YES,
+											 @"isEditable": @NO}];
+			}
+#endif
 		}
-		free(properties);
 	}
 
 	return attributesArray;
