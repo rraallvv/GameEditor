@@ -149,7 +149,7 @@
                                                                     <subviews>
                                                                         <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uo9-9m-F1F">
                                                                             <rect key="frame" x="3" y="0.0" width="17" height="17"/>
-                                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" id="Kie-eN-aeL">
+                                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" image="NSActionTemplate" id="Kie-eN-aeL">
                                                                                 <connections>
                                                                                     <binding destination="FEl-7x-Wqd" name="value" keyPath="objectValue.image" id="TNC-i2-uCt"/>
                                                                                 </connections>
