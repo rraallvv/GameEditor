@@ -81,7 +81,9 @@ anchorPoint = _anchorPoint;
 
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
-	[self drawRectangleOutline];
+	if (_node) {
+		[self drawRectangleOutline];
+	}
 }
 
 - (void)drawRectangleOutline {
@@ -257,6 +259,7 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
+	[[self window] makeFirstResponder:self];
 	if (_scene) {
 		CGPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
 		CGPoint locationInScene = [theEvent locationInNode:_scene];

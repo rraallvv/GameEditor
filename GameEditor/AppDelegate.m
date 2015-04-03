@@ -25,8 +25,8 @@
 
 #import "AppDelegate.h"
 #import "GameScene.h"
-#import "Attribute.h"
-#import "OutlineView.h"
+#import "AttributesView.h"
+#import "NavigationNode.h"
 
 @implementation SKScene (Unarchive)
 
@@ -59,21 +59,23 @@
 
 @implementation AppDelegate {
 	IBOutlet EditorView *_editorView;
-	IBOutlet NSTreeController *_treeController;
-	IBOutlet NSOutlineView *_outlineView;
-	NSMutableDictionary *_prefferedSizes;
-	NSMutableArray *_editorIdentifiers;
+	IBOutlet NSTreeController *_attributesTreeController;
+	IBOutlet NSTreeController *_navigatorTreeController;
+	IBOutlet AttributesView *_attributesView;
+	IBOutlet NSOutlineView *_navigatorView;
 }
 
 @synthesize window = _window;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	/* Main window appearance */
-	self.window.styleMask = self.window.styleMask | NSFullSizeContentViewWindowMask;
+	self.window.styleMask = self.window.styleMask;
 	self.window.titleVisibility = NSWindowTitleHidden;
-	self.window.titlebarAppearsTransparent = YES;
 
+	/* Pick the scene */
     GameScene *scene = [GameScene unarchiveFromFile:@"GameScene"];
+	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
+	[_navigatorView expandItem:nil expandChildren:YES];
 
     /* Set the scale mode to scale to fit the window */
     scene.scaleMode = SKSceneScaleModeAspectFit;
@@ -89,73 +91,10 @@
 	/* Setup the editor view */
 	_editorView.scene = scene;
 	_editorView.delegate = self;
-
-	/* Prepare the editors for the outline view */
-	NSNib *nib = [[NSNib alloc] initWithNibNamed:@"ValueEditors" bundle:nil];
-	NSArray* objects;
-	[nib instantiateWithOwner:self topLevelObjects:&objects];
-
-	_editorIdentifiers = [NSMutableArray array];
-	_prefferedSizes = [NSMutableDictionary dictionary];
-
-	for (id object in objects) {
-		if ([object isKindOfClass:[NSTableCellView class]]) {
-			NSTableCellView *tableCelView = object;
-
-			/* Register the identifiers for each editors */
-			[_outlineView registerNib:nib forIdentifier:tableCelView.identifier];
-
-			/* Fetch the preffered size for the editor's view */
-			_prefferedSizes[tableCelView.identifier] = [NSValue valueWithSize:tableCelView.frame.size];
-
-			/* Store the available indentifiers */
-			[_editorIdentifiers addObject:tableCelView.identifier];
-		}
-	}
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
     return YES;
-}
-
-- (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
-	if ([self isGroupItem:item]) {
-		if ([item indexPath].length == 1) {
-			return [outlineView makeViewWithIdentifier:@"class" owner:self];
-		} else {
-			return [outlineView makeViewWithIdentifier:@"expandable" owner:self];
-		}
-	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
-		return [outlineView makeViewWithIdentifier:@"attribute" owner:self];
-	} else {
-		NSString *type = [[item representedObject] valueForKey:@"type"];
-		for (NSString *identifier in _editorIdentifiers) {
-			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
-				return [outlineView makeViewWithIdentifier:identifier owner:self];
-			}
-		}
-		return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
-	}
-}
-
-- (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item {
-	return [self isGroupItem:item];
-}
-
-- (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	NSString *type = [[item representedObject] valueForKey:@"type"];
-	if (type) {
-		for (NSString *identifier in _editorIdentifiers) {
-			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
-				return [_prefferedSizes[identifier] sizeValue].height;
-			}
-		}
-	}
-	return 20;
-}
-
-- (BOOL) isGroupItem:(id)item {
-	return ![[[item representedObject] valueForKey:@"isLeaf"] boolValue];
 }
 
 - (IBAction)saveAction:(id)sender {
@@ -164,25 +103,48 @@
 
 - (void)selectedNode:(id)node {
 	/* Replace the attributes table */
-	[_treeController setContent:[self attributesForAllClassesWithNode:node]];
+	[_attributesTreeController setContent:[self attributesForAllClassesWithNode:node]];
 
-	// Expand all the groups
-	for (id item in [[_treeController arrangedObjects] childNodes])
-		[_outlineView expandItem:item expandChildren:NO];
-	//[_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:1] byExtendingSelection:NO];
+	/* Expand all the root nodes in the attributes view */
+	for (id item in [[_attributesTreeController arrangedObjects] childNodes])
+		[_attributesView expandItem:item expandChildren:NO];
+
+	/* Update the selection in the navigator view */
+	[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:[_navigatorView rowForItem:[self navigationNodeOfObject:node]]]
+				byExtendingSelection:NO];
+}
+
+- (id)navigationNodeOfObject:(id)anObject {
+	return [self navigationNodeOfObject:anObject inNodes:[[_navigatorTreeController arrangedObjects] childNodes]];
+}
+
+- (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray*)nodes {
+	for(NSTreeNode* node in nodes) {
+		if([[[node representedObject] node] isEqual:anObject]) {
+			return node;
+		}
+		if([[node childNodes] count]) {
+			return [self navigationNodeOfObject:anObject inNodes:[node childNodes]];
+		}
+	}
+	return nil;
 }
 
 - (NSMutableArray *)attributesForAllClassesWithNode:(id)node {
-	
+
 	NSMutableArray *classesArray = [NSMutableArray array];
 
 	Class classType = [node class];
 
 	do {
-		[classesArray addObject:@{@"name": [classType description],
-								  @"isLeaf": @NO,
-								  @"isEditable": @NO,
-								  @"children":[self attibutesForClass:classType node:node]}];
+		NSMutableArray *attributesArray = [self attributesForClass:classType node:node];
+
+		if (attributesArray.count > 0) {
+			[classesArray addObject:@{@"name": [classType description],
+									  @"isLeaf": @NO,
+									  @"isEditable": @NO,
+									  @"children":attributesArray}];
+		}
 
 		classType = [classType superclass];
 		
@@ -193,7 +155,7 @@
 	return classesArray;
 }
 
-- (NSMutableArray *)attibutesForClass:(Class)classType node:(id)node {
+- (NSMutableArray *)attributesForClass:(Class)classType node:(id)node {
 	unsigned int count;
 	objc_property_t *properties = class_copyPropertyList(classType, &count);
 
@@ -209,23 +171,24 @@
 			Class propertyClass = [propertyType classType];
 
 			if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
-				[attributesArray addObject:[Attribute attributeForColorWithName:propertyName node:node]];
+				[attributesArray addObject:[AttributeNode attributeForColorWithName:propertyName node:node]];
 
 			} else if (propertyClass == [SKTexture class]
 					   || propertyClass == [SKShader class]
-					   || propertyClass == [SKPhysicsBody class]) {
+					   || propertyClass == [SKPhysicsBody class]
+					   || propertyClass == [SKPhysicsWorld class]) {
 				[attributesArray addObject:@{@"name": propertyName,
 											 @"isLeaf": @NO,
 											 @"isEditable": @NO,
-											 @"children":[self attibutesForClass:propertyClass node:[node valueForKey:propertyName]]}];
+											 @"children":[self attributesForClass:propertyClass node:[node valueForKey:propertyName]]}];
 
 			} else if ([propertyName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-				[attributesArray addObject:[Attribute  attributeForRotationAngleWithName:propertyName node:node]];
+				[attributesArray addObject:[AttributeNode  attributeForRotationAngleWithName:propertyName node:node]];
 
 			} else {
 				BOOL editable = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
 				NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
-				editable = editable && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
+				editable = editable && ![propertyType isEqualToString:@""] && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
 
 				if (editable) {
 
@@ -234,33 +197,33 @@
 						&& ([propertyType isEqualToEncodedType:@encode(CGPoint)]
 							|| [propertyType isEqualToEncodedType:@encode(CGSize)]
 							|| [propertyType isEqualToEncodedType:@encode(CGRect)])) {
-							[attributesArray addObject:[Attribute attributeForNormalPrecisionValueWithName:propertyName node:node type:propertyType]];
-						} else if ([propertyName containsString:@"colorBlendFactor"]
-								   || [propertyName containsString:@"alpha"]) {
-							[attributesArray addObject:[Attribute attributeForNormalizedValueWithName:propertyName node:node type:propertyType]];
-						} else if ([propertyType isEqualToEncodedType:@encode(short)]
-								   || [propertyType isEqualToEncodedType:@encode(int)]
-								   || [propertyType isEqualToEncodedType:@encode(long)]
-								   || [propertyType isEqualToEncodedType:@encode(long long)]
-								   || [propertyType isEqualToEncodedType:@encode(unsigned short)]
-								   || [propertyType isEqualToEncodedType:@encode(unsigned int)]
-								   || [propertyType isEqualToEncodedType:@encode(unsigned long)]
-								   || [propertyType isEqualToEncodedType:@encode(unsigned long long)]) {
-							[attributesArray addObject:[Attribute attributeForIntegerValueWithName:propertyName node:node type:propertyType]];
-						} else {
-							[attributesArray addObject:[Attribute attributeForHighPrecisionValueWithName:propertyName node:node type:propertyType]];
-						}
+						[attributesArray addObject:[AttributeNode attributeForNormalPrecisionValueWithName:propertyName node:node type:propertyType]];
+					} else if ([propertyName containsString:@"colorBlendFactor"]
+							   || [propertyName containsString:@"alpha"]) {
+						[attributesArray addObject:[AttributeNode attributeForNormalizedValueWithName:propertyName node:node type:propertyType]];
+					} else if ([propertyType isEqualToEncodedType:@encode(short)]
+							   || [propertyType isEqualToEncodedType:@encode(int)]
+							   || [propertyType isEqualToEncodedType:@encode(long)]
+							   || [propertyType isEqualToEncodedType:@encode(long long)]
+							   || [propertyType isEqualToEncodedType:@encode(unsigned short)]
+							   || [propertyType isEqualToEncodedType:@encode(unsigned int)]
+							   || [propertyType isEqualToEncodedType:@encode(unsigned long)]
+							   || [propertyType isEqualToEncodedType:@encode(unsigned long long)]) {
+						[attributesArray addObject:[AttributeNode attributeForIntegerValueWithName:propertyName node:node type:propertyType]];
+					} else {
+						[attributesArray addObject:[AttributeNode attributeForHighPrecisionValueWithName:propertyName node:node type:propertyType]];
+					}
 
 				}
 #if 1// Show a dummy attribute for non-editable properties
 				else {
 					[attributesArray addObject:@{@"name": propertyName,
-											  @"value": @"(non-editable)",
-											  @"type": @"generic attribute",
-											  @"node": [NSNull null],
-											  @"description": [NSString stringWithFormat:@"%@\n%@", propertyName, propertyType],
-											  @"isLeaf": @YES,
-											  @"isEditable": @NO}];
+												 @"value": @"(non-editable)",
+												 @"type": @"generic attribute",
+												 @"node": [NSNull null],
+												 @"description": [NSString stringWithFormat:@"%@\n%@", propertyName, propertyType],
+												 @"isLeaf": @YES,
+												 @"isEditable": @NO}];
 				}
 #endif
 			}
@@ -269,6 +232,17 @@
 	}
 
 	return attributesArray;
+}
+
+- (IBAction)rowSelected:(id)sender {
+	NSInteger selectedRow = [_navigatorView selectedRow];
+	if (selectedRow != -1) {
+		[_editorView setNode:[[[_navigatorView itemAtRow:selectedRow] representedObject] node]];
+		//NSLog(@"%@ selected", [[[_navigatorView itemAtRow:selectedRow] representedObject] valueForKey:@"name"]);
+	}
+	else {
+		// No row was selected
+	}
 }
 
 @end
