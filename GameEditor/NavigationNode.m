@@ -86,6 +86,8 @@
 		return [NSImage imageNamed:@"SKShapeNode"];
 	} else if ([self.node isKindOfClass:[SKSpriteNode class]]) {
 		return [NSImage imageNamed:@"SKSpriteNode"];
+	} else if ([self.node isKindOfClass:[SKLightNode class]]) {
+		return [NSImage imageNamed:@"SKLightNode"];
 	} else {
 		return [NSImage imageNamed:@"SKNode"];
 	}
