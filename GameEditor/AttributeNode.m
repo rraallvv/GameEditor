@@ -137,13 +137,6 @@
 
 #pragma mark - Value transformers
 
-@interface NSValueTransformer (Blocks)
-+ (void)initializeWithTransformedValueClass:(Class)class
-				allowsReverseTransformation:(BOOL)allowsReverseTransformation
-					  transformedValueBlock:(id (^)(id value))transformedValueBlock
-			   reverseTransformedValueBlock:(id (^)(id value))reverseTransformedValueBlock;
-@end
-
 @implementation NSValueTransformer (Blocks)
 
 + (void)initializeWithTransformedValueClass:(Class)class
@@ -189,6 +182,10 @@
 
 		[self setValueTransformer:[[self alloc] init] forName:NSStringFromClass(self)];
 	}
+}
+
++ (instancetype) transformer {
+	return [self valueTransformerForName:NSStringFromClass(self)];
 }
 
 @end
@@ -256,9 +253,11 @@
 @synthesize
 name = _name,
 sensitivity = _sensitivity,
-increment = _increment;
+increment = _increment,
+formatter = _formatter,
+valueTransformer = _valueTransformer;
 
-- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
+- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer {
 	if (self = [super init]) {
 		_name = name;
 		_node = node;
@@ -266,6 +265,8 @@ increment = _increment;
 		_sensitivity = 1.0;
 		_increment = 1.0;
 		_splitValue = NO;
+		_formatter = formatter;
+		_valueTransformer = valueTransformer;
 
 		/* Prepare the labels and identifier for the editor */
 		if ([_type isEqualToEncodedType:@encode(CGPoint)]) {
@@ -298,64 +299,53 @@ increment = _increment;
 	return self;
 }
 
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:type];
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer {
+	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:type formatter:formatter valueTransformer:valueTransformer];
 }
 
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer {
-	AttributeNode *attribute = [[AttributeNode alloc] initWithAttributeWithName:name node:node type:type];
-	attribute.formatter = formatter;
-	attribute.valueTransformer = valueTransformer;
-	return attribute;
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
+	return [self attributeWithName:name node:node type:type formatter:nil valueTransformer:nil];
 }
 
 + (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode* )node {
-	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:@"color"];
+	return [self attributeWithName:name node:node type:@"color"];
 }
 
 + (instancetype)attributeForRotationAngleWithName:name node:(SKNode* )node {
-	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:@"d"];
-
-	attribute.formatter = [NSNumberFormatter degreesFormatter];
-	attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([DegreesTransformer class])];
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:@"d"
+													  formatter:[NSNumberFormatter degreesFormatter]
+											   valueTransformer:[DegreesTransformer transformer]];
 	attribute.sensitivity = GLKMathRadiansToDegrees(0.001);
-
 	return attribute;
 }
 
 + (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type];
-
-	attribute.formatter = [NSNumberFormatter highPrecisionFormatter];
-	attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([PrecisionTransformer class])];
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
+													  formatter:[NSNumberFormatter highPrecisionFormatter]
+											   valueTransformer:[PrecisionTransformer transformer]];
 	attribute.increment = 10.0;
-
 	return attribute;
 }
 
 + (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type];
-
-	attribute.formatter = [NSNumberFormatter normalPrecisionFormatter];
-
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
+													  formatter:[NSNumberFormatter normalPrecisionFormatter]
+											   valueTransformer:nil];
 	return attribute;
 }
 
 + (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type];
-
-	attribute.formatter = [NSNumberFormatter normalizedFormatter];
-	attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([PrecisionTransformer class])];
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
+													  formatter:[NSNumberFormatter normalizedFormatter]
+											   valueTransformer:[PrecisionTransformer transformer]];
 	attribute.increment = 10.0;
-
 	return attribute;
 }
 
 + (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type];
-
-	attribute.formatter = [NSNumberFormatter integerFormatter];
-
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
+													  formatter:[NSNumberFormatter integerFormatter]
+											   valueTransformer:nil];
 	return attribute;
 }
 

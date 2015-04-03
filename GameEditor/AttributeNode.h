@@ -49,6 +49,14 @@
 + (instancetype)integerFormatter;
 @end
 
+@interface NSValueTransformer (Blocks)
++ (void)initializeWithTransformedValueClass:(Class)class
+				allowsReverseTransformation:(BOOL)allowsReverseTransformation
+					  transformedValueBlock:(id (^)(id value))transformedValueBlock
+			   reverseTransformedValueBlock:(id (^)(id value))reverseTransformedValueBlock;
++ (instancetype) transformer;
+@end
+
 @interface PrecisionTransformer : NSValueTransformer
 @end
 
@@ -59,8 +67,8 @@
 @end
 
 @interface AttributeNode : NSObject
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer;
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
 + (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode* )node;
 + (instancetype)attributeForRotationAngleWithName:(NSString *)name node:(SKNode* )node;
 + (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;

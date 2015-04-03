@@ -196,7 +196,7 @@
 																  formatter:@[[NSNumberFormatter integerFormatter],
 																			  [NSNumberFormatter degreesFormatter]]
 														   valueTransformer:@[[NSNull null],
-																			  [NSValueTransformer valueTransformerForName:NSStringFromClass([DegreesTransformer class])]]]];
+																			  [DegreesTransformer transformer]]]];
 			}
 			hasZ = YES;
 			continue;
