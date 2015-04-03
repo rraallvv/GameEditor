@@ -389,6 +389,9 @@ increment = _increment;
 		/* Update the value component for the given subindex */
 
 		if (_splitValue) {
+			id newValue = self.value;
+			newValue[subindex] = value;
+			self.value = newValue;
 			[_node setValue:value forKeyPath:_splitNames[subindex]];
 		} else {
 			if ([_type isEqualToEncodedType:@encode(CGPoint)]
@@ -431,7 +434,7 @@ increment = _increment;
 		/* The key is a subindex of value */
 
 		if (_splitValue) {
-			return [_node valueForKeyPath:_splitNames[subindex]];
+			return _value[subindex];
 		} else {
 			if ([_type isEqualToEncodedType:@encode(CGPoint)]
 				|| [_type isEqualToEncodedType:@encode(CGSize)]
