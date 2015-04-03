@@ -439,10 +439,12 @@ static const CGFloat kIndentationPerLevel = 0.0;
 - (void)outlineView:(NSOutlineView *)outlineView didRemoveRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
 	// TODO: find a be a better way to repaint a node after it's been collapsed
 	for (NSView *view in outlineView.subviews) {
-		NSInteger row = [outlineView rowForView:view];
-		id item = [outlineView itemAtRow:row];
-		if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
-			[view setNeedsDisplay:YES];
+		NSInteger testRow = [outlineView rowForView:view];
+		if (testRow < row) {
+			id item = [outlineView itemAtRow:testRow];
+			if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
+				[view setNeedsDisplay:YES];
+			}
 		}
 	}
 }
@@ -450,10 +452,12 @@ static const CGFloat kIndentationPerLevel = 0.0;
 - (void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
 	// TODO: find a be a better way to repaint a node after it's been expanded
 	for (NSView *view in outlineView.subviews) {
-		NSInteger row = [outlineView rowForView:view];
-		id item = [outlineView itemAtRow:row];
-		if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
-			[view setNeedsDisplay:YES];
+		NSInteger testRow = [outlineView rowForView:view];
+		if (testRow < row) {
+			id item = [outlineView itemAtRow:testRow];
+			if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
+				[view setNeedsDisplay:YES];
+			}
 		}
 	}
 }
