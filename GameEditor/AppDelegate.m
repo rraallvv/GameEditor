@@ -188,7 +188,7 @@
 			} else {
 				BOOL editable = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
 				NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
-				editable = editable && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
+				editable = editable && ![propertyType isEqualToString:@""] && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
 
 				if (editable) {
 
