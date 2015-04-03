@@ -88,6 +88,12 @@
 		return [NSImage imageNamed:@"SKSpriteNode"];
 	} else if ([self.node isKindOfClass:[SKLightNode class]]) {
 		return [NSImage imageNamed:@"SKLightNode"];
+	} else if ([self.node isKindOfClass:[SKEmitterNode class]]) {
+		return [NSImage imageNamed:@"SKEmitterNode"];
+	} else if ([self.node isKindOfClass:[SKLabelNode class]]) {
+		return [NSImage imageNamed:@"SKLabelNode"];
+	} else if ([self.node isKindOfClass:[SKFieldNode class]]) {
+		return [NSImage imageNamed:@"SKFieldNode"];
 	} else {
 		return [NSImage imageNamed:@"SKNode"];
 	}
