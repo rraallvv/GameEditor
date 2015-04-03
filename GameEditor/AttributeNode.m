@@ -266,6 +266,13 @@ increment = _increment;
 	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:type];
 }
 
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer {
+	AttributeNode *attribute = [[AttributeNode alloc] initWithAttributeWithName:name node:node type:type];
+	attribute.formatter = formatter;
+	attribute.valueTransformer = valueTransformer;
+	return attribute;
+}
+
 + (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode* )node {
 	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:@"color"];
 }

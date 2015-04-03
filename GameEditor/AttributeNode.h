@@ -52,6 +52,7 @@
 
 @interface AttributeNode : NSObject
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer;
 + (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode* )node;
 + (instancetype)attributeForRotationAngleWithName:(NSString *)name node:(SKNode* )node;
 + (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
