@@ -360,7 +360,7 @@ increment = _increment;
 
 #pragma mark value with subindex
 
-- (void)setValue:(id)value forKey:(NSString *)key {
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
 	/* Try to get a subindex from the key */
 	NSArray *results = [key substringsWithRegularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
 
@@ -389,11 +389,11 @@ increment = _increment;
 	} else {
 
 		/* Fall back to the superclass default behavior if the key is not a value */
-		[super setValue:value forKey:key];
+		[super setValue:value forUndefinedKey:key];
 	}
 }
 
-- (id)valueForKey:(NSString *)key {
+- (id)valueForUndefinedKey:(NSString *)key {
 	/* Try to get a subindex from the key */
 	NSArray *results = [key substringsWithRegularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
 
@@ -423,7 +423,7 @@ increment = _increment;
 		}
 	}
 
-	return [super valueForKey:key];
+	return [super valueForUndefinedKey:key];
 }
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
