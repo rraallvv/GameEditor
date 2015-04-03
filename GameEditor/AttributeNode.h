@@ -41,6 +41,14 @@
 - (NSArray *)componentsSeparatedInWords;
 @end
 
+@interface NSNumberFormatter (CustomFormatters)
++ (instancetype)degreesFormatter;
++ (instancetype)highPrecisionFormatter;
++ (instancetype)normalPrecisionFormatter;
++ (instancetype)normalizedFormatter;
++ (instancetype)integerFormatter;
+@end
+
 @interface PrecisionTransformer : NSValueTransformer
 @end
 

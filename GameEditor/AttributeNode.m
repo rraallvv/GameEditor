@@ -99,6 +99,42 @@
 }
 @end
 
+@implementation NSNumberFormatter (CustomFormatters)
++ (instancetype) degreesFormatter {
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.negativeFormat = formatter.positiveFormat = @"#.###º";
+	return formatter;
+}
++ (instancetype)highPrecisionFormatter {
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
+	formatter.multiplier = @(0.01);
+	return formatter;
+}
++ (instancetype)normalPrecisionFormatter {
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
+	return formatter;
+}
++ (instancetype)normalizedFormatter {
+	NSNumberFormatter *formatter = [self highPrecisionFormatter];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.minimum = @(0.0);
+	formatter.maximum = @(100.0);
+	return formatter;
+}
++ (instancetype)integerFormatter {
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.roundingIncrement = @(1.0);
+	formatter.usesGroupingSeparator = NO;
+	return formatter;
+}
+@end
+
 #pragma mark - Value transformers
 
 @interface NSValueTransformer (Blocks)
@@ -280,10 +316,7 @@ increment = _increment;
 + (instancetype)attributeForRotationAngleWithName:name node:(SKNode* )node {
 	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:@"d"];
 
-	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-	formatter.numberStyle = NSNumberFormatterDecimalStyle;
-	formatter.negativeFormat = formatter.positiveFormat = @"#.###º";
-	attribute.formatter = formatter;
+	attribute.formatter = [NSNumberFormatter degreesFormatter];
 	attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([DegreesTransformer class])];
 	attribute.sensitivity = GLKMathRadiansToDegrees(0.001);
 
@@ -293,11 +326,7 @@ increment = _increment;
 + (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
 	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type];
 
-	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-	formatter.numberStyle = NSNumberFormatterDecimalStyle;
-	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
-	formatter.multiplier = @(0.01);
-	attribute.formatter = formatter;
+	attribute.formatter = [NSNumberFormatter highPrecisionFormatter];
 	attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([PrecisionTransformer class])];
 	attribute.increment = 10.0;
 
@@ -307,22 +336,17 @@ increment = _increment;
 + (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
 	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type];
 
-	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-	formatter.numberStyle = NSNumberFormatterDecimalStyle;
-	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
-	attribute.formatter = formatter;
+	attribute.formatter = [NSNumberFormatter normalPrecisionFormatter];
 
 	return attribute;
 }
 
 + (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:name node:node type:type];
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type];
 
-	NSNumberFormatter *formatter = attribute.formatter;
-	formatter.numberStyle = NSNumberFormatterDecimalStyle;
-	formatter.minimum = @(0.0);
-	formatter.maximum = @(100.0);
-	attribute.formatter = formatter;
+	attribute.formatter = [NSNumberFormatter normalizedFormatter];
+	attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([PrecisionTransformer class])];
+	attribute.increment = 10.0;
 
 	return attribute;
 }
@@ -330,11 +354,7 @@ increment = _increment;
 + (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
 	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type];
 
-	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-	formatter.numberStyle = NSNumberFormatterDecimalStyle;
-	formatter.roundingIncrement = @(1.0);
-	formatter.usesGroupingSeparator = NO;
-	attribute.formatter = formatter;
+	attribute.formatter = [NSNumberFormatter integerFormatter];
 
 	return attribute;
 }

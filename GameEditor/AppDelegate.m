@@ -190,18 +190,11 @@
 
 		if ([propertyNameComponents[0] isEqualToString:@"z"]) {
 			if (!hasZ) {
-				NSNumberFormatter *formatter1 = [[NSNumberFormatter alloc] init];
-				formatter1.numberStyle = NSNumberFormatterDecimalStyle;
-				formatter1.negativeFormat = formatter1.positiveFormat = @"#.###";
-
-				NSNumberFormatter *formatter2 = [[NSNumberFormatter alloc] init];
-				formatter2.numberStyle = NSNumberFormatterDecimalStyle;
-				formatter2.negativeFormat = formatter2.positiveFormat = @"#.###º";
-
 				[attributesArray addObject:[AttributeNode attributeWithName:@"zPosition,zRotation"
 																	   node:node
 																	   type:propertyType
-																  formatter:@[formatter1, formatter2]
+																  formatter:@[[NSNumberFormatter integerFormatter],
+																			  [NSNumberFormatter degreesFormatter]]
 														   valueTransformer:@[[NSNull null],
 																			  [NSValueTransformer valueTransformerForName:NSStringFromClass([DegreesTransformer class])]]]];
 			}
