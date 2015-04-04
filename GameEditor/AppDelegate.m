@@ -163,6 +163,7 @@
 
 	BOOL hasZPositionRotation = NO;
 	BOOL hasXYScale = NO;
+	BOOL hasXYRotation = NO;
 
 	if (count) {
 		for(unsigned int i = 0; i < count; i++) {
@@ -187,10 +188,23 @@
 				continue;
 			} else if ([propertyName rangeOfString:@"^(x|y)Scale$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasXYScale) {
-					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"Scale,xScale,yScale" node:node type:@"{dd}"];
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"scale,xScale,yScale" node:node type:@"{dd}"];
 					attribute.labels = @[@"X", @"Y"];
 					[attributesArray addObject:attribute];
 					hasXYScale = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^(x|y)Rotation$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasXYRotation) {
+					AttributeNode *attribute = [AttributeNode attributeWithName:@"rotation,xRotation,yRotation"
+																		   node:node
+																		   type:@"{dd}"
+																	  formatter:[NSNumberFormatter degreesFormatter]
+															   valueTransformer:[DegreesTransformer transformer]];
+
+					attribute.labels = @[@"X", @"Y"];
+					[attributesArray addObject:attribute];
+					hasXYRotation = YES;
 				}
 				continue;
 			}
