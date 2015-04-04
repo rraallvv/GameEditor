@@ -161,7 +161,8 @@
 
 	NSMutableArray *attributesArray = [NSMutableArray array];
 
-	BOOL hasZ = NO;
+	BOOL hasZPositionRotation = NO;
+	BOOL hasXYScale = NO;
 
 	if (count) {
 		for(unsigned int i = 0; i < count; i++) {
@@ -170,10 +171,8 @@
 			NSString *propertyAttributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
 			NSString *propertyType = [[propertyAttributes componentsSeparatedByString:@","] firstObject];
 
-			NSArray *propertyNameComponents = [propertyName componentsSeparatedInWords];
-
-			if ([propertyNameComponents[0] isEqualToString:@"z"]) {
-				if (!hasZ) {
+			if ([propertyName rangeOfString:@"^z(Position|Rotation)$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasZPositionRotation) {
 					AttributeNode *attribute = [AttributeNode attributeWithName:@"z,zPosition,zRotation"
 																		   node:node
 																		   type:@"{dd}"
@@ -183,8 +182,16 @@
 																				  [DegreesTransformer transformer]]];
 					attribute.labels = @[@"Position", @"Rotation"];
 					[attributesArray addObject:attribute];
+					hasZPositionRotation = YES;
 				}
-				hasZ = YES;
+				continue;
+			} else if ([propertyName rangeOfString:@"^(x|y)Scale$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasXYScale) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"Scale,xScale,yScale" node:node type:@"{dd}"];
+					attribute.labels = @[@"X", @"Y"];
+					[attributesArray addObject:attribute];
+					hasXYScale = YES;
+				}
 				continue;
 			}
 
