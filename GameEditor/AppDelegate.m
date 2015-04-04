@@ -176,6 +176,9 @@
 	BOOL hasParticleRotationRangeSpeed = NO;
 	BOOL hasParticleAlphaRangeSpeed = NO;
 	BOOL hasParticleColorBlendFactor = NO;
+	BOOL hasParticleColorRed = NO;
+	BOOL hasParticleColorGreen = NO;
+	BOOL hasParticleColorBlue = NO;
 
 	if (count) {
 		for(unsigned int i = 0; i < count; i++) {
@@ -208,6 +211,14 @@
 					attribute.labels = @[@"Start", @"Range"];
 					[attributesArray addObject:attribute];
 					hasEmissionAngle = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleColorRed(Speed|Range)$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleColorRed) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"red,particleColorRedSpeed,particleColorRedRange" node:node type:@"{dd}"];
+					attribute.labels = @[@"Start", @"Range"];
+					[attributesArray addObject:attribute];
+					hasParticleColorRed = YES;
 				}
 				continue;
 			} else if ([propertyName rangeOfString:@"^particleSpeed(Range)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
