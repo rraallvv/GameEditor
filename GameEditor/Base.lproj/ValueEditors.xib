@@ -42,7 +42,7 @@
             </connections>
             <point key="canvasLocation" x="436" y="250.5"/>
         </tableCellView>
-        <tableCellView identifier="\{[^=]*=dd\}" id="GbV-qK-Vp4" userLabel="dd" customClass="TableCellView">
+        <tableCellView identifier="\{([^=]+=)?(ff|dd)\}" id="GbV-qK-Vp4" userLabel="2 floats" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="30"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>

@@ -176,7 +176,7 @@
 				if (!hasZ) {
 					AttributeNode *attribute = [AttributeNode attributeWithName:@"z,zPosition,zRotation"
 																		   node:node
-																		   type:@"{xx=dd}"
+																		   type:@"{dd}"
 																	  formatter:@[[NSNumberFormatter integerFormatter],
 																				  [NSNumberFormatter degreesFormatter]]
 															   valueTransformer:@[[NSNull null],
