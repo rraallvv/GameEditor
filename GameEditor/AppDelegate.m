@@ -166,6 +166,7 @@
 
 	BOOL hasZPositionRotation = NO;
 	BOOL hasSpeed = NO;
+	BOOL hasEmissionAngle = NO;
 	BOOL hasLifetime = NO;
 	BOOL hasXYAcceleration = NO;
 	BOOL hasXYScale = NO;
@@ -194,6 +195,18 @@
 					attribute.labels = @[@"Position", @"Rotation"];
 					[attributesArray addObject:attribute];
 					hasZPositionRotation = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^emissionAngle(Range)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasEmissionAngle) {
+					AttributeNode *attribute = [AttributeNode attributeWithName:@"emissionAngle,emissionAngle,emissionAngleRange"
+																		   node:node
+																		   type:@"{dd}"
+																	  formatter:[NSNumberFormatter degreesFormatter]
+															   valueTransformer:[DegreesTransformer transformer]];
+					attribute.labels = @[@"Start", @"Range"];
+					[attributesArray addObject:attribute];
+					hasEmissionAngle = YES;
 				}
 				continue;
 			} else if ([propertyName rangeOfString:@"^particleSpeed(Range)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
