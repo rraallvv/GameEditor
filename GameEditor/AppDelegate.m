@@ -124,7 +124,10 @@
 			return node;
 		}
 		if([[node childNodes] count]) {
-			return [self navigationNodeOfObject:anObject inNodes:[node childNodes]];
+			id result = [self navigationNodeOfObject:anObject inNodes:[node childNodes]];
+			if (result) {
+				return result;
+			}
 		}
 	}
 	return nil;
@@ -161,12 +164,189 @@
 
 	NSMutableArray *attributesArray = [NSMutableArray array];
 
+	BOOL hasZPositionRotation = NO;
+	BOOL hasSpeed = NO;
+	BOOL hasEmissionAngle = NO;
+	BOOL hasLifetime = NO;
+	BOOL hasXYAcceleration = NO;
+	BOOL hasXYScale = NO;
+	BOOL hasXYRotation = NO;
+	BOOL hasParticleZPositionRangeSpeed = NO;
+	BOOL hasParticleScaleRangeSpeed = NO;
+	BOOL hasParticleRotationRangeSpeed = NO;
+	BOOL hasParticleAlphaRangeSpeed = NO;
+	BOOL hasParticleColorBlendFactor = NO;
+	BOOL hasParticleColorRed = NO;
+	BOOL hasParticleColorGreen = NO;
+	BOOL hasParticleColorBlue = NO;
+	BOOL hasParticleColorAlpha = NO;
+
 	if (count) {
 		for(unsigned int i = 0; i < count; i++) {
 			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
 			NSString *propertyName = [NSString stringWithUTF8String:property_getName(properties[i])];
 			NSString *propertyAttributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
 			NSString *propertyType = [[propertyAttributes componentsSeparatedByString:@","] firstObject];
+
+			if ([propertyName rangeOfString:@"^z(Position|Rotation)$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasZPositionRotation) {
+					AttributeNode *attribute = [AttributeNode attributeWithName:@"z,zPosition,zRotation"
+																		   node:node
+																		   type:@"{dd}"
+																	  formatter:@[[NSNumberFormatter integerFormatter],
+																				  [NSNumberFormatter degreesFormatter]]
+															   valueTransformer:@[[NSNull null],
+																				  [DegreesTransformer transformer]]];
+					attribute.labels = @[@"Position", @"Rotation"];
+					[attributesArray addObject:attribute];
+					hasZPositionRotation = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^emissionAngle(Range)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasEmissionAngle) {
+					AttributeNode *attribute = [AttributeNode attributeWithName:@"emissionAngle,emissionAngle,emissionAngleRange"
+																		   node:node
+																		   type:@"{dd}"
+																	  formatter:[NSNumberFormatter degreesFormatter]
+															   valueTransformer:[DegreesTransformer transformer]];
+					attribute.labels = @[@"Start", @"Range"];
+					[attributesArray addObject:attribute];
+					hasEmissionAngle = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleColorRed(Speed|Range)$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleColorRed) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"red,particleColorRedSpeed,particleColorRedRange" node:node type:@"{dd}"];
+					attribute.labels = @[@"Start", @"Range"];
+					[attributesArray addObject:attribute];
+					hasParticleColorRed = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleColorGreen(Speed|Range)$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleColorGreen) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"green,particleColorGreenSpeed,particleColorGreenRange" node:node type:@"{dd}"];
+					attribute.labels = @[@"Start", @"Range"];
+					[attributesArray addObject:attribute];
+					hasParticleColorGreen = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleColorBlue(Speed|Range)$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleColorBlue) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"blue,particleColorBlueSpeed,particleColorBlueRange" node:node type:@"{dd}"];
+					attribute.labels = @[@"Start", @"Range"];
+					[attributesArray addObject:attribute];
+					hasParticleColorBlue = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleColorAlpha(Speed|Range)$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleColorAlpha) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"alpha,particleColorAlphaSpeed,particleColorAlphaRange" node:node type:@"{dd}"];
+					attribute.labels = @[@"Start", @"Range"];
+					[attributesArray addObject:attribute];
+					hasParticleColorAlpha = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleSpeed(Range)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasSpeed) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"speed,particleSpeed,particleSpeedRange" node:node type:@"{dd}"];
+					attribute.labels = @[@"Start", @"Range"];
+					[attributesArray addObject:attribute];
+					hasSpeed = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleLifetime(Range)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasLifetime) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"lifetime,particleLifetime,particleLifetimeRange" node:node type:@"{dd}"];
+					attribute.labels = @[@"Start", @"Range"];
+					[attributesArray addObject:attribute];
+					hasLifetime = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^(x|y)Acceleration$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasXYAcceleration) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"acceleration,xAcceleration,yAcceleration" node:node type:@"{dd}"];
+					attribute.labels = @[@"X", @"Y"];
+					[attributesArray addObject:attribute];
+					hasXYAcceleration = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^(x|y)Scale$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasXYScale) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"scale,xScale,yScale" node:node type:@"{dd}"];
+					attribute.labels = @[@"X", @"Y"];
+					[attributesArray addObject:attribute];
+					hasXYScale = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^(x|y)Rotation$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasXYRotation) {
+					AttributeNode *attribute = [AttributeNode attributeWithName:@"rotation,xRotation,yRotation"
+																		   node:node
+																		   type:@"{dd}"
+																	  formatter:[NSNumberFormatter degreesFormatter]
+															   valueTransformer:[DegreesTransformer transformer]];
+
+					attribute.labels = @[@"X", @"Y"];
+					[attributesArray addObject:attribute];
+					hasXYRotation = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleZPosition(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleZPositionRangeSpeed) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"zPosition,particleZPosition,particleZPositionRange,particleZPositionSpeed"
+																		   node:node
+																		   type:@"{ddd}"];
+
+					attribute.labels = @[@"Start", @"Range", @"Speed"];
+					[attributesArray addObject:attribute];
+					hasParticleZPositionRangeSpeed = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleScale(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleScaleRangeSpeed) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"scale,particleScale,particleScaleRange,particleScaleSpeed"
+																								node:node
+																								type:@"{ddd}"];
+
+					attribute.labels = @[@"Start", @"Range", @"Speed"];
+					[attributesArray addObject:attribute];
+					hasParticleScaleRangeSpeed = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleRotation(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleRotationRangeSpeed) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"rotation,particleRotation,particleRotationRange,particleRotationSpeed"
+																								node:node
+																								type:@"{ddd}"];
+
+					attribute.labels = @[@"Start", @"Range", @"Speed"];
+					[attributesArray addObject:attribute];
+					hasParticleRotationRangeSpeed = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleAlpha(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleAlphaRangeSpeed) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"alpha,particleAlpha,particleAlphaRange,particleAlphaSpeed"
+																								node:node
+																								type:@"{ddd}"];
+
+					attribute.labels = @[@"Start", @"Range", @"Speed"];
+					[attributesArray addObject:attribute];
+					hasParticleAlphaRangeSpeed = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleColorBlendFactor(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleColorBlendFactor) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"colorBlendFactor,particleColorBlendFactor,particleColorBlendFactorRange,particleColorBlendFactorSpeed"
+																								node:node
+																								type:@"{ddd}"];
+
+					attribute.labels = @[@"Start", @"Range", @"Speed"];
+					[attributesArray addObject:attribute];
+					hasParticleColorBlendFactor = YES;
+				}
+				continue;
+			}
 
 			Class propertyClass = [propertyType classType];
 

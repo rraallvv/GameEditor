@@ -49,10 +49,6 @@
 }
 @end
 
-@interface NSString (Regex)
-- (NSArray *)substringsWithRegularExpressionWithPattern:(NSString *)pattern options:(NSRegularExpressionOptions)options error:(NSError **)error;
-@end
-
 @implementation NSString (Regex)
 - (NSArray *)substringsWithRegularExpressionWithPattern:(NSString *)pattern options:(NSRegularExpressionOptions)options error:(NSError **)error {
 	NSMutableArray *results = [NSMutableArray array];
@@ -71,14 +67,75 @@
 }
 @end
 
-#pragma mark - Value transformers
+@implementation NSString (AttributeName)
+- (NSArray *)componentsSeparatedInWords {
+	NSMutableArray *substrings = [NSMutableArray array];
+	NSMutableString *tempStr = [NSMutableString string];
 
-@interface NSValueTransformer (Blocks)
-+ (void)initializeWithTransformedValueClass:(Class)class
-				allowsReverseTransformation:(BOOL)allowsReverseTransformation
-					  transformedValueBlock:(id (^)(id value))transformedValueBlock
-			   reverseTransformedValueBlock:(id (^)(id value))reverseTransformedValueBlock;
+	for (NSInteger i=0; i<self.length; i++){
+		NSString *ch = [self substringWithRange:NSMakeRange(i, 1)];
+		if ([ch rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]].location != NSNotFound) {
+			[substrings addObject:tempStr];
+			tempStr = [NSMutableString string];
+		} else if ([ch isEqualToString:@"_"]) {
+			if (i == 0) {
+				continue;
+			}
+			else {
+				[substrings addObject:tempStr];
+				tempStr = [NSMutableString string];
+			}
+		} else if ([ch isEqualToString:@"-"]) {
+			[substrings addObject:tempStr];
+			tempStr = [NSMutableString string];
+		}
+		[tempStr appendString:ch];
+	}
+	if ([tempStr length]) {
+		[substrings addObject:tempStr];
+	}
+
+	return substrings;
+}
 @end
+
+@implementation NSNumberFormatter (CustomFormatters)
++ (instancetype) degreesFormatter {
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.negativeFormat = formatter.positiveFormat = @"#.###º";
+	return formatter;
+}
++ (instancetype)highPrecisionFormatter {
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
+	formatter.multiplier = @(0.01);
+	return formatter;
+}
++ (instancetype)normalPrecisionFormatter {
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
+	return formatter;
+}
++ (instancetype)normalizedFormatter {
+	NSNumberFormatter *formatter = [self highPrecisionFormatter];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.minimum = @(0.0);
+	formatter.maximum = @(100.0);
+	return formatter;
+}
++ (instancetype)integerFormatter {
+	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.roundingIncrement = @(1.0);
+	formatter.usesGroupingSeparator = NO;
+	return formatter;
+}
+@end
+
+#pragma mark - Value transformers
 
 @implementation NSValueTransformer (Blocks)
 
@@ -127,6 +184,10 @@
 	}
 }
 
++ (instancetype) transformer {
+	return [self valueTransformerForName:NSStringFromClass(self)];
+}
+
 @end
 
 @implementation PrecisionTransformer
@@ -169,26 +230,8 @@
 	[self initializeWithTransformedValueClass:[NSString class]
 				  allowsReverseTransformation:NO
 						transformedValueBlock:^(id value){
-							NSString *str = value;
-							NSMutableString *str2 = [NSMutableString string];
-
-							for (NSInteger i=0; i<str.length; i++){
-								NSString *ch = [str substringWithRange:NSMakeRange(i, 1)];
-								if ([ch rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]].location != NSNotFound) {
-									[str2 appendString:@" "];
-								} else if ([ch isEqualToString:@"_"]) {
-									if (i == 0)
-										continue;
-									else
-										[str2 appendString:@" "];
-								} else if ([ch isEqualToString:@"-"]) {
-									[str2 appendString:@" "];
-								}
-								[str2 appendString:ch];
-							}
-							
-							NSString * result = str2.capitalizedString;
-							
+							NSString *string = value;
+							NSString * result = [[string componentsSeparatedInWords] componentsJoinedByString:@" "].capitalizedString;
 							return result;
 						}
 				 reverseTransformedValueBlock:nil];
@@ -199,111 +242,109 @@
 #pragma mark - AttributeNode
 
 @implementation AttributeNode {
-	NSArray *_labels;
 	NSString *_type;
 	id _value;
 	SKNode *_node;
+	BOOL _splitValue;
+	NSArray *_splitNames;
 }
 
 @synthesize
 name = _name,
 sensitivity = _sensitivity,
-increment = _increment;
+increment = _increment,
+formatter = _formatter,
+valueTransformer = _valueTransformer,
+labels = _labels;
 
-- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
+- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer {
 	if (self = [super init]) {
 		_name = name;
 		_node = node;
 		_type = type;
 		_sensitivity = 1.0;
 		_increment = 1.0;
+		_splitValue = NO;
+		_formatter = formatter;
+		_valueTransformer = valueTransformer;
 
 		/* Prepare the labels and identifier for the editor */
-		if ([_type isEqualToEncodedType:@encode(CGPoint)]) {
+		if ([_type isEqualToEncodedType:@encode(CGPoint)]
+			|| [_type isEqualToEncodedType:@encode(CGVector)]) {
 			_labels = @[@"X", @"Y"];
 		} else if ([_type isEqualToEncodedType:@encode(CGSize)]) {
 			_labels = @[@"W", @"H"];
-		} else if ([_type isEqualToEncodedType:@encode(CGVector)]) {
-			_labels = @[@"dX", @"dY"];
 		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
 			_labels = @[@"X", @"Y", @"W", @"H"];
 		}
 
 		/* Bind the property to the 'raw' value if there isn't an accessor */
 		if (node) {
-			[self bind:@"value" toObject:node withKeyPath:_name options:nil];
+			_splitNames = [name componentsSeparatedByString:@","];
+			if (_splitNames.count > 1) {
+				_name = _splitNames[0];
+				_splitValue = YES;
+				_value = [NSMutableArray array];
+				for (int i=1; i<_splitNames.count; ++i) {
+					[_value addObject:[NSNull null]];
+					[self bind:[NSString stringWithFormat:@"value%d", i] toObject:node withKeyPath:_splitNames[i] options:nil];
+				}
+
+			} else {
+				[self bind:@"value" toObject:node withKeyPath:_name options:nil];
+			}
 		}
 	}
 	return self;
 }
 
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer {
+	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:type formatter:formatter valueTransformer:valueTransformer];
+}
+
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:type];
+	return [self attributeWithName:name node:node type:type formatter:nil valueTransformer:nil];
 }
 
 + (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode* )node {
-	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:@"color"];
+	return [self attributeWithName:name node:node type:@"color"];
 }
 
 + (instancetype)attributeForRotationAngleWithName:name node:(SKNode* )node {
-	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:@"d"];
-
-	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-	formatter.numberStyle = NSNumberFormatterDecimalStyle;
-	formatter.negativeFormat = formatter.positiveFormat = @"#.###º";
-	attribute.formatter = formatter;
-	attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([DegreesTransformer class])];
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:@"d"
+													  formatter:[NSNumberFormatter degreesFormatter]
+											   valueTransformer:[DegreesTransformer transformer]];
 	attribute.sensitivity = GLKMathRadiansToDegrees(0.001);
-
 	return attribute;
 }
 
 + (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type];
-
-	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-	formatter.numberStyle = NSNumberFormatterDecimalStyle;
-	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
-	formatter.multiplier = @(0.01);
-	attribute.formatter = formatter;
-	attribute.valueTransformer = [NSValueTransformer valueTransformerForName:NSStringFromClass([PrecisionTransformer class])];
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
+													  formatter:[NSNumberFormatter highPrecisionFormatter]
+											   valueTransformer:[PrecisionTransformer transformer]];
 	attribute.increment = 10.0;
-
 	return attribute;
 }
 
 + (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type];
-
-	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-	formatter.numberStyle = NSNumberFormatterDecimalStyle;
-	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
-	attribute.formatter = formatter;
-
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
+													  formatter:[NSNumberFormatter normalPrecisionFormatter]
+											   valueTransformer:nil];
 	return attribute;
 }
 
 + (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:name node:node type:type];
-
-	NSNumberFormatter *formatter = attribute.formatter;
-	formatter.numberStyle = NSNumberFormatterDecimalStyle;
-	formatter.minimum = @(0.0);
-	formatter.maximum = @(100.0);
-	attribute.formatter = formatter;
-
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
+													  formatter:[NSNumberFormatter normalizedFormatter]
+											   valueTransformer:[PrecisionTransformer transformer]];
+	attribute.increment = 10.0;
 	return attribute;
 }
 
 + (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
-	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type];
-
-	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-	formatter.numberStyle = NSNumberFormatterDecimalStyle;
-	formatter.roundingIncrement = @(1.0);
-	formatter.usesGroupingSeparator = NO;
-	attribute.formatter = formatter;
-
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
+													  formatter:[NSNumberFormatter integerFormatter]
+											   valueTransformer:nil];
 	return attribute;
 }
 
@@ -336,8 +377,10 @@ increment = _increment;
 
 	_value = value;
 
-	/* Update the bound object's property value */
-	[_node setValue:_value forKeyPath:_name];
+	if (!_splitValue) {
+		/* Update the bound object's property value */
+		[_node setValue:_value forKeyPath:_name];
+	}
 }
 
 - (id)value {
@@ -346,7 +389,7 @@ increment = _increment;
 
 #pragma mark value with subindex
 
-- (void)setValue:(id)value forKey:(NSString *)key {
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
 	/* Try to get a subindex from the key */
 	NSArray *results = [key substringsWithRegularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
 
@@ -357,29 +400,34 @@ increment = _increment;
 
 		/* Update the value component for the given subindex */
 
-		if ([_type isEqualToEncodedType:@encode(CGPoint)]
-			|| [_type isEqualToEncodedType:@encode(CGSize)]
-			|| [_type isEqualToEncodedType:@encode(CGVector)]) {
-			CGFloat data[2];
-			[self.value getValue:&data];
-			data[subindex] = [value floatValue];
-			self.value = [NSValue value:&data withObjCType:_type.UTF8String];
+		if (_splitValue) {
+			[_node setValue:value forKeyPath:_splitNames[subindex + 1]];
+			self.value[subindex] = value;
+		} else {
+			if ([_type isEqualToEncodedType:@encode(CGPoint)]
+				|| [_type isEqualToEncodedType:@encode(CGSize)]
+				|| [_type isEqualToEncodedType:@encode(CGVector)]) {
+				CGFloat data[2];
+				[self.value getValue:&data];
+				data[subindex] = [value floatValue];
+				self.value = [NSValue value:&data withObjCType:_type.UTF8String];
 
-		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
-			CGFloat data[4];
-			[self.value getValue:&data];
-			data[subindex] = [value floatValue];
-			self.value = [NSValue value:&data withObjCType:_type.UTF8String];
+			} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
+				CGFloat data[4];
+				[self.value getValue:&data];
+				data[subindex] = [value floatValue];
+				self.value = [NSValue value:&data withObjCType:_type.UTF8String];
+			}
 		}
 
 	} else {
 
 		/* Fall back to the superclass default behavior if the key is not a value */
-		[super setValue:value forKey:key];
+		[super setValue:value forUndefinedKey:key];
 	}
 }
 
-- (id)valueForKey:(NSString *)key {
+- (id)valueForUndefinedKey:(NSString *)key {
 	/* Try to get a subindex from the key */
 	NSArray *results = [key substringsWithRegularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
 
@@ -395,21 +443,25 @@ increment = _increment;
 
 		/* The key is a subindex of value */
 
-		if ([_type isEqualToEncodedType:@encode(CGPoint)]
-			|| [_type isEqualToEncodedType:@encode(CGSize)]
-			|| [_type isEqualToEncodedType:@encode(CGVector)]) {
-			CGFloat data[2];
-			[_value getValue:&data];
-			return @(data[subindex]);
+		if (_splitValue) {
+			return _value[subindex];
+		} else {
+			if ([_type isEqualToEncodedType:@encode(CGPoint)]
+				|| [_type isEqualToEncodedType:@encode(CGSize)]
+				|| [_type isEqualToEncodedType:@encode(CGVector)]) {
+				CGFloat data[2];
+				[_value getValue:&data];
+				return @(data[subindex]);
 
-		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
-			CGFloat data[4];
-			[_value getValue:&data];
-			return @(data[subindex]);
+			} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
+				CGFloat data[4];
+				[_value getValue:&data];
+				return @(data[subindex]);
+			}
 		}
 	}
 
-	return [super valueForKey:key];
+	return [super valueForUndefinedKey:key];
 }
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {

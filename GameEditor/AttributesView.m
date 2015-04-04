@@ -55,16 +55,21 @@
 			NSString *observedKey = bindingInfo[NSObservedKeyPathKey];
 
 			/* Get the keyPath relative to the attribute object */
-			NSRange range = [observedKey rangeOfString:@"(?<=\\.|^)value\\d*$" options:NSRegularExpressionSearch];
-			NSString *key = range.location != NSNotFound ? [observedKey substringWithRange:range] : nil;
+			NSArray *results = [observedKey substringsWithRegularExpressionWithPattern:@"(?<=\\.|^)value(\\d*)$" options:0 error:NULL];
+			NSString *key = results[0];
+			NSInteger subindex = [results[1] integerValue];
 
 			if (key) {
 				/* Update the binding with the attribute's value transformer */
 				NSMutableDictionary *options = bindingInfo[NSOptionsKey];
-				NSValueTransformer *valueTransformer = attribute.valueTransformer;
+				id valueTransformer = attribute.valueTransformer;
 
 				if (valueTransformer) {
-					options[NSValueTransformerBindingOption] = valueTransformer;
+					if ([valueTransformer isKindOfClass:[NSArray class]]) {
+						options[NSValueTransformerBindingOption] = [valueTransformer objectAtIndex:MIN(subindex, [valueTransformer count]) - 1];
+					} else {
+						options[NSValueTransformerBindingOption] = valueTransformer;
+					}
 				} else {
 					[options removeObjectForKey:NSValueTransformerBindingOption];
 				}
@@ -74,7 +79,12 @@
 				[textField bind:NSValueBinding toObject:attribute withKeyPath:key options:options];
 
 				/* Set the appropriate number formater */
-				textField.formatter = attribute.formatter;
+				id formatter = attribute.formatter;
+				if ([formatter isKindOfClass:[NSArray class]]) {
+					textField.formatter = [formatter objectAtIndex:MIN(subindex, [formatter count]) - 1];
+				} else {
+					textField.formatter = attribute.formatter;
+				}
 
 				/* Set the parameters for the stepper text field */
 				if ([textField isKindOfClass:[StepperTextField class]]) {

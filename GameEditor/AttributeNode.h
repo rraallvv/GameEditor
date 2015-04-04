@@ -33,6 +33,30 @@
 - (BOOL)isEqualToEncodedType:(const char*)type;
 @end
 
+@interface NSString (Regex)
+- (NSArray *)substringsWithRegularExpressionWithPattern:(NSString *)pattern options:(NSRegularExpressionOptions)options error:(NSError **)error;
+@end
+
+@interface NSString (AttributeName)
+- (NSArray *)componentsSeparatedInWords;
+@end
+
+@interface NSNumberFormatter (CustomFormatters)
++ (instancetype)degreesFormatter;
++ (instancetype)highPrecisionFormatter;
++ (instancetype)normalPrecisionFormatter;
++ (instancetype)normalizedFormatter;
++ (instancetype)integerFormatter;
+@end
+
+@interface NSValueTransformer (Blocks)
++ (void)initializeWithTransformedValueClass:(Class)class
+				allowsReverseTransformation:(BOOL)allowsReverseTransformation
+					  transformedValueBlock:(id (^)(id value))transformedValueBlock
+			   reverseTransformedValueBlock:(id (^)(id value))reverseTransformedValueBlock;
++ (instancetype) transformer;
+@end
+
 @interface PrecisionTransformer : NSValueTransformer
 @end
 
@@ -43,6 +67,7 @@
 @end
 
 @interface AttributeNode : NSObject
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer;
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
 + (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode* )node;
 + (instancetype)attributeForRotationAngleWithName:(NSString *)name node:(SKNode* )node;
@@ -55,4 +80,5 @@
 @property id valueTransformer;
 @property CGFloat sensitivity;
 @property CGFloat increment;
+@property NSArray *labels;
 @end
