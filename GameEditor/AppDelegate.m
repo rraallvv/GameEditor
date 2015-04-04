@@ -168,6 +168,7 @@
 	BOOL hasXYScale = NO;
 	BOOL hasXYRotation = NO;
 	BOOL hasParticleZPositionRangeSpeed = NO;
+	BOOL hasParticleScaleRangeSpeed = NO;
 
 	if (count) {
 		for(unsigned int i = 0; i < count; i++) {
@@ -213,13 +214,24 @@
 				continue;
 			} else if ([propertyName rangeOfString:@"^particleZPosition(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasParticleZPositionRangeSpeed) {
-					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"position,particleZPosition,particleZPositionRange,particleZPositionSpeed"
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"zPosition,particleZPosition,particleZPositionRange,particleZPositionSpeed"
 																		   node:node
 																		   type:@"{ddd}"];
 
 					attribute.labels = @[@"Start", @"Range", @"Speed"];
 					[attributesArray addObject:attribute];
 					hasParticleZPositionRangeSpeed = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleScale(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleScaleRangeSpeed) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"scale,particleScale,particleScaleRange,particleScaleSpeed"
+																								node:node
+																								type:@"{ddd}"];
+
+					attribute.labels = @[@"Start", @"Range", @"Speed"];
+					[attributesArray addObject:attribute];
+					hasParticleScaleRangeSpeed = YES;
 				}
 				continue;
 			}
