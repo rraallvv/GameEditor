@@ -175,6 +175,7 @@
 	BOOL hasParticleScaleRangeSpeed = NO;
 	BOOL hasParticleRotationRangeSpeed = NO;
 	BOOL hasParticleAlphaRangeSpeed = NO;
+	BOOL hasParticleColorBlendFactor = NO;
 
 	if (count) {
 		for(unsigned int i = 0; i < count; i++) {
@@ -296,6 +297,17 @@
 					attribute.labels = @[@"Start", @"Range", @"Speed"];
 					[attributesArray addObject:attribute];
 					hasParticleAlphaRangeSpeed = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleColorBlendFactor(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleColorBlendFactor) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"colorBlendFactor,particleColorBlendFactor,particleColorBlendFactorRange,particleColorBlendFactorSpeed"
+																								node:node
+																								type:@"{ddd}"];
+
+					attribute.labels = @[@"Start", @"Range", @"Speed"];
+					[attributesArray addObject:attribute];
+					hasParticleColorBlendFactor = YES;
 				}
 				continue;
 			}
