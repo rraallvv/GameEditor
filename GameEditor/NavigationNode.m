@@ -63,16 +63,16 @@
 }
 
 - (NSString *)name {
-	if ([self.node respondsToSelector:@selector(name)]) {
-		NSString *name = [self.node name];
+	if ([_node respondsToSelector:@selector(name)]) {
+		NSString *name = [_node name];
 		if (name && ![name isEqualToString:@""])
 			return name;
 	}
-	return [NSString stringWithFormat:@"<%@>", [self.node className]];
+	return [NSString stringWithFormat:@"<%@>", [_node className]];
 }
 
 - (BOOL)isLeaf {
-	return [[self.node children] count] == 0;
+	return [[_node children] count] == 0;
 }
 
 - (BOOL)isEditable {
@@ -80,19 +80,19 @@
 }
 
 - (NSImage *)image {
-	if ([self.node isKindOfClass:[SKScene class]]) {
+	if ([_node isKindOfClass:[SKScene class]]) {
 		return [NSImage imageNamed:@"SKScene"];
-	} else if ([self.node isKindOfClass:[SKShapeNode class]]) {
+	} else if ([_node isKindOfClass:[SKShapeNode class]]) {
 		return [NSImage imageNamed:@"SKShapeNode"];
-	} else if ([self.node isKindOfClass:[SKSpriteNode class]]) {
+	} else if ([_node isKindOfClass:[SKSpriteNode class]]) {
 		return [NSImage imageNamed:@"SKSpriteNode"];
-	} else if ([self.node isKindOfClass:[SKLightNode class]]) {
+	} else if ([_node isKindOfClass:[SKLightNode class]]) {
 		return [NSImage imageNamed:@"SKLightNode"];
-	} else if ([self.node isKindOfClass:[SKEmitterNode class]]) {
+	} else if ([_node isKindOfClass:[SKEmitterNode class]]) {
 		return [NSImage imageNamed:@"SKEmitterNode"];
-	} else if ([self.node isKindOfClass:[SKLabelNode class]]) {
+	} else if ([_node isKindOfClass:[SKLabelNode class]]) {
 		return [NSImage imageNamed:@"SKLabelNode"];
-	} else if ([self.node isKindOfClass:[SKFieldNode class]]) {
+	} else if ([_node isKindOfClass:[SKFieldNode class]]) {
 		return [NSImage imageNamed:@"SKFieldNode"];
 	} else {
 		return [NSImage imageNamed:@"SKNode"];
