@@ -124,7 +124,10 @@
 			return node;
 		}
 		if([[node childNodes] count]) {
-			return [self navigationNodeOfObject:anObject inNodes:[node childNodes]];
+			id result = [self navigationNodeOfObject:anObject inNodes:[node childNodes]];
+			if (result) {
+				return result;
+			}
 		}
 	}
 	return nil;
