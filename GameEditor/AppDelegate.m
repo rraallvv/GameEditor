@@ -101,7 +101,7 @@
 	[SKScene archiveScene:self.skView.scene toFile:@"GameScene"];
 }
 
-- (void)selectedNode:(id)node {
+- (void)editorView:(EditorView *)editorView didSelectNode:(id)node {
 	/* Replace the attributes table */
 	[_attributesTreeController setContent:[self attributesForAllClassesWithNode:node]];
 

@@ -251,7 +251,7 @@ anchorPoint = _anchorPoint;
 	[self bindToNode:_node];
 
 	/* Nofify the delegate */
-	[self.delegate selectedNode:(SKNode *)node];
+	[self.delegate editorView:self didSelectNode:(SKNode *)node];
 }
 
 - (SKNode *)node {

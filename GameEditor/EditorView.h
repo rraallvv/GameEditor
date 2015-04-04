@@ -26,10 +26,6 @@
 #import <Cocoa/Cocoa.h>
 #import <SpriteKit/SpriteKit.h>
 
-@protocol EditorViewDelegate
-- (void)selectedNode:(SKNode *)node;
-@end
-
 @interface EditorView : NSView
 
 @property (weak) SKNode *node;
@@ -42,4 +38,8 @@
 
 @property (weak) id delegate;
 
+@end
+
+@protocol EditorViewDelegate
+- (void)editorView:(EditorView *)editorView didSelectNode:(id)node;
 @end
