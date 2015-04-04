@@ -419,8 +419,7 @@
 	if (selectedRow != -1) {
 		[_editorView setNode:[[[_navigatorView itemAtRow:selectedRow] representedObject] node]];
 		//NSLog(@"%@ selected", [[[_navigatorView itemAtRow:selectedRow] representedObject] valueForKey:@"name"]);
-	}
-	else {
+	} else {
 		// No row was selected
 	}
 }
