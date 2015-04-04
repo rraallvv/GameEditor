@@ -190,13 +190,15 @@
 
 		if ([propertyNameComponents[0] isEqualToString:@"z"]) {
 			if (!hasZ) {
-				[attributesArray addObject:[AttributeNode attributeWithName:@"zPosition,zRotation"
+				AttributeNode *attribute = [AttributeNode attributeWithName:@"z,zPosition,zRotation"
 																	   node:node
-																	   type:propertyType
+																	   type:@"{xx=dd}"
 																  formatter:@[[NSNumberFormatter integerFormatter],
 																			  [NSNumberFormatter degreesFormatter]]
 														   valueTransformer:@[[NSNull null],
-																			  [DegreesTransformer transformer]]]];
+																			  [DegreesTransformer transformer]]];
+				attribute.labels = @[@"Position", @"Rotation"];
+				[attributesArray addObject:attribute];
 			}
 			hasZ = YES;
 			continue;

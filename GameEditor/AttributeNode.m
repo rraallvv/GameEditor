@@ -242,7 +242,6 @@
 #pragma mark - AttributeNode
 
 @implementation AttributeNode {
-	NSArray *_labels;
 	NSString *_type;
 	id _value;
 	SKNode *_node;
@@ -255,7 +254,8 @@ name = _name,
 sensitivity = _sensitivity,
 increment = _increment,
 formatter = _formatter,
-valueTransformer = _valueTransformer;
+valueTransformer = _valueTransformer,
+labels = _labels;
 
 - (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer {
 	if (self = [super init]) {
@@ -283,13 +283,13 @@ valueTransformer = _valueTransformer;
 		if (node) {
 			_splitNames = [name componentsSeparatedByString:@","];
 			if (_splitNames.count > 1) {
-				_name = @"z";
-				_type = @"{xx=dd}";
+				_name = _splitNames[0];
 				_splitValue = YES;
-				_value = [NSMutableArray arrayWithObjects:@(0.0), @(0.0), nil];
-				_labels = @[@"Position", @"Rotation"];
-				[self bind:@"value1" toObject:node withKeyPath:_splitNames[0] options:nil];
-				[self bind:@"value2" toObject:node withKeyPath:_splitNames[1] options:nil];
+				_value = [NSMutableArray array];
+				for (int i=1; i<_splitNames.count; ++i) {
+					[_value addObject:[NSNull null]];
+					[self bind:[NSString stringWithFormat:@"value%d", i] toObject:node withKeyPath:_splitNames[i] options:nil];
+				}
 
 			} else {
 				[self bind:@"value" toObject:node withKeyPath:_name options:nil];
@@ -402,7 +402,7 @@ valueTransformer = _valueTransformer;
 		/* Update the value component for the given subindex */
 
 		if (_splitValue) {
-			[_node setValue:value forKeyPath:_splitNames[subindex]];
+			[_node setValue:value forKeyPath:_splitNames[subindex + 1]];
 			self.value[subindex] = value;
 		} else {
 			if ([_type isEqualToEncodedType:@encode(CGPoint)]

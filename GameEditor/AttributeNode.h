@@ -80,4 +80,5 @@
 @property id valueTransformer;
 @property CGFloat sensitivity;
 @property CGFloat increment;
+@property NSArray *labels;
 @end
