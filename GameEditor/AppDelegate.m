@@ -165,6 +165,7 @@
 	NSMutableArray *attributesArray = [NSMutableArray array];
 
 	BOOL hasZPositionRotation = NO;
+	BOOL hasSpeed = NO;
 	BOOL hasLifetime = NO;
 	BOOL hasXYAcceleration = NO;
 	BOOL hasXYScale = NO;
@@ -193,6 +194,14 @@
 					attribute.labels = @[@"Position", @"Rotation"];
 					[attributesArray addObject:attribute];
 					hasZPositionRotation = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleSpeed(Range)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasSpeed) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"speed,particleSpeed,particleSpeedRange" node:node type:@"{dd}"];
+					attribute.labels = @[@"Start", @"Range"];
+					[attributesArray addObject:attribute];
+					hasSpeed = YES;
 				}
 				continue;
 			} else if ([propertyName rangeOfString:@"^particleLifetime(Range)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
