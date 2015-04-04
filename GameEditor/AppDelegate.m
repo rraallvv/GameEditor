@@ -165,6 +165,7 @@
 	NSMutableArray *attributesArray = [NSMutableArray array];
 
 	BOOL hasZPositionRotation = NO;
+	BOOL hasXYAcceleration = NO;
 	BOOL hasXYScale = NO;
 	BOOL hasXYRotation = NO;
 	BOOL hasParticleZPositionRangeSpeed = NO;
@@ -191,6 +192,14 @@
 					attribute.labels = @[@"Position", @"Rotation"];
 					[attributesArray addObject:attribute];
 					hasZPositionRotation = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^(x|y)Acceleration$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasXYAcceleration) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"acceleration,xAcceleration,yAcceleration" node:node type:@"{dd}"];
+					attribute.labels = @[@"X", @"Y"];
+					[attributesArray addObject:attribute];
+					hasXYAcceleration = YES;
 				}
 				continue;
 			} else if ([propertyName rangeOfString:@"^(x|y)Scale$" options:NSRegularExpressionSearch].location != NSNotFound) {

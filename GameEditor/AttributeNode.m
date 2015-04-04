@@ -269,12 +269,11 @@ labels = _labels;
 		_valueTransformer = valueTransformer;
 
 		/* Prepare the labels and identifier for the editor */
-		if ([_type isEqualToEncodedType:@encode(CGPoint)]) {
+		if ([_type isEqualToEncodedType:@encode(CGPoint)]
+			|| [_type isEqualToEncodedType:@encode(CGVector)]) {
 			_labels = @[@"X", @"Y"];
 		} else if ([_type isEqualToEncodedType:@encode(CGSize)]) {
 			_labels = @[@"W", @"H"];
-		} else if ([_type isEqualToEncodedType:@encode(CGVector)]) {
-			_labels = @[@"dX", @"dY"];
 		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
 			_labels = @[@"X", @"Y", @"W", @"H"];
 		}
