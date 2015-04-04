@@ -35,6 +35,12 @@
 	shapeNode2.position = CGPointMake(400, 100);
 	shapeNode2.zRotation = M_PI_4;
 	[self addChild:shapeNode2];
+
+	/* Add a particles emitter */
+	NSString *particlesPath = [[NSBundle mainBundle] pathForResource:@"Particles" ofType:@"sks"];
+	SKEmitterNode *emitter = [NSKeyedUnarchiver unarchiveObjectWithFile:particlesPath];
+	emitter.position = CGPointMake(scene.size.width/2, scene.size.height/2);
+	[scene addChild:emitter];
 #endif
 
 	SKSpriteNode *spaceShip = (SKSpriteNode *)[self childNodeWithName:@"//SpaceShip"];
