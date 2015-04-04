@@ -170,6 +170,7 @@
 	BOOL hasParticleZPositionRangeSpeed = NO;
 	BOOL hasParticleScaleRangeSpeed = NO;
 	BOOL hasParticleRotationRangeSpeed = NO;
+	BOOL hasParticleAlphaRangeSpeed = NO;
 
 	if (count) {
 		for(unsigned int i = 0; i < count; i++) {
@@ -244,6 +245,17 @@
 					attribute.labels = @[@"Start", @"Range", @"Speed"];
 					[attributesArray addObject:attribute];
 					hasParticleRotationRangeSpeed = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleAlpha(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleAlphaRangeSpeed) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"alpha,particleAlpha,particleAlphaRange,particleAlphaSpeed"
+																								node:node
+																								type:@"{ddd}"];
+
+					attribute.labels = @[@"Start", @"Range", @"Speed"];
+					[attributesArray addObject:attribute];
+					hasParticleAlphaRangeSpeed = YES;
 				}
 				continue;
 			}
