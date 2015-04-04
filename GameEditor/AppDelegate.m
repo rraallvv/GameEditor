@@ -221,6 +221,14 @@
 					hasParticleColorRed = YES;
 				}
 				continue;
+			} else if ([propertyName rangeOfString:@"^particleColorGreen(Speed|Range)$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleColorGreen) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"green,particleColorGreenSpeed,particleColorGreenRange" node:node type:@"{dd}"];
+					attribute.labels = @[@"Start", @"Range"];
+					[attributesArray addObject:attribute];
+					hasParticleColorGreen = YES;
+				}
+				continue;
 			} else if ([propertyName rangeOfString:@"^particleSpeed(Range)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasSpeed) {
 					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"speed,particleSpeed,particleSpeedRange" node:node type:@"{dd}"];
