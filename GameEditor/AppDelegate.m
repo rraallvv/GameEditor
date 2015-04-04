@@ -179,6 +179,7 @@
 	BOOL hasParticleColorRed = NO;
 	BOOL hasParticleColorGreen = NO;
 	BOOL hasParticleColorBlue = NO;
+	BOOL hasParticleColorAlpha = NO;
 
 	if (count) {
 		for(unsigned int i = 0; i < count; i++) {
@@ -235,6 +236,14 @@
 					attribute.labels = @[@"Start", @"Range"];
 					[attributesArray addObject:attribute];
 					hasParticleColorBlue = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleColorAlpha(Speed|Range)$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleColorAlpha) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"alpha,particleColorAlphaSpeed,particleColorAlphaRange" node:node type:@"{dd}"];
+					attribute.labels = @[@"Start", @"Range"];
+					[attributesArray addObject:attribute];
+					hasParticleColorAlpha = YES;
 				}
 				continue;
 			} else if ([propertyName rangeOfString:@"^particleSpeed(Range)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
