@@ -167,6 +167,7 @@
 	BOOL hasZPositionRotation = NO;
 	BOOL hasXYScale = NO;
 	BOOL hasXYRotation = NO;
+	BOOL hasParticleZPositionRangeSpeed = NO;
 
 	if (count) {
 		for(unsigned int i = 0; i < count; i++) {
@@ -208,6 +209,17 @@
 					attribute.labels = @[@"X", @"Y"];
 					[attributesArray addObject:attribute];
 					hasXYRotation = YES;
+				}
+				continue;
+			} else if ([propertyName rangeOfString:@"^particleZPosition(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				if (!hasParticleZPositionRangeSpeed) {
+					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"position,particleZPosition,particleZPositionRange,particleZPositionSpeed"
+																		   node:node
+																		   type:@"{ddd}"];
+
+					attribute.labels = @[@"Start", @"Range", @"Speed"];
+					[attributesArray addObject:attribute];
+					hasParticleZPositionRangeSpeed = YES;
 				}
 				continue;
 			}
