@@ -106,11 +106,22 @@
 #pragma mark Selection handling
 
 - (void)editorView:(EditorView *)editorView didSelectNode:(id)node {
+	[self updateSelectionWithNode:node];
+}
 
-#if 0
+- (void)navigatorView:(NavigatorView *)navigatorView didSelectNode:(id)node {
+	[self updateSelectionWithNode:node];
+}
+
+- (void)updateSelectionWithNode:(id)node {
+	[_editorView setNode:node];
+
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 		/* Build the tree of attributes in the background thread */
 		NSMutableArray *contents = [self attributesForAllClassesWithNode:node];
+
+		/* Look up for the row to be selected */
+		NSInteger row = [_navigatorView rowForItem:[self navigationNodeOfObject:node]];
 
 		dispatch_async(dispatch_get_main_queue(), ^{
 			/* Replace the attributes table */
@@ -119,39 +130,14 @@
 			/* Expand all the root nodes in the attributes view */
 			for (id item in [[_attributesTreeController arrangedObjects] childNodes])
 				[_attributesView expandItem:item expandChildren:NO];
+
+			/* Ask the editor view to repaint the selection */
+			[_editorView setNeedsDisplay:YES];
+
+			/* Update the selection in the navigator view */
+			[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
 		});
 	});
-#else
-	/* Replace the attributes table */
-	[_attributesTreeController setContent:[self attributesForAllClassesWithNode:node]];
-
-	/* Expand all the root nodes in the attributes view */
-	for (id item in [[_attributesTreeController arrangedObjects] childNodes])
-		[_attributesView expandItem:item expandChildren:NO];
-#endif
-
-	/* Update the selection in the navigator view */
-	[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:[_navigatorView rowForItem:[self navigationNodeOfObject:node]]]
-				byExtendingSelection:NO];
-}
-
-- (id)navigationNodeOfObject:(id)anObject {
-	return [self navigationNodeOfObject:anObject inNodes:[[_navigatorTreeController arrangedObjects] childNodes]];
-}
-
-- (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray*)nodes {
-	for(NSTreeNode* node in nodes) {
-		if([[[node representedObject] node] isEqual:anObject]) {
-			return node;
-		}
-		if([[node childNodes] count]) {
-			id result = [self navigationNodeOfObject:anObject inNodes:[node childNodes]];
-			if (result) {
-				return result;
-			}
-		}
-	}
-	return nil;
 }
 
 - (NSMutableArray *)attributesForAllClassesWithNode:(id)node {
@@ -171,7 +157,7 @@
 		}
 
 		classType = [classType superclass];
-		
+
 	} while (classType != nil
 			 && classType != [SKNode superclass]
 			 && classType != [NSObject class]);
@@ -315,8 +301,8 @@
 			} else if ([propertyName rangeOfString:@"^particleZPosition(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasParticleZPositionRangeSpeed) {
 					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"zPosition,particleZPosition,particleZPositionRange,particleZPositionSpeed"
-																		   node:node
-																		   type:@"{ddd}"];
+																								node:node
+																								type:@"{ddd}"];
 
 					attribute.labels = @[@"Start", @"Range", @"Speed"];
 					[attributesArray addObject:attribute];
@@ -398,22 +384,22 @@
 						&& ([propertyType isEqualToEncodedType:@encode(CGPoint)]
 							|| [propertyType isEqualToEncodedType:@encode(CGSize)]
 							|| [propertyType isEqualToEncodedType:@encode(CGRect)])) {
-						[attributesArray addObject:[AttributeNode attributeForNormalPrecisionValueWithName:propertyName node:node type:propertyType]];
-					} else if ([propertyName containsString:@"colorBlendFactor"]
-							   || [propertyName containsString:@"alpha"]) {
-						[attributesArray addObject:[AttributeNode attributeForNormalizedValueWithName:propertyName node:node type:propertyType]];
-					} else if ([propertyType isEqualToEncodedType:@encode(short)]
-							   || [propertyType isEqualToEncodedType:@encode(int)]
-							   || [propertyType isEqualToEncodedType:@encode(long)]
-							   || [propertyType isEqualToEncodedType:@encode(long long)]
-							   || [propertyType isEqualToEncodedType:@encode(unsigned short)]
-							   || [propertyType isEqualToEncodedType:@encode(unsigned int)]
-							   || [propertyType isEqualToEncodedType:@encode(unsigned long)]
-							   || [propertyType isEqualToEncodedType:@encode(unsigned long long)]) {
-						[attributesArray addObject:[AttributeNode attributeForIntegerValueWithName:propertyName node:node type:propertyType]];
-					} else {
-						[attributesArray addObject:[AttributeNode attributeForHighPrecisionValueWithName:propertyName node:node type:propertyType]];
-					}
+							[attributesArray addObject:[AttributeNode attributeForNormalPrecisionValueWithName:propertyName node:node type:propertyType]];
+						} else if ([propertyName containsString:@"colorBlendFactor"]
+								   || [propertyName containsString:@"alpha"]) {
+							[attributesArray addObject:[AttributeNode attributeForNormalizedValueWithName:propertyName node:node type:propertyType]];
+						} else if ([propertyType isEqualToEncodedType:@encode(short)]
+								   || [propertyType isEqualToEncodedType:@encode(int)]
+								   || [propertyType isEqualToEncodedType:@encode(long)]
+								   || [propertyType isEqualToEncodedType:@encode(long long)]
+								   || [propertyType isEqualToEncodedType:@encode(unsigned short)]
+								   || [propertyType isEqualToEncodedType:@encode(unsigned int)]
+								   || [propertyType isEqualToEncodedType:@encode(unsigned long)]
+								   || [propertyType isEqualToEncodedType:@encode(unsigned long long)]) {
+							[attributesArray addObject:[AttributeNode attributeForIntegerValueWithName:propertyName node:node type:propertyType]];
+						} else {
+							[attributesArray addObject:[AttributeNode attributeForHighPrecisionValueWithName:propertyName node:node type:propertyType]];
+						}
 
 				}
 #if 1// Show a dummy attribute for non-editable properties
@@ -431,12 +417,27 @@
 		}
 		free(properties);
 	}
-
+	
 	return attributesArray;
 }
 
-- (void)navigatorView:(NavigatorView *)navigatorView didSelectNode:(id)node {
-	[_editorView setNode:node];
+- (id)navigationNodeOfObject:(id)anObject {
+	return [self navigationNodeOfObject:anObject inNodes:[[_navigatorTreeController arrangedObjects] childNodes]];
+}
+
+- (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray*)nodes {
+	for(NSTreeNode* node in nodes) {
+		if([[[node representedObject] node] isEqual:anObject]) {
+			return node;
+		}
+		if([[node childNodes] count]) {
+			id result = [self navigationNodeOfObject:anObject inNodes:[node childNodes]];
+			if (result) {
+				return result;
+			}
+		}
+	}
+	return nil;
 }
 
 @end

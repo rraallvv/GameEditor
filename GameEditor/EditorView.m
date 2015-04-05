@@ -27,6 +27,8 @@
 #import <GLKit/GLKit.h>
 #import <objc/runtime.h>
 
+#pragma mark SKScene
+
 const CGFloat kRotationHandleDistance = 25.0;
 const CGFloat kHandleRadius = 4.5;
 
@@ -47,6 +49,8 @@ const CGFloat kHandleRadius = 4.5;
 }
 
 @end
+
+#pragma mark EditorView
 
 typedef enum {
 	BLHandle = 0,
@@ -286,6 +290,10 @@ anchorPoint = _anchorPoint;
 	}
 }
 
+- (void)mouseUp:(NSEvent *)theEvent {
+	_manipulatingHandle = NO;
+}
+
 - (void)updateSelectionWithLocationInView:(CGPoint)locationInView {
 	CGPoint locationInScene = [_scene convertPointFromView:locationInView];
 	CGPoint newPosition = CGPointMake(locationInScene.x - _draggedPosition.x, locationInScene.y - _draggedPosition.y);
@@ -388,10 +396,10 @@ anchorPoint = _anchorPoint;
 				} else if (_manipulatedHandle == TRHandle
 						   || _manipulatedHandle == BLHandle) {
 					shapeNode.xScale = distance * cos(angle) * shapeNode.xScale / _size.width;
-					shapeNode.yScale = distance * sin(angle) * shapeNode.yScale / _size.height;;
+					shapeNode.yScale = distance * sin(angle) * shapeNode.yScale / _size.height;
 				} else {
 					shapeNode.xScale = distance * cos(angle) * shapeNode.xScale / _size.width;
-					shapeNode.yScale = -distance * sin(angle) * shapeNode.yScale / _size.height;;
+					shapeNode.yScale = -distance * sin(angle) * shapeNode.yScale / _size.height;
 				}
 
 				CGPathRef pathRef = [shapeNode path];
@@ -428,10 +436,6 @@ anchorPoint = _anchorPoint;
 	} else {
 		_node.position = newPosition;
 	}
-}
-
-- (void)mouseUp:(NSEvent *)theEvent {
-	_manipulatingHandle = NO;
 }
 
 - (BOOL)isManipulatingHandleWithPoint:(CGPoint)point {
