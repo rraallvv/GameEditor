@@ -115,13 +115,13 @@ anchorPoint = _anchorPoint;
 	NSColor *fillColor = blueColor;
 	NSColor *strokeColor = whiteColor;
 	[self drawCircleWithCenter:_handlePoints[BLHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[BRHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[TRHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[TLHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
 	[self drawCircleWithCenter:_handlePoints[BMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[RMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[TMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_handlePoints[BRHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
 	[self drawCircleWithCenter:_handlePoints[LMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_handlePoints[RMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_handlePoints[TLHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_handlePoints[TMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_handlePoints[TRHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
 
 	/* Setup the shadow effect */
 	NSShadow *shadow = [[NSShadow alloc] init];
