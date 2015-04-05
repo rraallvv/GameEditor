@@ -43,8 +43,7 @@
 	[self addChild:emitter];
 #endif
 
-	SKSpriteNode *spaceShip = (SKSpriteNode *)[self childNodeWithName:@"//SpaceShip"];
-	[spaceShip setPaused:YES];
+	[self setPaused:NO];
 }
 
 @end
