@@ -102,12 +102,29 @@
 }
 
 - (void)editorView:(EditorView *)editorView didSelectNode:(id)node {
+
+#if 0
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		/* Build the tree of attributes in the background thread */
+		NSMutableArray *contents = [self attributesForAllClassesWithNode:node];
+
+		dispatch_async(dispatch_get_main_queue(), ^{
+			/* Replace the attributes table */
+			[_attributesTreeController setContent:contents];
+
+			/* Expand all the root nodes in the attributes view */
+			for (id item in [[_attributesTreeController arrangedObjects] childNodes])
+				[_attributesView expandItem:item expandChildren:NO];
+		});
+	});
+#else
 	/* Replace the attributes table */
 	[_attributesTreeController setContent:[self attributesForAllClassesWithNode:node]];
 
 	/* Expand all the root nodes in the attributes view */
 	for (id item in [[_attributesTreeController arrangedObjects] childNodes])
 		[_attributesView expandItem:item expandChildren:NO];
+#endif
 
 	/* Update the selection in the navigator view */
 	[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:[_navigatorView rowForItem:[self navigationNodeOfObject:node]]]
