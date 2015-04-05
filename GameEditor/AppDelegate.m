@@ -26,7 +26,6 @@
 #import "AppDelegate.h"
 #import "GameScene.h"
 #import "AttributesView.h"
-#import "NavigationNode.h"
 
 @implementation SKScene (Unarchive)
 
@@ -91,6 +90,9 @@
 	/* Setup the editor view */
 	_editorView.scene = scene;
 	_editorView.delegate = self;
+
+	/* Setup the navigator view */
+	_navigatorView.delegate = self;
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
@@ -100,6 +102,8 @@
 - (IBAction)saveAction:(id)sender {
 	[SKScene archiveScene:self.skView.scene toFile:@"GameScene"];
 }
+
+#pragma mark Selection handling
 
 - (void)editorView:(EditorView *)editorView didSelectNode:(id)node {
 
@@ -431,14 +435,8 @@
 	return attributesArray;
 }
 
-- (IBAction)rowSelected:(id)sender {
-	NSInteger selectedRow = [_navigatorView selectedRow];
-	if (selectedRow != -1) {
-		[_editorView setNode:[[[_navigatorView itemAtRow:selectedRow] representedObject] node]];
-		//NSLog(@"%@ selected", [[[_navigatorView itemAtRow:selectedRow] representedObject] valueForKey:@"name"]);
-	} else {
-		// No row was selected
-	}
+- (void)navigatorView:(NavigatorView *)navigatorView didSelectNode:(id)node {
+	[_editorView setNode:node];
 }
 
 @end

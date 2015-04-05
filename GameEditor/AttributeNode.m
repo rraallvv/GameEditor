@@ -26,6 +26,8 @@
 #import "AttributeNode.h"
 #import <objc/runtime.h>
 
+#pragma mark NSString
+
 @implementation NSString (Types)
 - (NSString *)extractClassName {
 	/* Try to get a class name from the type */
@@ -99,6 +101,8 @@
 }
 @end
 
+#pragma mark NSNumberFormatter
+
 @implementation NSNumberFormatter (CustomFormatters)
 + (instancetype) degreesFormatter {
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
@@ -135,7 +139,7 @@
 }
 @end
 
-#pragma mark - Value transformers
+#pragma mark Value transformers
 
 @implementation NSValueTransformer (Blocks)
 
@@ -239,7 +243,7 @@
 
 @end
 
-#pragma mark - AttributeNode
+#pragma mark AttributeNode
 
 @implementation AttributeNode {
 	NSString *_type;

@@ -25,6 +25,8 @@
 
 #import "ColorWell.h"
 
+#pragma mark ColorWell
+
 @implementation ColorWell
 
 - (void)drawRect:(NSRect)dirtyRect {

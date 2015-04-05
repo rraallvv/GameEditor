@@ -24,7 +24,12 @@
  */
 
 #import <Cocoa/Cocoa.h>
+#import "NavigationNode.h"
 
 @interface NavigatorView : NSOutlineView
 
+@end
+
+@protocol NavigatorViewDelegate
+- (void)navigatorView:(NavigatorView *)navigatorView didSelectNode:(id)node;
 @end
