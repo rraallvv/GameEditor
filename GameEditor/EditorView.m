@@ -34,18 +34,34 @@ const CGFloat kHandleRadius = 4.5;
 
 @implementation SKScene (SizeConversion)
 
-- (CGSize)convertSizeFromView:(CGSize)size {
+- (CGSize)convertSizeFromView:(CGSize)size toNode:(SKNode *)node {
 	CGPoint viewOrigin = [self convertPointFromView:self.view.frame.origin];
 	CGPoint point = CGPointMake(size.width, size.height);
 	CGPoint convertedPoint = [self convertPointFromView:point];
-	return CGSizeMake(convertedPoint.x - viewOrigin.x, convertedPoint.y - viewOrigin.y);
+	size = CGSizeMake(convertedPoint.x - viewOrigin.x, convertedPoint.y - viewOrigin.y);
+	SKNode *parentNode = node.parent;
+	if (parentNode) {
+		size.width = size.width;
+		size.height = size.height;
+		node = parentNode;
+		parentNode = parentNode.parent;
+	}
+	return size;
 }
 
-- (CGSize)convertSizeToView:(CGSize)size {
+- (CGSize)convertSizeToView:(CGSize)size fromNode:(SKNode *)node {
 	CGPoint viewOrigin = [self convertPointFromView:self.frame.origin];
 	CGPoint point = CGPointMake(size.width + viewOrigin.x, size.height + viewOrigin.y);
 	CGPoint convertedPoint = [self convertPointToView:point];
-	return CGSizeMake(convertedPoint.x, convertedPoint.y);
+	size = CGSizeMake(convertedPoint.x, convertedPoint.y);
+	SKNode *parentNode = node.parent;
+	if (parentNode) {
+		size.width = size.width;
+		size.height = size.height;
+		node = parentNode;
+		parentNode = parentNode.parent;
+	}
+	return size;
 }
 
 - (CGPoint)convertPointFromView:(CGPoint)point toNode:(SKNode *)node {
@@ -242,12 +258,12 @@ anchorPoint = _anchorPoint;
 						  _pathSizeSign.y * rect.size.height * shapeNode.yScale);
 	}
 
-	_size = [_scene convertSizeToView:size];
+	_size = [_scene convertSizeToView:size fromNode:_node];
 	[self setNeedsDisplay:YES];
 }
 
 - (CGSize)size {
-	return [_scene convertSizeFromView:_size];
+	return [_scene convertSizeFromView:_size toNode:_node];
 }
 
 - (void)setAnchorPoint:(CGPoint)anchorPoint {
@@ -355,7 +371,7 @@ anchorPoint = _anchorPoint;
 				CGFloat angle = atan2(distanceVector.dy, distanceVector.dx) - _zRotation;
 
 				spriteNode.anchorPoint = CGPointMake(distance * cos(angle) / _size.width, distance * sin(angle) / _size.height);
-				spriteNode.size = [_scene convertSizeFromView:_size]; // setting the anchorPoint make the size positive, so this put back the right size (if it have negative values)
+				spriteNode.size = [_scene convertSizeFromView:_size toNode:_node]; // setting the anchorPoint make the size positive, so this put back the right size (if it have negative values)
 				spriteNode.position = locationInScene;
 
 			} else if ([_node isKindOfClass:[SKShapeNode class]]) {
@@ -413,15 +429,15 @@ anchorPoint = _anchorPoint;
 				SKSpriteNode *spriteNode = (SKSpriteNode *)_node;
 				if (_manipulatedHandle == TMHandle
 					|| _manipulatedHandle == BMHandle) {
-					spriteNode.size = [_scene convertSizeFromView:CGSizeMake(_size.width, distance * sin(angle))];
+					spriteNode.size = [_scene convertSizeFromView:CGSizeMake(_size.width, distance * sin(angle)) toNode:_node];
 				} else if (_manipulatedHandle == RMHandle
 						   || _manipulatedHandle == LMHandle) {
-					spriteNode.size = [_scene convertSizeFromView:CGSizeMake(distance * cos(angle), _size.height)];
+					spriteNode.size = [_scene convertSizeFromView:CGSizeMake(distance * cos(angle), _size.height) toNode:_node];
 				} else if (_manipulatedHandle == TRHandle
 						   || _manipulatedHandle == BLHandle) {
-					spriteNode.size = [_scene convertSizeFromView:CGSizeMake(distance * cos(angle), distance * sin(angle))];
+					spriteNode.size = [_scene convertSizeFromView:CGSizeMake(distance * cos(angle), distance * sin(angle)) toNode:_node];
 				} else {
-					spriteNode.size = [_scene convertSizeFromView:CGSizeMake(distance * cos(angle), -distance * sin(angle))];
+					spriteNode.size = [_scene convertSizeFromView:CGSizeMake(distance * cos(angle), -distance * sin(angle)) toNode:_node];
 				}
 
 			} else if ([_node isKindOfClass:[SKShapeNode class]]) {
