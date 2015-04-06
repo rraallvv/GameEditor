@@ -39,12 +39,11 @@
 	/* Add a particles emitter */
 	NSString *particlesPath = [[NSBundle mainBundle] pathForResource:@"Particles" ofType:@"sks"];
 	SKEmitterNode *emitter = [NSKeyedUnarchiver unarchiveObjectWithFile:particlesPath];
-	emitter.position = CGPointMake(scene.size.width/2, scene.size.height/2);
-	[scene addChild:emitter];
+	emitter.position = CGPointMake(self.size.width/2, self.size.height/2);
+	[self addChild:emitter];
 #endif
 
-	SKSpriteNode *spaceShip = (SKSpriteNode *)[self childNodeWithName:@"//SpaceShip"];
-	[spaceShip setPaused:YES];
+	[self setPaused:NO];
 }
 
 @end

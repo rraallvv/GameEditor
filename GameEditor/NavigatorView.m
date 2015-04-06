@@ -25,6 +25,8 @@
 
 #import "NavigatorView.h"
 
+#pragma mark NavigatorTableRowView
+
 @interface NavigatorTableRowView : NSTableRowView
 @end
 
@@ -50,8 +52,21 @@
 
 @end
 
+#pragma mark NavigatorView
+
+@interface NavigatorView () <NSOutlineViewDelegate>
+
+@end
+
 @implementation NavigatorView {
 	id _actualDelegate;
+}
+
+- (void)outlineViewSelectionDidChange:(NSNotification *)notification {
+	NSInteger selectedRow = [self selectedRow];
+	if (selectedRow != -1) {
+		[_actualDelegate navigatorView:self didSelectNode:[[[self itemAtRow:selectedRow] representedObject] node]];
+	}
 }
 
 - (NSTableRowView *)outlineView:(NSOutlineView *)outlineView rowViewForItem:(id)item {

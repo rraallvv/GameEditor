@@ -446,32 +446,6 @@ static const CGFloat kIndentationPerLevel = 0.0;
 	NSRectFill(dirtyRect);
 }
 
-- (void)outlineView:(NSOutlineView *)outlineView didRemoveRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
-	// TODO: find a be a better way to repaint a node after it's been collapsed
-	for (NSView *view in outlineView.subviews) {
-		NSInteger testRow = [outlineView rowForView:view];
-		if (testRow < row) {
-			id item = [outlineView itemAtRow:testRow];
-			if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
-				[view setNeedsDisplay:YES];
-			}
-		}
-	}
-}
-
-- (void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
-	// TODO: find a be a better way to repaint a node after it's been expanded
-	for (NSView *view in outlineView.subviews) {
-		NSInteger testRow = [outlineView rowForView:view];
-		if (testRow < row) {
-			id item = [outlineView itemAtRow:testRow];
-			if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
-				[view setNeedsDisplay:YES];
-			}
-		}
-	}
-}
-
 - (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
 	if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
 		if ([item indexPath].length == 1) {
@@ -494,6 +468,18 @@ static const CGFloat kIndentationPerLevel = 0.0;
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item {
 	return ![[[item representedObject] valueForKey:@"isLeaf"] boolValue];
+}
+
+- (void)outlineViewItemDidCollapse:(NSNotification *)notification {
+	NSInteger row = [self rowForItem:notification.userInfo[@"NSObject"]];
+	NSView *rowView = [self rowViewAtRow:row makeIfNecessary:NO];
+	[rowView setNeedsDisplay:YES];
+}
+
+- (void)outlineViewItemDidExpand:(NSNotification *)notification {
+	NSInteger row = [self rowForItem:notification.userInfo[@"NSObject"]];
+	NSView *rowView = [self rowViewAtRow:row makeIfNecessary:NO];
+	[rowView setNeedsDisplay:YES];
 }
 
 @end

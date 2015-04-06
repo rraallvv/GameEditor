@@ -176,7 +176,6 @@
                                                         </tableColumn>
                                                     </tableColumns>
                                                     <connections>
-                                                        <action selector="rowSelected:" target="494" id="Cqo-zQ-Psk"/>
                                                         <binding destination="FfK-Wg-7Xj" name="content" keyPath="arrangedObjects.objectValue" id="SCc-L5-2Fi"/>
                                                     </connections>
                                                 </outlineView>
