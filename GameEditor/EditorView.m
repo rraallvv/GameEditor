@@ -48,6 +48,35 @@ const CGFloat kHandleRadius = 4.5;
 	return CGSizeMake(convertedPoint.x, convertedPoint.y);
 }
 
+- (CGPoint)convertPointFromView:(CGPoint)point withNode:(SKNode *)node {
+	point = [self convertPointFromView:point];
+	while (node.parent) {
+		node = node.parent;
+		CGPoint parentPosition = node.position;
+		CGFloat parentZRotation = -node.zRotation;
+		CGPoint transformedPoint;
+		point.x -= parentPosition.x;
+		point.y -= parentPosition.y;
+		transformedPoint.x = point.x * cos(parentZRotation) - point.y * sin(parentZRotation);
+		transformedPoint.y = point.x * sin(parentZRotation) + point.y * cos(parentZRotation);
+		point = transformedPoint;
+	}
+	return point;
+}
+
+- (CGPoint)convertPointToView:(CGPoint)point withNode:(SKNode *)node {
+	while (node.parent) {
+		node = node.parent;
+		CGPoint parentPosition = node.position;
+		CGFloat parentZRotation = node.zRotation;
+		CGPoint transformedPoint;
+		transformedPoint.x = (point.x * cos(parentZRotation) - point.y * sin(parentZRotation)) + parentPosition.x;
+		transformedPoint.y = (point.x * sin(parentZRotation) + point.y * cos(parentZRotation)) + parentPosition.y;
+		point = transformedPoint;
+	}
+	return [self convertPointToView:point];
+}
+
 @end
 
 #pragma mark EditorView
@@ -182,12 +211,12 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)setPosition:(CGPoint)position {
-	_position = [_scene convertPointToView:position];
+	_position = [_scene convertPointToView:position withNode:_node];
 	[self setNeedsDisplay:YES];
 }
 
 - (CGPoint)position {
-	return [_scene convertPointFromView:_position];
+	return [_scene convertPointFromView:_position withNode:_node];
 }
 
 - (void)setZRotation:(CGFloat)zRotation {
@@ -278,7 +307,7 @@ anchorPoint = _anchorPoint;
 	[[self window] makeFirstResponder:self];
 	if (_scene) {
 		CGPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
-		CGPoint locationInScene = [_scene convertPointFromView:locationInView];
+		CGPoint locationInScene = [_scene convertPointFromView:locationInView withNode:_node];
 		if (!(_node && [self isManipulatingHandleWithPoint:locationInView])) {
 			NSArray *nodes = [_scene nodesAtPoint:locationInScene];
 			if (nodes.count) {
@@ -308,7 +337,7 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)updateSelectionWithLocationInView:(CGPoint)locationInView {
-	CGPoint locationInScene = [_scene convertPointFromView:locationInView];
+	CGPoint locationInScene = [_scene convertPointFromView:locationInView withNode:_node];
 	CGPoint newPosition = CGPointMake(locationInScene.x - _draggedPosition.x, locationInScene.y - _draggedPosition.y);
 	if (_manipulatingHandle) {
 		if (_manipulatedHandle == AnchorPointHAndle) {
@@ -430,21 +459,25 @@ anchorPoint = _anchorPoint;
 				|| _manipulatedHandle == TRHandle) {
 				CGVector anchorDistance = CGVectorMake(_size.width * _anchorPoint.x, _size.height * _anchorPoint.y);
 				_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[BLHandle].x + anchorDistance.dx * cosine - anchorDistance.dy * sine,
-																		  _handlePoints[BLHandle].y + anchorDistance.dx * sine + anchorDistance.dy * cosine)];
+																		  _handlePoints[BLHandle].y + anchorDistance.dx * sine + anchorDistance.dy * cosine)
+													 withNode:_node];
 			} else if (_manipulatedHandle == BLHandle
 					   || _manipulatedHandle == BMHandle
 					   || _manipulatedHandle == LMHandle) {
 				CGVector anchorDistance = CGVectorMake(_size.width * (1.0 - _anchorPoint.x), _size.height * (1.0 - _anchorPoint.y));
 				_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[TRHandle].x - anchorDistance.dx * cosine + anchorDistance.dy * sine,
-																		  _handlePoints[TRHandle].y - anchorDistance.dx * sine - anchorDistance.dy * cosine)];
+																		  _handlePoints[TRHandle].y - anchorDistance.dx * sine - anchorDistance.dy * cosine)
+													 withNode:_node];
 			} else if (_manipulatedHandle == BRHandle) {
 				CGVector anchorDistance = CGVectorMake(_size.width * _anchorPoint.x, _size.height * (1.0 - _anchorPoint.y));
 				_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[TLHandle].x + anchorDistance.dx * cosine + anchorDistance.dy * sine,
-																		  _handlePoints[TLHandle].y + anchorDistance.dx * sine - anchorDistance.dy * cosine)];
+																		  _handlePoints[TLHandle].y + anchorDistance.dx * sine - anchorDistance.dy * cosine)
+													 withNode:_node];
 			} else {
 				CGVector anchorDistance = CGVectorMake(_size.width * (1.0 - _anchorPoint.x), _size.height * _anchorPoint.y);
 				_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[BRHandle].x - anchorDistance.dx * cosine - anchorDistance.dy * sine,
-																		  _handlePoints[BRHandle].y - anchorDistance.dx * sine + anchorDistance.dy * cosine)];
+																		  _handlePoints[BRHandle].y - anchorDistance.dx * sine + anchorDistance.dy * cosine)
+													 withNode:_node];
 			}
 		}
 	} else {
