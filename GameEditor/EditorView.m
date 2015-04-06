@@ -278,7 +278,7 @@ anchorPoint = _anchorPoint;
 	[[self window] makeFirstResponder:self];
 	if (_scene) {
 		CGPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
-		CGPoint locationInScene = [theEvent locationInNode:_scene];
+		CGPoint locationInScene = [_scene convertPointFromView:locationInView];
 		if (!(_node && [self isManipulatingHandleWithPoint:locationInView])) {
 			NSArray *nodes = [_scene nodesAtPoint:locationInScene];
 			if (nodes.count) {
