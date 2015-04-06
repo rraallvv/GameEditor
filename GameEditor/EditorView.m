@@ -323,7 +323,7 @@ anchorPoint = _anchorPoint;
 
 				spriteNode.anchorPoint = CGPointMake(distance * cos(angle) / _size.width, distance * sin(angle) / _size.height);
 				spriteNode.size = [_scene convertSizeFromView:_size]; // setting the anchorPoint make the size positive, so this put back the right size (if it have negative values)
-				spriteNode.position = [_scene convertPointFromView:locationInView];
+				spriteNode.position = locationInScene;
 
 			} else if ([_node isKindOfClass:[SKShapeNode class]]) {
 				SKShapeNode *shapeNode = (SKShapeNode *)_node;
@@ -340,7 +340,7 @@ anchorPoint = _anchorPoint;
 				shapeNode.path = CGPathCreateCopyByTransformingPath(path, &translation);
 
 				/* Translate anchor point and node position */
-				shapeNode.position = [_scene convertPointFromView:locationInView];
+				shapeNode.position = locationInScene;
 				self.anchorPoint = CGPointZero; // force recalculation of anchor point
 
 			} else {
