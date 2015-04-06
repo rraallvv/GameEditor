@@ -28,8 +28,9 @@
 #import <Cocoa/Cocoa.h>
 #import <SpriteKit/SpriteKit.h>
 #import "EditorView.h"
+#import "NavigatorView.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, NSOutlineViewDelegate, EditorViewDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSOutlineViewDelegate, EditorViewDelegate, NavigatorViewDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet SKView *skView;

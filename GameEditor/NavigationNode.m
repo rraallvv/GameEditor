@@ -27,6 +27,8 @@
 #import <AppKit/AppKit.h>
 #import <SpriteKit/SpriteKit.h>
 
+#pragma mark NavigationNode
+
 @implementation NavigationNode {
 	NSMutableArray *_childrenNavigationNodes;
 }

@@ -26,7 +26,7 @@
 #import "StepperTextField.h"
 #import <AppKit/AppKit.h>
 
-#pragma mark - StepperNumberFormatter
+#pragma mark StepperNumberFormatter
 
 @interface StepperNumberFormatter : NSNumberFormatter
 @end
@@ -55,7 +55,7 @@
 
 @end
 
-#pragma mark - MarginTextFieldCell
+#pragma mark MarginTextFieldCell
 
 IB_DESIGNABLE
 @interface MarginTextFieldCell : NSTextFieldCell
@@ -136,7 +136,7 @@ IB_DESIGNABLE
 
 @end
 
-#pragma mark - StepperTextField
+#pragma mark StepperTextField
 
 typedef enum {
 	ActivatedButtonNone,
