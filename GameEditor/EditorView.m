@@ -464,12 +464,19 @@ anchorPoint = _anchorPoint;
 		if (_manipulatedHandle == AnchorPointHAndle) {
 			if ([_node respondsToSelector:@selector(anchorPoint)]) {
 				/* Translate anchor point and node position */
-				CGVector distanceVector = CGVectorMake(locationInView.x - _handlePoints[BLHandle].x,
-													   locationInView.y - _handlePoints[BLHandle].y);
-				CGFloat distance = sqrt(distanceVector.dx * distanceVector.dx + distanceVector.dy * distanceVector.dy);
-				CGFloat angle = atan2(distanceVector.dy, distanceVector.dx) - _zRotation;
+				CGFloat Vx = _handlePoints[BRHandle].x - _handlePoints[BLHandle].x;
+				CGFloat Vy = _handlePoints[BRHandle].y - _handlePoints[BLHandle].y;
 
-				[(id)_node setAnchorPoint:CGPointMake(distance * cos(angle) / _size.width, distance * sin(angle) / _size.height)];
+				CGFloat Wx = _handlePoints[TLHandle].x - _handlePoints[BLHandle].x;
+				CGFloat Wy = _handlePoints[TLHandle].y - _handlePoints[BLHandle].y;
+
+				CGFloat dx = locationInView.x - _handlePoints[BLHandle].x;
+				CGFloat dy = locationInView.y - _handlePoints[BLHandle].y;
+
+				CGFloat Rx = (dx * Wy - dy * Wx) / (Vx * Wy - Vy * Wx);
+				CGFloat Ry = (dx * Vy - dy * Vx) / (Vy * Wx - Vx * Wy);
+
+				[(id)_node setAnchorPoint:CGPointMake(Rx, Ry)];
 				[(id)_node setSize:[_scene convertSizeFromView:_size toNode:_node]]; // setting the anchorPoint make the size positive, so this put back the right size (if it have negative values)
 				_node.position = locationInScene;
 			} else {
