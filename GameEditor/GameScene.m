@@ -42,8 +42,19 @@
 	emitter.position = CGPointMake(self.size.width/2, self.size.height/2);
 	[self addChild:emitter];
 #endif
+	[self advanceEmittersInNode:self];
 
-	[self setPaused:NO];
+	[self setPaused:YES];
+}
+
+- (void)advanceEmittersInNode:(id)node {
+	if ([node isKindOfClass:[SKEmitterNode class]]) {
+		SKEmitterNode *emitter = node;
+		[emitter advanceSimulationTime:emitter.particleLifetime];
+	}
+	for (id child in [node children]) {
+		[self advanceEmittersInNode:child];
+	}
 }
 
 @end
