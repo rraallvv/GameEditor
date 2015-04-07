@@ -35,31 +35,52 @@ const CGFloat kHandleRadius = 4.5;
 @implementation SKScene (SizeConversion)
 
 - (CGSize)convertSizeFromView:(CGSize)size toNode:(SKNode *)node {
-	CGPoint viewOrigin = [self convertPointFromView:self.view.frame.origin];
+	CGPoint viewOrigin = [self convertPointFromView:self.frame.origin];
+
 	CGPoint point = CGPointMake(size.width, size.height);
 	CGPoint convertedPoint = [self convertPointFromView:point];
 	size = CGSizeMake(convertedPoint.x - viewOrigin.x, convertedPoint.y - viewOrigin.y);
+
 	SKNode *parentNode = node.parent;
 	if (parentNode) {
+/*
 		size.width = size.width;
 		size.height = size.height;
+
 		node = parentNode;
 		parentNode = parentNode.parent;
+*/
 	}
 	return size;
 }
 
 - (CGSize)convertSizeToView:(CGSize)size fromNode:(SKNode *)node {
 	CGPoint viewOrigin = [self convertPointFromView:self.frame.origin];
+
 	CGPoint point = CGPointMake(size.width + viewOrigin.x, size.height + viewOrigin.y);
 	CGPoint convertedPoint = [self convertPointToView:point];
 	size = CGSizeMake(convertedPoint.x, convertedPoint.y);
+
 	SKNode *parentNode = node.parent;
 	if (parentNode) {
-		size.width = size.width;
-		size.height = size.height;
+/*
+		CGFloat zRotation = node.zRotation;
+		CGFloat cosine = fabs(cos(zRotation));
+		CGFloat sine = fabs(sin(zRotation));
+
+		CGPoint rotatedUpperRight;
+		rotatedUpperRight.x = (size.width * cosine - size.height *sine) * parentNode.xScale;
+		rotatedUpperRight.y = (size.width * sine + size.height * cosine) * parentNode.yScale;
+
+		CGFloat angle = atan2(rotatedUpperRight.y, rotatedUpperRight.x) - acos(cosine);
+		CGFloat distance = sqrt(rotatedUpperRight.x * rotatedUpperRight.x + rotatedUpperRight.y * rotatedUpperRight.y);
+
+		size.width = distance * cos(angle);
+		size.height = distance * sin(angle);
+
 		node = parentNode;
 		parentNode = parentNode.parent;
+*/
 	}
 	return size;
 }
@@ -209,8 +230,8 @@ anchorPoint = _anchorPoint;
 	const CGFloat cosine = cos(_zRotation);
 	const CGFloat sine = sin(_zRotation);
 
-	_handlePoints[BLHandle] = CGPointMake(_position.x + size.height * _anchorPoint.y * sine - size.width * _anchorPoint.x * cosine,
-								 _position.y - size.height * _anchorPoint.y * cosine - size.width * _anchorPoint.x * sine);
+	_handlePoints[BLHandle] = CGPointMake(_position.x + _anchorPoint.y * size.height * sine - _anchorPoint.x * size.width * cosine,
+										  _position.y - _anchorPoint.y * size.height * cosine - _anchorPoint.x * size.width * sine);
 	_handlePoints[BRHandle] = NSMakePoint(_handlePoints[BLHandle].x + size.width * cosine, _handlePoints[BLHandle].y + size.width * sine);
 	_handlePoints[TRHandle] = NSMakePoint(_handlePoints[BRHandle].x - size.height * sine, _handlePoints[BRHandle].y + size.height * cosine);
 	_handlePoints[TLHandle] = NSMakePoint(_handlePoints[BLHandle].x - size.height * sine, _handlePoints[BLHandle].y + size.height * cosine);
