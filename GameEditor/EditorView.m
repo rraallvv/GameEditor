@@ -444,6 +444,19 @@ anchorPoint = _anchorPoint;
 	_manipulatingHandle = NO;
 }
 
+/*
+ Formula to decompose the distance from the mouse pointer to the oposite side/corner
+ into the vectors that form the ouline edges
+
+ dx,dy mouse distance
+ Vx,Vy edge at the bottom/top
+ Wx,Wy edge at the left/right
+ Rx,Ry the components
+
+ Rx = (dx*Wy - dy*Wx)/(Vx*Wy - Vy*Wx)
+ Ry = (dx*Vy - dy*Vx)/(Vy*Wx - Vx*Wy)
+ */
+
 - (void)updateSelectionWithLocationInView:(CGPoint)locationInView {
 	CGPoint locationInScene = [_scene convertPointFromView:locationInView toNode:_node];
 	CGPoint newPosition = CGPointMake(locationInScene.x - _draggedPosition.x, locationInScene.y - _draggedPosition.y);
