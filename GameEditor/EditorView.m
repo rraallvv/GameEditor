@@ -230,11 +230,21 @@ anchorPoint = _anchorPoint;
 	const CGFloat cosine = cos(_zRotation);
 	const CGFloat sine = sin(_zRotation);
 
-	_handlePoints[BLHandle] = CGPointMake(_position.x + _anchorPoint.y * size.height * sine - _anchorPoint.x * size.width * cosine,
-										  _position.y - _anchorPoint.y * size.height * cosine - _anchorPoint.x * size.width * sine);
-	_handlePoints[BRHandle] = NSMakePoint(_handlePoints[BLHandle].x + size.width * cosine, _handlePoints[BLHandle].y + size.width * sine);
-	_handlePoints[TRHandle] = NSMakePoint(_handlePoints[BRHandle].x - size.height * sine, _handlePoints[BRHandle].y + size.height * cosine);
-	_handlePoints[TLHandle] = NSMakePoint(_handlePoints[BLHandle].x - size.height * sine, _handlePoints[BLHandle].y + size.height * cosine);
+	CGFloat xScale = 1.0;
+	CGFloat yScale = 1.0;
+	SKNode *parentNode = _node.parent;
+
+	while (parentNode) {
+		xScale *= parentNode.xScale;
+		yScale *= parentNode.yScale;
+		parentNode = parentNode.parent;
+	}
+
+	_handlePoints[BLHandle] = CGPointMake(_position.x + _anchorPoint.y * xScale * size.height * sine - _anchorPoint.x * xScale * size.width * cosine,
+										  _position.y - _anchorPoint.y * yScale * size.height * cosine - _anchorPoint.x * yScale * size.width * sine);
+	_handlePoints[BRHandle] = NSMakePoint(_handlePoints[BLHandle].x + xScale * size.width * cosine, _handlePoints[BLHandle].y + yScale * size.width * sine);
+	_handlePoints[TRHandle] = NSMakePoint(_handlePoints[BRHandle].x - xScale * size.height * sine, _handlePoints[BRHandle].y + yScale * size.height * cosine);
+	_handlePoints[TLHandle] = NSMakePoint(_handlePoints[BLHandle].x - xScale * size.height * sine, _handlePoints[BLHandle].y + yScale * size.height * cosine);
 
 	_handlePoints[BMHandle] = CGPointMake((_handlePoints[BLHandle].x + _handlePoints[BRHandle].x) / 2, (_handlePoints[BLHandle].y + _handlePoints[BRHandle].y) / 2);
 	_handlePoints[RMHandle] = CGPointMake((_handlePoints[BRHandle].x + _handlePoints[TRHandle].x) / 2, (_handlePoints[BRHandle].y + _handlePoints[TRHandle].y) / 2);
