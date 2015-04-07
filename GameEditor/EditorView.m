@@ -120,6 +120,60 @@ const CGFloat kHandleRadius = 4.5;
 
 @end
 
+#pragma mark SKShapeNode
+
+@interface SKShapeNode (Size)
+@property CGSize size;
+@end
+
+@implementation SKShapeNode (Size)
+
+- (CGFloat)widthSign {
+	CGFloat sign = [objc_getAssociatedObject(self, @selector(widthSign)) floatValue];
+	if (sign == 0) {
+		sign = 1.0;
+		[self setWidthSign:sign];
+	}
+	return sign;
+}
+
+- (void)setWidthSign:(CGFloat)sign {
+	objc_setAssociatedObject(self, @selector(widthSign), [NSNumber numberWithFloat:sign], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CGFloat)heightSign {
+	CGFloat sign = [objc_getAssociatedObject(self, @selector(heightSign)) floatValue];
+	if (sign == 0) {
+		sign = 1.0;
+		[self setHeightSign:sign];
+	}
+	return sign;
+}
+
+- (void)setHeightSign:(CGFloat)sign {
+	objc_setAssociatedObject(self, @selector(heightSign), [NSNumber numberWithFloat:sign], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)setSize:(CGSize)size {
+	CGSize oldSize = self.size;
+
+	CGPathRef path = self.path;
+	CGAffineTransform scale = CGAffineTransformMakeScale(size.width / oldSize.width, size.height / oldSize.height);
+	self.path = CGPathCreateCopyByTransformingPath(path, &scale);
+
+	self.widthSign = copysign(1.0, size.width);
+	self.heightSign = copysign(1.0, size.height);
+}
+
+- (CGSize)size {
+	CGPathRef path = [self path];
+	CGRect rect = CGPathGetPathBoundingBox(path);
+	CGSize size = CGSizeMake(self.widthSign * rect.size.width * self.xScale, self.heightSign * rect.size.height * self.yScale);
+	return size;
+}
+
+@end
+
 #pragma mark EditorView
 
 typedef enum {
@@ -140,7 +194,6 @@ typedef enum {
 	CGPoint _draggedPosition;
 	BOOL _manipulatingHandle;
 	ManipulatedHandle _manipulatedHandle;
-	CGPoint _pathSizeSign;
 
 	/* Outline handle points */
 	CGPoint _handlePoints[MaxHandle];
@@ -280,15 +333,6 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)setSize:(CGSize)size {
-
-	if ([_node isKindOfClass:[SKShapeNode class]]) {
-		SKShapeNode *shapeNode = (SKShapeNode *)_node;
-		CGPathRef pathRef = [shapeNode path];
-		CGRect rect = CGPathGetPathBoundingBox(pathRef);
-		size = CGSizeMake(_pathSizeSign.x * rect.size.width * shapeNode.xScale,
-						  _pathSizeSign.y * rect.size.height * shapeNode.yScale);
-	}
-
 	_size = [_scene convertSizeToView:size fromNode:_node];
 	[self setNeedsDisplay:YES];
 }
@@ -306,7 +350,7 @@ anchorPoint = _anchorPoint;
 		if (rect.size.width == 0) {
 			anchorPoint.x = 0;
 		} else {
-			if (_pathSizeSign.x > 0) {
+			if (shapeNode.widthSign > 0) {
 				anchorPoint.x = -rect.origin.x / rect.size.width;
 			} else {
 				anchorPoint.x = (1.0 + rect.origin.x / rect.size.width);
@@ -315,7 +359,7 @@ anchorPoint = _anchorPoint;
 		if (rect.size.height == 0) {
 			anchorPoint.y = 0;
 		} else {
-			if (_pathSizeSign.y > 0) {
+			if (shapeNode.heightSign > 0) {
 				anchorPoint.y = -rect.origin.y / rect.size.height;
 			} else {
 				anchorPoint.y = (1.0 + rect.origin.y / rect.size.height);
@@ -346,8 +390,6 @@ anchorPoint = _anchorPoint;
 
 	/* Nofify the delegate */
 	[self.delegate editorView:self didSelectNode:(SKNode *)node];
-
-	_pathSizeSign = CGPointMake(1.0, 1.0);
 }
 
 - (SKNode *)node {
@@ -455,52 +497,20 @@ anchorPoint = _anchorPoint;
 			CGFloat distance = sqrt(distanceVector.dx * distanceVector.dx + distanceVector.dy * distanceVector.dy);
 			CGFloat angle = atan2(distanceVector.dy, distanceVector.dx) - _zRotation;
 
-			if ([_node isKindOfClass:[SKSpriteNode class]]) {
+			if ([_node respondsToSelector:@selector(size)]) {
 				/* Resize the node */
-				SKSpriteNode *spriteNode = (SKSpriteNode *)_node;
 				if (_manipulatedHandle == TMHandle
 					|| _manipulatedHandle == BMHandle) {
-					spriteNode.size = [_scene convertSizeFromView:CGSizeMake(_size.width, distance * sin(angle)) toNode:_node];
+					[(id)_node setSize:[_scene convertSizeFromView:CGSizeMake(_size.width, distance * sin(angle)) toNode:_node]];
 				} else if (_manipulatedHandle == RMHandle
 						   || _manipulatedHandle == LMHandle) {
-					spriteNode.size = [_scene convertSizeFromView:CGSizeMake(distance * cos(angle), _size.height) toNode:_node];
+					[(id)_node setSize:[_scene convertSizeFromView:CGSizeMake(distance * cos(angle), _size.height) toNode:_node]];
 				} else if (_manipulatedHandle == TRHandle
 						   || _manipulatedHandle == BLHandle) {
-					spriteNode.size = [_scene convertSizeFromView:CGSizeMake(distance * cos(angle), distance * sin(angle)) toNode:_node];
+					[(id)_node setSize:[_scene convertSizeFromView:CGSizeMake(distance * cos(angle), distance * sin(angle)) toNode:_node]];
 				} else {
-					spriteNode.size = [_scene convertSizeFromView:CGSizeMake(distance * cos(angle), -distance * sin(angle)) toNode:_node];
+					[(id)_node setSize:[_scene convertSizeFromView:CGSizeMake(distance * cos(angle), -distance * sin(angle)) toNode:_node]];
 				}
-
-			} else if ([_node isKindOfClass:[SKShapeNode class]]) {
-				/* Resize the path */
-				SKShapeNode *shapeNode = (SKShapeNode *)_node;
-
-				CGFloat xScale = 1.0;
-				CGFloat yScale = 1.0;
-
-				if (_manipulatedHandle == TMHandle
-					|| _manipulatedHandle == BMHandle) {
-					yScale = distance * sin(angle) / _size.height;
-				} else if (_manipulatedHandle == RMHandle
-						   || _manipulatedHandle == LMHandle) {
-					xScale = distance * cos(angle) / _size.width;
-				} else if (_manipulatedHandle == TRHandle
-						   || _manipulatedHandle == BLHandle) {
-					xScale = distance * cos(angle) / _size.width;
-					yScale = distance * sin(angle) / _size.height;
-				} else {
-					xScale = distance * cos(angle) / _size.width;
-					yScale = -distance * sin(angle) / _size.height;
-				}
-
-				_pathSizeSign.x *= copysign(1.0, xScale);
-				_pathSizeSign.y *= copysign(1.0, yScale);
-
-				CGPathRef path = shapeNode.path;
-				CGAffineTransform scale = CGAffineTransformMakeScale(xScale, yScale);
-				shapeNode.path = CGPathCreateCopyByTransformingPath(path, &scale);
-
-				self.size = CGSizeZero; // force recalculation of size
 			}
 
 			CGFloat cosine = cos(_zRotation);
