@@ -335,9 +335,9 @@ anchorPoint = _anchorPoint;
 
 	_handlePoints[BLHandle] = CGPointMake(_position.x + _anchorPoint.y * xScale * size.height * sine - _anchorPoint.x * xScale * size.width * cosine,
 										  _position.y - _anchorPoint.y * yScale * size.height * cosine - _anchorPoint.x * yScale * size.width * sine);
-	_handlePoints[BRHandle] = NSMakePoint(_handlePoints[BLHandle].x + xScale * size.width * cosine, _handlePoints[BLHandle].y + yScale * size.width * sine);
-	_handlePoints[TRHandle] = NSMakePoint(_handlePoints[BRHandle].x - xScale * size.height * sine, _handlePoints[BRHandle].y + yScale * size.height * cosine);
-	_handlePoints[TLHandle] = NSMakePoint(_handlePoints[BLHandle].x - xScale * size.height * sine, _handlePoints[BLHandle].y + yScale * size.height * cosine);
+	_handlePoints[BRHandle] = CGPointMake(_handlePoints[BLHandle].x + xScale * size.width * cosine, _handlePoints[BLHandle].y + yScale * size.width * sine);
+	_handlePoints[TRHandle] = CGPointMake(_handlePoints[BRHandle].x - xScale * size.height * sine, _handlePoints[BRHandle].y + yScale * size.height * cosine);
+	_handlePoints[TLHandle] = CGPointMake(_handlePoints[BLHandle].x - xScale * size.height * sine, _handlePoints[BLHandle].y + yScale * size.height * cosine);
 
 	_handlePoints[BMHandle] = CGPointMake((_handlePoints[BLHandle].x + _handlePoints[BRHandle].x) / 2, (_handlePoints[BLHandle].y + _handlePoints[BRHandle].y) / 2);
 	_handlePoints[RMHandle] = CGPointMake((_handlePoints[BRHandle].x + _handlePoints[TRHandle].x) / 2, (_handlePoints[BRHandle].y + _handlePoints[TRHandle].y) / 2);
@@ -356,7 +356,6 @@ anchorPoint = _anchorPoint;
 
 - (void)setPosition:(CGPoint)position {
 	_position = [_scene convertPointToView:position fromNode:_node];
-	[self setNeedsDisplay:YES];
 }
 
 - (CGPoint)position {
@@ -365,7 +364,6 @@ anchorPoint = _anchorPoint;
 
 - (void)setZRotation:(CGFloat)zRotation {
 	_zRotation = [_scene convertZRotationToView:zRotation fromNode:_node];
-	[self setNeedsDisplay:YES];
 }
 
 - (CGFloat)zRotation {
@@ -374,7 +372,6 @@ anchorPoint = _anchorPoint;
 
 - (void)setSize:(CGSize)size {
 	_size = [_scene convertSizeToView:size fromNode:_node];
-	[self setNeedsDisplay:YES];
 }
 
 - (CGSize)size {
@@ -383,7 +380,6 @@ anchorPoint = _anchorPoint;
 
 - (void)setAnchorPoint:(CGPoint)anchorPoint {
 	_anchorPoint = anchorPoint;
-	[self setNeedsDisplay:YES];
 }
 
 - (CGPoint)anchorPoint {
@@ -419,11 +415,10 @@ anchorPoint = _anchorPoint;
 		if (!(_node && [self isManipulatingHandleWithPoint:locationInView])) {
 			NSArray *nodes = [_scene nodesAtPoint:locationInScene];
 			if (nodes.count) {
-				NSUInteger currentIndex = [nodes indexOfObject:_node];
-				NSUInteger index = (currentIndex + 1) % nodes.count;
+				NSUInteger index = ([nodes indexOfObject:_node] + 1) % nodes.count;
 				self.node = [nodes objectAtIndex:index];
 			} else {
-				self.node = self.scene;
+				self.node = _scene;
 			}
 		}
 
@@ -445,8 +440,8 @@ anchorPoint = _anchorPoint;
 }
 
 /*
- Formula to decompose the distance from the mouse pointer to the oposite side/corner
- into the vectors that form the ouline edges
+ Formula to decompose the distance vector from the handle in the oposite side/corner
+ to the mouse pointer into the vectors aligned with the outline edges
 
  dx,dy mouse distance
  Vx,Vy edge at the bottom/top
@@ -488,15 +483,15 @@ anchorPoint = _anchorPoint;
 														toNode:_node];
 		} else {
 
+			/* Vectors parallel to the outline edged with magnituds equal to width and height */
 			CGFloat Vx = _handlePoints[BRHandle].x - _handlePoints[BLHandle].x;
 			CGFloat Vy = _handlePoints[BRHandle].y - _handlePoints[BLHandle].y;
 
 			CGFloat Wx = _handlePoints[TLHandle].x - _handlePoints[BLHandle].x;
 			CGFloat Wy = _handlePoints[TLHandle].y - _handlePoints[BLHandle].y;
 
-			CGFloat dx, dy;
-
 			/* Distance vector between the the handle and the mouse pointer */
+			CGFloat dx, dy;
 			if (_manipulatedHandle == TMHandle
 				|| _manipulatedHandle == RMHandle
 				|| _manipulatedHandle == TRHandle) {
@@ -519,27 +514,28 @@ anchorPoint = _anchorPoint;
 
 			}
 
+			/* Distance vector components */
 			CGFloat Rx, Ry;
 			Rx = (dx * Wy - dy * Wx) / (Vx * Wy - Vy * Wx);
 			Ry = (dx * Vy - dy * Vx) / (Vy * Wx - Vx * Wy);
 
 
+			/* Resize the node */
 			if ([_node respondsToSelector:@selector(size)]) {
-				/* Resize the node */
 				if (_manipulatedHandle == TMHandle || _manipulatedHandle == BMHandle) {
 					Rx = 1.0;
-					[(id)_node setSize:[_scene convertSizeFromView:CGSizeMake(_size.width, _size.height * Ry) toNode:_node]];
 				} else if (_manipulatedHandle == RMHandle || _manipulatedHandle == LMHandle) {
 					Ry = 1.0;
-					[(id)_node setSize:[_scene convertSizeFromView:CGSizeMake(_size.width * Rx, _size.height) toNode:_node]];
 				} else if (_manipulatedHandle == TRHandle || _manipulatedHandle == BLHandle) {
-					[(id)_node setSize:[_scene convertSizeFromView:CGSizeMake(_size.width * Rx, _size.height * Ry) toNode:_node]];
+
 				} else {// _manipulatedHandle == BRHandle || _manipulatedHandle == TLHandle
-					[(id)_node setSize:[_scene convertSizeFromView:CGSizeMake(_size.width * Rx, -_size.height * Ry) toNode:_node]];
+					Ry = -Ry;
 				}
+
+				[(id)_node setSize:[_scene convertSizeFromView:CGSizeMake(_size.width * Rx, _size.height * Ry) toNode:_node]];
 			}
 
-			/* Translate the node */
+			/* Translate the node to keep it anchored to the corner/size opposite to the handle */
 			if (_manipulatedHandle == TMHandle
 				|| _manipulatedHandle == RMHandle
 				|| _manipulatedHandle == TRHandle) {
@@ -557,14 +553,14 @@ anchorPoint = _anchorPoint;
 																		  _handlePoints[TRHandle].y - anchorDistance.dy)
 													   toNode:_node];
 			} else if (_manipulatedHandle == BRHandle) {
-				CGVector anchorDistance = CGVectorMake(Vx * _anchorPoint.x * Rx + Wx * (1.0 - _anchorPoint.y) * Ry,
-													   Vy * _anchorPoint.x * Rx + Wy * (1.0 - _anchorPoint.y) * Ry);
+				CGVector anchorDistance = CGVectorMake(Vx * _anchorPoint.x * Rx - Wx * (1.0 - _anchorPoint.y) * Ry,
+													   Vy * _anchorPoint.x * Rx - Wy * (1.0 - _anchorPoint.y) * Ry);
 				_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[TLHandle].x + anchorDistance.dx,
 																		  _handlePoints[TLHandle].y + anchorDistance.dy)
 													   toNode:_node];
 			} else { //_manipulatedHandle == TLHandle
-				CGVector anchorDistance = CGVectorMake(Vx * (1.0 - _anchorPoint.x) * Rx + Wx * _anchorPoint.y * Ry,
-													   Vy * (1.0 - _anchorPoint.x) * Rx + Wy * _anchorPoint.y * Ry);
+				CGVector anchorDistance = CGVectorMake(Vx * (1.0 - _anchorPoint.x) * Rx - Wx * _anchorPoint.y * Ry,
+													   Vy * (1.0 - _anchorPoint.x) * Rx - Wy * _anchorPoint.y * Ry);
 				_node.position = [_scene convertPointFromView:CGPointMake(_handlePoints[BRHandle].x - anchorDistance.dx,
 																		  _handlePoints[BRHandle].y - anchorDistance.dy)
 													   toNode:_node];
@@ -573,6 +569,8 @@ anchorPoint = _anchorPoint;
 	} else {
 		_node.position = newPosition;
 	}
+
+	[self setNeedsDisplay:YES];
 }
 
 - (BOOL)isManipulatingHandleWithPoint:(CGPoint)point {
