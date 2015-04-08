@@ -255,6 +255,16 @@ anchorPoint = _anchorPoint;
 	[self drawCircleWithCenter:_handlePoints[TMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
 	[self drawCircleWithCenter:_handlePoints[TRHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
 
+	/* Draw a line connecting the node to it's parent */
+	if (_node.parent && _node.parent != _scene) {
+		NSBezierPath *parentConnectionPath = [NSBezierPath bezierPath];
+		[parentConnectionPath moveToPoint:_handlePoints[AnchorPointHAndle]];
+		[parentConnectionPath lineToPoint:[_scene convertPointToView:CGPointZero fromNode:_node.parent]];
+		[[NSColor colorWithRed:1.0 green:0.9 blue:0.0 alpha:1.0] setStroke];
+		[parentConnectionPath stroke];
+		[whiteColor setStroke];
+	}
+
 	/* Setup the shadow effect */
 	NSShadow *shadow = [[NSShadow alloc] init];
 	[shadow setShadowBlurRadius:3.0];
