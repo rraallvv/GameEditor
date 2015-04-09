@@ -186,7 +186,8 @@ const CGFloat kHandleRadius = 4.5;
 #pragma mark EditorView
 
 typedef enum {
-	BLHandle = 0,
+	AnchorPointHandle = 0,
+	BLHandle,
 	BRHandle,
 	TRHandle,
 	TLHandle,
@@ -195,7 +196,6 @@ typedef enum {
 	TMHandle,
 	LMHandle,
 	RotationHandle,
-	AnchorPointHandle,
 	MaxHandle
 } ManipulatedHandle;
 
@@ -297,38 +297,55 @@ anchorPoint = _anchorPoint;
 	}
 }
 
-- (void)updateHandles {
-
-	CGPoint position = [_scene convertPointToView:CGPointZero fromNode:_node];
+- (void)getFramePoints:(CGPoint *)points forNode:(SKNode *)node {
+	CGPoint position = [_scene convertPointToView:CGPointZero fromNode:node];
 
 	CGPoint anchorPoint = CGPointZero;
-	if ([_node respondsToSelector:@selector(anchorPoint)]) {
-		anchorPoint = [(id)_node anchorPoint];
+	if ([node respondsToSelector:@selector(anchorPoint)]) {
+		anchorPoint = [(id)node anchorPoint];
 	}
 
-	CGFloat xScale = _node.xScale;
-	CGFloat yScale = _node.yScale;
+	CGFloat xScale = node.xScale;
+	CGFloat yScale = node.yScale;
 
 	CGSize size = CGSizeZero;
-	if ([_node respondsToSelector:@selector(size)]) {
-		size = [(id)_node size];
+	if ([node respondsToSelector:@selector(size)]) {
+		size = [(id)node size];
 		size.width /= xScale;
 		size.height /= yScale;
 	}
 
-	_handlePoints[AnchorPointHandle] = position;
+	points[AnchorPointHandle] = position;
+	points[BLHandle] = [_scene convertPointToView:CGPointMake(-size.width * anchorPoint.x, -size.height * anchorPoint.y) fromNode:node];
+	points[BRHandle] = [_scene convertPointToView:CGPointMake(size.width * (1.0 - anchorPoint.x), -size.height * anchorPoint.y) fromNode:node];
+	points[TRHandle] = [_scene convertPointToView:CGPointMake(size.width * (1.0 - anchorPoint.x), size.height * (1.0 - anchorPoint.y)) fromNode:node];
+	points[TLHandle] = [_scene convertPointToView:CGPointMake(-size.width * anchorPoint.x, size.height * (1.0 - anchorPoint.y)) fromNode:node];
+}
 
-	_handlePoints[RotationHandle] = CGPointMake(position.x + kRotationHandleDistance * cos(_zRotation), position.y + kRotationHandleDistance * sin(_zRotation));
+- (void)updateHandles {
 
-	_handlePoints[BLHandle] = [_scene convertPointToView:CGPointMake(-size.width * anchorPoint.x, -size.height * anchorPoint.y) fromNode:_node];
-	_handlePoints[BRHandle] = [_scene convertPointToView:CGPointMake(size.width * (1.0 - anchorPoint.x), -size.height * anchorPoint.y) fromNode:_node];
-	_handlePoints[TRHandle] = [_scene convertPointToView:CGPointMake(size.width * (1.0 - anchorPoint.x), size.height * (1.0 - anchorPoint.y)) fromNode:_node];
-	_handlePoints[TLHandle] = [_scene convertPointToView:CGPointMake(-size.width * anchorPoint.x, size.height * (1.0 - anchorPoint.y)) fromNode:_node];
+	CGPoint points[5];
 
-	_handlePoints[BMHandle] = CGPointMake((_handlePoints[BLHandle].x + _handlePoints[BRHandle].x) / 2, (_handlePoints[BLHandle].y + _handlePoints[BRHandle].y) / 2);
-	_handlePoints[RMHandle] = CGPointMake((_handlePoints[BRHandle].x + _handlePoints[TRHandle].x) / 2, (_handlePoints[BRHandle].y + _handlePoints[TRHandle].y) / 2);
-	_handlePoints[TMHandle] = CGPointMake((_handlePoints[TRHandle].x + _handlePoints[TLHandle].x) / 2, (_handlePoints[TRHandle].y + _handlePoints[TLHandle].y) / 2);
-	_handlePoints[LMHandle] = CGPointMake((_handlePoints[TLHandle].x + _handlePoints[BLHandle].x) / 2, (_handlePoints[TLHandle].y + _handlePoints[BLHandle].y) / 2);
+	[self getFramePoints:points forNode:_node];
+
+	_handlePoints[AnchorPointHandle] = points[AnchorPointHandle];
+
+	_handlePoints[BLHandle] = points[BLHandle];
+	_handlePoints[BRHandle] = points[BRHandle];
+	_handlePoints[TRHandle] = points[TRHandle];
+	_handlePoints[TLHandle] = points[TLHandle];
+
+	_handlePoints[RotationHandle] = CGPointMake(_handlePoints[AnchorPointHandle].x + kRotationHandleDistance * cos(_zRotation),
+												_handlePoints[AnchorPointHandle].y + kRotationHandleDistance * sin(_zRotation));
+
+	_handlePoints[BMHandle] = CGPointMake((_handlePoints[BLHandle].x + _handlePoints[BRHandle].x) / 2,
+										  (_handlePoints[BLHandle].y + _handlePoints[BRHandle].y) / 2);
+	_handlePoints[RMHandle] = CGPointMake((_handlePoints[BRHandle].x + _handlePoints[TRHandle].x) / 2,
+										  (_handlePoints[BRHandle].y + _handlePoints[TRHandle].y) / 2);
+	_handlePoints[TMHandle] = CGPointMake((_handlePoints[TRHandle].x + _handlePoints[TLHandle].x) / 2,
+										  (_handlePoints[TRHandle].y + _handlePoints[TLHandle].y) / 2);
+	_handlePoints[LMHandle] = CGPointMake((_handlePoints[TLHandle].x + _handlePoints[BLHandle].x) / 2,
+										  (_handlePoints[TLHandle].y + _handlePoints[BLHandle].y) / 2);
 }
 
 - (CGRect)handleRectFromPoint:(CGPoint)point {
