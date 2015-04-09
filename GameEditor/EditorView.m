@@ -370,6 +370,11 @@ anchorPoint = _anchorPoint;
 	if (_node == node)
 		return;
 
+	/* Ask for Core Animation backed layer */
+	if (!self.wantsLayer) {
+		self.wantsLayer = YES;
+	}
+
 	/* Clear the properties bindings*/
 	[self unbindToNode:_node];
 
