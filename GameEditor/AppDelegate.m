@@ -86,6 +86,7 @@
     
     self.skView.showsFPS = YES;
     self.skView.showsNodeCount = YES;
+	self.skView.showsPhysics = YES;
 
 	/* Setup the editor view */
 	_editorView.scene = scene;
