@@ -91,12 +91,12 @@ const CGFloat kHandleRadius = 4.5;
 
 #pragma mark SKShapeNode
 
-@interface SKShapeNode (Size)
+@interface SKShapeNode (SizeAndAnchorPoint)
 @property (nonatomic) CGSize size;
 @property (nonatomic) CGPoint anchorPoint;
 @end
 
-@implementation SKShapeNode (Size)
+@implementation SKShapeNode (SizeAndAnchorPoint)
 
 - (void)setWidthSign:(CGFloat)sign {
 	objc_setAssociatedObject(self, @selector(widthSign), [NSNumber numberWithFloat:sign], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -186,7 +186,8 @@ const CGFloat kHandleRadius = 4.5;
 #pragma mark EditorView
 
 typedef enum {
-	BLHandle = 0,
+	AnchorPointHandle = 0,
+	BLHandle,
 	BRHandle,
 	TRHandle,
 	TLHandle,
@@ -195,7 +196,6 @@ typedef enum {
 	TMHandle,
 	LMHandle,
 	RotationHandle,
-	AnchorPointHAndle,
 	MaxHandle
 } ManipulatedHandle;
 
@@ -258,7 +258,7 @@ anchorPoint = _anchorPoint;
 	/* Draw a line connecting the node to it's parent */
 	if (_node.parent && _node.parent != _scene) {
 		NSBezierPath *parentConnectionPath = [NSBezierPath bezierPath];
-		[parentConnectionPath moveToPoint:_handlePoints[AnchorPointHAndle]];
+		[parentConnectionPath moveToPoint:_handlePoints[AnchorPointHandle]];
 		[parentConnectionPath lineToPoint:[_scene convertPointToView:CGPointZero fromNode:_node.parent]];
 		[[NSColor colorWithRed:1.0 green:0.9 blue:0.0 alpha:1.0] setStroke];
 		[parentConnectionPath stroke];
@@ -274,13 +274,13 @@ anchorPoint = _anchorPoint;
 	/* Rotation angle handle */
 	const CGFloat rotationLineWidth = 1.0;
 	const CGFloat rotationHandleRadius = 4.0;
-	[NSBezierPath strokeLineFromPoint:_handlePoints[AnchorPointHAndle] toPoint:_handlePoints[RotationHandle]];
-	[self drawCircleWithCenter:_handlePoints[AnchorPointHAndle] radius:kRotationHandleDistance fillColor:nil strokeColor:strokeColor lineWidth:rotationLineWidth];
+	[NSBezierPath strokeLineFromPoint:_handlePoints[AnchorPointHandle] toPoint:_handlePoints[RotationHandle]];
+	[self drawCircleWithCenter:_handlePoints[AnchorPointHandle] radius:kRotationHandleDistance fillColor:nil strokeColor:strokeColor lineWidth:rotationLineWidth];
 	[self drawCircleWithCenter:_handlePoints[RotationHandle] radius:rotationHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
 
 	/* Anchor point handle */
 	const CGFloat anchorHandleRadius = 4.0;
-	[self drawCircleWithCenter:_position radius:anchorHandleRadius fillColor:whiteColor strokeColor:nil lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_handlePoints[AnchorPointHandle] radius:anchorHandleRadius fillColor:whiteColor strokeColor:nil lineWidth:handleLineWidth];
 }
 
 - (void)drawCircleWithCenter:(CGPoint)center radius:(CGFloat)radius fillColor:(NSColor *)fillColor strokeColor:(NSColor *)strokeColor lineWidth:(CGFloat)lineWidth{
@@ -297,36 +297,55 @@ anchorPoint = _anchorPoint;
 	}
 }
 
-- (void)updateHandles {
+- (void)getFramePoints:(CGPoint *)points forNode:(SKNode *)node {
+	CGPoint position = [_scene convertPointToView:CGPointZero fromNode:node];
 
-	CGFloat xScale = _node.xScale;
-	CGFloat yScale = _node.yScale;
+	CGPoint anchorPoint = CGPointZero;
+	if ([node respondsToSelector:@selector(anchorPoint)]) {
+		anchorPoint = [(id)node anchorPoint];
+	}
+
+	CGFloat xScale = node.xScale;
+	CGFloat yScale = node.yScale;
 
 	CGSize size = CGSizeZero;
-	if ([_node respondsToSelector:@selector(size)]) {
-		size = [(id)_node size];
+	if ([node respondsToSelector:@selector(size)]) {
+		size = [(id)node size];
 		size.width /= xScale;
 		size.height /= yScale;
 	}
 
-	CGPoint anchorPoint = CGPointZero;
-	if ([_node respondsToSelector:@selector(anchorPoint)]) {
-		anchorPoint = [(id)_node anchorPoint];
-	}
+	points[AnchorPointHandle] = position;
+	points[BLHandle] = [_scene convertPointToView:CGPointMake(-size.width * anchorPoint.x, -size.height * anchorPoint.y) fromNode:node];
+	points[BRHandle] = [_scene convertPointToView:CGPointMake(size.width * (1.0 - anchorPoint.x), -size.height * anchorPoint.y) fromNode:node];
+	points[TRHandle] = [_scene convertPointToView:CGPointMake(size.width * (1.0 - anchorPoint.x), size.height * (1.0 - anchorPoint.y)) fromNode:node];
+	points[TLHandle] = [_scene convertPointToView:CGPointMake(-size.width * anchorPoint.x, size.height * (1.0 - anchorPoint.y)) fromNode:node];
+}
 
-	_handlePoints[BLHandle] = [_scene convertPointToView:CGPointMake(-size.width * anchorPoint.x, -size.height * anchorPoint.y) fromNode:_node];
-	_handlePoints[BRHandle] = [_scene convertPointToView:CGPointMake(size.width * (1.0 - anchorPoint.x), -size.height * anchorPoint.y) fromNode:_node];
-	_handlePoints[TRHandle] = [_scene convertPointToView:CGPointMake(size.width * (1.0 - anchorPoint.x), size.height * (1.0 - anchorPoint.y)) fromNode:_node];
-	_handlePoints[TLHandle] = [_scene convertPointToView:CGPointMake(-size.width * anchorPoint.x, size.height * (1.0 - anchorPoint.y)) fromNode:_node];
+- (void)updateHandles {
 
-	_handlePoints[BMHandle] = CGPointMake((_handlePoints[BLHandle].x + _handlePoints[BRHandle].x) / 2, (_handlePoints[BLHandle].y + _handlePoints[BRHandle].y) / 2);
-	_handlePoints[RMHandle] = CGPointMake((_handlePoints[BRHandle].x + _handlePoints[TRHandle].x) / 2, (_handlePoints[BRHandle].y + _handlePoints[TRHandle].y) / 2);
-	_handlePoints[TMHandle] = CGPointMake((_handlePoints[TRHandle].x + _handlePoints[TLHandle].x) / 2, (_handlePoints[TRHandle].y + _handlePoints[TLHandle].y) / 2);
-	_handlePoints[LMHandle] = CGPointMake((_handlePoints[TLHandle].x + _handlePoints[BLHandle].x) / 2, (_handlePoints[TLHandle].y + _handlePoints[BLHandle].y) / 2);
+	CGPoint points[5];
 
-	_handlePoints[RotationHandle] = CGPointMake(_position.x + kRotationHandleDistance * cos(_zRotation), _position.y + kRotationHandleDistance * sin(_zRotation));
+	[self getFramePoints:points forNode:_node];
 
-	_handlePoints[AnchorPointHAndle] = [_scene convertPointToView:CGPointZero fromNode:_node];
+	_handlePoints[AnchorPointHandle] = points[AnchorPointHandle];
+
+	_handlePoints[BLHandle] = points[BLHandle];
+	_handlePoints[BRHandle] = points[BRHandle];
+	_handlePoints[TRHandle] = points[TRHandle];
+	_handlePoints[TLHandle] = points[TLHandle];
+
+	_handlePoints[RotationHandle] = CGPointMake(_handlePoints[AnchorPointHandle].x + kRotationHandleDistance * cos(_zRotation),
+												_handlePoints[AnchorPointHandle].y + kRotationHandleDistance * sin(_zRotation));
+
+	_handlePoints[BMHandle] = CGPointMake((_handlePoints[BLHandle].x + _handlePoints[BRHandle].x) / 2,
+										  (_handlePoints[BLHandle].y + _handlePoints[BRHandle].y) / 2);
+	_handlePoints[RMHandle] = CGPointMake((_handlePoints[BRHandle].x + _handlePoints[TRHandle].x) / 2,
+										  (_handlePoints[BRHandle].y + _handlePoints[TRHandle].y) / 2);
+	_handlePoints[TMHandle] = CGPointMake((_handlePoints[TRHandle].x + _handlePoints[TLHandle].x) / 2,
+										  (_handlePoints[TRHandle].y + _handlePoints[TLHandle].y) / 2);
+	_handlePoints[LMHandle] = CGPointMake((_handlePoints[TLHandle].x + _handlePoints[BLHandle].x) / 2,
+										  (_handlePoints[TLHandle].y + _handlePoints[BLHandle].y) / 2);
 }
 
 - (CGRect)handleRectFromPoint:(CGPoint)point {
@@ -370,6 +389,11 @@ anchorPoint = _anchorPoint;
 	if (_node == node)
 		return;
 
+	/* Ask for Core Animation backed layer */
+	if (!self.wantsLayer) {
+		self.wantsLayer = YES;
+	}
+
 	/* Clear the properties bindings*/
 	[self unbindToNode:_node];
 
@@ -387,13 +411,35 @@ anchorPoint = _anchorPoint;
 	return _node;
 }
 
+- (NSArray *)nodesInArray:(NSArray *)nodes containingPoint:(CGPoint)point {
+	NSMutableArray *array = [NSMutableArray array];
+	for (SKNode *child in nodes) {
+		CGPoint points[5];
+		[self getFramePoints:points forNode:child];
+
+		CGMutablePathRef path = CGPathCreateMutable();
+		CGPathAddLines(path, NULL, &points[1], 4);
+		CGPathCloseSubpath(path);
+
+		if (CGPathContainsPoint(path, NULL, point, NO)) {
+			[array addObject:child];
+		}
+		if (child.children.count) {
+			[array addObjectsFromArray:[self nodesInArray:child.children containingPoint:point]];
+		}
+
+		CGPathRelease(path);
+	}
+	return array;
+};
+
 - (void)mouseDown:(NSEvent *)theEvent {
 	[[self window] makeFirstResponder:self];
 	if (_scene) {
 		CGPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
 		CGPoint locationInScene = [_scene convertPointFromView:locationInView];
 		if (!(_node && [self shouldManipulateHandleWithPoint:locationInView])) {
-			NSArray *nodes = [_scene nodesAtPoint:locationInScene];
+			NSArray *nodes = [self nodesInArray:_scene.children containingPoint:locationInView];
 			if (nodes.count) {
 				NSUInteger index = ([nodes indexOfObject:_node] + 1) % nodes.count;
 				self.node = [nodes objectAtIndex:index];
@@ -442,7 +488,7 @@ anchorPoint = _anchorPoint;
 		newPosition = nodePositionInScene;
 	}
 	if (_manipulatingHandle) {
-		if (_manipulatedHandle == AnchorPointHAndle) {
+		if (_manipulatedHandle == AnchorPointHandle) {
 			if ([_node respondsToSelector:@selector(anchorPoint)]) {
 				/* Translate anchor point and node position */
 				CGFloat Vx = _handlePoints[BRHandle].x - _handlePoints[BLHandle].x;
@@ -467,8 +513,8 @@ anchorPoint = _anchorPoint;
 				_node.position = newPosition;
 			}
 		} else if (_manipulatedHandle == RotationHandle) {
-			_node.zRotation = [_scene convertZRotationFromView:atan2(locationInView.y - _handlePoints[AnchorPointHAndle].y,
-																	 locationInView.x - _handlePoints[AnchorPointHAndle].x)
+			_node.zRotation = [_scene convertZRotationFromView:atan2(locationInView.y - _handlePoints[AnchorPointHandle].y,
+																	 locationInView.x - _handlePoints[AnchorPointHandle].x)
 														toNode:_node];
 		} else {
 
@@ -564,8 +610,8 @@ anchorPoint = _anchorPoint;
 
 - (BOOL)shouldManipulateHandleWithPoint:(CGPoint)point {
 	_manipulatedHandle = MaxHandle;
-	if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[AnchorPointHAndle]])) {
-		_manipulatedHandle = AnchorPointHAndle;
+	if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[AnchorPointHandle]])) {
+		_manipulatedHandle = AnchorPointHandle;
 	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[RotationHandle]])) {
 		_manipulatedHandle = RotationHandle;
 	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[BLHandle]])) {
