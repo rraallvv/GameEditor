@@ -91,12 +91,12 @@ const CGFloat kHandleRadius = 4.5;
 
 #pragma mark SKShapeNode
 
-@interface SKShapeNode (Size)
+@interface SKShapeNode (SizeAndAnchorPoint)
 @property (nonatomic) CGSize size;
 @property (nonatomic) CGPoint anchorPoint;
 @end
 
-@implementation SKShapeNode (Size)
+@implementation SKShapeNode (SizeAndAnchorPoint)
 
 - (void)setWidthSign:(CGFloat)sign {
 	objc_setAssociatedObject(self, @selector(widthSign), [NSNumber numberWithFloat:sign], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
