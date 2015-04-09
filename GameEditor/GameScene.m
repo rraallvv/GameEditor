@@ -37,11 +37,18 @@
 	[self addChild:shapeNode2];
 
 	/* Add a particles emitter */
+
 	NSString *particlesPath = [[NSBundle mainBundle] pathForResource:@"Particles" ofType:@"sks"];
 	SKEmitterNode *emitter = [NSKeyedUnarchiver unarchiveObjectWithFile:particlesPath];
 	emitter.position = CGPointMake(self.size.width/2, self.size.height/2);
 	[self addChild:emitter];
+
+	/* Add the scene physics body */
+
+	SKPhysicsBody* borderBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
+	self.physicsBody = borderBody;
 #endif
+
 	[self advanceEmittersInNode:self];
 
 	[self setPaused:YES];
