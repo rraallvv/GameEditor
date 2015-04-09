@@ -411,13 +411,35 @@ anchorPoint = _anchorPoint;
 	return _node;
 }
 
+- (NSArray *)nodesInArray:(NSArray *)nodes containingPoint:(CGPoint)point {
+	NSMutableArray *array = [NSMutableArray array];
+	for (SKNode *child in nodes) {
+		CGPoint points[5];
+		[self getFramePoints:points forNode:child];
+
+		CGMutablePathRef path = CGPathCreateMutable();
+		CGPathAddLines(path, NULL, &points[1], 4);
+		CGPathCloseSubpath(path);
+
+		if (CGPathContainsPoint(path, NULL, point, NO)) {
+			[array addObject:child];
+		}
+		if (child.children.count) {
+			[array addObjectsFromArray:[self nodesInArray:child.children containingPoint:point]];
+		}
+
+		CGPathRelease(path);
+	}
+	return array;
+};
+
 - (void)mouseDown:(NSEvent *)theEvent {
 	[[self window] makeFirstResponder:self];
 	if (_scene) {
 		CGPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
 		CGPoint locationInScene = [_scene convertPointFromView:locationInView];
 		if (!(_node && [self shouldManipulateHandleWithPoint:locationInView])) {
-			NSArray *nodes = [_scene nodesAtPoint:locationInScene];
+			NSArray *nodes = [self nodesInArray:_scene.children containingPoint:locationInView];
 			if (nodes.count) {
 				NSUInteger index = ([nodes indexOfObject:_node] + 1) % nodes.count;
 				self.node = [nodes objectAtIndex:index];
