@@ -57,7 +57,7 @@
 - (void)advanceEmittersInNode:(id)node {
 	if ([node isKindOfClass:[SKEmitterNode class]]) {
 		SKEmitterNode *emitter = node;
-		[emitter advanceSimulationTime:emitter.particleLifetime];
+		[emitter advanceSimulationTime:0.41 * emitter.particleLifetime];
 	}
 	for (id child in [node children]) {
 		[self advanceEmittersInNode:child];
