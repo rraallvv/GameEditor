@@ -56,6 +56,10 @@
 	return _node;
 }
 
+- (void)setChildren:(NSMutableArray *)children {
+	_childrenNavigationNodes = children;
+}
+
 - (NSMutableArray *)children {
 	return _childrenNavigationNodes;
 }

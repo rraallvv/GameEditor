@@ -532,8 +532,7 @@
 			[node addChild:child];
 		}
 
-		[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:selectedNode.scene]];
-		[_navigatorView expandItem:nil expandChildren:YES];
+		[_navigatorTreeController moveNode:[self nodeInChildrenArray:rootNode.childNodes withIndexPath:_fromIndexPath] toIndexPath:_toIndexPath];
 
 		return YES;
 	} else {

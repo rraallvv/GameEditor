@@ -29,5 +29,5 @@
 + (instancetype)navigationNodeWithNode:(id)node;
 @property id node;
 @property NSString *name;
-@property (readonly) NSMutableArray *children;
+@property NSMutableArray *children;
 @end
