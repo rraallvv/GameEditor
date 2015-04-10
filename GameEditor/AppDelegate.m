@@ -472,7 +472,7 @@
 }
 
 - (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index {
-	if (index >= 0 && item) {
+	if (item) {
 		NSPasteboard *p = [info draggingPasteboard];
 		_fromIndexPath = [NSKeyedUnarchiver unarchiveObjectWithData:[p dataForType:@"public.binary"]];
 		NSTreeNode *rootNode = _navigatorTreeController.arrangedObjects;
@@ -484,7 +484,7 @@
 			return NSDragOperationNone;
 		}
 
-		_toIndexPath = [[item indexPath] indexPathByAddingIndex:index];
+		_toIndexPath = [[item indexPath] indexPathByAddingIndex:MAX(0, index)];
 
 		if (_fromIndexPath.length < _toIndexPath.length) {
 			NSUInteger position = 0;
@@ -509,6 +509,9 @@
 		NSTreeNode *rootNode = _navigatorTreeController.arrangedObjects;
 		NSTreeNode *selectedNode = [self nodeInChildrenArray:rootNode.childNodes withIndexPath:_fromIndexPath];
 		[_navigatorTreeController moveNode:selectedNode toIndexPath:_toIndexPath];
+
+		/* Expand the destination parent node */
+		[_navigatorView expandItem:[self nodeInChildrenArray:rootNode.childNodes withIndexPath:[_toIndexPath indexPathByRemovingLastIndex]]];
 
 		/* Selecte the node at the new location */
 		NSInteger selectedRow = [_navigatorView rowForItem:selectedNode];

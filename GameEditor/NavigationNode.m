@@ -92,7 +92,7 @@
 }
 
 - (BOOL)isLeaf {
-	return [[_node children] count] == 0;
+	return [_childrenNavigationNodes count] == 0;
 }
 
 - (BOOL)isEditable {
