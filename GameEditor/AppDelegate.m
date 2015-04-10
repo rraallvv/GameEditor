@@ -505,34 +505,14 @@
 - (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index {
 	if ([self outlineView:outlineView validateDrop:info proposedItem:item proposedChildIndex:index] == NSDragOperationMove) {
 
+		/* Move the node to its new location */
 		NSTreeNode *rootNode = _navigatorTreeController.arrangedObjects;
+		NSTreeNode *selectedNode = [self nodeInChildrenArray:rootNode.childNodes withIndexPath:_fromIndexPath];
+		[_navigatorTreeController moveNode:selectedNode toIndexPath:_toIndexPath];
 
-		SKNode *selectedNode = [[[self nodeInChildrenArray:rootNode.childNodes withIndexPath:_fromIndexPath] representedObject] node];
-
-		SKNode *node = [[item representedObject] node];
-
-		NSMutableArray *array = [NSMutableArray array];
-		for (NSInteger i = index; i < node.children.count;) {
-			if (node.children[i] != selectedNode) {
-				[array addObject:node.children[i]];
-				[node.children[i] removeFromParent];
-			} else {
-				i++;
-			}
-		}
-
-		CGPoint position = [selectedNode.scene convertPoint:CGPointZero fromNode:selectedNode];
-		position = [selectedNode.scene convertPoint:position toNode:node];
-
-		[selectedNode removeFromParent];
-		selectedNode.position = position;
-		[node addChild:selectedNode];
-
-		for (SKNode *child in array) {
-			[node addChild:child];
-		}
-
-		[_navigatorTreeController moveNode:[self nodeInChildrenArray:rootNode.childNodes withIndexPath:_fromIndexPath] toIndexPath:_toIndexPath];
+		/* Selecte the node at the new location */
+		NSInteger selectedRow = [_navigatorView rowForItem:selectedNode];
+		[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
 
 		return YES;
 	} else {
