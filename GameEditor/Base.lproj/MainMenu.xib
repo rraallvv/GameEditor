@@ -425,7 +425,7 @@
                         </subviews>
                         <holdingPriorities>
                             <real value="250"/>
-                            <real value="250"/>
+                            <real value="249"/>
                             <real value="250"/>
                         </holdingPriorities>
                     </splitView>
