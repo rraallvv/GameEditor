@@ -62,6 +62,8 @@
 	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet AttributesView *_attributesView;
 	IBOutlet NSOutlineView *_navigatorView;
+	NSIndexPath *_fromIndexPath;
+	NSIndexPath *_toIndexPath;
 }
 
 @synthesize window = _window;
@@ -94,6 +96,10 @@
 
 	/* Setup the navigator view */
 	_navigatorView.delegate = self;
+	_navigatorView.dataSource = self;
+
+	/* Enable Drag & Drop */
+	[_navigatorView registerForDraggedTypes: [NSArray arrayWithObject: @"public.binary"]];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
@@ -439,6 +445,100 @@
 		}
 	}
 	return nil;
+}
+
+#pragma mark Drag & Drop
+
+- (NSTreeNode *)nodeInChildrenArray:(NSArray *)array withIndexPath:(NSIndexPath *)indexPath {
+	for(NSTreeNode *child in array) {
+		if ([[child indexPath] compare:indexPath] == NSOrderedSame) {
+			return child;
+		}
+		if (child.childNodes.count) {
+			NSTreeNode *node = [self nodeInChildrenArray:child.childNodes withIndexPath:indexPath];
+			if (node) {
+				return node;
+			}
+		}
+	}
+	return nil;
+}
+
+- (id <NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item {
+	NSPasteboardItem *pboardItem = [[NSPasteboardItem alloc] init];
+	NSData *pboardData = [NSKeyedArchiver archivedDataWithRootObject:[item indexPath]];
+	[pboardItem setData:pboardData forType:@"public.binary"];
+	return pboardItem;
+}
+
+- (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index {
+	if (index >= 0 && item) {
+		NSPasteboard *p = [info draggingPasteboard];
+		_fromIndexPath = [NSKeyedUnarchiver unarchiveObjectWithData:[p dataForType:@"public.binary"]];
+		NSTreeNode *rootNode = _navigatorTreeController.arrangedObjects;
+
+		NSTreeNode *sourceNode = [self nodeInChildrenArray:rootNode.childNodes withIndexPath:_fromIndexPath];
+
+		if(!sourceNode) {
+			// Not found
+			return NSDragOperationNone;
+		}
+
+		_toIndexPath = [[item indexPath] indexPathByAddingIndex:index];
+
+		if (_fromIndexPath.length < _toIndexPath.length) {
+			NSUInteger position = 0;
+			while (position < _fromIndexPath.length) {
+				if ([_fromIndexPath indexAtPosition:position] != [_toIndexPath indexAtPosition:position])
+					return NSDragOperationMove;
+				position++;
+			}
+			return NSDragOperationNone;
+		}
+		
+		return NSDragOperationMove;
+	} else {
+		return NSDragOperationNone;
+	}
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index {
+	if ([self outlineView:outlineView validateDrop:info proposedItem:item proposedChildIndex:index] == NSDragOperationMove) {
+
+		NSTreeNode *rootNode = _navigatorTreeController.arrangedObjects;
+
+		SKNode *selectedNode = [[[self nodeInChildrenArray:rootNode.childNodes withIndexPath:_fromIndexPath] representedObject] node];
+
+		SKNode *node = [[item representedObject] node];
+
+		NSMutableArray *array = [NSMutableArray array];
+		for (NSInteger i = index; i < node.children.count;) {
+			if (node.children[i] != selectedNode) {
+				[array addObject:node.children[i]];
+				[node.children[i] removeFromParent];
+			} else {
+				i++;
+			}
+		}
+
+		CGPoint position = [selectedNode.scene convertPoint:CGPointZero fromNode:selectedNode];
+		position = [selectedNode.scene convertPoint:position toNode:node];
+
+		[selectedNode removeFromParent];
+		selectedNode.position = position;
+		[node addChild:selectedNode];
+
+		for (SKNode *child in array) {
+			[node addChild:child];
+		}
+
+		[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:selectedNode.scene]];
+		[_navigatorView expandItem:nil expandChildren:YES];
+
+		return YES;
+	} else {
+		return NO;
+	}
 }
 
 @end
