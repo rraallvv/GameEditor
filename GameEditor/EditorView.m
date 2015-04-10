@@ -127,6 +127,9 @@ const CGFloat kHandleRadius = 4.5;
 - (void)setSize:(CGSize)size {
 	CGSize oldSize = self.size;
 
+	if (CGSizeEqualToSize(size, oldSize))
+		return;
+
 	CGPathRef path = self.path;
 	CGAffineTransform scale = CGAffineTransformMakeScale(size.width / oldSize.width, size.height / oldSize.height);
 	self.path = CGPathCreateCopyByTransformingPath(path, &scale);
@@ -144,6 +147,9 @@ const CGFloat kHandleRadius = 4.5;
 
 - (void)setAnchorPoint:(CGPoint)anchorPoint {
 	CGPoint oldAnchorPoint = self.anchorPoint;
+
+	if (CGPointEqualToPoint(anchorPoint, oldAnchorPoint))
+		return;
 
 	CGSize size = self.size;
 
