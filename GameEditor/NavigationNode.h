@@ -24,10 +24,11 @@
  */
 
 #import <Foundation/Foundation.h>
+#import <SpriteKit/SpriteKit.h>
 
 @interface NavigationNode : NSObject
 + (instancetype)navigationNodeWithNode:(id)node;
-@property id node;
+@property SKNode *node;
 @property NSString *name;
-@property (readonly) NSMutableArray *children;
+@property NSMutableArray *children;
 @end

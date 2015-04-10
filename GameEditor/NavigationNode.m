@@ -56,6 +56,24 @@
 	return _node;
 }
 
+- (void)setChildren:(NSMutableArray *)children {
+
+	SKScene *scene = [_node scene];
+
+	for (NavigationNode *child in children) {
+		SKNode *node = [child node];
+
+		CGPoint position = [scene convertPoint:CGPointZero fromNode:node];
+		position = [scene convertPoint:position toNode:_node];
+
+		[node removeFromParent];
+		node.position = position;
+		[_node addChild:node];
+	}
+
+	_childrenNavigationNodes = children;
+}
+
 - (NSMutableArray *)children {
 	return _childrenNavigationNodes;
 }
@@ -74,7 +92,7 @@
 }
 
 - (BOOL)isLeaf {
-	return [[_node children] count] == 0;
+	return [_childrenNavigationNodes count] == 0;
 }
 
 - (BOOL)isEditable {

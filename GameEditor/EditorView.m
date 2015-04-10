@@ -127,6 +127,9 @@ const CGFloat kHandleRadius = 4.5;
 - (void)setSize:(CGSize)size {
 	CGSize oldSize = self.size;
 
+	if (CGSizeEqualToSize(size, oldSize))
+		return;
+
 	CGPathRef path = self.path;
 	CGAffineTransform scale = CGAffineTransformMakeScale(size.width / oldSize.width, size.height / oldSize.height);
 	self.path = CGPathCreateCopyByTransformingPath(path, &scale);
@@ -144,6 +147,9 @@ const CGFloat kHandleRadius = 4.5;
 
 - (void)setAnchorPoint:(CGPoint)anchorPoint {
 	CGPoint oldAnchorPoint = self.anchorPoint;
+
+	if (CGPointEqualToPoint(anchorPoint, oldAnchorPoint))
+		return;
 
 	CGSize size = self.size;
 
@@ -414,11 +420,27 @@ anchorPoint = _anchorPoint;
 - (NSArray *)nodesInArray:(NSArray *)nodes containingPoint:(CGPoint)point {
 	NSMutableArray *array = [NSMutableArray array];
 	for (SKNode *child in nodes) {
-		CGPoint points[5];
-		[self getFramePoints:points forNode:child];
 
 		CGMutablePathRef path = CGPathCreateMutable();
-		CGPathAddLines(path, NULL, &points[1], 4);
+
+		/* Construct the path using the transformed frame */
+		if ([child respondsToSelector:@selector(size)]) {
+			CGPoint points[5];
+			[self getFramePoints:points forNode:child];
+			CGPathAddLines(path, NULL, &points[1], 4);
+
+		/* Construct the path using a rectangle of arbitrary size centered at the node's position*/
+		} else {
+			CGPoint center = [_scene convertPointToView:CGPointZero fromNode:child];
+			CGPoint points[4] = {
+				{center.x - kRotationHandleDistance, center.y - kRotationHandleDistance},
+				{center.x + kRotationHandleDistance, center.y - kRotationHandleDistance},
+				{center.x + kRotationHandleDistance, center.y + kRotationHandleDistance},
+				{center.x - kRotationHandleDistance, center.y + kRotationHandleDistance}
+			};
+			CGPathAddLines(path, NULL, &points[0], 4);
+		}
+
 		CGPathCloseSubpath(path);
 
 		if (CGPathContainsPoint(path, NULL, point, NO)) {

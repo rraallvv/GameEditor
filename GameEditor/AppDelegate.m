@@ -27,11 +27,12 @@
 #import "GameScene.h"
 #import "AttributesView.h"
 
-@implementation SKScene (Unarchive)
+@implementation SKScene (Archiving)
 
 + (instancetype)unarchiveFromFile:(NSString *)file {
     /* Retrieve scene file path from the application bundle */
     NSString *nodePath = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
+
     /* Unarchive the file to an SKScene object */
     NSData *data = [NSData dataWithContentsOfFile:nodePath
                                           options:NSDataReadingMappedIfSafe
@@ -48,8 +49,18 @@
 	/* Retrieve scene file path from the application bundle */
 	NSString *nodePath = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
 
-	/* Unarchive the file to an SKScene object */
-	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:scene];
+	/* Archive the file to an SKScene object */
+	NSMutableData *data = [NSMutableData data];
+	NSKeyedArchiver *arch = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+
+#if 1// Save to XML plist format
+	[arch setOutputFormat:NSPropertyListXMLFormat_v1_0];
+#else
+	[arch setOutputFormat:NSPropertyListBinaryFormat_v1_0];
+#endif
+
+	[arch encodeObject:scene forKey:NSKeyedArchiveRootObjectKey];
+	[arch finishEncoding];
 
 	return [data writeToFile:nodePath atomically:YES];
 }
@@ -62,6 +73,8 @@
 	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet AttributesView *_attributesView;
 	IBOutlet NSOutlineView *_navigatorView;
+	NSIndexPath *_fromIndexPath;
+	NSIndexPath *_toIndexPath;
 }
 
 @synthesize window = _window;
@@ -94,6 +107,10 @@
 
 	/* Setup the navigator view */
 	_navigatorView.delegate = self;
+	_navigatorView.dataSource = self;
+
+	/* Enable Drag & Drop */
+	[_navigatorView registerForDraggedTypes: [NSArray arrayWithObject: @"public.binary"]];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
@@ -439,6 +456,82 @@
 		}
 	}
 	return nil;
+}
+
+#pragma mark Drag & Drop
+
+- (NSTreeNode *)nodeInChildrenArray:(NSArray *)array withIndexPath:(NSIndexPath *)indexPath {
+	for(NSTreeNode *child in array) {
+		if ([[child indexPath] compare:indexPath] == NSOrderedSame) {
+			return child;
+		}
+		if (child.childNodes.count) {
+			NSTreeNode *node = [self nodeInChildrenArray:child.childNodes withIndexPath:indexPath];
+			if (node) {
+				return node;
+			}
+		}
+	}
+	return nil;
+}
+
+- (id <NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item {
+	NSPasteboardItem *pboardItem = [[NSPasteboardItem alloc] init];
+	NSData *pboardData = [NSKeyedArchiver archivedDataWithRootObject:[item indexPath]];
+	[pboardItem setData:pboardData forType:@"public.binary"];
+	return pboardItem;
+}
+
+- (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index {
+	if (item) {
+		NSPasteboard *p = [info draggingPasteboard];
+		_fromIndexPath = [NSKeyedUnarchiver unarchiveObjectWithData:[p dataForType:@"public.binary"]];
+		NSTreeNode *rootNode = _navigatorTreeController.arrangedObjects;
+
+		NSTreeNode *sourceNode = [self nodeInChildrenArray:rootNode.childNodes withIndexPath:_fromIndexPath];
+
+		if(!sourceNode) {
+			// Not found
+			return NSDragOperationNone;
+		}
+
+		_toIndexPath = [[item indexPath] indexPathByAddingIndex:MAX(0, index)];
+
+		if (_fromIndexPath.length < _toIndexPath.length) {
+			NSUInteger position = 0;
+			while (position < _fromIndexPath.length) {
+				if ([_fromIndexPath indexAtPosition:position] != [_toIndexPath indexAtPosition:position])
+					return NSDragOperationMove;
+				position++;
+			}
+			return NSDragOperationNone;
+		}
+		
+		return NSDragOperationMove;
+	} else {
+		return NSDragOperationNone;
+	}
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index {
+	if ([self outlineView:outlineView validateDrop:info proposedItem:item proposedChildIndex:index] == NSDragOperationMove) {
+
+		/* Move the node to its new location */
+		NSTreeNode *rootNode = _navigatorTreeController.arrangedObjects;
+		NSTreeNode *selectedNode = [self nodeInChildrenArray:rootNode.childNodes withIndexPath:_fromIndexPath];
+		[_navigatorTreeController moveNode:selectedNode toIndexPath:_toIndexPath];
+
+		/* Expand the destination parent node */
+		[_navigatorView expandItem:[self nodeInChildrenArray:rootNode.childNodes withIndexPath:[_toIndexPath indexPathByRemovingLastIndex]]];
+
+		/* Selecte the node at the new location */
+		NSInteger selectedRow = [_navigatorView rowForItem:selectedNode];
+		[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
+
+		return YES;
+	} else {
+		return NO;
+	}
 }
 
 @end
