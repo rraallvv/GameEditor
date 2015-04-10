@@ -27,11 +27,12 @@
 #import "GameScene.h"
 #import "AttributesView.h"
 
-@implementation SKScene (Unarchive)
+@implementation SKScene (Archiving)
 
 + (instancetype)unarchiveFromFile:(NSString *)file {
     /* Retrieve scene file path from the application bundle */
     NSString *nodePath = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
+
     /* Unarchive the file to an SKScene object */
     NSData *data = [NSData dataWithContentsOfFile:nodePath
                                           options:NSDataReadingMappedIfSafe
@@ -48,8 +49,18 @@
 	/* Retrieve scene file path from the application bundle */
 	NSString *nodePath = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
 
-	/* Unarchive the file to an SKScene object */
-	NSData *data = [NSKeyedArchiver archivedDataWithRootObject:scene];
+	/* Archive the file to an SKScene object */
+	NSMutableData *data = [NSMutableData data];
+	NSKeyedArchiver *arch = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+
+#if 1// Save to XML plist format
+	[arch setOutputFormat:NSPropertyListXMLFormat_v1_0];
+#else
+	[arch setOutputFormat:NSPropertyListBinaryFormat_v1_0];
+#endif
+
+	[arch encodeObject:scene forKey:NSKeyedArchiveRootObjectKey];
+	[arch finishEncoding];
 
 	return [data writeToFile:nodePath atomically:YES];
 }
