@@ -49,7 +49,11 @@
 		[_childrenNavigationNodes addObject:childNavigationNode];
 	}
 
+	[_node removeObserver:self forKeyPath:@"name"];
+
 	_node = node;
+
+	[_node addObserver:self forKeyPath:@"name" options:0 context:NULL];
 }
 
 - (id)node {
@@ -97,7 +101,9 @@
 }
 
 - (void)setName:(NSString *)name {
-	[(SKNode *)self.node setName:name];
+	if (![_node.name isEqualToString:name]) {
+		[(SKNode *)self.node setName:name];
+	}
 }
 
 - (NSString *)name {
@@ -135,6 +141,16 @@
 	} else {
 		return [NSImage imageNamed:@"SKNode"];
 	}
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if ([keyPath isEqualToString:@"name"]) {
+		self.name = [_node valueForKey:@"name"];
+	}
+}
+
+- (void)dealloc {
+	[_node removeObserver:self forKeyPath:@"name"];
 }
 
 @end
