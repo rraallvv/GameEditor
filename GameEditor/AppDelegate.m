@@ -520,10 +520,10 @@
 		NSTreeNode *selectedNode = [self nodeWithIndexPath:_fromIndexPath inNodes:rootNode.childNodes];
 		[_navigatorTreeController moveNode:selectedNode toIndexPath:_toIndexPath];
 
-		/* Expand the destination parent node */
-		[_navigatorView expandItem:[self nodeWithIndexPath:[_toIndexPath indexPathByRemovingLastIndex] inNodes:rootNode.childNodes]];
+		/* Expand the destination node */
+		[_navigatorView expandItem:item];
 
-		/* Selecte the node at the new location */
+		/* Select the node at the new location */
 		NSInteger selectedRow = [_navigatorView rowForItem:selectedNode];
 		[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
 
