@@ -224,12 +224,70 @@ anchorPoint = _anchorPoint;
 
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
+	if (_scene) {
+		[self drawNode:_scene];
+	}
 	if (_node) {
-		[self drawRectangleOutline];
+		[self drawSelectionOutline];
 	}
 }
 
-- (void)drawRectangleOutline {
+- (void)drawNode:(SKNode *)aNode {
+	if ([aNode isMemberOfClass:[SKNode class]]) {
+
+		const CGFloat halfWidth = 11;
+		const CGFloat dashSize = 8;
+
+		CGPoint center = [_scene convertPointToView:CGPointZero fromNode:aNode];
+
+		const CGFloat leftEdge = center.x - halfWidth;
+		const CGFloat rightEdge = center.x + halfWidth;
+		const CGFloat topEdge = center.y + halfWidth;
+		const CGFloat bottomEdge = center.y - halfWidth;
+
+		NSBezierPath *path = [NSBezierPath bezierPath];
+
+		[path moveToPoint:CGPointMake(leftEdge, bottomEdge + dashSize)];
+		[path lineToPoint:CGPointMake(leftEdge, bottomEdge)];
+		[path lineToPoint:CGPointMake(leftEdge + dashSize, bottomEdge)];
+
+		[path moveToPoint:CGPointMake(rightEdge - dashSize, bottomEdge)];
+		[path lineToPoint:CGPointMake(rightEdge, bottomEdge)];
+		[path lineToPoint:CGPointMake(rightEdge, bottomEdge + dashSize)];
+
+		[path moveToPoint:CGPointMake(rightEdge, topEdge - dashSize)];
+		[path lineToPoint:CGPointMake(rightEdge, topEdge)];
+		[path lineToPoint:CGPointMake(rightEdge - dashSize, topEdge)];
+
+		[path moveToPoint:CGPointMake(leftEdge + dashSize, topEdge)];
+		[path lineToPoint:CGPointMake(leftEdge, topEdge)];
+		[path lineToPoint:CGPointMake(leftEdge, topEdge - dashSize)];
+
+		[path setLineWidth:2.0];
+
+		[[NSColor blueColor] set];
+
+		CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
+		CGContextSaveGState(ctx);
+
+		/* Draw the glow effect */
+		NSShadow *shadow = [[NSShadow alloc] init];
+		[shadow setShadowBlurRadius:2.5];
+		[shadow setShadowColor:[NSColor whiteColor]];
+		[shadow set];
+
+		for (int i = 0; i < 10; ++i) {
+			[path stroke];
+		}
+
+		CGContextRestoreGState(ctx);
+	}
+	for (SKNode *node in aNode.children) {
+		[self drawNode:node];
+	}
+}
+
+- (void)drawSelectionOutline {
 	[self updateHandles];
 
 	NSColor *whiteColor = [NSColor whiteColor];
