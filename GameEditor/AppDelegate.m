@@ -474,6 +474,20 @@
 	return nil;
 }
 
+- (NSIndexPath *)indexPathForNode:(NSTreeNode *)aNode inNodes:(NSArray *)nodes {
+	for(NSTreeNode *node in nodes) {
+		if ([node isEqual:aNode])
+			return [node indexPath];
+		if ([[node childNodes] count]) {
+			NSIndexPath *result = [self indexPathForNode:aNode inNodes:[node childNodes]];
+			if (result) {
+				return result;
+			}
+		}
+	}
+	return nil;
+}
+
 - (id <NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item {
 	NSPasteboardItem *pboardItem = [[NSPasteboardItem alloc] init];
 	NSData *pboardData = [NSKeyedArchiver archivedDataWithRootObject:[item indexPath]];
@@ -520,12 +534,16 @@
 		NSTreeNode *selectedNode = [self nodeWithIndexPath:_fromIndexPath inNodes:rootNode.childNodes];
 		[_navigatorTreeController moveNode:selectedNode toIndexPath:_toIndexPath];
 
-		/* Expand the destination node */
+		/* Retrieve the selected node if it's being dropped on an item */
+		if (index == NSOutlineViewDropOnItemIndex) {
+			selectedNode = [self nodeWithIndexPath:[[self indexPathForNode:item inNodes:rootNode.childNodes] indexPathByAddingIndex:0] inNodes:rootNode.childNodes];
+		}
+
+		/* Expand the parent node where the selected node was dropped */
 		[_navigatorView expandItem:item];
 
-		/* Select the node at the new location */
-		NSInteger selectedRow = [_navigatorView rowForItem:selectedNode];
-		[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
+		/* Select the node at it's new location */
+		[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:[_navigatorView rowForItem:selectedNode]] byExtendingSelection:NO];
 
 		return YES;
 	} else {
