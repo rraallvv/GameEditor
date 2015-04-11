@@ -59,15 +59,33 @@
 - (void)setChildren:(NSMutableArray *)children {
 
 	SKScene *scene = [_node scene];
-
 	for (NavigationNode *child in children) {
 		SKNode *node = [child node];
 
-		CGPoint position = [scene convertPoint:CGPointZero fromNode:node];
-		position = [scene convertPoint:position toNode:_node];
+		CGPoint position = node.position;
+		CGFloat zRotation = node.zRotation;
+
+		if (node.parent != _node) {
+			if (node.parent == node.scene) {
+				position = [scene convertPoint:position toNode:_node];
+				SKNode *parent = _node;
+				while (parent) {
+					zRotation -= parent.zRotation;
+					parent = parent.parent;
+				}
+			} else if (_node == _node.scene) {
+				position = [scene convertPoint:[scene convertPoint:CGPointZero fromNode:node] toNode:_node];
+				SKNode *parent = node.parent;
+				while (parent) {
+					zRotation += parent.zRotation;
+					parent = parent.parent;
+				}
+			}
+		}
 
 		[node removeFromParent];
 		node.position = position;
+		node.zRotation = zRotation;
 		[_node addChild:node];
 	}
 
