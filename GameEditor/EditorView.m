@@ -718,4 +718,8 @@ anchorPoint = _anchorPoint;
 	}
 }
 
+- (void)dealloc {
+	[self unbindToNode:_node];
+}
+
 @end
