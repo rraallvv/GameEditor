@@ -371,8 +371,13 @@
 
 			Class propertyClass = [propertyType classType];
 
-			if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
-				[attributesArray addObject:[AttributeNode attributeForColorWithName:propertyName node:node]];
+			BOOL editable = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
+
+			if ([propertyType isEqualToEncodedType:@encode(NSString)] && editable) {
+				[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyType]];
+
+			} else if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
+				[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyType]];
 
 			} else if (propertyClass == [SKTexture class]
 					   || propertyClass == [SKShader class]
@@ -387,7 +392,6 @@
 				[attributesArray addObject:[AttributeNode  attributeForRotationAngleWithName:propertyName node:node]];
 
 			} else {
-				BOOL editable = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
 				NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
 				editable = editable && ![propertyType isEqualToString:@""] && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
 

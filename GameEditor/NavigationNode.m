@@ -114,7 +114,7 @@
 }
 
 - (BOOL)isEditable {
-	return NO;
+	return YES;
 }
 
 - (NSImage *)image {
