@@ -154,6 +154,9 @@
                                                                                     <binding destination="FEl-7x-Wqd" name="value" keyPath="objectValue.image" id="TNC-i2-uCt"/>
                                                                                 </connections>
                                                                             </imageCell>
+                                                                            <connections>
+                                                                                <binding destination="FEl-7x-Wqd" name="value" keyPath="objectValue.image" id="qqT-0R-qpC"/>
+                                                                            </connections>
                                                                         </imageView>
                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SAt-Hc-87n">
                                                                             <rect key="frame" x="21" y="-1" width="105" height="17"/>
@@ -163,6 +166,7 @@
                                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
+                                                                                <binding destination="FEl-7x-Wqd" name="editable" keyPath="objectValue.isEditable" id="TSJ-ca-UNg"/>
                                                                                 <binding destination="FEl-7x-Wqd" name="value" keyPath="objectValue.name" id="1Ef-Kt-TjO"/>
                                                                             </connections>
                                                                         </textField>
