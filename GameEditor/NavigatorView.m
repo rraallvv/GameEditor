@@ -25,33 +25,6 @@
 
 #import "NavigatorView.h"
 
-#pragma mark NavigatorTableRowView
-
-@interface NavigatorTableRowView : NSTableRowView
-@end
-
-@implementation NavigatorTableRowView
-
-- (void)drawBackgroundInRect:(NSRect)dirtyRect {
-	[self.backgroundColor set];
-	NSRectFill(dirtyRect);
-}
-
-- (void)drawSelectionInRect:(NSRect)dirtyRect {
-	if (self.window.isKeyWindow) {
-		if (self.isEmphasized) {
-			[[NSColor colorWithRed:0.30 green:0.55 blue:1.0 alpha:1.0] set];
-		} else {
-			[[NSColor secondarySelectedControlColor] set];
-		}
-	} else {
-		[[NSColor lightGrayColor] set];
-	}
-	NSRectFill(dirtyRect);
-}
-
-@end
-
 #pragma mark NavigatorView
 
 @interface NavigatorView () <NSOutlineViewDelegate>
@@ -67,10 +40,6 @@
 	if (selectedRow != -1) {
 		[_actualDelegate navigatorView:self didSelectNode:[[[self itemAtRow:selectedRow] representedObject] node]];
 	}
-}
-
-- (NSTableRowView *)outlineView:(NSOutlineView *)outlineView rowViewForItem:(id)item {
-	return [[NavigatorTableRowView alloc] init];
 }
 
 - (void)setDelegate:(id)newDelegate {

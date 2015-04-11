@@ -460,15 +460,14 @@
 
 #pragma mark Drag & Drop
 
-- (NSTreeNode *)nodeInChildrenArray:(NSArray *)array withIndexPath:(NSIndexPath *)indexPath {
-	for(NSTreeNode *child in array) {
-		if ([[child indexPath] compare:indexPath] == NSOrderedSame) {
-			return child;
-		}
-		if (child.childNodes.count) {
-			NSTreeNode *node = [self nodeInChildrenArray:child.childNodes withIndexPath:indexPath];
-			if (node) {
-				return node;
+- (NSTreeNode *)nodeWithIndexPath:(NSIndexPath *)indexPath inNodes:(NSArray *)nodes {
+	for(NSTreeNode *node in nodes) {
+		if ([[node indexPath] compare:indexPath] == NSOrderedSame)
+			return node;
+		if ([[node childNodes] count]) {
+			NSTreeNode *result = [self nodeWithIndexPath:indexPath inNodes:[node childNodes]];
+			if (result) {
+				return result;
 			}
 		}
 	}
@@ -488,7 +487,7 @@
 		_fromIndexPath = [NSKeyedUnarchiver unarchiveObjectWithData:[p dataForType:@"public.binary"]];
 		NSTreeNode *rootNode = _navigatorTreeController.arrangedObjects;
 
-		NSTreeNode *sourceNode = [self nodeInChildrenArray:rootNode.childNodes withIndexPath:_fromIndexPath];
+		NSTreeNode *sourceNode = [self nodeWithIndexPath:_fromIndexPath inNodes:rootNode.childNodes];
 
 		if(!sourceNode) {
 			// Not found
@@ -518,11 +517,11 @@
 
 		/* Move the node to its new location */
 		NSTreeNode *rootNode = _navigatorTreeController.arrangedObjects;
-		NSTreeNode *selectedNode = [self nodeInChildrenArray:rootNode.childNodes withIndexPath:_fromIndexPath];
+		NSTreeNode *selectedNode = [self nodeWithIndexPath:_fromIndexPath inNodes:rootNode.childNodes];
 		[_navigatorTreeController moveNode:selectedNode toIndexPath:_toIndexPath];
 
 		/* Expand the destination parent node */
-		[_navigatorView expandItem:[self nodeInChildrenArray:rootNode.childNodes withIndexPath:[_toIndexPath indexPathByRemovingLastIndex]]];
+		[_navigatorView expandItem:[self nodeWithIndexPath:[_toIndexPath indexPathByRemovingLastIndex] inNodes:rootNode.childNodes]];
 
 		/* Selecte the node at the new location */
 		NSInteger selectedRow = [_navigatorView rowForItem:selectedNode];

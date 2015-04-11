@@ -13,11 +13,11 @@
 		E4220B2D1ACFF92B00753375 /* Particles.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2B1ACFF92B00753375 /* Particles.sks */; };
 		E4220B2E1ACFF92B00753375 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2C1ACFF92B00753375 /* spark.png */; };
 		E460AB931ACDC9B900859EA2 /* NavigatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E460AB921ACDC9B900859EA2 /* NavigatorView.m */; };
-		E474192F1AD84EDC00061932 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E474192E1AD84EDC00061932 /* GameScene.sks */; };
+		E474192F1AD84EDC00061932 /* NewGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E474192E1AD84EDC00061932 /* NewGameScene.sks */; };
 		E4ABDB4F1AB3933900AAE82E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */; };
 		E4ABDB511AB3933900AAE82E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB501AB3933900AAE82E /* main.m */; };
 		E4ABDB541AB3933900AAE82E /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB531AB3933900AAE82E /* GameScene.m */; };
-		E4ABDB561AB3933900AAE82E /* OldGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4ABDB551AB3933900AAE82E /* OldGameScene.sks */; };
+		E4ABDB561AB3933900AAE82E /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4ABDB551AB3933900AAE82E /* GameScene.sks */; };
 		E4ABDB581AB3933900AAE82E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4ABDB571AB3933900AAE82E /* Images.xcassets */; };
 		E4ABDB5B1AB3933900AAE82E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4ABDB591AB3933900AAE82E /* MainMenu.xib */; };
 		E4ABDB671AB3933900AAE82E /* GameEditorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB661AB3933900AAE82E /* GameEditorTests.m */; };
@@ -49,7 +49,7 @@
 		E4220B2C1ACFF92B00753375 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		E460AB911ACDC9B900859EA2 /* NavigatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigatorView.h; sourceTree = "<group>"; };
 		E460AB921ACDC9B900859EA2 /* NavigatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigatorView.m; sourceTree = "<group>"; };
-		E474192E1AD84EDC00061932 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		E474192E1AD84EDC00061932 /* NewGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = NewGameScene.sks; sourceTree = "<group>"; };
 		E4ABDB481AB3933900AAE82E /* GameEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4ABDB4C1AB3933900AAE82E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4ABDB4D1AB3933900AAE82E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -57,7 +57,7 @@
 		E4ABDB501AB3933900AAE82E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E4ABDB521AB3933900AAE82E /* GameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
 		E4ABDB531AB3933900AAE82E /* GameScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
-		E4ABDB551AB3933900AAE82E /* OldGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = OldGameScene.sks; sourceTree = "<group>"; };
+		E4ABDB551AB3933900AAE82E /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		E4ABDB571AB3933900AAE82E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E4ABDB5A1AB3933900AAE82E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		E4ABDB601AB3933900AAE82E /* GameEditorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GameEditorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -139,8 +139,8 @@
 				E4BB58AD1ABB510A0021A467 /* EditorView.m */,
 				E4ABDB591AB3933900AAE82E /* MainMenu.xib */,
 				E40813901AC3C45300F54824 /* ValueEditors.xib */,
-				E474192E1AD84EDC00061932 /* GameScene.sks */,
-				E4ABDB551AB3933900AAE82E /* OldGameScene.sks */,
+				E474192E1AD84EDC00061932 /* NewGameScene.sks */,
+				E4ABDB551AB3933900AAE82E /* GameScene.sks */,
 				E4220B2B1ACFF92B00753375 /* Particles.sks */,
 				E4220B2C1ACFF92B00753375 /* spark.png */,
 				E4BB58AA1ABB4D4B0021A467 /* Spaceship.png */,
@@ -269,12 +269,12 @@
 			files = (
 				E4BB58AB1ABB4D4B0021A467 /* Spaceship.png in Resources */,
 				E4220B2D1ACFF92B00753375 /* Particles.sks in Resources */,
-				E4ABDB561AB3933900AAE82E /* OldGameScene.sks in Resources */,
+				E4ABDB561AB3933900AAE82E /* GameScene.sks in Resources */,
 				E4ABDB581AB3933900AAE82E /* Images.xcassets in Resources */,
 				E4ABDB5B1AB3933900AAE82E /* MainMenu.xib in Resources */,
 				E4220B2E1ACFF92B00753375 /* spark.png in Resources */,
 				E40813921AC3C45300F54824 /* ValueEditors.xib in Resources */,
-				E474192F1AD84EDC00061932 /* GameScene.sks in Resources */,
+				E474192F1AD84EDC00061932 /* NewGameScene.sks in Resources */,
 				E4BB58B01ABB659C0021A467 /* SpaceshipTest.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
