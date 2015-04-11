@@ -139,7 +139,7 @@
 		NSMutableArray *contents = [self attributesForAllClassesWithNode:node];
 
 		/* Look up for the row to be selected */
-		NSInteger row = [_navigatorView rowForItem:[self navigationNodeOfObject:node]];
+		NSInteger row = [_navigatorView rowForItem:[self navigationNodeOfObject:node inNodes:[[_navigatorTreeController arrangedObjects] childNodes]]];
 
 		dispatch_async(dispatch_get_main_queue(), ^{
 			/* Replace the attributes table */
@@ -439,10 +439,6 @@
 	return attributesArray;
 }
 
-- (id)navigationNodeOfObject:(id)anObject {
-	return [self navigationNodeOfObject:anObject inNodes:[[_navigatorTreeController arrangedObjects] childNodes]];
-}
-
 - (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray*)nodes {
 	for(NSTreeNode* node in nodes) {
 		if([[[node representedObject] node] isEqual:anObject]) {
@@ -486,6 +482,23 @@
 		}
 	}
 	return nil;
+}
+
+- (void)getExpandedNodesInfo:(NSMutableArray *)array forNode:(NSTreeNode *)aNode {
+	[array addObject:[NSNumber numberWithBool:[_navigatorView isItemExpanded:aNode]]];
+	for (NSTreeNode *node in aNode.childNodes) {
+		[self getExpandedNodesInfo:array forNode:node];
+	}
+}
+
+- (void)expandNode:(NSTreeNode *)aNode withInfo:(NSMutableArray *)array {
+	if ([[array firstObject] boolValue]) {
+		[_navigatorView expandItem:aNode];
+	}
+	[array removeObjectAtIndex:0];
+	for (NSTreeNode *node in aNode.childNodes) {
+		[self expandNode:node withInfo:array];
+	}
 }
 
 - (id <NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item {
@@ -532,6 +545,11 @@
 		/* Move the node to its new location */
 		NSTreeNode *rootNode = _navigatorTreeController.arrangedObjects;
 		NSTreeNode *selectedNode = [self nodeWithIndexPath:_fromIndexPath inNodes:rootNode.childNodes];
+
+		NSMutableArray *savedExpadedNodesInfo = [NSMutableArray array];
+		[self getExpandedNodesInfo:savedExpadedNodesInfo forNode:selectedNode];
+
+		/* Move the node to its new location */
 		[_navigatorTreeController moveNode:selectedNode toIndexPath:_toIndexPath];
 
 		/* Retrieve the selected node if it's being dropped on an item */
@@ -539,8 +557,9 @@
 			selectedNode = [self nodeWithIndexPath:[[self indexPathForNode:item inNodes:rootNode.childNodes] indexPathByAddingIndex:0] inNodes:rootNode.childNodes];
 		}
 
-		/* Expand the parent node where the selected node was dropped */
+		/* Expand the nodes */
 		[_navigatorView expandItem:item];
+		[self expandNode:selectedNode withInfo:savedExpadedNodesInfo];
 
 		/* Select the node at it's new location */
 		[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:[_navigatorView rowForItem:selectedNode]] byExtendingSelection:NO];
