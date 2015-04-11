@@ -73,8 +73,6 @@
 	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet AttributesView *_attributesView;
 	IBOutlet NSOutlineView *_navigatorView;
-	NSIndexPath *_fromIndexPath;
-	NSIndexPath *_toIndexPath;
 }
 
 @synthesize window = _window;
@@ -452,122 +450,6 @@
 		}
 	}
 	return nil;
-}
-
-#pragma mark Drag & Drop
-
-- (NSTreeNode *)nodeWithIndexPath:(NSIndexPath *)indexPath inNodes:(NSArray *)nodes {
-	for(NSTreeNode *node in nodes) {
-		if ([[node indexPath] compare:indexPath] == NSOrderedSame)
-			return node;
-		if ([[node childNodes] count]) {
-			NSTreeNode *result = [self nodeWithIndexPath:indexPath inNodes:[node childNodes]];
-			if (result) {
-				return result;
-			}
-		}
-	}
-	return nil;
-}
-
-- (NSIndexPath *)indexPathForNode:(NSTreeNode *)aNode inNodes:(NSArray *)nodes {
-	for(NSTreeNode *node in nodes) {
-		if ([node isEqual:aNode])
-			return [node indexPath];
-		if ([[node childNodes] count]) {
-			NSIndexPath *result = [self indexPathForNode:aNode inNodes:[node childNodes]];
-			if (result) {
-				return result;
-			}
-		}
-	}
-	return nil;
-}
-
-- (void)getExpandedNodesInfo:(NSMutableArray *)array forNode:(NSTreeNode *)aNode {
-	[array addObject:[NSNumber numberWithBool:[_navigatorView isItemExpanded:aNode]]];
-	for (NSTreeNode *node in aNode.childNodes) {
-		[self getExpandedNodesInfo:array forNode:node];
-	}
-}
-
-- (void)expandNode:(NSTreeNode *)aNode withInfo:(NSMutableArray *)array {
-	if ([[array firstObject] boolValue]) {
-		[_navigatorView expandItem:aNode];
-	}
-	[array removeObjectAtIndex:0];
-	for (NSTreeNode *node in aNode.childNodes) {
-		[self expandNode:node withInfo:array];
-	}
-}
-
-- (id <NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item {
-	NSPasteboardItem *pboardItem = [[NSPasteboardItem alloc] init];
-	NSData *pboardData = [NSKeyedArchiver archivedDataWithRootObject:[item indexPath]];
-	[pboardItem setData:pboardData forType:@"public.binary"];
-	return pboardItem;
-}
-
-- (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index {
-	if (item) {
-		NSPasteboard *p = [info draggingPasteboard];
-		_fromIndexPath = [NSKeyedUnarchiver unarchiveObjectWithData:[p dataForType:@"public.binary"]];
-		NSTreeNode *rootNode = _navigatorTreeController.arrangedObjects;
-
-		NSTreeNode *sourceNode = [self nodeWithIndexPath:_fromIndexPath inNodes:rootNode.childNodes];
-
-		if(!sourceNode) {
-			// Not found
-			return NSDragOperationNone;
-		}
-
-		_toIndexPath = [[item indexPath] indexPathByAddingIndex:MAX(0, index)];
-
-		if (_fromIndexPath.length < _toIndexPath.length) {
-			NSUInteger position = 0;
-			while (position < _fromIndexPath.length) {
-				if ([_fromIndexPath indexAtPosition:position] != [_toIndexPath indexAtPosition:position])
-					return NSDragOperationMove;
-				position++;
-			}
-			return NSDragOperationNone;
-		}
-		
-		return NSDragOperationMove;
-	} else {
-		return NSDragOperationNone;
-	}
-}
-
-- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index {
-	if ([self outlineView:outlineView validateDrop:info proposedItem:item proposedChildIndex:index] == NSDragOperationMove) {
-
-		/* Move the node to its new location */
-		NSTreeNode *rootNode = _navigatorTreeController.arrangedObjects;
-		NSTreeNode *selectedNode = [self nodeWithIndexPath:_fromIndexPath inNodes:rootNode.childNodes];
-
-		NSMutableArray *savedExpadedNodesInfo = [NSMutableArray array];
-		[self getExpandedNodesInfo:savedExpadedNodesInfo forNode:selectedNode];
-
-		/* Move the node to its new location */
-		[_navigatorTreeController moveNode:selectedNode toIndexPath:_toIndexPath];
-
-		/* Retrieve the selected node if it's being dropped on an item */
-		if (index == NSOutlineViewDropOnItemIndex) {
-			selectedNode = [self nodeWithIndexPath:[[self indexPathForNode:item inNodes:rootNode.childNodes] indexPathByAddingIndex:0] inNodes:rootNode.childNodes];
-		}
-
-		/* Expand the nodes */
-		[_navigatorView expandItem:item];
-		[self expandNode:selectedNode withInfo:savedExpadedNodesInfo];
-
-		/* Select the node at it's new location */
-		[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:[_navigatorView rowForItem:selectedNode]] byExtendingSelection:NO];
-
-		return YES;
-	} else {
-		return NO;
-	}
 }
 
 @end
