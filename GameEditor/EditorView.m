@@ -233,12 +233,13 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)drawNode:(SKNode *)aNode {
+
+	CGPoint center = [_scene convertPointToView:CGPointZero fromNode:aNode];
+
 	if ([aNode isMemberOfClass:[SKNode class]]) {
 
 		const CGFloat halfWidth = 11;
 		const CGFloat dashSize = 8;
-
-		CGPoint center = [_scene convertPointToView:CGPointZero fromNode:aNode];
 
 		const CGFloat leftEdge = center.x - halfWidth;
 		const CGFloat rightEdge = center.x + halfWidth;
@@ -286,7 +287,46 @@ anchorPoint = _anchorPoint;
 			[[NSColor magentaColor] set];
 			[path stroke];
 		}
+	} else if ([aNode isKindOfClass:[SKEmitterNode class]]) {
+		CGFloat lineWidth = 2.0;
+		CGFloat distance = 8;
+		CGFloat angle1 = GLKMathDegreesToRadians(30);
+		CGFloat angle2 = GLKMathDegreesToRadians(150);
+		CGFloat angle3 = GLKMathDegreesToRadians(270);
+
+		if (_node == aNode) {
+			NSColor *strokeColor = [NSColor colorWithRed:0.4 green:0.5 blue:1.0 alpha:1.0];
+
+			CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
+			CGContextSaveGState(ctx);
+
+			/* Draw the glow effect */
+			NSShadow *shadow = [[NSShadow alloc] init];
+			[shadow setShadowBlurRadius:2.0];
+			[shadow setShadowColor:[NSColor whiteColor]];
+			[shadow set];
+
+			for (int i = 0; i < 8; ++i) {
+				[self drawCircleWithCenter:CGPointMake(center.x + distance * cos(angle1), center.y + distance * sin(angle1))
+									radius:kHandleRadius fillColor:nil strokeColor:strokeColor lineWidth:lineWidth];
+				[self drawCircleWithCenter:CGPointMake(center.x + distance * cos(angle2), center.y + distance * sin(angle2))
+									radius:kHandleRadius fillColor:nil strokeColor:strokeColor lineWidth:lineWidth];
+				[self drawCircleWithCenter:CGPointMake(center.x + distance * cos(angle3), center.y + distance * sin(angle3))
+									radius:kHandleRadius fillColor:nil strokeColor:strokeColor lineWidth:lineWidth];
+			}
+
+			CGContextRestoreGState(ctx);
+		} else {
+			NSColor *strokeColor = [NSColor magentaColor];
+			[self drawCircleWithCenter:CGPointMake(center.x + distance * cos(angle1), center.y + distance * sin(angle1))
+								radius:kHandleRadius fillColor:nil strokeColor:strokeColor lineWidth:lineWidth];
+			[self drawCircleWithCenter:CGPointMake(center.x + distance * cos(angle2), center.y + distance * sin(angle2))
+								radius:kHandleRadius fillColor:nil strokeColor:strokeColor lineWidth:lineWidth];
+			[self drawCircleWithCenter:CGPointMake(center.x + distance * cos(angle3), center.y + distance * sin(angle3))
+								radius:kHandleRadius fillColor:nil strokeColor:strokeColor lineWidth:lineWidth];
+		}
 	}
+
 	for (SKNode *node in aNode.children) {
 		[self drawNode:node];
 	}
