@@ -265,22 +265,27 @@ anchorPoint = _anchorPoint;
 
 		[path setLineWidth:2.0];
 
-		[[NSColor blueColor] set];
+		if (_node == aNode) {
+			[[NSColor blueColor] set];
 
-		CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
-		CGContextSaveGState(ctx);
+			CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
+			CGContextSaveGState(ctx);
 
-		/* Draw the glow effect */
-		NSShadow *shadow = [[NSShadow alloc] init];
-		[shadow setShadowBlurRadius:2.5];
-		[shadow setShadowColor:[NSColor whiteColor]];
-		[shadow set];
+			/* Draw the glow effect */
+			NSShadow *shadow = [[NSShadow alloc] init];
+			[shadow setShadowBlurRadius:2.0];
+			[shadow setShadowColor:[NSColor whiteColor]];
+			[shadow set];
 
-		for (int i = 0; i < 10; ++i) {
+			for (int i = 0; i < 8; ++i) {
+				[path stroke];
+			}
+
+			CGContextRestoreGState(ctx);
+		} else {
+			[[NSColor magentaColor] set];
 			[path stroke];
 		}
-
-		CGContextRestoreGState(ctx);
 	}
 	for (SKNode *node in aNode.children) {
 		[self drawNode:node];
@@ -293,31 +298,38 @@ anchorPoint = _anchorPoint;
 	NSColor *whiteColor = [NSColor whiteColor];
 	NSColor *blueColor = [NSColor colorWithCalibratedRed:0.345 green:0.337 blue:0.961 alpha:1.0];
 
-	/* Outline rectangle*/
-	const CGFloat outlineLineWidth = 1.0;
-
-	NSBezierPath *outlinePath = [NSBezierPath bezierPath];
-	[outlinePath moveToPoint:_handlePoints[BLHandle]];
-	[outlinePath lineToPoint:_handlePoints[BRHandle]];
-	[outlinePath lineToPoint:_handlePoints[TRHandle]];
-	[outlinePath lineToPoint:_handlePoints[TLHandle]];
-	[outlinePath closePath];
-	[outlinePath setLineWidth:outlineLineWidth];
-	[blueColor set];
-	[outlinePath stroke];
-
-	/* Outline handles */
 	const CGFloat handleLineWidth = 1.5;
 	NSColor *fillColor = blueColor;
 	NSColor *strokeColor = whiteColor;
-	[self drawCircleWithCenter:_handlePoints[BLHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[BMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[BRHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[LMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[RMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[TLHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[TMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[TRHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+
+	if ([_node respondsToSelector:@selector(size)]) {
+		/* Draw outline */
+		const CGFloat outlineLineWidth = 1.0;
+
+		NSBezierPath *outlinePath = [NSBezierPath bezierPath];
+		[outlinePath moveToPoint:_handlePoints[BLHandle]];
+		[outlinePath lineToPoint:_handlePoints[BRHandle]];
+		[outlinePath lineToPoint:_handlePoints[TRHandle]];
+		[outlinePath lineToPoint:_handlePoints[TLHandle]];
+		[outlinePath closePath];
+		[outlinePath setLineWidth:outlineLineWidth];
+		[blueColor set];
+		[outlinePath stroke];
+
+		/* Draw size handles */
+		[fillColor set];
+		[strokeColor set];
+		[self drawCircleWithCenter:_handlePoints[BLHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+		[self drawCircleWithCenter:_handlePoints[BMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+		[self drawCircleWithCenter:_handlePoints[BRHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+		[self drawCircleWithCenter:_handlePoints[LMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+		[self drawCircleWithCenter:_handlePoints[RMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+		[self drawCircleWithCenter:_handlePoints[TRHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+		[self drawCircleWithCenter:_handlePoints[TMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+		[self drawCircleWithCenter:_handlePoints[TLHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	}
+
+	[strokeColor set];
 
 	/* Draw a line connecting the node to it's parent */
 	if (_node.parent && _node.parent != _scene) {
