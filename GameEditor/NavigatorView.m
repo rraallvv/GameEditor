@@ -41,7 +41,7 @@
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification {
 	NSInteger selectedRow = [self selectedRow];
 	if (selectedRow != -1) {
-		[_actualDelegate navigatorView:self didSelectNode:[[[self itemAtRow:selectedRow] representedObject] node]];
+		[_actualDelegate navigatorView:self didSelectObject:[[self itemAtRow:selectedRow] representedObject]];
 	}
 }
 

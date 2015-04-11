@@ -100,12 +100,20 @@
 				E4ABDB711AB3BCA700AAE82E /* AttributeNode.m */,
 				E408138D1AC228F400F54824 /* AttributesView.h */,
 				E408138E1AC228F400F54824 /* AttributesView.m */,
+				E41894D81AD975B200E704BB /* Controls */,
+			);
+			name = AttributesInspector;
+			sourceTree = "<group>";
+		};
+		E41894D81AD975B200E704BB /* Controls */ = {
+			isa = PBXGroup;
+			children = (
 				E4BFF4AE1AB78E24002DADD3 /* StepperTextField.h */,
 				E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */,
 				E40813931AC42FFF00F54824 /* ColorWell.h */,
 				E40813941AC42FFF00F54824 /* ColorWell.m */,
 			);
-			name = AttributesInspector;
+			name = Controls;
 			sourceTree = "<group>";
 		};
 		E4ABDB3F1AB3933900AAE82E = {

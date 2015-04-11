@@ -115,18 +115,14 @@
     return YES;
 }
 
-- (IBAction)saveAction:(id)sender {
-	[SKScene archiveScene:self.skView.scene toFile:@"GameScene"];
-}
-
 #pragma mark Selection handling
 
 - (void)editorView:(EditorView *)editorView didSelectNode:(id)node {
 	[self updateSelectionWithNode:node];
 }
 
-- (void)navigatorView:(NavigatorView *)navigatorView didSelectNode:(id)node {
-	[self updateSelectionWithNode:node];
+- (void)navigatorView:(NavigatorView *)navigatorView didSelectObject:(id)object {
+	[self updateSelectionWithNode:[object node]];
 }
 
 - (void)updateSelectionWithNode:(id)node {
@@ -155,6 +151,8 @@
 		});
 	});
 }
+
+#pragma mark Attributes creation
 
 - (NSMutableArray *)attributesForAllClassesWithNode:(id)node {
 
@@ -437,6 +435,8 @@
 	return attributesArray;
 }
 
+#pragma mark Helper methods
+
 - (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray*)nodes {
 	for(NSTreeNode* node in nodes) {
 		if([[[node representedObject] node] isEqual:anObject]) {
@@ -450,6 +450,12 @@
 		}
 	}
 	return nil;
+}
+
+#pragma mark Actions
+
+- (IBAction)saveAction:(id)sender {
+	[SKScene archiveScene:self.skView.scene toFile:@"GameScene"];
 }
 
 @end
