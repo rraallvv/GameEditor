@@ -23,6 +23,7 @@
  * THE SOFTWARE.
  */
 
+
 #define NSLog(FORMAT, ...) fprintf( stderr, "%s\n", [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String])
 
 #import <Cocoa/Cocoa.h>

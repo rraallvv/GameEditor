@@ -30,9 +30,9 @@
 @implementation ColorWell
 
 - (void)drawRect:(NSRect)dirtyRect {
-    [super drawRect:dirtyRect];
-    
-    // Drawing code here.
+	[super drawRect:dirtyRect];
+
+	// Drawing code here.
 }
 
 - (void)activate:(BOOL)exclusive {

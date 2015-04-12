@@ -220,6 +220,7 @@ typedef enum {
 	CGPoint _draggedPosition;
 	BOOL _manipulatingHandle;
 	ManipulatedHandle _manipulatedHandle;
+	NSMutableArray *_boundAttributes;
 
 	/* Outline handle points */
 	CGPoint _handlePoints[MaxHandle];
@@ -234,7 +235,7 @@ size = _size,
 anchorPoint = _anchorPoint;
 
 - (void)drawRect:(NSRect)dirtyRect {
-    [super drawRect:dirtyRect];
+	[super drawRect:dirtyRect];
 
 	/* Draw the scene frame */
 	[[NSColor colorWithRed:1.0 green:0.9 blue:0.0 alpha:1.0] set];
@@ -559,14 +560,14 @@ anchorPoint = _anchorPoint;
 	}
 
 	/* Clear the properties bindings*/
-	[self unbindToNode:_node];
+	[self unbindFromSelectedNode];
 
 	_node = node;
 
 	//self.scene = _node.scene;
 
 	/* Craete the new bindings */
-	[self bindToNode:_node];
+	[self bindToSelectedNode];
 
 	/* Nofify the delegate */
 	[self.delegate editorView:self didSelectNode:(SKNode *)node];
@@ -687,9 +688,7 @@ anchorPoint = _anchorPoint;
 				[(id)_node setAnchorPoint:CGPointMake(Rx, Ry)];
 				[(id)_node setSize:[_scene convertSizeFromView:_size]]; // setting the anchorPoint make the size positive, so this put back the right size (if it have negative values)
 
-				if (_node != _scene) {
-					_node.position = [_scene convertPoint:locationInScene toNode:_node.parent];
-				}
+				_node.position = [_scene convertPoint:locationInScene toNode:_node.parent];
 			} else {
 				_node.position = newPosition;
 			}
@@ -826,9 +825,10 @@ anchorPoint = _anchorPoint;
 	return _scene;
 }
 
-- (void)bindToNode:(SKNode *)node {
-	/* Populate the attributes table from the selected node's properties */
-	Class classType = [node class];
+- (void)bindToSelectedNode {
+	/* Start observing all properties in the selected node */
+	_boundAttributes = [NSMutableArray array];
+	Class classType = [_node class];
 	do {
 		unsigned int count;
 		objc_property_t *properties = class_copyPropertyList(classType, &count);
@@ -836,7 +836,8 @@ anchorPoint = _anchorPoint;
 		if (count) {
 			for(unsigned int i = 0; i < count; i++) {
 				NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
-				[node addObserver:self forKeyPath:key options:0 context:nil];
+				[_node addObserver:self forKeyPath:key options:0 context:nil];
+				[_boundAttributes addObject:key];
 			}
 			free(properties);
 		}
@@ -845,23 +846,28 @@ anchorPoint = _anchorPoint;
 	} while (classType != nil && classType != [SKNode superclass]);
 }
 
-- (void)unbindToNode:(SKNode *)node {
-	/* Populate the attributes table from the selected node's properties */
-	Class classType = [node class];
-	do {
-		unsigned int count;
-		objc_property_t *properties = class_copyPropertyList(classType, &count);
+- (void)unbindFromSelectedNode {
+	/* Stop observing the bound properties in the selected node */
+	for (NSString *key in _boundAttributes) {
+		[_node removeObserver:self forKeyPath:key];
+	}
+	_boundAttributes = nil;
+}
 
-		if (count) {
-			for(unsigned int i = 0; i < count; i++) {
-				NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
-				[node removeObserver:self forKeyPath:key];
-			}
-			free(properties);
+- (void)updateVisibleRect {
+	if (_scene) {
+		CGRect visibleRect = [[_scene valueForKey:@"visibleRect"] rectValue];
+		CGRect viewRect = self.bounds;
+		viewRect.origin = [_scene convertPointFromView:CGPointZero];
+		//viewRect.origin.x *= 2;
+		//viewRect.origin.y *= 2;
+		viewRect.size = [_scene convertSizeFromView:viewRect.size];
+		//viewRect.size.width *= 2;
+		//viewRect.size.height *= 2;
+		if (!CGRectEqualToRect(visibleRect, viewRect)) {
+			[_scene setValue:[NSValue valueWithRect:viewRect] forKey:@"visibleRect"];
 		}
-
-		classType = [classType superclass];
-	} while (classType != nil && classType != [SKNode superclass]);
+	}
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -871,6 +877,10 @@ anchorPoint = _anchorPoint;
 		[self setValue:[_node valueForKey:@"zRotation"] forKey:@"zRotation"];
 		[self setValue:[_node valueForKey:@"anchorPoint"] forKey:@"anchorPoint"];
 
+		if (object == _scene) {
+			[self updateVisibleRect];
+		}
+
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[self setNeedsDisplay:YES];
 		});
@@ -878,7 +888,12 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)dealloc {
-	[self unbindToNode:_node];
+	[self unbindFromSelectedNode];
+}
+
+- (void)setFrame:(NSRect)frame {
+	[super setFrame:frame];
+	[self updateVisibleRect];
 }
 
 @end

@@ -40,7 +40,7 @@
 	if  (!string) {
 		return nil;
 	}
-	
+
 	NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:string attributes:defaultAttributes];
 
 	[attributedString addAttribute:NSForegroundColorAttributeName
@@ -276,7 +276,7 @@ draggingMult = _sensitivity;
 			[self.window disableCursorRects];
 		}
 		self.floatValue += _sensitivity * theEvent.deltaX;
-		
+
 		[self updateBindingValue];
 	}
 	_dragging = YES;
@@ -319,10 +319,10 @@ draggingMult = _sensitivity;
 
 	/* Apply the value transformer, if one has been set */
 	NSDictionary* bindingOptions = bindingInfo[NSOptionsKey];
-	if(bindingOptions){
+	if(bindingOptions) {
 		NSValueTransformer* transformer = bindingOptions[NSValueTransformerBindingOption];
-		if(transformer && (id)transformer != [NSNull null]){
-			if([[transformer class] allowsReverseTransformation]){
+		if(transformer && (id)transformer != [NSNull null]) {
+			if([[transformer class] allowsReverseTransformation]) {
 				value = [transformer reverseTransformedValue:value];
 			} else {
 				NSLog(@"WARNING: binding \"%@\" has value transformer, but it doesn't allow reverse transformations in %s", NSValueBinding, __PRETTY_FUNCTION__);

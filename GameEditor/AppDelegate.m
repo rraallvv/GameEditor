@@ -30,19 +30,19 @@
 @implementation SKScene (Archiving)
 
 + (instancetype)unarchiveFromFile:(NSString *)file {
-    /* Retrieve scene file path from the application bundle */
-    NSString *nodePath = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
+	/* Retrieve scene file path from the application bundle */
+	NSString *nodePath = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
 
-    /* Unarchive the file to an SKScene object */
-    NSData *data = [NSData dataWithContentsOfFile:nodePath
-                                          options:NSDataReadingMappedIfSafe
-                                            error:nil];
-    NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-    [arch setClass:self forClassName:@"SKScene"];
-    SKScene *scene = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
-    [arch finishDecoding];
+	/* Unarchive the file to an SKScene object */
+	NSData *data = [NSData dataWithContentsOfFile:nodePath
+										  options:NSDataReadingMappedIfSafe
+											error:nil];
+	NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+	[arch setClass:self forClassName:@"SKScene"];
+	SKScene *scene = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
+	[arch finishDecoding];
 
-    return scene;
+	return scene;
 }
 
 + (BOOL)archiveScene:(SKScene *)scene toFile:(NSString *)file {
@@ -83,26 +83,27 @@
 	self.window.titleVisibility = NSWindowTitleHidden;
 
 	/* Pick the scene */
-    GameScene *scene = [GameScene unarchiveFromFile:@"GameScene"];
+	GameScene *scene = [GameScene unarchiveFromFile:@"GameScene"];
 	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
 	[_navigatorView expandItem:nil expandChildren:YES];
 
-    /* Set the scale mode to scale to fit the window */
-    scene.scaleMode = SKSceneScaleModeAspectFit;
+	/* Set the scale mode to scale to fit the window */
+	scene.scaleMode = SKSceneScaleModeAspectFit;
 
-    [self.skView presentScene:scene];
+	[self.skView presentScene:scene];
 
-    /* Sprite Kit applies additional optimizations to improve rendering performance */
-    self.skView.ignoresSiblingOrder = YES;
-    
-    self.skView.showsFPS = YES;
-    self.skView.showsNodeCount = YES;
-	self.skView.showsPhysics = YES;
+	/* Sprite Kit applies additional optimizations to improve rendering performance */
+	self.skView.ignoresSiblingOrder = YES;
+
+	self.skView.showsFPS = YES;
+	self.skView.showsNodeCount = YES;
+	//self.skView.showsPhysics = YES;
 
 	/* Setup the editor view */
 	_editorView.scene = scene;
 	_editorView.delegate = self;
-	[self performSelector:@selector(updateSelectionWithNode:) withObject:_editorView.scene afterDelay:0.1];
+	[_editorView updateVisibleRect];
+	[self performSelector:@selector(updateSelectionWithNode:) withObject:_editorView.scene afterDelay:0.5];
 
 	/* Setup the navigator view */
 	_navigatorView.delegate = self;
@@ -113,7 +114,7 @@
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
-    return YES;
+	return YES;
 }
 
 #pragma mark Selection handling
@@ -436,7 +437,7 @@
 		}
 		free(properties);
 	}
-	
+
 	return attributesArray;
 }
 
