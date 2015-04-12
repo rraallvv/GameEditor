@@ -267,6 +267,8 @@ anchorPoint = _anchorPoint;
 	[path setLineWidth:2.0];
 
 	CGPoint center = [_scene convertPoint:CGPointZero fromNode:aNode];
+	center.x -= sceneOrigin.x;
+	center.y -= sceneOrigin.y;
 
 	NSColor *color = nil;
 
@@ -418,7 +420,10 @@ anchorPoint = _anchorPoint;
 	if (_node.parent && _node.parent != _scene) {
 		NSBezierPath *parentConnectionPath = [NSBezierPath bezierPath];
 		[parentConnectionPath moveToPoint:_handlePoints[AnchorPointHandle]];
-		[parentConnectionPath lineToPoint:[_scene convertPoint:CGPointZero fromNode:_node.parent]];
+		CGPoint parentAnchorPoint = [_scene convertPoint:CGPointZero fromNode:_node.parent];
+		parentAnchorPoint.x -= sceneOrigin.x;
+		parentAnchorPoint.y -= sceneOrigin.y;
+		[parentConnectionPath lineToPoint:parentAnchorPoint];
 		[orangeColor setStroke];
 		[parentConnectionPath stroke];
 	}
@@ -600,6 +605,8 @@ anchorPoint = _anchorPoint;
 		/* Construct the path using a rectangle of arbitrary size centered at the node's position*/
 		} else {
 			CGPoint center = [_scene convertPoint:CGPointZero fromNode:child];
+			center.x -= sceneOrigin.x;
+			center.y -= sceneOrigin.y;
 			CGPoint points[4] = {
 				{center.x - kRotationHandleDistance, center.y - kRotationHandleDistance},
 				{center.x + kRotationHandleDistance, center.y - kRotationHandleDistance},
