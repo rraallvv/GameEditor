@@ -49,7 +49,11 @@
 		[_childrenNavigationNodes addObject:childNavigationNode];
 	}
 
+	[_node removeObserver:self forKeyPath:@"name"];
+
 	_node = node;
+
+	[_node addObserver:self forKeyPath:@"name" options:0 context:NULL];
 }
 
 - (id)node {
@@ -59,15 +63,33 @@
 - (void)setChildren:(NSMutableArray *)children {
 
 	SKScene *scene = [_node scene];
-
 	for (NavigationNode *child in children) {
 		SKNode *node = [child node];
 
-		CGPoint position = [scene convertPoint:CGPointZero fromNode:node];
-		position = [scene convertPoint:position toNode:_node];
+		CGPoint position = node.position;
+		CGFloat zRotation = node.zRotation;
+
+		if (node.parent != _node) {
+			if (node.parent == node.scene) {
+				position = [scene convertPoint:position toNode:_node];
+				SKNode *parent = _node;
+				while (parent) {
+					zRotation -= parent.zRotation;
+					parent = parent.parent;
+				}
+			} else if (_node == _node.scene) {
+				position = [scene convertPoint:[scene convertPoint:CGPointZero fromNode:node] toNode:_node];
+				SKNode *parent = node.parent;
+				while (parent) {
+					zRotation += parent.zRotation;
+					parent = parent.parent;
+				}
+			}
+		}
 
 		[node removeFromParent];
 		node.position = position;
+		node.zRotation = zRotation;
 		[_node addChild:node];
 	}
 
@@ -79,7 +101,9 @@
 }
 
 - (void)setName:(NSString *)name {
-	[(SKNode *)self.node setName:name];
+	if (![_node.name isEqualToString:name]) {
+		[(SKNode *)self.node setName:name];
+	}
 }
 
 - (NSString *)name {
@@ -96,7 +120,7 @@
 }
 
 - (BOOL)isEditable {
-	return NO;
+	return YES;
 }
 
 - (NSImage *)image {
@@ -117,6 +141,16 @@
 	} else {
 		return [NSImage imageNamed:@"SKNode"];
 	}
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if ([keyPath isEqualToString:@"name"]) {
+		self.name = [_node valueForKey:@"name"];
+	}
+}
+
+- (void)dealloc {
+	[_node removeObserver:self forKeyPath:@"name"];
 }
 
 @end

@@ -74,7 +74,7 @@
 	NSMutableArray *substrings = [NSMutableArray array];
 	NSMutableString *tempStr = [NSMutableString string];
 
-	for (NSInteger i=0; i<self.length; i++){
+	for (NSInteger i=0; i<self.length; i++) {
 		NSString *ch = [self substringWithRange:NSMakeRange(i, 1)];
 		if ([ch rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]].location != NSNotFound) {
 			[substrings addObject:tempStr];

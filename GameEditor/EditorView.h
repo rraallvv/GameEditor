@@ -38,6 +38,8 @@
 
 @property (weak) id delegate;
 
+- (void)updateVisibleRect;
+
 @end
 
 @protocol EditorViewDelegate

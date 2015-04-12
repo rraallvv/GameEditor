@@ -128,7 +128,7 @@
 	[_popover.contentViewController.view.subviews.firstObject setStringValue:error.localizedDescription];
 	[_popover showRelativeToRect:[self bounds] ofView:self preferredEdge:NSMinXEdge];
 #endif
-	
+
 }
 
 @end
