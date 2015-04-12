@@ -239,6 +239,9 @@ anchorPoint = _anchorPoint;
 - (void)drawRect:(NSRect)dirtyRect {
 	[super drawRect:dirtyRect];
 
+	if (!_scene)
+		return;
+
 	/* Draw the scene frame */
 	[[NSColor colorWithRed:1.0 green:0.9 blue:0.0 alpha:1.0] set];
 
@@ -253,12 +256,12 @@ anchorPoint = _anchorPoint;
 	[path stroke];
 
 	[self drawSelectionInNode:_scene];
+
+	if (_node && _node != _scene)
+		[self drawHandles];
 }
 
 - (void)drawSelectionInNode:(SKNode *)aNode {
-
-	if (!_scene)
-		return;
 
 	CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
 	CGContextSaveGState(ctx);
@@ -350,10 +353,6 @@ anchorPoint = _anchorPoint;
 
 		color = [NSColor cyanColor];
 
-	}
-
-	if (aNode == _node && aNode != _scene) {
-		[self drawHandles];
 	}
 
 	if (_node == aNode) {
