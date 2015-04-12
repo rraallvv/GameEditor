@@ -221,7 +221,6 @@ typedef enum {
 	BOOL _manipulatingHandle;
 	ManipulatedHandle _manipulatedHandle;
 	NSMutableArray *_boundAttributes;
-	CGPoint _viewOrigin;
 
 	/* Outline handle points */
 	CGPoint _handlePoints[MaxHandle];
@@ -633,8 +632,7 @@ anchorPoint = _anchorPoint;
 
 		if (_node == _scene) {
 			/* Get the position being dragged relative to the editor's view */
-			CGPoint viewPositionInScene = _viewOrigin;
-			_draggedPosition = CGPointMake(-locationInScene.x - viewPositionInScene.x, -locationInScene.y - viewPositionInScene.y);
+			_draggedPosition = CGPointMake(-locationInScene.x, -locationInScene.y);
 		} else {
 			/* Get the position being dragged relative to the node's position */
 			CGPoint nodePositionInScene = [_scene convertPoint:CGPointZero fromNode:_node];
@@ -670,9 +668,6 @@ anchorPoint = _anchorPoint;
 
 - (void)updateSelectionWithLocationInScene:(CGPoint)locationInScene {
 	if (_node == _scene) {
-		CGPoint viewPositionInScene = CGPointMake(-locationInScene.x - _draggedPosition.x, -locationInScene.y - _draggedPosition.y);
-		_viewOrigin = viewPositionInScene;
-		[self updateVisibleRect];
 
 	} else {
 		CGPoint nodePositionInScene = CGPointMake(locationInScene.x - _draggedPosition.x, locationInScene.y - _draggedPosition.y);
@@ -868,7 +863,7 @@ anchorPoint = _anchorPoint;
 	if (_scene) {
 		CGRect oldVisibleRect = [[_scene valueForKey:@"visibleRect"] rectValue];
 		CGRect visibleRect;
-		visibleRect.origin = _viewOrigin;
+		visibleRect.origin = CGPointZero;
 		//viewRect.origin.x *= 2;
 		//viewRect.origin.y *= 2;
 		visibleRect.size = self.bounds.size;
