@@ -245,7 +245,7 @@ anchorPoint = _anchorPoint;
 	[[NSColor colorWithRed:1.0 green:0.9 blue:0.0 alpha:1.0] set];
 
 	CGRect rect;
-	rect.origin = CGPointMake(-_viewOrigin.x, -_viewOrigin.y);
+	rect.origin = CGPointMake(_viewOrigin.x, _viewOrigin.y);
 	rect.size = _scene.size;
 
 	NSBezierPath *path = [NSBezierPath bezierPath];
@@ -269,8 +269,8 @@ anchorPoint = _anchorPoint;
 	[path setLineWidth:2.0];
 
 	CGPoint center = [_scene convertPoint:CGPointZero fromNode:aNode];
-	center.x -= _viewOrigin.x;
-	center.y -= _viewOrigin.y;
+	center.x += _viewOrigin.x;
+	center.y += _viewOrigin.y;
 
 	NSColor *color = nil;
 
@@ -419,8 +419,8 @@ anchorPoint = _anchorPoint;
 		NSBezierPath *parentConnectionPath = [NSBezierPath bezierPath];
 		[parentConnectionPath moveToPoint:_handlePoints[AnchorPointHandle]];
 		CGPoint parentAnchorPoint = [_scene convertPoint:CGPointZero fromNode:_node.parent];
-		parentAnchorPoint.x -= _viewOrigin.x;
-		parentAnchorPoint.y -= _viewOrigin.y;
+		parentAnchorPoint.x += _viewOrigin.x;
+		parentAnchorPoint.y += _viewOrigin.y;
 		[parentConnectionPath lineToPoint:parentAnchorPoint];
 		[orangeColor setStroke];
 		[parentConnectionPath stroke];
@@ -492,8 +492,8 @@ anchorPoint = _anchorPoint;
 	points[TLHandle] = [_scene convertPoint:CGPointMake(-size.width * anchorPoint.x, size.height * (1.0 - anchorPoint.y)) fromNode:node];
 
 	for (int i = AnchorPointHandle; i <= TLHandle; ++i) {
-		points[i].x -= _viewOrigin.x;
-		points[i].y -= _viewOrigin.y;
+		points[i].x += _viewOrigin.x;
+		points[i].y += _viewOrigin.y;
 	}
 }
 
@@ -603,8 +603,8 @@ anchorPoint = _anchorPoint;
 		/* Construct the path using a rectangle of arbitrary size centered at the node's position*/
 		} else {
 			CGPoint center = [_scene convertPoint:CGPointZero fromNode:child];
-			center.x -= _viewOrigin.x;
-			center.y -= _viewOrigin.y;
+			center.x += _viewOrigin.x;
+			center.y += _viewOrigin.y;
 			CGPoint points[4] = {
 				{center.x - kRotationHandleDistance, center.y - kRotationHandleDistance},
 				{center.x + kRotationHandleDistance, center.y - kRotationHandleDistance},
@@ -644,7 +644,7 @@ anchorPoint = _anchorPoint;
 
 		if (_node == _scene) {
 			/* Get the position being dragged relative to the editor's view */
-			_draggedPosition = CGPointMake(locationInScene.x + _viewOrigin.x, locationInScene.y + _viewOrigin.y);
+			_draggedPosition = CGPointMake(locationInScene.x - _viewOrigin.x, locationInScene.y - _viewOrigin.y);
 		} else {
 			/* Get the position being dragged relative to the node's position */
 			CGPoint nodePositionInScene = [_scene convertPoint:CGPointZero fromNode:_node];
@@ -681,8 +681,8 @@ anchorPoint = _anchorPoint;
 - (void)updateSelectionWithLocationInScene:(CGPoint)locationInScene {
 	if (_node == _scene) {
 		CGPoint nodePositionInScene = CGPointMake(locationInScene.x - _draggedPosition.x, locationInScene.y - _draggedPosition.y);
-		_viewOrigin.x = -nodePositionInScene.x;
-		_viewOrigin.y = -nodePositionInScene.y;
+		_viewOrigin.x = nodePositionInScene.x;
+		_viewOrigin.y = nodePositionInScene.y;
 		[self updateVisibleRect];
 	} else {
 		CGPoint nodePositionInScene = CGPointMake(locationInScene.x - _draggedPosition.x, locationInScene.y - _draggedPosition.y);
@@ -707,8 +707,8 @@ anchorPoint = _anchorPoint;
 					[(id)_node setAnchorPoint:CGPointMake(Rx, Ry)];
 					[(id)_node setSize:_size]; // setting the anchorPoint make the size positive, so this put back the right size (if it have negative values)
 
-					_node.position = [_scene convertPoint:CGPointMake(locationInScene.x + _viewOrigin.x,
-																	  locationInScene.y + _viewOrigin.y)
+					_node.position = [_scene convertPoint:CGPointMake(locationInScene.x - _viewOrigin.x,
+																	  locationInScene.y - _viewOrigin.y)
 												   toNode:_node.parent];
 				} else {
 					_node.position = nodePosition;
@@ -777,28 +777,28 @@ anchorPoint = _anchorPoint;
 					|| _manipulatedHandle == TRHandle) {
 					CGVector anchorDistance = CGVectorMake(Vx * _anchorPoint.x * Rx + Wx * _anchorPoint.y * Ry,
 														   Vy * _anchorPoint.x * Rx + Wy * _anchorPoint.y * Ry);
-					_node.position = [_scene convertPoint:CGPointMake(_handlePoints[BLHandle].x + anchorDistance.dx + _viewOrigin.x,
-																	  _handlePoints[BLHandle].y + anchorDistance.dy + _viewOrigin.y)
+					_node.position = [_scene convertPoint:CGPointMake(_handlePoints[BLHandle].x + anchorDistance.dx - _viewOrigin.x,
+																	  _handlePoints[BLHandle].y + anchorDistance.dy - _viewOrigin.y)
 												   toNode:_node.parent];
 				} else if (_manipulatedHandle == BLHandle
 						   || _manipulatedHandle == BMHandle
 						   || _manipulatedHandle == LMHandle) {
 					CGVector anchorDistance = CGVectorMake(Vx * (1.0 - _anchorPoint.x) * Rx + Wx * (1.0 - _anchorPoint.y) * Ry,
 														   Vy * (1.0 - _anchorPoint.x) * Rx + Wy * (1.0 - _anchorPoint.y) * Ry);
-					_node.position = [_scene convertPoint:CGPointMake(_handlePoints[TRHandle].x - anchorDistance.dx + _viewOrigin.x,
-																	  _handlePoints[TRHandle].y - anchorDistance.dy + _viewOrigin.y)
+					_node.position = [_scene convertPoint:CGPointMake(_handlePoints[TRHandle].x - anchorDistance.dx - _viewOrigin.x,
+																	  _handlePoints[TRHandle].y - anchorDistance.dy - _viewOrigin.y)
 												   toNode:_node.parent];
 				} else if (_manipulatedHandle == BRHandle) {
 					CGVector anchorDistance = CGVectorMake(Vx * _anchorPoint.x * Rx - Wx * (1.0 - _anchorPoint.y) * Ry,
 														   Vy * _anchorPoint.x * Rx - Wy * (1.0 - _anchorPoint.y) * Ry);
-					_node.position = [_scene convertPoint:CGPointMake(_handlePoints[TLHandle].x + anchorDistance.dx + _viewOrigin.x,
-																	  _handlePoints[TLHandle].y + anchorDistance.dy + _viewOrigin.y)
+					_node.position = [_scene convertPoint:CGPointMake(_handlePoints[TLHandle].x + anchorDistance.dx - _viewOrigin.x,
+																	  _handlePoints[TLHandle].y + anchorDistance.dy - _viewOrigin.y)
 												   toNode:_node.parent];
 				} else { //_manipulatedHandle == TLHandle
 					CGVector anchorDistance = CGVectorMake(Vx * (1.0 - _anchorPoint.x) * Rx - Wx * _anchorPoint.y * Ry,
 														   Vy * (1.0 - _anchorPoint.x) * Rx - Wy * _anchorPoint.y * Ry);
-					_node.position = [_scene convertPoint:CGPointMake(_handlePoints[BRHandle].x - anchorDistance.dx + _viewOrigin.x,
-																	  _handlePoints[BRHandle].y - anchorDistance.dy + _viewOrigin.y)
+					_node.position = [_scene convertPoint:CGPointMake(_handlePoints[BRHandle].x - anchorDistance.dx - _viewOrigin.x,
+																	  _handlePoints[BRHandle].y - anchorDistance.dy - _viewOrigin.y)
 												   toNode:_node.parent];
 				}
 			}
@@ -880,12 +880,12 @@ anchorPoint = _anchorPoint;
 	if (_scene) {
 		CGRect oldVisibleRect = [[_scene valueForKey:@"visibleRect"] rectValue];
 		CGRect visibleRect;
-		visibleRect.origin = _viewOrigin;
-		//viewRect.origin.x *= 2;
-		//viewRect.origin.y *= 2;
+		visibleRect.origin = CGPointMake(-_viewOrigin.x, -_viewOrigin.y);
+		//visibleRect.origin.x *= 2;
+		//visibleRect.origin.y *= 2;
 		visibleRect.size = self.bounds.size;
-		//viewRect.size.width *= 2;
-		//viewRect.size.height *= 2;
+		//visibleRect.size.width *= 2;
+		//visibleRect.size.height *= 2;
 		if (!CGRectEqualToRect(visibleRect, oldVisibleRect)) {
 			[_scene setValue:[NSValue valueWithRect:visibleRect] forKey:@"visibleRect"];
 		}
