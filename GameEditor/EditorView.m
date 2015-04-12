@@ -248,9 +248,12 @@ anchorPoint = _anchorPoint;
 	CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
 	CGContextSaveGState(ctx);
 
-	NSBezierPath *path = nil;
+	NSBezierPath *path = [NSBezierPath bezierPath];
+	[path setLineWidth:2.0];
 
 	CGPoint center = [_scene convertPointToView:CGPointZero fromNode:aNode];
+
+	NSColor *color = nil;
 
 	if ([aNode isMemberOfClass:[SKNode class]]) {
 
@@ -261,8 +264,6 @@ anchorPoint = _anchorPoint;
 		const CGFloat rightEdge = center.x + halfWidth;
 		const CGFloat topEdge = center.y + halfWidth;
 		const CGFloat bottomEdge = center.y - halfWidth;
-
-		path = [NSBezierPath bezierPath];
 
 		[path moveToPoint:CGPointMake(leftEdge, bottomEdge + dashSize)];
 		[path lineToPoint:CGPointMake(leftEdge, bottomEdge)];
@@ -280,70 +281,63 @@ anchorPoint = _anchorPoint;
 		[path lineToPoint:CGPointMake(leftEdge, topEdge)];
 		[path lineToPoint:CGPointMake(leftEdge, topEdge - dashSize)];
 
-		[path setLineWidth:2.0];
+		color = [NSColor magentaColor];
 
-		if (_node == aNode) {
-			[[NSColor blueColor] set];
-
-			/* Draw the glow effect */
-			NSShadow *shadow = [[NSShadow alloc] init];
-			[shadow setShadowBlurRadius:2.0];
-			[shadow setShadowColor:[NSColor whiteColor]];
-			[shadow set];
-		} else {
-			[[NSColor magentaColor] set];
-		}
 	} else if ([aNode isKindOfClass:[SKEmitterNode class]]) {
-		CGFloat lineWidth = 2.0;
 		CGFloat distance = 8;
 		CGFloat angle1 = GLKMathDegreesToRadians(30);
 		CGFloat angle2 = GLKMathDegreesToRadians(150);
 		CGFloat angle3 = GLKMathDegreesToRadians(270);
 
-		if (_node == aNode) {
-			NSColor *strokeColor = [NSColor colorWithRed:0.4 green:0.5 blue:1.0 alpha:1.0];
+		[path appendBezierPathWithCircleWithCenter:CGPointMake(center.x + distance * cos(angle1), center.y + distance * sin(angle1))
+											radius:kHandleRadius];
+		[path appendBezierPathWithCircleWithCenter:CGPointMake(center.x + distance * cos(angle2), center.y + distance * sin(angle2))
+											radius:kHandleRadius];
+		[path appendBezierPathWithCircleWithCenter:CGPointMake(center.x + distance * cos(angle3), center.y + distance * sin(angle3))
+											radius:kHandleRadius];
 
-			/* Draw the glow effect */
-			NSShadow *shadow = [[NSShadow alloc] init];
-			[shadow setShadowBlurRadius:2.0];
-			[shadow setShadowColor:[NSColor whiteColor]];
-			[shadow set];
+		color = [NSColor magentaColor];
 
-			path = [NSBezierPath bezierPath];
-			[strokeColor setStroke];
-			[path setLineWidth:lineWidth];
+	} else if ([aNode isKindOfClass:[SKLightNode class]]) {
 
-			[path appendBezierPathWithCircleWithCenter:CGPointMake(center.x + distance * cos(angle1), center.y + distance * sin(angle1))
-												radius:kHandleRadius];
-			[path appendBezierPathWithCircleWithCenter:CGPointMake(center.x + distance * cos(angle2), center.y + distance * sin(angle2))
-												radius:kHandleRadius];
-			[path appendBezierPathWithCircleWithCenter:CGPointMake(center.x + distance * cos(angle3), center.y + distance * sin(angle3))
-												radius:kHandleRadius];
-		} else {
-			NSColor *strokeColor = [NSColor magentaColor];
+		CGFloat distance1 = 8.0;
+		CGFloat distance2 = 16.0;
 
-			path = [NSBezierPath bezierPath];
-			[strokeColor setStroke];
-			[path setLineWidth:lineWidth];
+		[path appendBezierPathWithCircleWithCenter:center radius:distance1];
 
-			[path appendBezierPathWithCircleWithCenter:CGPointMake(center.x + distance * cos(angle1), center.y + distance * sin(angle1))
-												radius:kHandleRadius];
-			[path appendBezierPathWithCircleWithCenter:CGPointMake(center.x + distance * cos(angle2), center.y + distance * sin(angle2))
-												radius:kHandleRadius];
-			[path appendBezierPathWithCircleWithCenter:CGPointMake(center.x + distance * cos(angle3), center.y + distance * sin(angle3))
-												radius:kHandleRadius];
+		CGFloat angles[] = {
+			GLKMathDegreesToRadians(45),
+			GLKMathDegreesToRadians(135),
+			GLKMathDegreesToRadians(225),
+			GLKMathDegreesToRadians(315)
+		};
+
+		for (int i = 0; i < 4; ++i) {
+			CGFloat cosine = cos(angles[i]);
+			CGFloat sine = sin(angles[i]);
+			[path moveToPoint:CGPointMake(center.x + distance1 * cosine, center.y + distance1 * sine)];
+			[path lineToPoint:CGPointMake(center.x + distance2 * cosine, center.y + distance2 * sine)];
 		}
+
+		color = [NSColor yellowColor];
 	}
 
-	if (path) {
-		if (_node == aNode) {
-			// TODO: Avoid drawing multiple times to get the glow effect
-			for (int i = 0; i < 8; ++i) {
-				[path stroke];
-			}
-		} else {
+	if (_node == aNode) {
+		[[NSColor colorWithRed:0.4 green:0.5 blue:1.0 alpha:1.0] setStroke];
+
+		/* Set the glow effect */
+		NSShadow *shadow = [[NSShadow alloc] init];
+		[shadow setShadowBlurRadius:2.0];
+		[shadow setShadowColor:[NSColor whiteColor]];
+		[shadow set];
+
+		// TODO: Avoid drawing multiple times to get the glow effect
+		for (int i = 0; i < 8; ++i) {
 			[path stroke];
 		}
+	} else {
+		[color setStroke];
+		[path stroke];
 	}
 
 	CGContextRestoreGState(ctx);
