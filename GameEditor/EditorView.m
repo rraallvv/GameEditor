@@ -243,7 +243,7 @@ anchorPoint = _anchorPoint;
 	[[NSColor colorWithRed:1.0 green:0.9 blue:0.0 alpha:1.0] set];
 
 	CGRect rect;
-	rect.origin = CGPointZero;
+	rect.origin = CGPointMake(-sceneOrigin.x, -sceneOrigin.y);
 	rect.size = _scene.size;
 
 	NSBezierPath *path = [NSBezierPath bezierPath];
