@@ -102,6 +102,7 @@
 	/* Setup the editor view */
 	_editorView.scene = scene;
 	_editorView.delegate = self;
+	[self performSelector:@selector(updateSelectionWithNode:) withObject:_editorView.scene afterDelay:0.1];
 
 	/* Setup the navigator view */
 	_navigatorView.delegate = self;
