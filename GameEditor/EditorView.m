@@ -284,24 +284,26 @@ anchorPoint = _anchorPoint;
 		color = [NSColor magentaColor];
 
 	} else if ([aNode isKindOfClass:[SKEmitterNode class]]) {
-		CGFloat distance = 8;
-		CGFloat angle1 = GLKMathDegreesToRadians(30);
-		CGFloat angle2 = GLKMathDegreesToRadians(150);
-		CGFloat angle3 = GLKMathDegreesToRadians(270);
 
-		[path appendBezierPathWithCircleWithCenter:CGPointMake(center.x + distance * cos(angle1), center.y + distance * sin(angle1))
-											radius:kHandleRadius];
-		[path appendBezierPathWithCircleWithCenter:CGPointMake(center.x + distance * cos(angle2), center.y + distance * sin(angle2))
-											radius:kHandleRadius];
-		[path appendBezierPathWithCircleWithCenter:CGPointMake(center.x + distance * cos(angle3), center.y + distance * sin(angle3))
-											radius:kHandleRadius];
+		const CGFloat distance = 8.0;
+
+		CGFloat angles[] = {
+			GLKMathDegreesToRadians(30),
+			GLKMathDegreesToRadians(150),
+			GLKMathDegreesToRadians(270)
+		};
+
+		for (int i = 0; i < 3; ++i) {
+			[path appendBezierPathWithCircleWithCenter:CGPointMake(center.x + distance * cos(angles[i]), center.y + distance * sin(angles[i]))
+												radius:kHandleRadius];
+		}
 
 		color = [NSColor magentaColor];
 
 	} else if ([aNode isKindOfClass:[SKLightNode class]]) {
 
-		CGFloat distance1 = 8.0;
-		CGFloat distance2 = 16.0;
+		const CGFloat distance1 = 8.0;
+		const CGFloat distance2 = 16.0;
 
 		[path appendBezierPathWithCircleWithCenter:center radius:distance1];
 
@@ -320,6 +322,16 @@ anchorPoint = _anchorPoint;
 		}
 
 		color = [NSColor yellowColor];
+
+	} else if ([aNode isKindOfClass:[SKFieldNode class]]) {
+
+		const CGFloat distance1 = 4.25;
+		const CGFloat distance2 = 11.25;
+
+		[path appendBezierPathWithCircleWithCenter:center radius:distance1];
+		[path appendBezierPathWithCircleWithCenter:center radius:distance2];
+
+		color = [NSColor cyanColor];
 	}
 
 	if (_node == aNode) {
