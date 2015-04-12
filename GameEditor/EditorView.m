@@ -620,10 +620,9 @@ anchorPoint = _anchorPoint;
 - (void)mouseDown:(NSEvent *)theEvent {
 	[[self window] makeFirstResponder:self];
 	if (_scene) {
-		CGPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
-		CGPoint locationInScene = locationInView;
-		if (!(_node && [self shouldManipulateHandleWithPoint:locationInView])) {
-			NSArray *nodes = [self nodesInArray:_scene.children containingPoint:locationInView];
+		CGPoint locationInScene = [self convertPoint:theEvent.locationInWindow fromView:nil];
+		if (!(_node && [self shouldManipulateHandleWithPoint:locationInScene])) {
+			NSArray *nodes = [self nodesInArray:_scene.children containingPoint:locationInScene];
 			if (nodes.count) {
 				NSUInteger index = ([nodes indexOfObject:_node] + 1) % nodes.count;
 				self.node = [nodes objectAtIndex:index];
@@ -641,14 +640,14 @@ anchorPoint = _anchorPoint;
 			CGPoint nodePositionInScene = [_scene convertPoint:CGPointZero fromNode:_node];
 			_draggedPosition = CGPointMake(locationInScene.x - nodePositionInScene.x, locationInScene.y - nodePositionInScene.y);
 		}
-		[self updateSelectionWithLocationInView:locationInView];
+		[self updateSelectionWithLocationInScene:locationInScene];
 	}
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
 	if (_scene) {
 		CGPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
-		[self updateSelectionWithLocationInView:locationInView];
+		[self updateSelectionWithLocationInScene:locationInView];
 	}
 }
 
@@ -669,8 +668,7 @@ anchorPoint = _anchorPoint;
  Ry = (dx*Vy - dy*Vx)/(Vy*Wx - Vx*Wy)
  */
 
-- (void)updateSelectionWithLocationInView:(CGPoint)locationInView {
-	CGPoint locationInScene = locationInView;
+- (void)updateSelectionWithLocationInScene:(CGPoint)locationInScene {
 	if (_node == _scene) {
 		CGPoint viewPositionInScene = CGPointMake(-locationInScene.x - _draggedPosition.x, -locationInScene.y - _draggedPosition.y);
 		_viewOrigin = viewPositionInScene;
@@ -690,8 +688,8 @@ anchorPoint = _anchorPoint;
 					CGFloat Wx = _handlePoints[TLHandle].x - _handlePoints[BLHandle].x;
 					CGFloat Wy = _handlePoints[TLHandle].y - _handlePoints[BLHandle].y;
 
-					CGFloat dx = locationInView.x - _handlePoints[BLHandle].x;
-					CGFloat dy = locationInView.y - _handlePoints[BLHandle].y;
+					CGFloat dx = locationInScene.x - _handlePoints[BLHandle].x;
+					CGFloat dy = locationInScene.y - _handlePoints[BLHandle].y;
 
 					CGFloat Rx = (dx * Wy - dy * Wx) / (Vx * Wy - Vy * Wx);
 					CGFloat Ry = (dx * Vy - dy * Vx) / (Vy * Wx - Vx * Wy);
@@ -704,8 +702,8 @@ anchorPoint = _anchorPoint;
 					_node.position = nodePosition;
 				}
 			} else if (_manipulatedHandle == RotationHandle) {
-				_node.zRotation = [_scene convertZRotationFromView:atan2(locationInView.y - _handlePoints[AnchorPointHandle].y,
-																		 locationInView.x - _handlePoints[AnchorPointHandle].x)
+				_node.zRotation = [_scene convertZRotationFromView:atan2(locationInScene.y - _handlePoints[AnchorPointHandle].y,
+																		 locationInScene.x - _handlePoints[AnchorPointHandle].x)
 															toNode:_node];
 			} else {
 
@@ -721,22 +719,22 @@ anchorPoint = _anchorPoint;
 				if (_manipulatedHandle == TMHandle
 					|| _manipulatedHandle == RMHandle
 					|| _manipulatedHandle == TRHandle) {
-					dx = locationInView.x - _handlePoints[BLHandle].x;
-					dy = locationInView.y - _handlePoints[BLHandle].y;
+					dx = locationInScene.x - _handlePoints[BLHandle].x;
+					dy = locationInScene.y - _handlePoints[BLHandle].y;
 
 				} else if (_manipulatedHandle == BLHandle
 						   || _manipulatedHandle == BMHandle
 						   || _manipulatedHandle == LMHandle) {
-					dx = _handlePoints[TRHandle].x - locationInView.x;
-					dy = _handlePoints[TRHandle].y - locationInView.y;
+					dx = _handlePoints[TRHandle].x - locationInScene.x;
+					dy = _handlePoints[TRHandle].y - locationInScene.y;
 
 				} else if (_manipulatedHandle == BRHandle) {
-					dx = locationInView.x - _handlePoints[TLHandle].x;
-					dy = locationInView.y - _handlePoints[TLHandle].y;
+					dx = locationInScene.x - _handlePoints[TLHandle].x;
+					dy = locationInScene.y - _handlePoints[TLHandle].y;
 
 				} else {
-					dx = _handlePoints[BRHandle].x - locationInView.x;
-					dy = _handlePoints[BRHandle].y - locationInView.y;
+					dx = _handlePoints[BRHandle].x - locationInScene.x;
+					dy = _handlePoints[BRHandle].y - locationInScene.y;
 
 				}
 
