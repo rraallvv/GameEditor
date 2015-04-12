@@ -27,6 +27,8 @@
 #import <GLKit/GLKit.h>
 #import <objc/runtime.h>
 
+const CGPoint sceneOrigin = {-100, -150};
+
 #pragma mark NSBezierPath
 
 @implementation NSBezierPath (Additions)
@@ -485,6 +487,11 @@ anchorPoint = _anchorPoint;
 	points[BRHandle] = [_scene convertPoint:CGPointMake(size.width * (1.0 - anchorPoint.x), -size.height * anchorPoint.y) fromNode:node];
 	points[TRHandle] = [_scene convertPoint:CGPointMake(size.width * (1.0 - anchorPoint.x), size.height * (1.0 - anchorPoint.y)) fromNode:node];
 	points[TLHandle] = [_scene convertPoint:CGPointMake(-size.width * anchorPoint.x, size.height * (1.0 - anchorPoint.y)) fromNode:node];
+
+	for (int i = AnchorPointHandle; i <= TLHandle; ++i) {
+		points[i].x -= sceneOrigin.x;
+		points[i].y -= sceneOrigin.y;
+	}
 }
 
 - (void)updateHandles {
@@ -644,8 +651,8 @@ anchorPoint = _anchorPoint;
 
 - (void)mouseDragged:(NSEvent *)theEvent {
 	if (_scene) {
-		CGPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
-		[self updateSelectionWithLocationInScene:locationInView];
+		CGPoint locationInScene = [self convertPoint:theEvent.locationInWindow fromView:nil];
+		[self updateSelectionWithLocationInScene:locationInScene];
 	}
 }
 
@@ -863,7 +870,7 @@ anchorPoint = _anchorPoint;
 	if (_scene) {
 		CGRect oldVisibleRect = [[_scene valueForKey:@"visibleRect"] rectValue];
 		CGRect visibleRect;
-		visibleRect.origin = CGPointZero;
+		visibleRect.origin = sceneOrigin;
 		//viewRect.origin.x *= 2;
 		//viewRect.origin.y *= 2;
 		visibleRect.size = self.bounds.size;
