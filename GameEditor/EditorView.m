@@ -705,6 +705,8 @@ anchorPoint = _anchorPoint;
 					[(id)_node setAnchorPoint:CGPointMake(Rx, Ry)];
 					[(id)_node setSize:_size]; // setting the anchorPoint make the size positive, so this put back the right size (if it have negative values)
 
+					locationInScene.x += sceneOrigin.x;
+					locationInScene.y += sceneOrigin.y;
 					_node.position = [_scene convertPoint:locationInScene toNode:_node.parent];
 				} else {
 					_node.position = nodePosition;
