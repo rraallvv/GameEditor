@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6751"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7531"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
@@ -420,7 +420,7 @@
             </constraints>
             <point key="canvasLocation" x="436" y="332.5"/>
         </tableCellView>
-        <tableCellView identifier="color" id="Nhn-ML-Yi0" userLabel="color">
+        <tableCellView identifier="@&quot;NSColor&quot;" id="Nhn-ML-Yi0" userLabel="color">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -449,7 +449,7 @@
             <subviews>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tJ6-rj-LJu">
                     <rect key="frame" x="0.0" y="1" width="161" height="19"/>
-                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" placeholderString="Value" bezelStyle="round" id="4Dn-y0-9HB">
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" placeholderString="Value" id="4Dn-y0-9HB">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -502,6 +502,34 @@
             </constraints>
             <point key="canvasLocation" x="726" y="545"/>
         </customView>
+        <tableCellView identifier="@&quot;NSString&quot;" id="AvU-FU-guj" userLabel="string" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="8Dg-tM-wS7">
+                    <rect key="frame" x="0.0" y="1" width="172" height="19"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="String" id="VoN-6p-bSt">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="AvU-FU-guj" name="editable" keyPath="objectValue.isEditable" id="EcU-H0-w8v"/>
+                        <binding destination="AvU-FU-guj" name="value" keyPath="objectValue.value" id="RFF-Gq-e5C"/>
+                    </connections>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="8Dg-tM-wS7" secondAttribute="trailing" id="UgJ-3U-sA9"/>
+                <constraint firstItem="8Dg-tM-wS7" firstAttribute="top" secondItem="AvU-FU-guj" secondAttribute="top" id="xrf-fc-phQ"/>
+                <constraint firstItem="8Dg-tM-wS7" firstAttribute="leading" secondItem="AvU-FU-guj" secondAttribute="leading" id="yPp-fK-6Dh"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="y2J-uA-XqQ"/>
+                <outlet property="textField" destination="8Dg-tM-wS7" id="w4g-3F-6fZ"/>
+            </connections>
+            <point key="canvasLocation" x="436" y="612"/>
+        </tableCellView>
     </objects>
     <resources>
         <image name="AltDecreaseStepper" width="11" height="13"/>

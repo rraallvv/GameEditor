@@ -27,6 +27,17 @@
 #import <GLKit/GLKit.h>
 #import <objc/runtime.h>
 
+#pragma mark NSBezierPath
+
+@implementation NSBezierPath (Additions)
+
+- (void)appendBezierPathWithCircleWithCenter:(NSPoint)center radius:(CGFloat)radius {
+	[self moveToPoint:CGPointMake(center.x + radius, center.y)];
+	[self appendBezierPathWithArcWithCenter:center radius:radius startAngle:0 endAngle:M_2_PI clockwise:YES];
+}
+
+@end
+
 #pragma mark SKScene
 
 const CGFloat kRotationHandleDistance = 25.0;
@@ -209,6 +220,7 @@ typedef enum {
 	CGPoint _draggedPosition;
 	BOOL _manipulatingHandle;
 	ManipulatedHandle _manipulatedHandle;
+	NSMutableArray *_boundAttributes;
 
 	/* Outline handle points */
 	CGPoint _handlePoints[MaxHandle];
@@ -223,53 +235,194 @@ size = _size,
 anchorPoint = _anchorPoint;
 
 - (void)drawRect:(NSRect)dirtyRect {
-    [super drawRect:dirtyRect];
-	if (_node) {
-		[self drawRectangleOutline];
+	[super drawRect:dirtyRect];
+
+	/* Draw the scene frame */
+	[[NSColor colorWithRed:1.0 green:0.9 blue:0.0 alpha:1.0] set];
+
+	CGRect rect;
+	rect.origin = [_scene convertPointToView:CGPointZero];
+	rect.size = [_scene convertSizeToView:_scene.size];
+
+	NSBezierPath *path = [NSBezierPath bezierPath];
+	[path setLineWidth:1.0];
+	[path appendBezierPathWithRect:rect];
+
+	[path stroke];
+
+	[self drawSelectionInNode:_scene];
+}
+
+- (void)drawSelectionInNode:(SKNode *)aNode {
+
+	if (!_scene)
+		return;
+
+	CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
+	CGContextSaveGState(ctx);
+
+	NSBezierPath *path = [NSBezierPath bezierPath];
+	[path setLineWidth:2.0];
+
+	CGPoint center = [_scene convertPointToView:CGPointZero fromNode:aNode];
+
+	NSColor *color = nil;
+
+	if ([aNode isMemberOfClass:[SKNode class]]) {
+
+		const CGFloat halfWidth = 11;
+		const CGFloat dashSize = 8;
+
+		const CGFloat leftEdge = center.x - halfWidth;
+		const CGFloat rightEdge = center.x + halfWidth;
+		const CGFloat topEdge = center.y + halfWidth;
+		const CGFloat bottomEdge = center.y - halfWidth;
+
+		[path moveToPoint:CGPointMake(leftEdge, bottomEdge + dashSize)];
+		[path lineToPoint:CGPointMake(leftEdge, bottomEdge)];
+		[path lineToPoint:CGPointMake(leftEdge + dashSize, bottomEdge)];
+
+		[path moveToPoint:CGPointMake(rightEdge - dashSize, bottomEdge)];
+		[path lineToPoint:CGPointMake(rightEdge, bottomEdge)];
+		[path lineToPoint:CGPointMake(rightEdge, bottomEdge + dashSize)];
+
+		[path moveToPoint:CGPointMake(rightEdge, topEdge - dashSize)];
+		[path lineToPoint:CGPointMake(rightEdge, topEdge)];
+		[path lineToPoint:CGPointMake(rightEdge - dashSize, topEdge)];
+
+		[path moveToPoint:CGPointMake(leftEdge + dashSize, topEdge)];
+		[path lineToPoint:CGPointMake(leftEdge, topEdge)];
+		[path lineToPoint:CGPointMake(leftEdge, topEdge - dashSize)];
+
+		color = [NSColor magentaColor];
+
+	} else if ([aNode isKindOfClass:[SKEmitterNode class]]) {
+
+		const CGFloat distance = 8.0;
+
+		CGFloat angles[] = {
+			GLKMathDegreesToRadians(30),
+			GLKMathDegreesToRadians(150),
+			GLKMathDegreesToRadians(270)
+		};
+
+		for (int i = 0; i < 3; ++i) {
+			[path appendBezierPathWithCircleWithCenter:CGPointMake(center.x + distance * cos(angles[i]), center.y + distance * sin(angles[i]))
+												radius:kHandleRadius];
+		}
+
+		color = [NSColor magentaColor];
+
+	} else if ([aNode isKindOfClass:[SKLightNode class]]) {
+
+		const CGFloat distance1 = 8.0;
+		const CGFloat distance2 = 16.0;
+
+		[path appendBezierPathWithCircleWithCenter:center radius:distance1];
+
+		CGFloat angles[] = {
+			GLKMathDegreesToRadians(45),
+			GLKMathDegreesToRadians(135),
+			GLKMathDegreesToRadians(225),
+			GLKMathDegreesToRadians(315)
+		};
+
+		for (int i = 0; i < 4; ++i) {
+			CGFloat cosine = cos(angles[i]);
+			CGFloat sine = sin(angles[i]);
+			[path moveToPoint:CGPointMake(center.x + distance1 * cosine, center.y + distance1 * sine)];
+			[path lineToPoint:CGPointMake(center.x + distance2 * cosine, center.y + distance2 * sine)];
+		}
+
+		color = [NSColor yellowColor];
+
+	} else if ([aNode isKindOfClass:[SKFieldNode class]]) {
+
+		const CGFloat distance1 = 4.25;
+		const CGFloat distance2 = 11.25;
+
+		[path appendBezierPathWithCircleWithCenter:center radius:distance1];
+		[path appendBezierPathWithCircleWithCenter:center radius:distance2];
+
+		color = [NSColor cyanColor];
+
+	}
+
+	if (aNode == _node && aNode != _scene) {
+		[self drawHandles];
+	}
+
+	if (_node == aNode) {
+		[[NSColor colorWithRed:0.4 green:0.5 blue:1.0 alpha:1.0] setStroke];
+
+		/* Set the glow effect */
+		NSShadow *shadow = [[NSShadow alloc] init];
+		[shadow setShadowBlurRadius:2.0];
+		[shadow setShadowColor:[NSColor whiteColor]];
+		[shadow set];
+
+		// TODO: Avoid drawing multiple times to get the glow effect
+		for (int i = 0; i < 8; ++i) {
+			[path stroke];
+		}
+	} else {
+		[color setStroke];
+		[path stroke];
+	}
+
+	CGContextRestoreGState(ctx);
+
+	for (SKNode *node in aNode.children) {
+		[self drawSelectionInNode:node];
 	}
 }
 
-- (void)drawRectangleOutline {
+- (void)drawHandles {
+
 	[self updateHandles];
 
 	NSColor *whiteColor = [NSColor whiteColor];
 	NSColor *blueColor = [NSColor colorWithCalibratedRed:0.345 green:0.337 blue:0.961 alpha:1.0];
+	NSColor *orangeColor = [NSColor colorWithRed:1.0 green:0.9 blue:0.0 alpha:1.0];
 
-	/* Outline rectangle*/
-	const CGFloat outlineLineWidth = 1.0;
-
-	NSBezierPath *outlinePath = [NSBezierPath bezierPath];
-	[outlinePath moveToPoint:_handlePoints[BLHandle]];
-	[outlinePath lineToPoint:_handlePoints[BRHandle]];
-	[outlinePath lineToPoint:_handlePoints[TRHandle]];
-	[outlinePath lineToPoint:_handlePoints[TLHandle]];
-	[outlinePath closePath];
-	[outlinePath setLineWidth:outlineLineWidth];
-	[blueColor set];
-	[outlinePath stroke];
-
-	/* Outline handles */
 	const CGFloat handleLineWidth = 1.5;
 	NSColor *fillColor = blueColor;
 	NSColor *strokeColor = whiteColor;
-	[self drawCircleWithCenter:_handlePoints[BLHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[BMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[BRHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[LMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[RMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[TLHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[TMHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
-	[self drawCircleWithCenter:_handlePoints[TRHandle] radius:kHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+
+	if ([_node respondsToSelector:@selector(size)]) {
+		/* Draw outline */
+		NSBezierPath *outlinePath = [NSBezierPath bezierPath];
+		[blueColor setStroke];
+		[outlinePath appendBezierPathWithPoints:&_handlePoints[BLHandle] count:4];
+		[outlinePath closePath];
+		[outlinePath setLineWidth:1.0];
+		[outlinePath stroke];
+
+		/* Draw size handles */
+		NSBezierPath *path = [NSBezierPath bezierPath];
+		[fillColor setFill];
+		[strokeColor setStroke];
+		[path setLineWidth:handleLineWidth];
+		for (int i = BLHandle; i <= LMHandle; ++i) {
+			[path appendBezierPathWithCircleWithCenter:_handlePoints[i] radius:kHandleRadius];
+		}
+		[path fill];
+		[path stroke];
+	}
+
+	[strokeColor set];
 
 	/* Draw a line connecting the node to it's parent */
 	if (_node.parent && _node.parent != _scene) {
 		NSBezierPath *parentConnectionPath = [NSBezierPath bezierPath];
 		[parentConnectionPath moveToPoint:_handlePoints[AnchorPointHandle]];
 		[parentConnectionPath lineToPoint:[_scene convertPointToView:CGPointZero fromNode:_node.parent]];
-		[[NSColor colorWithRed:1.0 green:0.9 blue:0.0 alpha:1.0] setStroke];
+		[orangeColor setStroke];
 		[parentConnectionPath stroke];
-		[whiteColor setStroke];
 	}
+
+	CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
+	CGContextSaveGState(ctx);
 
 	/* Setup the shadow effect */
 	NSShadow *shadow = [[NSShadow alloc] init];
@@ -277,16 +430,22 @@ anchorPoint = _anchorPoint;
 	[shadow setShadowColor:[NSColor blackColor]];
 	[shadow set];
 
-	/* Rotation angle handle */
+	/* Rotation handle */
+	[whiteColor setStroke];
 	const CGFloat rotationLineWidth = 1.0;
 	const CGFloat rotationHandleRadius = 4.0;
 	[NSBezierPath strokeLineFromPoint:_handlePoints[AnchorPointHandle] toPoint:_handlePoints[RotationHandle]];
 	[self drawCircleWithCenter:_handlePoints[AnchorPointHandle] radius:kRotationHandleDistance fillColor:nil strokeColor:strokeColor lineWidth:rotationLineWidth];
-	[self drawCircleWithCenter:_handlePoints[RotationHandle] radius:rotationHandleRadius fillColor:fillColor strokeColor:strokeColor lineWidth:handleLineWidth];
+	[self drawCircleWithCenter:_handlePoints[RotationHandle] radius:rotationHandleRadius fillColor:fillColor strokeColor:nil lineWidth:handleLineWidth];
 
 	/* Anchor point handle */
 	const CGFloat anchorHandleRadius = 4.0;
 	[self drawCircleWithCenter:_handlePoints[AnchorPointHandle] radius:anchorHandleRadius fillColor:whiteColor strokeColor:nil lineWidth:handleLineWidth];
+
+	CGContextRestoreGState(ctx);
+
+	/* Fill the rotation handle without the shadow effect */
+	[self drawCircleWithCenter:_handlePoints[RotationHandle] radius:rotationHandleRadius fillColor:nil strokeColor:strokeColor lineWidth:handleLineWidth];
 }
 
 - (void)drawCircleWithCenter:(CGPoint)center radius:(CGFloat)radius fillColor:(NSColor *)fillColor strokeColor:(NSColor *)strokeColor lineWidth:(CGFloat)lineWidth{
@@ -401,13 +560,14 @@ anchorPoint = _anchorPoint;
 	}
 
 	/* Clear the properties bindings*/
-	[self unbindToNode:_node];
+	[self unbindFromSelectedNode];
 
 	_node = node;
-	self.scene = _node.scene;
+
+	//self.scene = _node.scene;
 
 	/* Craete the new bindings */
-	[self bindToNode:_node];
+	[self bindToSelectedNode];
 
 	/* Nofify the delegate */
 	[self.delegate editorView:self didSelectNode:(SKNode *)node];
@@ -528,9 +688,7 @@ anchorPoint = _anchorPoint;
 				[(id)_node setAnchorPoint:CGPointMake(Rx, Ry)];
 				[(id)_node setSize:[_scene convertSizeFromView:_size]]; // setting the anchorPoint make the size positive, so this put back the right size (if it have negative values)
 
-				if (_node != _scene) {
-					_node.position = [_scene convertPoint:locationInScene toNode:_node.parent];
-				}
+				_node.position = [_scene convertPoint:locationInScene toNode:_node.parent];
 			} else {
 				_node.position = newPosition;
 			}
@@ -667,9 +825,10 @@ anchorPoint = _anchorPoint;
 	return _scene;
 }
 
-- (void)bindToNode:(SKNode *)node {
-	/* Populate the attributes table from the selected node's properties */
-	Class classType = [node class];
+- (void)bindToSelectedNode {
+	/* Start observing all properties in the selected node */
+	_boundAttributes = [NSMutableArray array];
+	Class classType = [_node class];
 	do {
 		unsigned int count;
 		objc_property_t *properties = class_copyPropertyList(classType, &count);
@@ -677,7 +836,8 @@ anchorPoint = _anchorPoint;
 		if (count) {
 			for(unsigned int i = 0; i < count; i++) {
 				NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
-				[node addObserver:self forKeyPath:key options:0 context:nil];
+				[_node addObserver:self forKeyPath:key options:0 context:nil];
+				[_boundAttributes addObject:key];
 			}
 			free(properties);
 		}
@@ -686,23 +846,28 @@ anchorPoint = _anchorPoint;
 	} while (classType != nil && classType != [SKNode superclass]);
 }
 
-- (void)unbindToNode:(SKNode *)node {
-	/* Populate the attributes table from the selected node's properties */
-	Class classType = [node class];
-	do {
-		unsigned int count;
-		objc_property_t *properties = class_copyPropertyList(classType, &count);
+- (void)unbindFromSelectedNode {
+	/* Stop observing the bound properties in the selected node */
+	for (NSString *key in _boundAttributes) {
+		[_node removeObserver:self forKeyPath:key];
+	}
+	_boundAttributes = nil;
+}
 
-		if (count) {
-			for(unsigned int i = 0; i < count; i++) {
-				NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
-				[node removeObserver:self forKeyPath:key];
-			}
-			free(properties);
+- (void)updateVisibleRect {
+	if (_scene) {
+		CGRect visibleRect = [[_scene valueForKey:@"visibleRect"] rectValue];
+		CGRect viewRect = self.bounds;
+		viewRect.origin = [_scene convertPointFromView:CGPointZero];
+		//viewRect.origin.x *= 2;
+		//viewRect.origin.y *= 2;
+		viewRect.size = [_scene convertSizeFromView:viewRect.size];
+		//viewRect.size.width *= 2;
+		//viewRect.size.height *= 2;
+		if (!CGRectEqualToRect(visibleRect, viewRect)) {
+			[_scene setValue:[NSValue valueWithRect:viewRect] forKey:@"visibleRect"];
 		}
-
-		classType = [classType superclass];
-	} while (classType != nil && classType != [SKNode superclass]);
+	}
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -712,10 +877,23 @@ anchorPoint = _anchorPoint;
 		[self setValue:[_node valueForKey:@"zRotation"] forKey:@"zRotation"];
 		[self setValue:[_node valueForKey:@"anchorPoint"] forKey:@"anchorPoint"];
 
+		if (object == _scene) {
+			[self updateVisibleRect];
+		}
+
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[self setNeedsDisplay:YES];
 		});
 	}
+}
+
+- (void)dealloc {
+	[self unbindFromSelectedNode];
+}
+
+- (void)setFrame:(NSRect)frame {
+	[super setFrame:frame];
+	[self updateVisibleRect];
 }
 
 @end

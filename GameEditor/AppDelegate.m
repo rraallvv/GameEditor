@@ -30,19 +30,19 @@
 @implementation SKScene (Archiving)
 
 + (instancetype)unarchiveFromFile:(NSString *)file {
-    /* Retrieve scene file path from the application bundle */
-    NSString *nodePath = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
+	/* Retrieve scene file path from the application bundle */
+	NSString *nodePath = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
 
-    /* Unarchive the file to an SKScene object */
-    NSData *data = [NSData dataWithContentsOfFile:nodePath
-                                          options:NSDataReadingMappedIfSafe
-                                            error:nil];
-    NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-    [arch setClass:self forClassName:@"SKScene"];
-    SKScene *scene = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
-    [arch finishDecoding];
+	/* Unarchive the file to an SKScene object */
+	NSData *data = [NSData dataWithContentsOfFile:nodePath
+										  options:NSDataReadingMappedIfSafe
+											error:nil];
+	NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+	[arch setClass:self forClassName:@"SKScene"];
+	SKScene *scene = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
+	[arch finishDecoding];
 
-    return scene;
+	return scene;
 }
 
 + (BOOL)archiveScene:(SKScene *)scene toFile:(NSString *)file {
@@ -73,8 +73,6 @@
 	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet AttributesView *_attributesView;
 	IBOutlet NSOutlineView *_navigatorView;
-	NSIndexPath *_fromIndexPath;
-	NSIndexPath *_toIndexPath;
 }
 
 @synthesize window = _window;
@@ -85,25 +83,27 @@
 	self.window.titleVisibility = NSWindowTitleHidden;
 
 	/* Pick the scene */
-    GameScene *scene = [GameScene unarchiveFromFile:@"GameScene"];
+	GameScene *scene = [GameScene unarchiveFromFile:@"GameScene"];
 	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
 	[_navigatorView expandItem:nil expandChildren:YES];
 
-    /* Set the scale mode to scale to fit the window */
-    scene.scaleMode = SKSceneScaleModeAspectFit;
+	/* Set the scale mode to scale to fit the window */
+	scene.scaleMode = SKSceneScaleModeAspectFit;
 
-    [self.skView presentScene:scene];
+	[self.skView presentScene:scene];
 
-    /* Sprite Kit applies additional optimizations to improve rendering performance */
-    self.skView.ignoresSiblingOrder = YES;
-    
-    self.skView.showsFPS = YES;
-    self.skView.showsNodeCount = YES;
-	self.skView.showsPhysics = YES;
+	/* Sprite Kit applies additional optimizations to improve rendering performance */
+	self.skView.ignoresSiblingOrder = YES;
+
+	self.skView.showsFPS = YES;
+	self.skView.showsNodeCount = YES;
+	//self.skView.showsPhysics = YES;
 
 	/* Setup the editor view */
 	_editorView.scene = scene;
 	_editorView.delegate = self;
+	[_editorView updateVisibleRect];
+	[self performSelector:@selector(updateSelectionWithNode:) withObject:_editorView.scene afterDelay:0.5];
 
 	/* Setup the navigator view */
 	_navigatorView.delegate = self;
@@ -114,11 +114,7 @@
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
-    return YES;
-}
-
-- (IBAction)saveAction:(id)sender {
-	[SKScene archiveScene:self.skView.scene toFile:@"GameScene"];
+	return YES;
 }
 
 #pragma mark Selection handling
@@ -127,8 +123,8 @@
 	[self updateSelectionWithNode:node];
 }
 
-- (void)navigatorView:(NavigatorView *)navigatorView didSelectNode:(id)node {
-	[self updateSelectionWithNode:node];
+- (void)navigatorView:(NavigatorView *)navigatorView didSelectObject:(id)object {
+	[self updateSelectionWithNode:[object node]];
 }
 
 - (void)updateSelectionWithNode:(id)node {
@@ -139,7 +135,7 @@
 		NSMutableArray *contents = [self attributesForAllClassesWithNode:node];
 
 		/* Look up for the row to be selected */
-		NSInteger row = [_navigatorView rowForItem:[self navigationNodeOfObject:node]];
+		NSInteger row = [_navigatorView rowForItem:[self navigationNodeOfObject:node inNodes:[[_navigatorTreeController arrangedObjects] childNodes]]];
 
 		dispatch_async(dispatch_get_main_queue(), ^{
 			/* Replace the attributes table */
@@ -157,6 +153,8 @@
 		});
 	});
 }
+
+#pragma mark Attributes creation
 
 - (NSMutableArray *)attributesForAllClassesWithNode:(id)node {
 
@@ -375,8 +373,13 @@
 
 			Class propertyClass = [propertyType classType];
 
-			if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
-				[attributesArray addObject:[AttributeNode attributeForColorWithName:propertyName node:node]];
+			BOOL editable = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
+
+			if ([propertyType isEqualToEncodedType:@encode(NSString)] && editable) {
+				[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyType]];
+
+			} else if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
+				[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyType]];
 
 			} else if (propertyClass == [SKTexture class]
 					   || propertyClass == [SKShader class]
@@ -391,7 +394,6 @@
 				[attributesArray addObject:[AttributeNode  attributeForRotationAngleWithName:propertyName node:node]];
 
 			} else {
-				BOOL editable = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
 				NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
 				editable = editable && ![propertyType isEqualToString:@""] && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
 
@@ -435,13 +437,11 @@
 		}
 		free(properties);
 	}
-	
+
 	return attributesArray;
 }
 
-- (id)navigationNodeOfObject:(id)anObject {
-	return [self navigationNodeOfObject:anObject inNodes:[[_navigatorTreeController arrangedObjects] childNodes]];
-}
+#pragma mark Helper methods
 
 - (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray*)nodes {
 	for(NSTreeNode* node in nodes) {
@@ -458,80 +458,10 @@
 	return nil;
 }
 
-#pragma mark Drag & Drop
+#pragma mark Actions
 
-- (NSTreeNode *)nodeInChildrenArray:(NSArray *)array withIndexPath:(NSIndexPath *)indexPath {
-	for(NSTreeNode *child in array) {
-		if ([[child indexPath] compare:indexPath] == NSOrderedSame) {
-			return child;
-		}
-		if (child.childNodes.count) {
-			NSTreeNode *node = [self nodeInChildrenArray:child.childNodes withIndexPath:indexPath];
-			if (node) {
-				return node;
-			}
-		}
-	}
-	return nil;
-}
-
-- (id <NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item {
-	NSPasteboardItem *pboardItem = [[NSPasteboardItem alloc] init];
-	NSData *pboardData = [NSKeyedArchiver archivedDataWithRootObject:[item indexPath]];
-	[pboardItem setData:pboardData forType:@"public.binary"];
-	return pboardItem;
-}
-
-- (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index {
-	if (item) {
-		NSPasteboard *p = [info draggingPasteboard];
-		_fromIndexPath = [NSKeyedUnarchiver unarchiveObjectWithData:[p dataForType:@"public.binary"]];
-		NSTreeNode *rootNode = _navigatorTreeController.arrangedObjects;
-
-		NSTreeNode *sourceNode = [self nodeInChildrenArray:rootNode.childNodes withIndexPath:_fromIndexPath];
-
-		if(!sourceNode) {
-			// Not found
-			return NSDragOperationNone;
-		}
-
-		_toIndexPath = [[item indexPath] indexPathByAddingIndex:MAX(0, index)];
-
-		if (_fromIndexPath.length < _toIndexPath.length) {
-			NSUInteger position = 0;
-			while (position < _fromIndexPath.length) {
-				if ([_fromIndexPath indexAtPosition:position] != [_toIndexPath indexAtPosition:position])
-					return NSDragOperationMove;
-				position++;
-			}
-			return NSDragOperationNone;
-		}
-		
-		return NSDragOperationMove;
-	} else {
-		return NSDragOperationNone;
-	}
-}
-
-- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index {
-	if ([self outlineView:outlineView validateDrop:info proposedItem:item proposedChildIndex:index] == NSDragOperationMove) {
-
-		/* Move the node to its new location */
-		NSTreeNode *rootNode = _navigatorTreeController.arrangedObjects;
-		NSTreeNode *selectedNode = [self nodeInChildrenArray:rootNode.childNodes withIndexPath:_fromIndexPath];
-		[_navigatorTreeController moveNode:selectedNode toIndexPath:_toIndexPath];
-
-		/* Expand the destination parent node */
-		[_navigatorView expandItem:[self nodeInChildrenArray:rootNode.childNodes withIndexPath:[_toIndexPath indexPathByRemovingLastIndex]]];
-
-		/* Selecte the node at the new location */
-		NSInteger selectedRow = [_navigatorView rowForItem:selectedNode];
-		[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:selectedRow] byExtendingSelection:NO];
-
-		return YES;
-	} else {
-		return NO;
-	}
+- (IBAction)saveAction:(id)sender {
+	[SKScene archiveScene:self.skView.scene toFile:@"GameScene"];
 }
 
 @end

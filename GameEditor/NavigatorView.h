@@ -31,5 +31,5 @@
 @end
 
 @protocol NavigatorViewDelegate
-- (void)navigatorView:(NavigatorView *)navigatorView didSelectNode:(id)node;
+- (void)navigatorView:(NavigatorView *)navigatorView didSelectObject:(id)object;
 @end
