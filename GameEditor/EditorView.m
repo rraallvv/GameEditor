@@ -27,8 +27,6 @@
 #import <GLKit/GLKit.h>
 #import <objc/runtime.h>
 
-CGFloat viewScale = 2.0;
-
 #pragma mark NSBezierPath
 
 @implementation NSBezierPath (Additions)
@@ -224,6 +222,7 @@ typedef enum {
 	ManipulatedHandle _manipulatedHandle;
 	NSMutableArray *_boundAttributes;
 	CGPoint _viewOrigin;
+	CGFloat _viewScale;
 
 	/* Outline handle points */
 	CGPoint _handlePoints[MaxHandle];
@@ -248,7 +247,7 @@ anchorPoint = _anchorPoint;
 
 	CGRect rect;
 	rect.origin = CGPointMake(_viewOrigin.x, _viewOrigin.y);
-	rect.size = CGSizeMake(_scene.size.width / viewScale, _scene.size.height / viewScale);
+	rect.size = CGSizeMake(_scene.size.width / _viewScale, _scene.size.height / _viewScale);
 
 	NSBezierPath *path = [NSBezierPath bezierPath];
 	[path setLineWidth:1.0];
@@ -271,8 +270,8 @@ anchorPoint = _anchorPoint;
 	[path setLineWidth:2.0];
 
 	CGPoint center = [_scene convertPoint:CGPointZero fromNode:aNode];
-	center.x /= viewScale;
-	center.y /= viewScale;
+	center.x /= _viewScale;
+	center.y /= _viewScale;
 	center.x += _viewOrigin.x;
 	center.y += _viewOrigin.y;
 
@@ -423,8 +422,8 @@ anchorPoint = _anchorPoint;
 		NSBezierPath *parentConnectionPath = [NSBezierPath bezierPath];
 		[parentConnectionPath moveToPoint:_handlePoints[AnchorPointHandle]];
 		CGPoint parentPosition = [_scene convertPoint:CGPointZero fromNode:_node.parent];
-		parentPosition.x /= viewScale;
-		parentPosition.y /= viewScale;
+		parentPosition.x /= _viewScale;
+		parentPosition.y /= _viewScale;
 		parentPosition.x += _viewOrigin.x;
 		parentPosition.y += _viewOrigin.y;
 		[parentConnectionPath lineToPoint:parentPosition];
@@ -498,8 +497,8 @@ anchorPoint = _anchorPoint;
 	points[TLHandle] = [_scene convertPoint:CGPointMake(-size.width * anchorPoint.x, size.height * (1.0 - anchorPoint.y)) fromNode:node];
 
 	for (int i = AnchorPointHandle; i <= TLHandle; ++i) {
-		points[i].x /= viewScale;
-		points[i].y /= viewScale;
+		points[i].x /= _viewScale;
+		points[i].y /= _viewScale;
 		points[i].x += _viewOrigin.x;
 		points[i].y += _viewOrigin.y;
 	}
@@ -569,6 +568,16 @@ anchorPoint = _anchorPoint;
 	return _anchorPoint;
 }
 
+- (void)setScene:(SKScene *)scene {
+	if (_scene == scene)
+		return;
+	_scene = scene;
+}
+
+- (SKScene *)scene {
+	return _scene;
+}
+
 - (void)setNode:(SKNode *)node {
 	if (_node == node)
 		return;
@@ -611,8 +620,8 @@ anchorPoint = _anchorPoint;
 		/* Construct the path using a rectangle of arbitrary size centered at the node's position*/
 		} else {
 			CGPoint center = [_scene convertPoint:CGPointZero fromNode:child];
-			center.x /= viewScale;
-			center.y /= viewScale;
+			center.x /= _viewScale;
+			center.y /= _viewScale;
 			center.x += _viewOrigin.x;
 			center.y += _viewOrigin.y;
 			CGPoint points[4] = {
@@ -638,6 +647,8 @@ anchorPoint = _anchorPoint;
 	return array;
 };
 
+#pragma mark Mouse event handling
+
 - (void)mouseDown:(NSEvent *)theEvent {
 	[[self window] makeFirstResponder:self];
 	if (_scene) {
@@ -658,8 +669,8 @@ anchorPoint = _anchorPoint;
 		} else {
 			/* Get the position being dragged relative to the node's position */
 			CGPoint nodePositionInScene = [_scene convertPoint:CGPointZero fromNode:_node];
-			nodePositionInScene.x /= viewScale;
-			nodePositionInScene.y /= viewScale;
+			nodePositionInScene.x /= _viewScale;
+			nodePositionInScene.y /= _viewScale;
 			_draggedPosition = CGPointMake(locationInScene.x - nodePositionInScene.x, locationInScene.y - nodePositionInScene.y);
 		}
 		[self updateSelectionWithLocationInScene:locationInScene];
@@ -698,8 +709,8 @@ anchorPoint = _anchorPoint;
 		[self updateVisibleRect];
 	} else {
 		CGPoint nodePositionInScene = CGPointMake(locationInScene.x - _draggedPosition.x, locationInScene.y - _draggedPosition.y);
-		nodePositionInScene.x *= viewScale;
-		nodePositionInScene.y *= viewScale;
+		nodePositionInScene.x *= _viewScale;
+		nodePositionInScene.y *= _viewScale;
 		CGPoint nodePosition = [_scene convertPoint:nodePositionInScene toNode:_node.parent];
 
 		if (_manipulatingHandle) {
@@ -718,13 +729,16 @@ anchorPoint = _anchorPoint;
 					CGFloat Rx = (dx * Wy - dy * Wx) / (Vx * Wy - Vy * Wx);
 					CGFloat Ry = (dx * Vy - dy * Vx) / (Vy * Wx - Vx * Wy);
 
+					CGSize size = _size; // save the current size
+
 					[(id)_node setAnchorPoint:CGPointMake(Rx, Ry)];
-					[(id)_node setSize:_size]; // setting the anchorPoint make the size positive, so this put back the right size (if it have negative values)
+
+					[(id)_node setSize:size]; // restore the size; this is needed if the current size has a negative value
 
 					nodePosition = CGPointMake(locationInScene.x - _viewOrigin.x,
-											locationInScene.y - _viewOrigin.y);
-					nodePosition.x *= viewScale;
-					nodePosition.y *= viewScale;
+											   locationInScene.y - _viewOrigin.y);
+					nodePosition.x *= _viewScale;
+					nodePosition.y *= _viewScale;
 					_node.position = [_scene convertPoint:nodePosition
 												   toNode:_node.parent];
 				} else {
@@ -794,28 +808,40 @@ anchorPoint = _anchorPoint;
 					|| _manipulatedHandle == TRHandle) {
 					CGVector anchorDistance = CGVectorMake(Vx * _anchorPoint.x * Rx + Wx * _anchorPoint.y * Ry,
 														   Vy * _anchorPoint.x * Rx + Wy * _anchorPoint.y * Ry);
-					_node.position = [_scene convertPoint:CGPointMake(_handlePoints[BLHandle].x + anchorDistance.dx - _viewOrigin.x,
-																	  _handlePoints[BLHandle].y + anchorDistance.dy - _viewOrigin.y)
+					nodePosition = CGPointMake(_handlePoints[BLHandle].x + anchorDistance.dx - _viewOrigin.x,
+											   _handlePoints[BLHandle].y + anchorDistance.dy - _viewOrigin.y);
+					nodePosition.x *= _viewScale;
+					nodePosition.y *= _viewScale;
+					_node.position = [_scene convertPoint:nodePosition
 												   toNode:_node.parent];
 				} else if (_manipulatedHandle == BLHandle
 						   || _manipulatedHandle == BMHandle
 						   || _manipulatedHandle == LMHandle) {
 					CGVector anchorDistance = CGVectorMake(Vx * (1.0 - _anchorPoint.x) * Rx + Wx * (1.0 - _anchorPoint.y) * Ry,
 														   Vy * (1.0 - _anchorPoint.x) * Rx + Wy * (1.0 - _anchorPoint.y) * Ry);
-					_node.position = [_scene convertPoint:CGPointMake(_handlePoints[TRHandle].x - anchorDistance.dx - _viewOrigin.x,
-																	  _handlePoints[TRHandle].y - anchorDistance.dy - _viewOrigin.y)
+					nodePosition = CGPointMake(_handlePoints[TRHandle].x - anchorDistance.dx - _viewOrigin.x,
+											   _handlePoints[TRHandle].y - anchorDistance.dy - _viewOrigin.y);
+					nodePosition.x *= _viewScale;
+					nodePosition.y *= _viewScale;
+					_node.position = [_scene convertPoint:nodePosition
 												   toNode:_node.parent];
 				} else if (_manipulatedHandle == BRHandle) {
 					CGVector anchorDistance = CGVectorMake(Vx * _anchorPoint.x * Rx - Wx * (1.0 - _anchorPoint.y) * Ry,
 														   Vy * _anchorPoint.x * Rx - Wy * (1.0 - _anchorPoint.y) * Ry);
-					_node.position = [_scene convertPoint:CGPointMake(_handlePoints[TLHandle].x + anchorDistance.dx - _viewOrigin.x,
-																	  _handlePoints[TLHandle].y + anchorDistance.dy - _viewOrigin.y)
+					nodePosition = CGPointMake(_handlePoints[TLHandle].x + anchorDistance.dx - _viewOrigin.x,
+											   _handlePoints[TLHandle].y + anchorDistance.dy - _viewOrigin.y);
+					nodePosition.x *= _viewScale;
+					nodePosition.y *= _viewScale;
+					_node.position = [_scene convertPoint:nodePosition
 												   toNode:_node.parent];
 				} else { //_manipulatedHandle == TLHandle
 					CGVector anchorDistance = CGVectorMake(Vx * (1.0 - _anchorPoint.x) * Rx - Wx * _anchorPoint.y * Ry,
 														   Vy * (1.0 - _anchorPoint.x) * Rx - Wy * _anchorPoint.y * Ry);
-					_node.position = [_scene convertPoint:CGPointMake(_handlePoints[BRHandle].x - anchorDistance.dx - _viewOrigin.x,
-																	  _handlePoints[BRHandle].y - anchorDistance.dy - _viewOrigin.y)
+					nodePosition = CGPointMake(_handlePoints[BRHandle].x - anchorDistance.dx - _viewOrigin.x,
+											   _handlePoints[BRHandle].y - anchorDistance.dy - _viewOrigin.y);
+					nodePosition.x *= _viewScale;
+					nodePosition.y *= _viewScale;
+					_node.position = [_scene convertPoint:nodePosition
 												   toNode:_node.parent];
 				}
 			}
@@ -854,16 +880,6 @@ anchorPoint = _anchorPoint;
 	return _manipulatingHandle;
 }
 
-- (void)setScene:(SKScene *)scene {
-	if (_scene == scene)
-		return;
-	_scene = scene;
-}
-
-- (SKScene *)scene {
-	return _scene;
-}
-
 - (void)bindToSelectedNode {
 	/* Start observing all properties in the selected node */
 	_boundAttributes = [NSMutableArray array];
@@ -898,11 +914,11 @@ anchorPoint = _anchorPoint;
 		CGRect oldVisibleRect = [[_scene valueForKey:@"visibleRect"] rectValue];
 		CGRect visibleRect;
 		visibleRect.origin = CGPointMake(-_viewOrigin.x, -_viewOrigin.y);
-		visibleRect.origin.x *= viewScale;
-		visibleRect.origin.y *= viewScale;
+		visibleRect.origin.x *= _viewScale;
+		visibleRect.origin.y *= _viewScale;
 		visibleRect.size = self.bounds.size;
-		visibleRect.size.width *= viewScale;
-		visibleRect.size.height *= viewScale;
+		visibleRect.size.width *= _viewScale;
+		visibleRect.size.height *= _viewScale;
 		if (!CGRectEqualToRect(visibleRect, oldVisibleRect)) {
 			[_scene setValue:[NSValue valueWithRect:visibleRect] forKey:@"visibleRect"];
 		}
