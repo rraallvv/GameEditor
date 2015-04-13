@@ -690,8 +690,18 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)scrollWheel:(NSEvent *)theEvent {
-	_viewScale = MIN(MAX(_viewScale * (1.0 - theEvent.deltaY / 30), 0.25), 40.0);
-	[self updateVisibleRect];
+	if (_scene) {
+		CGPoint locationInView = [self convertPoint:theEvent.locationInWindow fromView:nil];
+
+		CGPoint locationInScene = CGPointMake(_viewScale * (locationInView.x - _viewOrigin.x), _viewScale * (locationInView.y - _viewOrigin.y));
+
+		_viewScale = MIN(MAX(_viewScale * (1.0 - theEvent.deltaY / 30), 0.25), 40.0);
+
+		_viewOrigin = CGPointMake(locationInView.x - locationInScene.x / _viewScale, locationInView.y - locationInScene.y / _viewScale);
+
+		[self updateVisibleRect];
+		[self setNeedsDisplay:YES];
+	}
 }
 
 /*
