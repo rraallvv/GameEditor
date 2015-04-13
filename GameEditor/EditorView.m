@@ -658,6 +658,8 @@ anchorPoint = _anchorPoint;
 		} else {
 			/* Get the position being dragged relative to the node's position */
 			CGPoint nodePositionInScene = [_scene convertPoint:CGPointZero fromNode:_node];
+			nodePositionInScene.x /= viewScale;
+			nodePositionInScene.y /= viewScale;
 			_draggedPosition = CGPointMake(locationInScene.x - nodePositionInScene.x, locationInScene.y - nodePositionInScene.y);
 		}
 		[self updateSelectionWithLocationInScene:locationInScene];
@@ -696,6 +698,8 @@ anchorPoint = _anchorPoint;
 		[self updateVisibleRect];
 	} else {
 		CGPoint nodePositionInScene = CGPointMake(locationInScene.x - _draggedPosition.x, locationInScene.y - _draggedPosition.y);
+		nodePositionInScene.x *= viewScale;
+		nodePositionInScene.y *= viewScale;
 		CGPoint nodePosition = [_scene convertPoint:nodePositionInScene toNode:_node.parent];
 
 		if (_manipulatingHandle) {
