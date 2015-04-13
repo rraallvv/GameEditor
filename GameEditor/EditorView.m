@@ -27,6 +27,8 @@
 #import <GLKit/GLKit.h>
 #import <objc/runtime.h>
 
+CGFloat viewScale = 2.0;
+
 #pragma mark NSBezierPath
 
 @implementation NSBezierPath (Additions)
@@ -246,7 +248,7 @@ anchorPoint = _anchorPoint;
 
 	CGRect rect;
 	rect.origin = CGPointMake(_viewOrigin.x, _viewOrigin.y);
-	rect.size = _scene.size;
+	rect.size = CGSizeMake(_scene.size.width / viewScale, _scene.size.height / viewScale);
 
 	NSBezierPath *path = [NSBezierPath bezierPath];
 	[path setLineWidth:1.0];
@@ -269,6 +271,8 @@ anchorPoint = _anchorPoint;
 	[path setLineWidth:2.0];
 
 	CGPoint center = [_scene convertPoint:CGPointZero fromNode:aNode];
+	center.x /= viewScale;
+	center.y /= viewScale;
 	center.x += _viewOrigin.x;
 	center.y += _viewOrigin.y;
 
@@ -418,10 +422,12 @@ anchorPoint = _anchorPoint;
 	if (_node.parent && _node.parent != _scene) {
 		NSBezierPath *parentConnectionPath = [NSBezierPath bezierPath];
 		[parentConnectionPath moveToPoint:_handlePoints[AnchorPointHandle]];
-		CGPoint parentAnchorPoint = [_scene convertPoint:CGPointZero fromNode:_node.parent];
-		parentAnchorPoint.x += _viewOrigin.x;
-		parentAnchorPoint.y += _viewOrigin.y;
-		[parentConnectionPath lineToPoint:parentAnchorPoint];
+		CGPoint parentPosition = [_scene convertPoint:CGPointZero fromNode:_node.parent];
+		parentPosition.x /= viewScale;
+		parentPosition.y /= viewScale;
+		parentPosition.x += _viewOrigin.x;
+		parentPosition.y += _viewOrigin.y;
+		[parentConnectionPath lineToPoint:parentPosition];
 		[orangeColor setStroke];
 		[parentConnectionPath stroke];
 	}
@@ -492,6 +498,8 @@ anchorPoint = _anchorPoint;
 	points[TLHandle] = [_scene convertPoint:CGPointMake(-size.width * anchorPoint.x, size.height * (1.0 - anchorPoint.y)) fromNode:node];
 
 	for (int i = AnchorPointHandle; i <= TLHandle; ++i) {
+		points[i].x /= viewScale;
+		points[i].y /= viewScale;
 		points[i].x += _viewOrigin.x;
 		points[i].y += _viewOrigin.y;
 	}
@@ -603,6 +611,8 @@ anchorPoint = _anchorPoint;
 		/* Construct the path using a rectangle of arbitrary size centered at the node's position*/
 		} else {
 			CGPoint center = [_scene convertPoint:CGPointZero fromNode:child];
+			center.x /= viewScale;
+			center.y /= viewScale;
 			center.x += _viewOrigin.x;
 			center.y += _viewOrigin.y;
 			CGPoint points[4] = {
@@ -881,11 +891,11 @@ anchorPoint = _anchorPoint;
 		CGRect oldVisibleRect = [[_scene valueForKey:@"visibleRect"] rectValue];
 		CGRect visibleRect;
 		visibleRect.origin = CGPointMake(-_viewOrigin.x, -_viewOrigin.y);
-		//visibleRect.origin.x *= 2;
-		//visibleRect.origin.y *= 2;
+		visibleRect.origin.x *= viewScale;
+		visibleRect.origin.y *= viewScale;
 		visibleRect.size = self.bounds.size;
-		//visibleRect.size.width *= 2;
-		//visibleRect.size.height *= 2;
+		visibleRect.size.width *= viewScale;
+		visibleRect.size.height *= viewScale;
 		if (!CGRectEqualToRect(visibleRect, oldVisibleRect)) {
 			[_scene setValue:[NSValue valueWithRect:visibleRect] forKey:@"visibleRect"];
 		}
