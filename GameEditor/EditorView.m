@@ -572,8 +572,17 @@ anchorPoint = _anchorPoint;
 - (void)setScene:(SKScene *)scene {
 	if (_scene == scene)
 		return;
-	_viewScale = 1.0;
+
 	_scene = scene;
+
+	/* Set the view scale to the default value */
+	_viewScale = 1.0;
+
+	/* Center the scene in the editor's view */
+	CGSize viewSize = self.bounds.size;
+	CGSize sceneSize = _scene.size;
+	_viewOrigin = CGPointMake(0.5 * (viewSize.width - sceneSize.width),
+							  0.5 * (viewSize.height - sceneSize.height));
 }
 
 - (SKScene *)scene {
