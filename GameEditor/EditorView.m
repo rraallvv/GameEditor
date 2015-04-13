@@ -571,6 +571,7 @@ anchorPoint = _anchorPoint;
 - (void)setScene:(SKScene *)scene {
 	if (_scene == scene)
 		return;
+	_viewScale = 1.0;
 	_scene = scene;
 }
 
@@ -686,6 +687,11 @@ anchorPoint = _anchorPoint;
 
 - (void)mouseUp:(NSEvent *)theEvent {
 	_manipulatingHandle = NO;
+}
+
+- (void)scrollWheel:(NSEvent *)theEvent {
+	_viewScale = MIN(MAX(_viewScale * (1.0 - theEvent.deltaY / 30), 0.25), 40.0);
+	[self updateVisibleRect];
 }
 
 /*
