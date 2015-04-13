@@ -218,6 +218,7 @@ typedef enum {
 
 @implementation EditorView {
 	CGPoint _draggedPosition;
+	CGPoint _handleOffset;
 	BOOL _manipulatingHandle;
 	ManipulatedHandle _manipulatedHandle;
 	NSMutableArray *_boundAttributes;
@@ -531,7 +532,7 @@ anchorPoint = _anchorPoint;
 }
 
 - (CGRect)handleRectFromPoint:(CGPoint)point {
-	CGFloat dimension = kHandleRadius * 2.0;
+	CGFloat dimension = kHandleRadius * 2.5;
 	return CGRectMake(point.x - kHandleRadius, point.y - kHandleRadius, dimension, dimension);
 }
 
@@ -667,13 +668,21 @@ anchorPoint = _anchorPoint;
 		if (_node == _scene) {
 			/* Get the position being dragged relative to the editor's view */
 			_draggedPosition = CGPointMake(locationInScene.x - _viewOrigin.x, locationInScene.y - _viewOrigin.y);
+
 		} else {
+			/* Save the offset between the mouse pointer and the handle */
+			if (_manipulatingHandle) {
+				_handleOffset.x = locationInScene.x - _handlePoints[_manipulatedHandle].x;
+				_handleOffset.y = locationInScene.y - _handlePoints[_manipulatedHandle].y;
+			}
+
 			/* Get the position being dragged relative to the node's position */
 			CGPoint nodePositionInScene = [_scene convertPoint:CGPointZero fromNode:_node];
 			nodePositionInScene.x /= _viewScale;
 			nodePositionInScene.y /= _viewScale;
 			_draggedPosition = CGPointMake(locationInScene.x - nodePositionInScene.x, locationInScene.y - nodePositionInScene.y);
 		}
+
 		[self updateSelectionWithLocationInScene:locationInScene];
 	}
 }
@@ -723,7 +732,15 @@ anchorPoint = _anchorPoint;
 		_viewOrigin.x = nodePositionInScene.x;
 		_viewOrigin.y = nodePositionInScene.y;
 		[self updateVisibleRect];
+
 	} else {
+
+		/* Remove the offset between the mouse pointer and the handle */
+		if (_manipulatingHandle) {
+			locationInScene.x -= _handleOffset.x;
+			locationInScene.y -= _handleOffset.y;
+		}
+
 		CGPoint nodePositionInScene = CGPointMake(locationInScene.x - _draggedPosition.x, locationInScene.y - _draggedPosition.y);
 		nodePositionInScene.x *= _viewScale;
 		nodePositionInScene.y *= _viewScale;
