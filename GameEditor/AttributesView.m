@@ -89,7 +89,6 @@
 				/* Set the parameters for the stepper text field */
 				if ([textField isKindOfClass:[StepperTextField class]]) {
 					StepperTextField *stepper = (StepperTextField *)textField;
-					stepper.stepperInc = attribute.increment;
 					stepper.draggingMult = attribute.sensitivity;
 				}
 			}

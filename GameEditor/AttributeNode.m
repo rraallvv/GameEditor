@@ -256,7 +256,6 @@
 @synthesize
 name = _name,
 sensitivity = _sensitivity,
-increment = _increment,
 formatter = _formatter,
 valueTransformer = _valueTransformer,
 labels = _labels;
@@ -267,7 +266,6 @@ labels = _labels;
 		_node = node;
 		_type = type;
 		_sensitivity = 1.0;
-		_increment = 1.0;
 		_splitValue = NO;
 		_formatter = formatter;
 		_valueTransformer = valueTransformer;
@@ -316,7 +314,6 @@ labels = _labels;
 	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
 													  formatter:[NSNumberFormatter highPrecisionFormatter]
 											   valueTransformer:[PrecisionTransformer transformer]];
-	attribute.increment = 10.0;
 	return attribute;
 }
 
@@ -331,7 +328,6 @@ labels = _labels;
 	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
 													  formatter:[NSNumberFormatter normalizedFormatter]
 											   valueTransformer:[PrecisionTransformer transformer]];
-	attribute.increment = 10.0;
 	return attribute;
 }
 
