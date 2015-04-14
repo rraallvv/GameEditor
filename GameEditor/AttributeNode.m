@@ -352,6 +352,16 @@ labels = _labels;
 	return attribute;
 }
 
++ (NSDictionary *)attributeForNonEditableValue:(NSString *)name type:(NSString *)type {
+	return @{@"name": name,
+			 @"value": @"(non-editable)",
+			 @"type": @"generic attribute",
+			 @"node": [NSNull null],
+			 @"description": [NSString stringWithFormat:@"%@\n%@", name, type],
+			 @"isLeaf": @YES,
+			 @"isEditable": @NO};
+}
+
 - (NSString *)description {
 	return [NSString stringWithFormat:@"%@\n%@", _name, _type];
 }
@@ -372,7 +382,7 @@ labels = _labels;
 	[self unbind:@"value"];
 }
 
-#pragma mark value
+#pragma mark Value
 
 - (void)setValue:(id)value {
 	/* Do nothing if the value hasn't changed */
@@ -390,8 +400,6 @@ labels = _labels;
 - (id)value {
 	return _value;
 }
-
-#pragma mark value with subindex
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {
 	/* Try to get a subindex from the key */

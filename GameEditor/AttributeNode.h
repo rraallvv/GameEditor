@@ -75,6 +75,7 @@
 + (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
 + (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
 + (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
++ (NSDictionary *)attributeForNonEditableValue:(NSString *)name type:(NSString *)type;
 @property (copy) NSString *name;
 @property id formatter;
 @property id valueTransformer;
