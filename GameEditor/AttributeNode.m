@@ -272,16 +272,6 @@ labels = _labels;
 		_formatter = formatter;
 		_valueTransformer = valueTransformer;
 
-		/* Prepare the labels and identifier for the editor */
-		if ([_type isEqualToEncodedType:@encode(CGPoint)]
-			|| [_type isEqualToEncodedType:@encode(CGVector)]) {
-			_labels = @[@"X", @"Y"];
-		} else if ([_type isEqualToEncodedType:@encode(CGSize)]) {
-			_labels = @[@"W", @"H"];
-		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
-			_labels = @[@"X", @"Y", @"W", @"H"];
-		}
-
 		/* Bind the property to the 'raw' value if there isn't an accessor */
 		if (node) {
 			_splitNames = [name componentsSeparatedByString:@","];
