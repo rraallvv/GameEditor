@@ -56,7 +56,13 @@
 	NSMutableArray *results = [NSMutableArray array];
 
 	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:options error:error];
+
+#if 0 // return all matches
+	NSArray *matches = [regex matchesInString:self options:0 range:NSMakeRange(0, self.length)];
+	for (NSTextCheckingResult *result in matches)
+#else
 	NSTextCheckingResult *result = [regex firstMatchInString:self options:0 range:NSMakeRange(0, self.length)];
+#endif
 
 	for (int i = 1; i < [result numberOfRanges]; ++i) {
 		[results addObject:[self substringWithRange:[result rangeAtIndex:i]]];
