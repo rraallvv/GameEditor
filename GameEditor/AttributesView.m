@@ -85,12 +85,6 @@
 				} else {
 					textField.formatter = attribute.formatter;
 				}
-
-				/* Set the parameters for the stepper text field */
-				if ([textField isKindOfClass:[StepperTextField class]]) {
-					StepperTextField *stepper = (StepperTextField *)textField;
-					stepper.draggingMult = attribute.sensitivity;
-				}
 			}
 		}
 	}

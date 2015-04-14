@@ -108,6 +108,7 @@
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
 	formatter.negativeFormat = formatter.positiveFormat = @"#.###º";
+	formatter.multiplier = @(0.1);
 	return formatter;
 }
 + (instancetype)highPrecisionFormatter {
@@ -217,11 +218,11 @@
 	[self initializeWithTransformedValueClass:[NSNumber class]
 				  allowsReverseTransformation:YES
 						transformedValueBlock:^(NSNumber *value){
-							NSNumber *result = @(GLKMathRadiansToDegrees(value.floatValue));
+							NSNumber *result = @(GLKMathRadiansToDegrees(value.floatValue)*10.0);
 							return result;
 						}
 				 reverseTransformedValueBlock:^(NSNumber *value){
-							NSNumber *result = @(GLKMathDegreesToRadians(value.floatValue));
+							NSNumber *result = @(GLKMathDegreesToRadians(value.floatValue*0.1));
 							return result;
 						}];
 }
@@ -255,7 +256,6 @@
 
 @synthesize
 name = _name,
-sensitivity = _sensitivity,
 formatter = _formatter,
 valueTransformer = _valueTransformer,
 labels = _labels;
@@ -265,7 +265,6 @@ labels = _labels;
 		_name = name;
 		_node = node;
 		_type = type;
-		_sensitivity = 1.0;
 		_splitValue = NO;
 		_formatter = formatter;
 		_valueTransformer = valueTransformer;
@@ -306,7 +305,6 @@ labels = _labels;
 	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:@"d"
 													  formatter:[NSNumberFormatter degreesFormatter]
 											   valueTransformer:[DegreesTransformer transformer]];
-	attribute.sensitivity = GLKMathRadiansToDegrees(0.001);
 	return attribute;
 }
 
