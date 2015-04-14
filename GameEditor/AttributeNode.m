@@ -58,7 +58,7 @@
 	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:options error:error];
 	NSTextCheckingResult *result = [regex firstMatchInString:self options:0 range:NSMakeRange(0, self.length)];
 
-	for (int i = 0; i < [result numberOfRanges]; ++i) {
+	for (int i = 1; i < [result numberOfRanges]; ++i) {
 		[results addObject:[self substringWithRange:[result rangeAtIndex:i]]];
 	}
 
@@ -389,8 +389,8 @@ labels = _labels;
 	/* Try to get a subindex from the key */
 	NSArray *results = [key substringsWithRegularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
 
-	NSString *baseKey = results[1];
-	NSInteger subindex = [results[2] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
+	NSString *baseKey = results[0];
+	NSInteger subindex = [results[1] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
 
 	if ([baseKey isEqualToString:@"value"]) {
 
@@ -429,8 +429,8 @@ labels = _labels;
 	/* Try to get a subindex from the key */
 	NSArray *results = [key substringsWithRegularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
 
-	NSString *baseKey = results[1];
-	NSInteger subindex = [results[2] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
+	NSString *baseKey = results[0];
+	NSInteger subindex = [results[1] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
 
 	if ([baseKey isEqualToString:@"label"]) {
 
@@ -467,7 +467,7 @@ labels = _labels;
 
 	/* Try to get the key without subindex */
 	NSArray *results = [key substringsWithRegularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
-	NSString *baseKey = results[1];
+	NSString *baseKey = results[0];
 
 	if ([baseKey isEqualToString:@"value"]) {
 		keyPaths = [keyPaths setByAddingObject:@"value"];

@@ -56,7 +56,7 @@
 
 			/* Get the keyPath relative to the attribute object */
 			NSArray *results = [observedKey substringsWithRegularExpressionWithPattern:@"(?<=\\.|^)value(\\d*)$" options:0 error:NULL];
-			NSInteger subindex = [results[1] integerValue];
+			NSInteger subindex = [results[0] integerValue];
 
 			if (subindex > 0) {
 				NSString *key = [NSString stringWithFormat:@"value%ld", subindex];
