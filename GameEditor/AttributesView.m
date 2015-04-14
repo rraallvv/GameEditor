@@ -56,10 +56,11 @@
 
 			/* Get the keyPath relative to the attribute object */
 			NSArray *results = [observedKey substringsWithRegularExpressionWithPattern:@"(?<=\\.|^)value(\\d*)$" options:0 error:NULL];
-			NSString *key = results[0];
 			NSInteger subindex = [results[1] integerValue];
 
-			if (key) {
+			if (subindex > 0) {
+				NSString *key = [NSString stringWithFormat:@"value%ld", subindex];
+
 				/* Update the binding with the attribute's value transformer */
 				NSMutableDictionary *options = bindingInfo[NSOptionsKey];
 				id valueTransformer = attribute.valueTransformer;
