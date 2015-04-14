@@ -413,8 +413,10 @@ labels = _labels;
 		/* Update the value component for the given subindex */
 
 		if (_splitValue) {
-			[_node setValue:value forKeyPath:_splitNames[subindex + 1]];
-			self.value[subindex] = value;
+			if (![self.value[subindex] isEqual:value]) {
+				self.value[subindex] = value;
+				[_node setValue:value forKeyPath:_splitNames[subindex + 1]];
+			}
 		} else {
 			if ([_type isEqualToEncodedType:@encode(CGPoint)]
 				|| [_type isEqualToEncodedType:@encode(CGSize)]
