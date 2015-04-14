@@ -73,6 +73,7 @@
 	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet AttributesView *_attributesView;
 	IBOutlet NSOutlineView *_navigatorView;
+	SKNode *_selectedNode;
 }
 
 @synthesize window = _window;
@@ -128,6 +129,11 @@
 }
 
 - (void)updateSelectionWithNode:(id)node {
+	if (_selectedNode == node)
+		return;
+
+	_selectedNode = node;
+
 	[_editorView setNode:node];
 
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
