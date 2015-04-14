@@ -389,12 +389,12 @@ labels = _labels;
 	if ([_value isEqual:value])
 		return;
 
+	NSAssert(!_splitValue, @"A split value is not replaced, but its subindexes are updated in setValue:forUndefinedKey:");
+
 	_value = value;
 
-	if (!_splitValue) {
-		/* Update the bound object's property value */
-		[_node setValue:_value forKeyPath:_name];
-	}
+	/* Update the bound object's property value */
+	[_node setValue:_value forKeyPath:_name];
 }
 
 - (id)value {
