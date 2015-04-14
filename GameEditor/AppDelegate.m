@@ -73,6 +73,7 @@
 	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet AttributesView *_attributesView;
 	IBOutlet NSOutlineView *_navigatorView;
+	SKNode *_selectedNode;
 }
 
 @synthesize window = _window;
@@ -128,6 +129,11 @@
 }
 
 - (void)updateSelectionWithNode:(id)node {
+	if (_selectedNode == node)
+		return;
+
+	_selectedNode = node;
+
 	[_editorView setNode:node];
 
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -207,8 +213,14 @@
 	if (count) {
 		for(unsigned int i = 0; i < count; i++) {
 			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
-			NSString *propertyName = [NSString stringWithUTF8String:property_getName(properties[i])];
 			NSString *propertyAttributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
+
+			BOOL editable = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
+
+			if (!editable)
+				continue;
+
+			NSString *propertyName = [NSString stringWithUTF8String:property_getName(properties[i])];
 			NSString *propertyType = [[propertyAttributes componentsSeparatedByString:@","] firstObject];
 
 			if ([propertyName rangeOfString:@"^z(Position|Rotation)$" options:NSRegularExpressionSearch].location != NSNotFound) {
@@ -224,7 +236,7 @@
 					[attributesArray addObject:attribute];
 					hasZPositionRotation = YES;
 				}
-				continue;
+
 			} else if ([propertyName rangeOfString:@"^emissionAngle(Range)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasEmissionAngle) {
 					AttributeNode *attribute = [AttributeNode attributeWithName:@"emissionAngle,emissionAngle,emissionAngleRange"
@@ -236,7 +248,7 @@
 					[attributesArray addObject:attribute];
 					hasEmissionAngle = YES;
 				}
-				continue;
+
 			} else if ([propertyName rangeOfString:@"^particleColorRed(Speed|Range)$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasParticleColorRed) {
 					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"red,particleColorRedSpeed,particleColorRedRange" node:node type:@"{dd}"];
@@ -244,7 +256,7 @@
 					[attributesArray addObject:attribute];
 					hasParticleColorRed = YES;
 				}
-				continue;
+
 			} else if ([propertyName rangeOfString:@"^particleColorGreen(Speed|Range)$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasParticleColorGreen) {
 					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"green,particleColorGreenSpeed,particleColorGreenRange" node:node type:@"{dd}"];
@@ -252,7 +264,7 @@
 					[attributesArray addObject:attribute];
 					hasParticleColorGreen = YES;
 				}
-				continue;
+
 			} else if ([propertyName rangeOfString:@"^particleColorBlue(Speed|Range)$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasParticleColorBlue) {
 					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"blue,particleColorBlueSpeed,particleColorBlueRange" node:node type:@"{dd}"];
@@ -260,7 +272,7 @@
 					[attributesArray addObject:attribute];
 					hasParticleColorBlue = YES;
 				}
-				continue;
+
 			} else if ([propertyName rangeOfString:@"^particleColorAlpha(Speed|Range)$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasParticleColorAlpha) {
 					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"alpha,particleColorAlphaSpeed,particleColorAlphaRange" node:node type:@"{dd}"];
@@ -268,7 +280,7 @@
 					[attributesArray addObject:attribute];
 					hasParticleColorAlpha = YES;
 				}
-				continue;
+
 			} else if ([propertyName rangeOfString:@"^particleSpeed(Range)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasSpeed) {
 					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"speed,particleSpeed,particleSpeedRange" node:node type:@"{dd}"];
@@ -276,7 +288,7 @@
 					[attributesArray addObject:attribute];
 					hasSpeed = YES;
 				}
-				continue;
+
 			} else if ([propertyName rangeOfString:@"^particleLifetime(Range)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasLifetime) {
 					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"lifetime,particleLifetime,particleLifetimeRange" node:node type:@"{dd}"];
@@ -284,7 +296,7 @@
 					[attributesArray addObject:attribute];
 					hasLifetime = YES;
 				}
-				continue;
+
 			} else if ([propertyName rangeOfString:@"^(x|y)Acceleration$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasXYAcceleration) {
 					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"acceleration,xAcceleration,yAcceleration" node:node type:@"{dd}"];
@@ -292,7 +304,7 @@
 					[attributesArray addObject:attribute];
 					hasXYAcceleration = YES;
 				}
-				continue;
+
 			} else if ([propertyName rangeOfString:@"^(x|y)Scale$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasXYScale) {
 					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"scale,xScale,yScale" node:node type:@"{dd}"];
@@ -300,7 +312,7 @@
 					[attributesArray addObject:attribute];
 					hasXYScale = YES;
 				}
-				continue;
+
 			} else if ([propertyName rangeOfString:@"^(x|y)Rotation$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasXYRotation) {
 					AttributeNode *attribute = [AttributeNode attributeWithName:@"rotation,xRotation,yRotation"
@@ -313,7 +325,7 @@
 					[attributesArray addObject:attribute];
 					hasXYRotation = YES;
 				}
-				continue;
+
 			} else if ([propertyName rangeOfString:@"^particleZPosition(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasParticleZPositionRangeSpeed) {
 					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"zPosition,particleZPosition,particleZPositionRange,particleZPositionSpeed"
@@ -324,7 +336,7 @@
 					[attributesArray addObject:attribute];
 					hasParticleZPositionRangeSpeed = YES;
 				}
-				continue;
+
 			} else if ([propertyName rangeOfString:@"^particleScale(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasParticleScaleRangeSpeed) {
 					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"scale,particleScale,particleScaleRange,particleScaleSpeed"
@@ -335,7 +347,7 @@
 					[attributesArray addObject:attribute];
 					hasParticleScaleRangeSpeed = YES;
 				}
-				continue;
+
 			} else if ([propertyName rangeOfString:@"^particleRotation(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasParticleRotationRangeSpeed) {
 					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"rotation,particleRotation,particleRotationRange,particleRotationSpeed"
@@ -346,7 +358,7 @@
 					[attributesArray addObject:attribute];
 					hasParticleRotationRangeSpeed = YES;
 				}
-				continue;
+
 			} else if ([propertyName rangeOfString:@"^particleAlpha(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasParticleAlphaRangeSpeed) {
 					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"alpha,particleAlpha,particleAlphaRange,particleAlphaSpeed"
@@ -357,7 +369,7 @@
 					[attributesArray addObject:attribute];
 					hasParticleAlphaRangeSpeed = YES;
 				}
-				continue;
+
 			} else if ([propertyName rangeOfString:@"^particleColorBlendFactor(Range|Speed)?$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasParticleColorBlendFactor) {
 					AttributeNode *attribute = [AttributeNode attributeForHighPrecisionValueWithName:@"colorBlendFactor,particleColorBlendFactor,particleColorBlendFactorRange,particleColorBlendFactorSpeed"
@@ -368,42 +380,39 @@
 					[attributesArray addObject:attribute];
 					hasParticleColorBlendFactor = YES;
 				}
-				continue;
-			}
-
-			Class propertyClass = [propertyType classType];
-
-			BOOL editable = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
-
-			if ([propertyType isEqualToEncodedType:@encode(NSString)] && editable) {
-				[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyType]];
-
-			} else if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
-				[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyType]];
-
-			} else if (propertyClass == [SKTexture class]
-					   || propertyClass == [SKShader class]
-					   || propertyClass == [SKPhysicsBody class]
-					   || propertyClass == [SKPhysicsWorld class]) {
-				[attributesArray addObject:@{@"name": propertyName,
-											 @"isLeaf": @NO,
-											 @"isEditable": @NO,
-											 @"children":[self attributesForClass:propertyClass node:[node valueForKey:propertyName]]}];
-
-			} else if ([propertyName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
-				[attributesArray addObject:[AttributeNode  attributeForRotationAngleWithName:propertyName node:node]];
 
 			} else {
-				NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
-				editable = editable && ![propertyType isEqualToString:@""] && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
 
-				if (editable) {
+				Class propertyClass = [propertyType classType];
 
-					if (![propertyName containsString:@"anchorPoint"]
-						&& ![propertyName containsString:@"centerRect"]
-						&& ([propertyType isEqualToEncodedType:@encode(CGPoint)]
-							|| [propertyType isEqualToEncodedType:@encode(CGSize)]
-							|| [propertyType isEqualToEncodedType:@encode(CGRect)])) {
+				if ([propertyType isEqualToEncodedType:@encode(NSString)]) {
+					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyType]];
+
+				} else if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
+					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyType]];
+
+				} else if (propertyClass == [SKTexture class]
+						   || propertyClass == [SKShader class]
+						   || propertyClass == [SKPhysicsBody class]
+						   || propertyClass == [SKPhysicsWorld class]) {
+					[attributesArray addObject:@{@"name": propertyName,
+												 @"isLeaf": @NO,
+												 @"isEditable": @NO,
+												 @"children":[self attributesForClass:propertyClass node:[node valueForKey:propertyName]]}];
+
+				} else if ([propertyName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
+					[attributesArray addObject:[AttributeNode  attributeForRotationAngleWithName:propertyName node:node]];
+
+				} else {
+					NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
+					editable = ![propertyType isEqualToString:@""] && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
+
+					if (editable) {
+						if (![propertyName containsString:@"anchorPoint"]
+							&& ![propertyName containsString:@"centerRect"]
+							&& ([propertyType isEqualToEncodedType:@encode(CGPoint)]
+								|| [propertyType isEqualToEncodedType:@encode(CGSize)]
+								|| [propertyType isEqualToEncodedType:@encode(CGRect)])) {
 							[attributesArray addObject:[AttributeNode attributeForNormalPrecisionValueWithName:propertyName node:node type:propertyType]];
 						} else if ([propertyName containsString:@"colorBlendFactor"]
 								   || [propertyName containsString:@"alpha"]) {
@@ -420,19 +429,13 @@
 						} else {
 							[attributesArray addObject:[AttributeNode attributeForHighPrecisionValueWithName:propertyName node:node type:propertyType]];
 						}
-
-				}
+					}
 #if 1// Show a dummy attribute for non-editable properties
-				else {
-					[attributesArray addObject:@{@"name": propertyName,
-												 @"value": @"(non-editable)",
-												 @"type": @"generic attribute",
-												 @"node": [NSNull null],
-												 @"description": [NSString stringWithFormat:@"%@\n%@", propertyName, propertyType],
-												 @"isLeaf": @YES,
-												 @"isEditable": @NO}];
-				}
+					else {
+						[attributesArray addObject:[AttributeNode attributeForNonEditableValue:propertyName type:propertyType]];
+					}
 #endif
+				}
 			}
 		}
 		free(properties);
