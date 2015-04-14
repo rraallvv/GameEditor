@@ -32,8 +32,8 @@
 @end
 
 @implementation NavigatorView {
-	id _actualDelegate;
-	id _actualDataSource;
+	__weak id _actualDelegate;
+	__weak id _actualDataSource;
 	NSIndexPath *_fromIndexPath;
 	NSIndexPath *_toIndexPath;
 }
@@ -47,7 +47,7 @@
 - (void)setDelegate:(id<NSOutlineViewDelegate>)anObject {
 	[super setDelegate:nil];
 	_actualDelegate = anObject;
-	[super setDelegate:(id)self];
+	[super setDelegate:self];
 }
 
 - (id)delegate {
@@ -57,7 +57,7 @@
 - (void)setDataSource:(id<NSOutlineViewDataSource>)aSource {
 	[super setDataSource:nil];
 	_actualDataSource = aSource;
-	[super setDataSource:(id)self];
+	[super setDataSource:self];
 }
 
 - (id<NSOutlineViewDataSource>)dataSource {

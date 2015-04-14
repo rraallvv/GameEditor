@@ -336,7 +336,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 @end
 
 @implementation AttributesView {
-	id _actualDelegate;
+	__weak id _actualDelegate;
 	NSMutableDictionary *_prefferedSizes;
 	NSMutableArray *_editorIdentifiers;
 }
@@ -400,7 +400,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 - (void)setDelegate:(id)newDelegate {
 	[super setDelegate:nil];
 	_actualDelegate = newDelegate;
-	[super setDelegate:(id)self];
+	[super setDelegate:self];
 }
 
 - (id)delegate {
