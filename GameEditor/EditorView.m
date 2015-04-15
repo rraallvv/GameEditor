@@ -221,7 +221,9 @@ typedef enum {
 	CGPoint _handleOffset;
 	BOOL _manipulatingHandle;
 	ManipulatedHandle _manipulatedHandle;
-	NSMutableArray *_boundAttributes;
+	NSMutableSet *_boundAttributes;
+	NSString *_prevObservedKeyPath;
+	__weak id _prevObservedObject;
 	CGPoint _viewOrigin;
 	CGFloat _viewScale;
 
@@ -694,7 +696,7 @@ anchorPoint = _anchorPoint;
 			_draggedPosition = CGPointMake(locationInScene.x - nodePositionInScene.x, locationInScene.y - nodePositionInScene.y);
 		}
 
-		[self updateSelectionWithLocationInScene:locationInScene];
+		//[self updateSelectionWithLocationInScene:locationInScene];
 	}
 }
 
@@ -934,7 +936,7 @@ anchorPoint = _anchorPoint;
 
 - (void)bindToSelectedNode {
 	/* Start observing all properties in the selected node */
-	_boundAttributes = [NSMutableArray array];
+	_boundAttributes = [NSMutableSet set];
 	Class classType = [_node class];
 	do {
 		unsigned int count;
@@ -944,7 +946,6 @@ anchorPoint = _anchorPoint;
 			for(unsigned int i = 0; i < count; i++) {
 				NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
 				[_node addObserver:self forKeyPath:key options:0 context:nil];
-				[_boundAttributes addObject:key];
 			}
 			free(properties);
 		}
@@ -979,12 +980,28 @@ anchorPoint = _anchorPoint;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if (object == _node) {
-		[self setValue:[_node valueForKey:@"position"] forKey:@"position"];
-		[self setValue:[_node valueForKey:@"size"] forKey:@"size"];
-		[self setValue:[_node valueForKey:@"zRotation"] forKey:@"zRotation"];
-		[self setValue:[_node valueForKey:@"anchorPoint"] forKey:@"anchorPoint"];
 
-		if (object == _scene) {
+		/* Try to register an undo operation for the observed change */
+		if ([_boundAttributes containsObject:keyPath]) {
+			if (![keyPath isEqualToString:@"visibleRect"]) {
+				if (![_prevObservedKeyPath isEqualToString:keyPath]
+					|| ![_prevObservedObject isEqual:object]) {
+					NSLog(@"\nRegister undo operation for node:%p keyPath:%@ value:%@\n", _node, keyPath, [self valueForKey:keyPath]);
+					_prevObservedKeyPath = keyPath;
+					_prevObservedObject = _node;
+				}
+			}
+		} else {
+			[_boundAttributes addObject:keyPath];
+		}
+
+		/* Update the current selection and editor view's visible rect */
+		if (object != _scene) {
+			[self setValue:[_node valueForKey:@"position"] forKey:@"position"];
+			[self setValue:[_node valueForKey:@"size"] forKey:@"size"];
+			[self setValue:[_node valueForKey:@"zRotation"] forKey:@"zRotation"];
+			[self setValue:[_node valueForKey:@"anchorPoint"] forKey:@"anchorPoint"];
+		} else {
 			[self updateVisibleRect];
 		}
 
@@ -994,13 +1011,13 @@ anchorPoint = _anchorPoint;
 	}
 }
 
-- (void)dealloc {
-	[self unbindFromSelectedNode];
-}
-
 - (void)setFrame:(NSRect)frame {
 	[super setFrame:frame];
 	[self updateVisibleRect];
+}
+
+- (void)dealloc {
+	[self unbindFromSelectedNode];
 }
 
 @end
