@@ -228,7 +228,10 @@
 					|| [propertyName isEqualToString:@"zPosition"]
 					|| [propertyName isEqualToString:@"zRotation"]
 					|| [propertyName isEqualToString:@"xScale"]
-					|| [propertyName isEqualToString:@"yScale"])) {
+					|| [propertyName isEqualToString:@"yScale"]
+					|| [propertyName isEqualToString:@"visibleRect"]
+					|| [propertyName isEqualToString:@"visibleRectCenter"]
+					|| [propertyName isEqualToString:@"visibleRectSize"])) {
 				[attributesArray addObject:[AttributeNode attributeForNonEditableValue:propertyName type:propertyType]];
 
 			} else if ([propertyName rangeOfString:@"^z(Position|Rotation)$" options:NSRegularExpressionSearch].location != NSNotFound) {
