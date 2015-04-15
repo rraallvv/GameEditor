@@ -222,8 +222,8 @@ typedef enum {
 	BOOL _manipulatingHandle;
 	ManipulatedHandle _manipulatedHandle;
 	NSMutableSet *_boundAttributes;
-	NSString *_prevObservedKeyPath;
 	__weak id _prevObservedObject;
+	NSString *_prevObservedKeyPath;
 	CGPoint _viewOrigin;
 	CGFloat _viewScale;
 
@@ -987,10 +987,12 @@ anchorPoint = _anchorPoint;
 				id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
 				id newValue = [change objectForKey:NSKeyValueChangeNewKey];
 				if (![oldValue isEqual:newValue]) {
-					if (![_prevObservedKeyPath isEqualToString:keyPath] || ![_prevObservedObject isEqual:object]) {
+					if (![_prevObservedObject isEqual:object] || ![_prevObservedKeyPath isEqualToString:keyPath]) {
 
 						NSUndoManager *undoManager = [self undoManager];
-						[[undoManager prepareWithInvocationTarget:object] setValue:oldValue forKey:keyPath];
+						[[undoManager prepareWithInvocationTarget:self] performUndoBlock:^{
+							[object setValue:oldValue forKey:keyPath];
+						}];
 						[undoManager setActionName:keyPath];
 
 						//NSLog(@"\nRegister undo operation for node:%p keyPath:%@ value:%@ %@\n", object, keyPath, oldValue, newValue);
@@ -1018,6 +1020,11 @@ anchorPoint = _anchorPoint;
 			[self setNeedsDisplay:YES];
 		});
 	}
+}
+
+- (void)performUndoBlock:(void (^)())block {
+	block();
+	[self setNeedsDisplay:YES];
 }
 
 - (void)setFrame:(NSRect)frame {
