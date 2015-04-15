@@ -530,7 +530,13 @@ labels = _labels;
 }
 
 - (void)dealloc {
-	[self unbind:@"value"];
+	if (_splitValue) {
+		for (int i = 1; i <= [_value count]; ++i) {
+			[self unbind:[NSString stringWithFormat:@"value%d", i]];
+		}
+	} else {
+		[self unbind:@"value"];
+	}
 }
 
 #pragma mark Value
