@@ -123,11 +123,13 @@
 #pragma mark NSString
 
 @implementation NSString (Types)
+
 - (NSString *)extractClassName {
 	/* Try to get a class name from the type */
 	NSRange range = [self rangeOfString:@"(?<=@\")(\\w*)(?=\")" options:NSRegularExpressionSearch];
 	return range.location != NSNotFound ? [self substringWithRange:range] : nil;
 }
+
 - (Class)classType {
 	NSString *className = [self extractClassName];
 	if (className) {
@@ -135,6 +137,7 @@
 	}
 	return nil;
 }
+
 - (BOOL)isEqualToEncodedType:(const char*)type {
 	NSString *className = [self extractClassName];
 	if (className) {
@@ -143,9 +146,11 @@
 		return [self isEqualToString:[NSString stringWithUTF8String:type]];
 	}
 }
+
 @end
 
 @implementation NSString (Regex)
+
 - (NSArray *)substringsWithRegularExpressionWithPattern:(NSString *)pattern options:(NSRegularExpressionOptions)options error:(NSError **)error {
 	NSMutableArray *results = [NSMutableArray array];
 
@@ -167,9 +172,11 @@
 
 	return results;
 }
+
 @end
 
 @implementation NSString (AttributeName)
+
 - (NSArray *)componentsSeparatedInWords {
 	NSMutableArray *substrings = [NSMutableArray array];
 	NSMutableString *tempStr = [NSMutableString string];
@@ -199,11 +206,13 @@
 
 	return substrings;
 }
+
 @end
 
 #pragma mark NSNumberFormatter
 
 @implementation NSNumberFormatter (CustomFormatters)
+
 + (instancetype) degreesFormatter {
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
@@ -211,6 +220,7 @@
 	formatter.multiplier = @(0.1);
 	return formatter;
 }
+
 + (instancetype)highPrecisionFormatter {
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
@@ -218,19 +228,24 @@
 	formatter.multiplier = @(0.01);
 	return formatter;
 }
+
 + (instancetype)normalPrecisionFormatter {
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
 	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
 	return formatter;
 }
+
 + (instancetype)normalizedFormatter {
 	NSNumberFormatter *formatter = [self highPrecisionFormatter];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
 	formatter.minimum = @(0.0);
 	formatter.maximum = @(100.0);
+	formatter.multiplier = @(0.01);
 	return formatter;
 }
+
 + (instancetype)integerFormatter {
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
@@ -238,6 +253,7 @@
 	formatter.usesGroupingSeparator = NO;
 	return formatter;
 }
+
 @end
 
 #pragma mark Value transformers
