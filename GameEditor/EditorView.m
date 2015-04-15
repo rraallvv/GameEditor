@@ -945,7 +945,7 @@ anchorPoint = _anchorPoint;
 		if (count) {
 			for(unsigned int i = 0; i < count; i++) {
 				NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
-				[_node addObserver:self forKeyPath:key options:0 context:nil];
+				[_node addObserver:self forKeyPath:key options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
 			}
 			free(properties);
 		}
@@ -984,11 +984,16 @@ anchorPoint = _anchorPoint;
 		/* Try to register an undo operation for the observed change */
 		if ([_boundAttributes containsObject:keyPath]) {
 			if (![keyPath isEqualToString:@"visibleRect"]) {
-				if (![_prevObservedKeyPath isEqualToString:keyPath]
-					|| ![_prevObservedObject isEqual:object]) {
-					NSLog(@"\nRegister undo operation for node:%p keyPath:%@ value:%@\n", _node, keyPath, [self valueForKey:keyPath]);
-					_prevObservedKeyPath = keyPath;
-					_prevObservedObject = _node;
+				if (![[change objectForKey:NSKeyValueChangeOldKey] isEqual:[change objectForKey:NSKeyValueChangeNewKey]]) {
+					if (![_prevObservedKeyPath isEqualToString:keyPath] || ![_prevObservedObject isEqual:object]) {
+
+						//[[self.undoManager prepareWithInvocationTarget:_node] setValue:[_node valueForKey:keyPath] forKey:keyPath];
+						//[self.undoManager setActionName:keyPath];
+
+						NSLog(@"\nRegister undo operation for node:%p keyPath:%@ value:%@ %@\n", _node, keyPath, [change objectForKey:NSKeyValueChangeOldKey], [change objectForKey:NSKeyValueChangeNewKey]);
+						_prevObservedKeyPath = keyPath;
+						_prevObservedObject = _node;
+					}
 				}
 			}
 		} else {
