@@ -223,7 +223,15 @@
 			NSString *propertyName = [NSString stringWithUTF8String:property_getName(properties[i])];
 			NSString *propertyType = [[propertyAttributes componentsSeparatedByString:@","] firstObject];
 
-			if ([propertyName rangeOfString:@"^z(Position|Rotation)$" options:NSRegularExpressionSearch].location != NSNotFound) {
+			if ([node isKindOfClass:[SKScene class]]
+				&& ([propertyName isEqualToString:@"position"]
+					|| [propertyName isEqualToString:@"zPosition"]
+					|| [propertyName isEqualToString:@"zRotation"]
+					|| [propertyName isEqualToString:@"xScale"]
+					|| [propertyName isEqualToString:@"yScale"])) {
+				[attributesArray addObject:[AttributeNode attributeForNonEditableValue:propertyName type:propertyType]];
+
+			} else if ([propertyName rangeOfString:@"^z(Position|Rotation)$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasZPositionRotation) {
 					AttributeNode *attribute = [AttributeNode attributeWithName:@"z,zPosition,zRotation"
 																		   node:node
