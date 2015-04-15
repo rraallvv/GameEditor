@@ -984,15 +984,19 @@ anchorPoint = _anchorPoint;
 		/* Try to register an undo operation for the observed change */
 		if ([_boundAttributes containsObject:keyPath]) {
 			if (![keyPath isEqualToString:@"visibleRect"]) {
-				if (![[change objectForKey:NSKeyValueChangeOldKey] isEqual:[change objectForKey:NSKeyValueChangeNewKey]]) {
+				id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
+				id newValue = [change objectForKey:NSKeyValueChangeNewKey];
+				if (![oldValue isEqual:newValue]) {
 					if (![_prevObservedKeyPath isEqualToString:keyPath] || ![_prevObservedObject isEqual:object]) {
 
-						//[[self.undoManager prepareWithInvocationTarget:_node] setValue:[_node valueForKey:keyPath] forKey:keyPath];
-						//[self.undoManager setActionName:keyPath];
+						NSUndoManager *undoManager = [self undoManager];
+						[[undoManager prepareWithInvocationTarget:object] setValue:oldValue forKey:keyPath];
+						[undoManager setActionName:keyPath];
 
-						NSLog(@"\nRegister undo operation for node:%p keyPath:%@ value:%@ %@\n", _node, keyPath, [change objectForKey:NSKeyValueChangeOldKey], [change objectForKey:NSKeyValueChangeNewKey]);
+						//NSLog(@"\nRegister undo operation for node:%p keyPath:%@ value:%@ %@\n", object, keyPath, oldValue, newValue);
+
 						_prevObservedKeyPath = keyPath;
-						_prevObservedObject = _node;
+						_prevObservedObject = object;
 					}
 				}
 			}
@@ -1002,10 +1006,10 @@ anchorPoint = _anchorPoint;
 
 		/* Update the current selection and editor view's visible rect */
 		if (object != _scene) {
-			[self setValue:[_node valueForKey:@"position"] forKey:@"position"];
-			[self setValue:[_node valueForKey:@"size"] forKey:@"size"];
-			[self setValue:[_node valueForKey:@"zRotation"] forKey:@"zRotation"];
-			[self setValue:[_node valueForKey:@"anchorPoint"] forKey:@"anchorPoint"];
+			[self setValue:[object valueForKey:@"position"] forKey:@"position"];
+			[self setValue:[object valueForKey:@"size"] forKey:@"size"];
+			[self setValue:[object valueForKey:@"zRotation"] forKey:@"zRotation"];
+			[self setValue:[object valueForKey:@"anchorPoint"] forKey:@"anchorPoint"];
 		} else {
 			[self updateVisibleRect];
 		}
