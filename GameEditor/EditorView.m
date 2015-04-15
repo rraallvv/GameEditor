@@ -678,6 +678,8 @@ anchorPoint = _anchorPoint;
 			/* Get the position being dragged relative to the editor's view */
 			_draggedPosition = CGPointMake(locationInScene.x - _viewOrigin.x, locationInScene.y - _viewOrigin.y);
 
+			[[NSCursor pointingHandCursor] set];
+
 		} else {
 			/* Save the offset between the mouse pointer and the handle */
 			if (_manipulatingHandle) {
@@ -700,11 +702,19 @@ anchorPoint = _anchorPoint;
 	if (_scene) {
 		CGPoint locationInScene = [self convertPoint:theEvent.locationInWindow fromView:nil];
 		[self updateSelectionWithLocationInScene:locationInScene];
+
+		if (_node == _scene) {
+			[[NSCursor pointingHandCursor] set];
+		}
 	}
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
 	_manipulatingHandle = NO;
+
+	if (_node == _scene) {
+		[[NSCursor arrowCursor] set];
+	}
 }
 
 - (void)scrollWheel:(NSEvent *)theEvent {
