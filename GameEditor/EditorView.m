@@ -989,10 +989,12 @@ anchorPoint = _anchorPoint;
 				if (![oldValue isEqual:newValue]) {
 					if (![_prevObservedObject isEqual:object] || ![_prevObservedKeyPath isEqualToString:keyPath]) {
 
-						NSUndoManager *undoManager = [self undoManager];
-						[[undoManager prepareWithInvocationTarget:self] performUndoBlock:^{
+						id undoBlock = ^{
 							[object setValue:oldValue forKey:keyPath];
-						}];
+						};
+
+						NSUndoManager *undoManager = [self undoManager];
+						[[undoManager prepareWithInvocationTarget:self] performUndoBlock:undoBlock];
 						[undoManager setActionName:keyPath];
 
 						//NSLog(@"\nRegister undo operation for node:%p keyPath:%@ value:%@ %@\n", object, keyPath, oldValue, newValue);
