@@ -221,7 +221,9 @@ typedef enum {
 	CGPoint _handleOffset;
 	BOOL _manipulatingHandle;
 	ManipulatedHandle _manipulatedHandle;
-	NSMutableArray *_boundAttributes;
+	NSMutableSet *_boundAttributes;
+	BOOL _registeredUndo;
+	NSMutableDictionary *_undoBlocks;
 	CGPoint _viewOrigin;
 	CGFloat _viewScale;
 
@@ -678,6 +680,8 @@ anchorPoint = _anchorPoint;
 			/* Get the position being dragged relative to the editor's view */
 			_draggedPosition = CGPointMake(locationInScene.x - _viewOrigin.x, locationInScene.y - _viewOrigin.y);
 
+			[[NSCursor pointingHandCursor] set];
+
 		} else {
 			/* Save the offset between the mouse pointer and the handle */
 			if (_manipulatingHandle) {
@@ -692,7 +696,7 @@ anchorPoint = _anchorPoint;
 			_draggedPosition = CGPointMake(locationInScene.x - nodePositionInScene.x, locationInScene.y - nodePositionInScene.y);
 		}
 
-		[self updateSelectionWithLocationInScene:locationInScene];
+		//[self updateSelectionWithLocationInScene:locationInScene];
 	}
 }
 
@@ -700,11 +704,20 @@ anchorPoint = _anchorPoint;
 	if (_scene) {
 		CGPoint locationInScene = [self convertPoint:theEvent.locationInWindow fromView:nil];
 		[self updateSelectionWithLocationInScene:locationInScene];
+
+		if (_node == _scene) {
+			[[NSCursor pointingHandCursor] set];
+		}
 	}
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
 	_manipulatingHandle = NO;
+	_registeredUndo = NO;
+
+	if (_node == _scene) {
+		[[NSCursor arrowCursor] set];
+	}
 }
 
 - (void)scrollWheel:(NSEvent *)theEvent {
@@ -924,7 +937,7 @@ anchorPoint = _anchorPoint;
 
 - (void)bindToSelectedNode {
 	/* Start observing all properties in the selected node */
-	_boundAttributes = [NSMutableArray array];
+	_boundAttributes = [NSMutableSet set];
 	Class classType = [_node class];
 	do {
 		unsigned int count;
@@ -933,8 +946,7 @@ anchorPoint = _anchorPoint;
 		if (count) {
 			for(unsigned int i = 0; i < count; i++) {
 				NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
-				[_node addObserver:self forKeyPath:key options:0 context:nil];
-				[_boundAttributes addObject:key];
+				[_node addObserver:self forKeyPath:key options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
 			}
 			free(properties);
 		}
@@ -969,12 +981,57 @@ anchorPoint = _anchorPoint;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if (object == _node) {
-		[self setValue:[_node valueForKey:@"position"] forKey:@"position"];
-		[self setValue:[_node valueForKey:@"size"] forKey:@"size"];
-		[self setValue:[_node valueForKey:@"zRotation"] forKey:@"zRotation"];
-		[self setValue:[_node valueForKey:@"anchorPoint"] forKey:@"anchorPoint"];
 
-		if (object == _scene) {
+		/* Try to register the undo operation for the observed change */
+		if ([_boundAttributes containsObject:keyPath]) {
+			if (![keyPath isEqualToString:@"visibleRect"]) {
+
+				id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
+				id newValue = [change objectForKey:NSKeyValueChangeNewKey];
+
+				if (!_registeredUndo && ![oldValue isEqual:newValue]) {
+
+					if ([_undoBlocks valueForKey:keyPath]) {
+						/* Register all the stored undo operations in a single invocation by the undo manager */
+						id undoBlocks = _undoBlocks.copy;
+						id undoAllBlocksBlock = ^{
+							for (id key in undoBlocks) {
+								void (^block)() = undoBlocks[key];
+								block();
+							}
+						};
+
+						_undoBlocks = nil;
+
+						NSUndoManager *undoManager = [self undoManager];
+						[[undoManager prepareWithInvocationTarget:self] performUndoBlock:undoAllBlocksBlock];
+						[undoManager setActionName:keyPath];
+
+						_registeredUndo = YES;
+
+					} else {
+						/* Some undo operations are compound of several observed changes,
+						   thus store this single undo operation for later registration */
+						if (!_undoBlocks)
+							_undoBlocks = [NSMutableDictionary dictionary];
+
+						[_undoBlocks setObject:^{
+							[object setValue:oldValue forKey:keyPath];
+						} forKey:keyPath];
+					}
+				}
+			}
+		} else {
+			[_boundAttributes addObject:keyPath];
+		}
+
+		/* Update the current selection and editor view's visible rect */
+		if (object != _scene) {
+			[self setValue:[object valueForKey:@"position"] forKey:@"position"];
+			[self setValue:[object valueForKey:@"size"] forKey:@"size"];
+			[self setValue:[object valueForKey:@"zRotation"] forKey:@"zRotation"];
+			[self setValue:[object valueForKey:@"anchorPoint"] forKey:@"anchorPoint"];
+		} else {
 			[self updateVisibleRect];
 		}
 
@@ -984,13 +1041,21 @@ anchorPoint = _anchorPoint;
 	}
 }
 
-- (void)dealloc {
-	[self unbindFromSelectedNode];
+- (void)performUndoBlock:(void (^)())block {
+	block();
+	[self setNode:nil];
+	_registeredUndo = NO;
+	_undoBlocks = nil;
+	[self setNeedsDisplay:YES];
 }
 
 - (void)setFrame:(NSRect)frame {
 	[super setFrame:frame];
 	[self updateVisibleRect];
+}
+
+- (void)dealloc {
+	[self unbindFromSelectedNode];
 }
 
 @end
