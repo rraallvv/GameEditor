@@ -56,10 +56,12 @@
 
 			/* Get the keyPath relative to the attribute object */
 			NSArray *results = [observedKey substringsWithRegularExpressionWithPattern:@"(?<=\\.|^)value(\\d*)$" options:0 error:NULL];
-			NSString *key = results[0];
-			NSInteger subindex = [results[1] integerValue];
 
-			if (key) {
+			if ([results count]) {
+				NSInteger subindex = [results[0] integerValue];
+
+				NSString *key = subindex > 0 ? [NSString stringWithFormat:@"value%ld", subindex] : @"value";
+
 				/* Update the binding with the attribute's value transformer */
 				NSMutableDictionary *options = bindingInfo[NSOptionsKey];
 				id valueTransformer = attribute.valueTransformer;
@@ -84,13 +86,6 @@
 					textField.formatter = [formatter objectAtIndex:MIN(subindex, [formatter count]) - 1];
 				} else {
 					textField.formatter = attribute.formatter;
-				}
-
-				/* Set the parameters for the stepper text field */
-				if ([textField isKindOfClass:[StepperTextField class]]) {
-					StepperTextField *stepper = (StepperTextField *)textField;
-					stepper.stepperInc = attribute.increment;
-					stepper.draggingMult = attribute.sensitivity;
 				}
 			}
 		}

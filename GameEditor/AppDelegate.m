@@ -223,7 +223,18 @@
 			NSString *propertyName = [NSString stringWithUTF8String:property_getName(properties[i])];
 			NSString *propertyType = [[propertyAttributes componentsSeparatedByString:@","] firstObject];
 
-			if ([propertyName rangeOfString:@"^z(Position|Rotation)$" options:NSRegularExpressionSearch].location != NSNotFound) {
+			if ([node isKindOfClass:[SKScene class]]
+				&& ([propertyName isEqualToString:@"position"]
+					|| [propertyName isEqualToString:@"zPosition"]
+					|| [propertyName isEqualToString:@"zRotation"]
+					|| [propertyName isEqualToString:@"xScale"]
+					|| [propertyName isEqualToString:@"yScale"]
+					|| [propertyName isEqualToString:@"visibleRect"]
+					|| [propertyName isEqualToString:@"visibleRectCenter"]
+					|| [propertyName isEqualToString:@"visibleRectSize"])) {
+				[attributesArray addObject:[AttributeNode attributeForNonEditableValue:propertyName type:propertyType]];
+
+			} else if ([propertyName rangeOfString:@"^z(Position|Rotation)$" options:NSRegularExpressionSearch].location != NSNotFound) {
 				if (!hasZPositionRotation) {
 					AttributeNode *attribute = [AttributeNode attributeWithName:@"z,zPosition,zRotation"
 																		   node:node
@@ -407,16 +418,20 @@
 					NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
 					editable = ![propertyType isEqualToString:@""] && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
 
+					AttributeNode *attribute;
+
 					if (editable) {
 						if (![propertyName containsString:@"anchorPoint"]
 							&& ![propertyName containsString:@"centerRect"]
 							&& ([propertyType isEqualToEncodedType:@encode(CGPoint)]
 								|| [propertyType isEqualToEncodedType:@encode(CGSize)]
 								|| [propertyType isEqualToEncodedType:@encode(CGRect)])) {
-							[attributesArray addObject:[AttributeNode attributeForNormalPrecisionValueWithName:propertyName node:node type:propertyType]];
+							attribute = [AttributeNode attributeForNormalPrecisionValueWithName:propertyName node:node type:propertyType];
+
 						} else if ([propertyName containsString:@"colorBlendFactor"]
 								   || [propertyName containsString:@"alpha"]) {
-							[attributesArray addObject:[AttributeNode attributeForNormalizedValueWithName:propertyName node:node type:propertyType]];
+							attribute = [AttributeNode attributeForNormalizedValueWithName:propertyName node:node type:propertyType];
+
 						} else if ([propertyType isEqualToEncodedType:@encode(short)]
 								   || [propertyType isEqualToEncodedType:@encode(int)]
 								   || [propertyType isEqualToEncodedType:@encode(long)]
@@ -425,10 +440,22 @@
 								   || [propertyType isEqualToEncodedType:@encode(unsigned int)]
 								   || [propertyType isEqualToEncodedType:@encode(unsigned long)]
 								   || [propertyType isEqualToEncodedType:@encode(unsigned long long)]) {
-							[attributesArray addObject:[AttributeNode attributeForIntegerValueWithName:propertyName node:node type:propertyType]];
+							attribute = [AttributeNode attributeForIntegerValueWithName:propertyName node:node type:propertyType];
+
 						} else {
-							[attributesArray addObject:[AttributeNode attributeForHighPrecisionValueWithName:propertyName node:node type:propertyType]];
+							attribute = [AttributeNode attributeForHighPrecisionValueWithName:propertyName node:node type:propertyType];
 						}
+
+						if ([propertyType isEqualToEncodedType:@encode(CGPoint)]
+							|| [propertyType isEqualToEncodedType:@encode(CGVector)]) {
+							attribute.labels = @[@"X", @"Y"];
+						} else if ([propertyType isEqualToEncodedType:@encode(CGSize)]) {
+							attribute.labels = @[@"W", @"H"];
+						} else if ([propertyType isEqualToEncodedType:@encode(CGRect)]) {
+							attribute.labels = @[@"X", @"Y", @"W", @"H"];
+						}
+
+						[attributesArray addObject:attribute];
 					}
 #if 1// Show a dummy attribute for non-editable properties
 					else {

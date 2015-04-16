@@ -26,14 +26,110 @@
 #import "AttributeNode.h"
 #import <objc/runtime.h>
 
+#pragma mark NSNumber
+
+@implementation NSNumber (CreatingFromArbitraryTypes)
++ numberWithValue:(const void *)aValue objCType:(const char *)aTypeDescription {
+	return [[self alloc] initWithValue:aValue objCType:aTypeDescription];
+}
+
+/// For the constants see: <http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Articles/chapter_14_section_9.html>
+- (instancetype)initWithValue:(const void *)aValue objCType:(const char *)aTypeDescription {
+	if ('^' == *aTypeDescription
+		&& nil == aValue) {
+		self = nil; // nil should stay nil, even if it's technically a (void *)
+	} else {
+		id number = [NSNumber alloc];
+		switch (*aTypeDescription)
+		{
+			case 'c': // BOOL, char
+				self = [number initWithChar:*(char *)aValue];
+				break;
+			case 'C': self = [number initWithUnsignedChar:*(unsigned char *)aValue];
+				break;
+			case 's': self = [number initWithShort:*(short *)aValue];
+				break;
+			case 'S': self = [number initWithUnsignedShort:*(unsigned short *)aValue];
+				break;
+			case 'i': self = [number initWithInt:*(int *)aValue];
+				break;
+			case 'I': self = [number initWithUnsignedInt:*(unsigned *)aValue];
+				break;
+			case 'l': self = [number initWithLong:*(long *)aValue];
+				break;
+			case 'L': self = [number initWithUnsignedLong:*(unsigned long *)aValue];
+				break;
+			case 'q': self = [number initWithLongLong:*(long long *)aValue];
+				break;
+			case 'Q': self = [number initWithUnsignedLongLong:*(unsigned long long *)aValue];
+				break;
+			case 'f': self = [number initWithFloat:*(float *)aValue];
+				break;
+			case 'd': self = [number initWithDouble:*(double *)aValue];
+				break;
+			case '@': self = (__bridge NSNumber *)(aValue);
+				break;
+			case '^': // pointer, no string stuff supported right now
+			case '{': // struct, only simple ones containing only basic types right now
+			case '[': // array, of whatever, just gets the address
+			default:
+				//NSLog(@"converting unknown format %s", aTypeDescription);
+				self = [number initWithBytes:aValue objCType:aTypeDescription];
+		}
+	}
+	return self;
+}
+
+- (void)getValue:(void *)value withObjCType:(const char *)aTypeDescription {
+	switch (*aTypeDescription)
+	{
+		case 'c': // BOOL, char
+			*(char *)value  = [self charValue];
+			break;
+		case 'C': *(unsigned char *)value = [self unsignedCharValue];
+			break;
+		case 's': *(short *)value = [self shortValue];
+			break;
+		case 'S': *(unsigned short *)value = [self unsignedShortValue];
+			break;
+		case 'i': *(int *)value = [self intValue];
+			break;
+		case 'I': *(unsigned *)value = [self unsignedIntValue];
+			break;
+		case 'l': *(long *)value = [self longValue];
+			break;
+		case 'L': *(unsigned long *)value = [self unsignedLongValue];
+			break;
+		case 'q': *(long long *)value = [self longLongValue];
+			break;
+		case 'Q': *(unsigned long long *)value = [self unsignedLongLongValue];
+			break;
+		case 'f': *(float *)value = [self floatValue];
+			break;
+		case 'd': *(double *)value = [self doubleValue];
+			break;
+		case '@': value = (__bridge void *)(self);
+			break;
+		case '^':
+		case '{':
+		case '[':
+		default:
+			[self getValue:value];
+	}
+}
+
+@end
+
 #pragma mark NSString
 
 @implementation NSString (Types)
+
 - (NSString *)extractClassName {
 	/* Try to get a class name from the type */
 	NSRange range = [self rangeOfString:@"(?<=@\")(\\w*)(?=\")" options:NSRegularExpressionSearch];
 	return range.location != NSNotFound ? [self substringWithRange:range] : nil;
 }
+
 - (Class)classType {
 	NSString *className = [self extractClassName];
 	if (className) {
@@ -41,6 +137,7 @@
 	}
 	return nil;
 }
+
 - (BOOL)isEqualToEncodedType:(const char*)type {
 	NSString *className = [self extractClassName];
 	if (className) {
@@ -49,16 +146,24 @@
 		return [self isEqualToString:[NSString stringWithUTF8String:type]];
 	}
 }
+
 @end
 
 @implementation NSString (Regex)
+
 - (NSArray *)substringsWithRegularExpressionWithPattern:(NSString *)pattern options:(NSRegularExpressionOptions)options error:(NSError **)error {
 	NSMutableArray *results = [NSMutableArray array];
 
 	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:options error:error];
-	NSTextCheckingResult *result = [regex firstMatchInString:self options:0 range:NSMakeRange(0, self.length)];
 
-	for (int i = 0; i < [result numberOfRanges]; ++i) {
+#if 0 // return all matches
+	NSArray *matches = [regex matchesInString:self options:0 range:NSMakeRange(0, self.length)];
+	for (NSTextCheckingResult *result in matches)
+#else
+	NSTextCheckingResult *result = [regex firstMatchInString:self options:0 range:NSMakeRange(0, self.length)];
+#endif
+
+	for (int i = 1; i < [result numberOfRanges]; ++i) {
 		[results addObject:[self substringWithRange:[result rangeAtIndex:i]]];
 	}
 
@@ -67,9 +172,11 @@
 
 	return results;
 }
+
 @end
 
 @implementation NSString (AttributeName)
+
 - (NSArray *)componentsSeparatedInWords {
 	NSMutableArray *substrings = [NSMutableArray array];
 	NSMutableString *tempStr = [NSMutableString string];
@@ -99,17 +206,21 @@
 
 	return substrings;
 }
+
 @end
 
 #pragma mark NSNumberFormatter
 
 @implementation NSNumberFormatter (CustomFormatters)
+
 + (instancetype) degreesFormatter {
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
 	formatter.negativeFormat = formatter.positiveFormat = @"#.###º";
+	formatter.multiplier = @(0.1);
 	return formatter;
 }
+
 + (instancetype)highPrecisionFormatter {
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
@@ -117,19 +228,24 @@
 	formatter.multiplier = @(0.01);
 	return formatter;
 }
+
 + (instancetype)normalPrecisionFormatter {
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
 	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
 	return formatter;
 }
+
 + (instancetype)normalizedFormatter {
 	NSNumberFormatter *formatter = [self highPrecisionFormatter];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
+	formatter.negativeFormat = formatter.positiveFormat = @"#.###";
 	formatter.minimum = @(0.0);
 	formatter.maximum = @(100.0);
+	formatter.multiplier = @(0.01);
 	return formatter;
 }
+
 + (instancetype)integerFormatter {
 	NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 	formatter.numberStyle = NSNumberFormatterDecimalStyle;
@@ -137,6 +253,7 @@
 	formatter.usesGroupingSeparator = NO;
 	return formatter;
 }
+
 @end
 
 #pragma mark Value transformers
@@ -217,11 +334,11 @@
 	[self initializeWithTransformedValueClass:[NSNumber class]
 				  allowsReverseTransformation:YES
 						transformedValueBlock:^(NSNumber *value){
-							NSNumber *result = @(GLKMathRadiansToDegrees(value.floatValue));
+							NSNumber *result = @(GLKMathRadiansToDegrees(value.floatValue)*10.0);
 							return result;
 						}
 				 reverseTransformedValueBlock:^(NSNumber *value){
-							NSNumber *result = @(GLKMathDegreesToRadians(value.floatValue));
+							NSNumber *result = @(GLKMathDegreesToRadians(value.floatValue*0.1));
 							return result;
 						}];
 }
@@ -250,13 +367,17 @@
 	id _value;
 	SKNode *_node;
 	BOOL _splitValue;
+	BOOL _structValue;
 	NSArray *_splitNames;
+	NSMutableArray *_types;
+	NSMutableArray *_typeSizes;
+	int _typeSize;
+	NSMutableData* _data;
+	unsigned char *_pdata;
 }
 
 @synthesize
 name = _name,
-sensitivity = _sensitivity,
-increment = _increment,
 formatter = _formatter,
 valueTransformer = _valueTransformer,
 labels = _labels;
@@ -266,35 +387,68 @@ labels = _labels;
 		_name = name;
 		_node = node;
 		_type = type;
-		_sensitivity = 1.0;
-		_increment = 1.0;
 		_splitValue = NO;
+		_structValue = NO;
 		_formatter = formatter;
 		_valueTransformer = valueTransformer;
-
-		/* Prepare the labels and identifier for the editor */
-		if ([_type isEqualToEncodedType:@encode(CGPoint)]
-			|| [_type isEqualToEncodedType:@encode(CGVector)]) {
-			_labels = @[@"X", @"Y"];
-		} else if ([_type isEqualToEncodedType:@encode(CGSize)]) {
-			_labels = @[@"W", @"H"];
-		} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
-			_labels = @[@"X", @"Y", @"W", @"H"];
-		}
+		_typeSize = 0;
 
 		/* Bind the property to the 'raw' value if there isn't an accessor */
 		if (node) {
+			/* Try to get the separate values of a split value attribute */
 			_splitNames = [name componentsSeparatedByString:@","];
 			if (_splitNames.count > 1) {
 				_name = _splitNames[0];
 				_splitValue = YES;
 				_value = [NSMutableArray array];
+				/* Initialize and bind each value for the split value attribute */
 				for (int i=1; i<_splitNames.count; ++i) {
 					[_value addObject:[NSNull null]];
 					[self bind:[NSString stringWithFormat:@"value%d", i] toObject:node withKeyPath:_splitNames[i] options:nil];
 				}
 
 			} else {
+				/* Try to get the endoced type fields of the struct */
+				NSMutableArray *tempArray = [NSMutableArray array];
+				NSInteger level = 0;
+
+				_types = [NSMutableArray array];
+
+				for (NSInteger i=0; i<type.length; i++) {
+					NSString *ch = [type substringWithRange:NSMakeRange(i, 1)];
+					if ([ch isEqualToString:@"{"]) {
+						level++;
+						tempArray = [NSMutableArray array];
+					} else if ([ch isEqualToString:@"="]) {
+						tempArray = [NSMutableArray array];
+					} else if ([ch isEqualToString:@"}"]) {
+						[_types addObjectsFromArray:tempArray];
+						tempArray = [NSMutableArray array];
+						level--;
+					} else {
+						[tempArray addObject:ch];
+					}
+				}
+
+				if (_types.count && level == 0) {
+					/* Compute the size of each field and data buffer to hold the struct fields */
+					_typeSizes = [NSMutableArray array];
+
+					for (int i = 0; i < _types.count; ++i) {
+						[_typeSizes addObject:@(_typeSize)];
+						NSUInteger size;
+						NSGetSizeAndAlignment([_types[i] UTF8String], &size, NULL);
+						_typeSize += size;
+					}
+
+					/* Allocate the data buffer to hold the struct fields */
+					_data = [NSMutableData dataWithLength:_typeSize];
+					_pdata = [_data mutableBytes];
+
+					_structValue = YES;
+				}
+
+				/* Bind the struct value */
 				[self bind:@"value" toObject:node withKeyPath:_name options:nil];
 			}
 		}
@@ -318,7 +472,6 @@ labels = _labels;
 	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:@"d"
 													  formatter:[NSNumberFormatter degreesFormatter]
 											   valueTransformer:[DegreesTransformer transformer]];
-	attribute.sensitivity = GLKMathRadiansToDegrees(0.001);
 	return attribute;
 }
 
@@ -326,7 +479,6 @@ labels = _labels;
 	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
 													  formatter:[NSNumberFormatter highPrecisionFormatter]
 											   valueTransformer:[PrecisionTransformer transformer]];
-	attribute.increment = 10.0;
 	return attribute;
 }
 
@@ -341,7 +493,6 @@ labels = _labels;
 	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
 													  formatter:[NSNumberFormatter normalizedFormatter]
 											   valueTransformer:[PrecisionTransformer transformer]];
-	attribute.increment = 10.0;
 	return attribute;
 }
 
@@ -379,7 +530,13 @@ labels = _labels;
 }
 
 - (void)dealloc {
-	[self unbind:@"value"];
+	if (_splitValue) {
+		for (int i = 1; i <= [_value count]; ++i) {
+			[self unbind:[NSString stringWithFormat:@"value%d", i]];
+		}
+	} else {
+		[self unbind:@"value"];
+	}
 }
 
 #pragma mark Value
@@ -405,33 +562,22 @@ labels = _labels;
 	/* Try to get a subindex from the key */
 	NSArray *results = [key substringsWithRegularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
 
-	NSString *baseKey = results[1];
-	NSInteger subindex = [results[2] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
+	NSString *baseKey = results[0];
+	NSInteger subindex = [results[1] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
 
 	if ([baseKey isEqualToString:@"value"]) {
-
 		/* Update the value component for the given subindex */
-
 		if (_splitValue) {
 			if (![self.value[subindex] isEqual:value]) {
 				self.value[subindex] = value;
 				[_node setValue:value forKeyPath:_splitNames[subindex + 1]];
 			}
-		} else {
-			if ([_type isEqualToEncodedType:@encode(CGPoint)]
-				|| [_type isEqualToEncodedType:@encode(CGSize)]
-				|| [_type isEqualToEncodedType:@encode(CGVector)]) {
-				CGFloat data[2];
-				[self.value getValue:&data];
-				data[subindex] = [value floatValue];
-				self.value = [NSValue value:&data withObjCType:_type.UTF8String];
-
-			} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
-				CGFloat data[4];
-				[self.value getValue:&data];
-				data[subindex] = [value floatValue];
-				self.value = [NSValue value:&data withObjCType:_type.UTF8String];
-			}
+		} else if (_structValue) {
+			[self.value getValue:_pdata];
+			int offset = [_typeSizes[subindex] intValue];
+			const char *objCType = [_types[subindex] UTF8String];
+			[(NSNumber *)value getValue:_pdata + offset withObjCType:objCType];
+			self.value = [NSValue value:_pdata withObjCType:_type.UTF8String];
 		}
 
 	} else {
@@ -445,33 +591,22 @@ labels = _labels;
 	/* Try to get a subindex from the key */
 	NSArray *results = [key substringsWithRegularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
 
-	NSString *baseKey = results[1];
-	NSInteger subindex = [results[2] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
+	NSString *baseKey = results[0];
+	NSInteger subindex = [results[1] integerValue] - 1; // 1-based subindex (label1, value1, etc.)
 
 	if ([baseKey isEqualToString:@"label"]) {
-
 		/* The key is a subindex of label */
 		return _labels[subindex];
 
 	} else if ([baseKey isEqualToString:@"value"]) {
-
 		/* The key is a subindex of value */
-
 		if (_splitValue) {
 			return _value[subindex];
-		} else {
-			if ([_type isEqualToEncodedType:@encode(CGPoint)]
-				|| [_type isEqualToEncodedType:@encode(CGSize)]
-				|| [_type isEqualToEncodedType:@encode(CGVector)]) {
-				CGFloat data[2];
-				[_value getValue:&data];
-				return @(data[subindex]);
-
-			} else if ([_type isEqualToEncodedType:@encode(CGRect)]) {
-				CGFloat data[4];
-				[_value getValue:&data];
-				return @(data[subindex]);
-			}
+		} else if (_structValue) {
+			[_value getValue:_pdata];
+			int offset = [_typeSizes[subindex] intValue];
+			const char *objCType = [_types[subindex] UTF8String];
+			return [NSNumber numberWithValue:_pdata + offset objCType:objCType];
 		}
 	}
 
@@ -483,7 +618,7 @@ labels = _labels;
 
 	/* Try to get the key without subindex */
 	NSArray *results = [key substringsWithRegularExpressionWithPattern:@"([\\D]+)([\\d]+)" options:0 error:NULL];
-	NSString *baseKey = results[1];
+	NSString *baseKey = results[0];
 
 	if ([baseKey isEqualToString:@"value"]) {
 		keyPaths = [keyPaths setByAddingObject:@"value"];
