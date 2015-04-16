@@ -222,8 +222,8 @@ typedef enum {
 	BOOL _manipulatingHandle;
 	ManipulatedHandle _manipulatedHandle;
 	NSMutableSet *_boundAttributes;
-	__weak id _prevObservedObject;
-	NSString *_prevObservedKeyPath;
+	BOOL _registeredUndo;
+	NSMutableDictionary *_undoBlocks;
 	CGPoint _viewOrigin;
 	CGFloat _viewScale;
 
@@ -713,6 +713,7 @@ anchorPoint = _anchorPoint;
 
 - (void)mouseUp:(NSEvent *)theEvent {
 	_manipulatingHandle = NO;
+	_registeredUndo = NO;
 
 	if (_node == _scene) {
 		[[NSCursor arrowCursor] set];
@@ -981,26 +982,42 @@ anchorPoint = _anchorPoint;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if (object == _node) {
 
-		/* Try to register an undo operation for the observed change */
+		/* Try to register the undo operation for the observed change */
 		if ([_boundAttributes containsObject:keyPath]) {
 			if (![keyPath isEqualToString:@"visibleRect"]) {
+
 				id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
 				id newValue = [change objectForKey:NSKeyValueChangeNewKey];
-				if (![oldValue isEqual:newValue]) {
-					if (![_prevObservedObject isEqual:object] || ![_prevObservedKeyPath isEqualToString:keyPath]) {
 
-						id undoBlock = ^{
-							[object setValue:oldValue forKey:keyPath];
+				if (!_registeredUndo && ![oldValue isEqual:newValue]) {
+
+					if ([_undoBlocks valueForKey:keyPath]) {
+						/* Register all the stored undo operations in a single invocation by the undo manager */
+						id undoBlocks = _undoBlocks.copy;
+						id undoAllBlocksBlock = ^{
+							for (id key in undoBlocks) {
+								void (^block)() = undoBlocks[key];
+								block();
+							}
 						};
 
+						_undoBlocks = nil;
+
 						NSUndoManager *undoManager = [self undoManager];
-						[[undoManager prepareWithInvocationTarget:self] performUndoBlock:undoBlock];
+						[[undoManager prepareWithInvocationTarget:self] performUndoBlock:undoAllBlocksBlock];
 						[undoManager setActionName:keyPath];
 
-						//NSLog(@"\nRegister undo operation for node:%p keyPath:%@ value:%@ %@\n", object, keyPath, oldValue, newValue);
+						_registeredUndo = YES;
 
-						_prevObservedKeyPath = keyPath;
-						_prevObservedObject = object;
+					} else {
+						/* Some undo operations are compound of several observed changes,
+						   thus store this single undo operation for later registration */
+						if (!_undoBlocks)
+							_undoBlocks = [NSMutableDictionary dictionary];
+
+						[_undoBlocks setObject:^{
+							[object setValue:oldValue forKey:keyPath];
+						} forKey:keyPath];
 					}
 				}
 			}
@@ -1026,8 +1043,9 @@ anchorPoint = _anchorPoint;
 
 - (void)performUndoBlock:(void (^)())block {
 	block();
-	_prevObservedObject = nil;
-	_prevObservedKeyPath = nil;
+	[self setNode:nil];
+	_registeredUndo = NO;
+	_undoBlocks = nil;
 	[self setNeedsDisplay:YES];
 }
 
