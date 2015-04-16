@@ -994,11 +994,13 @@ anchorPoint = _anchorPoint;
 					if ([_undoBlocks valueForKey:keyPath]) {
 						/* Register all the stored undo operations in a single invocation by the undo manager */
 						id undoBlocks = _undoBlocks.copy;
+						__weak EditorView *weakSelf = self;
 						id undoAllBlocksBlock = ^{
 							for (id key in undoBlocks) {
 								void (^block)() = undoBlocks[key];
 								block();
 							}
+							[weakSelf setNode:object];
 						};
 
 						_undoBlocks = nil;
@@ -1043,7 +1045,6 @@ anchorPoint = _anchorPoint;
 
 - (void)performUndoBlock:(void (^)())block {
 	block();
-	[self setNode:nil];
 	_registeredUndo = NO;
 	_undoBlocks = nil;
 	[self setNeedsDisplay:YES];
