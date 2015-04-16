@@ -1026,6 +1026,8 @@ anchorPoint = _anchorPoint;
 
 - (void)performUndoBlock:(void (^)())block {
 	block();
+	_prevObservedObject = nil;
+	_prevObservedKeyPath = nil;
 	[self setNeedsDisplay:YES];
 }
 
