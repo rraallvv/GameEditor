@@ -461,7 +461,7 @@ anchorPoint = _anchorPoint;
 	[self drawCircleWithCenter:_handlePoints[RotationHandle] radius:rotationHandleRadius fillColor:nil strokeColor:strokeColor lineWidth:handleLineWidth];
 }
 
-- (void)drawCircleWithCenter:(CGPoint)center radius:(CGFloat)radius fillColor:(NSColor *)fillColor strokeColor:(NSColor *)strokeColor lineWidth:(CGFloat)lineWidth{
+- (void)drawCircleWithCenter:(CGPoint)center radius:(CGFloat)radius fillColor:(NSColor *)fillColor strokeColor:(NSColor *)strokeColor lineWidth:(CGFloat)lineWidth {
 	NSBezierPath *path = [NSBezierPath bezierPath];
 	[path appendBezierPathWithArcWithCenter:center radius:radius startAngle:0 endAngle:M_2_PI clockwise:YES];
 	[path setLineWidth:lineWidth];
@@ -993,22 +993,25 @@ anchorPoint = _anchorPoint;
 
 					if ([_compoundUndo valueForKey:keyPath]) {
 						/* Register all the stored undo operations in a single invocation by the undo manager */
-						id compoundUndo = _compoundUndo.copy;
-						__weak EditorView *weakSelf = self;
-						id undoAllBlocksBlock = ^{
-							for (id key in compoundUndo) {
-								id undo = compoundUndo[key];
+						id info = _compoundUndo.copy;
+
+						__weak id weakSelf = self;
+						id block = ^id (id info){
+							NSMutableDictionary *redoInfo = [NSMutableDictionary dictionary];
+							for (id key in info) {
+								id undo = info[key];
+								[redoInfo setObject:@{@"object": undo[@"object"],
+													  @"value": [undo[@"object"] valueForKey:key]} forKey:key];
 								[undo[@"object"] setValue:undo[@"value"] forKey:key];
 							}
 							[weakSelf setNode:object];
+							return redoInfo;
 						};
 
-						_compoundUndo = nil;
-
 						NSUndoManager *undoManager = [self undoManager];
-						[[undoManager prepareWithInvocationTarget:self] performUndoBlock:undoAllBlocksBlock];
-						[undoManager setActionName:keyPath];
+						[[undoManager prepareWithInvocationTarget:self] performUndoBlock:block withInfo:info];
 
+						_compoundUndo = nil;
 						_registeredUndo = YES;
 
 					} else {
@@ -1041,8 +1044,10 @@ anchorPoint = _anchorPoint;
 	}
 }
 
-- (void)performUndoBlock:(void (^)())block {
-	block();
+- (void)performUndoBlock:(id (^)(id))block withInfo:(id)info {
+	NSUndoManager *undoManager = [self undoManager];
+	[[undoManager prepareWithInvocationTarget:self] performUndoBlock:block withInfo:block(info)];
+
 	_registeredUndo = NO;
 	_compoundUndo = nil;
 	[self setNeedsDisplay:YES];
