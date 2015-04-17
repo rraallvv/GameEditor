@@ -223,7 +223,7 @@ typedef enum {
 	ManipulatedHandle _manipulatedHandle;
 	NSMutableSet *_boundAttributes;
 	BOOL _registeredUndo;
-	NSMutableDictionary *_undoBlocks;
+	NSMutableDictionary *_compoundUndo;
 	CGPoint _viewOrigin;
 	CGFloat _viewScale;
 
@@ -991,19 +991,19 @@ anchorPoint = _anchorPoint;
 
 				if (!_registeredUndo && ![oldValue isEqual:newValue]) {
 
-					if ([_undoBlocks valueForKey:keyPath]) {
+					if ([_compoundUndo valueForKey:keyPath]) {
 						/* Register all the stored undo operations in a single invocation by the undo manager */
-						id undoBlocks = _undoBlocks.copy;
+						id compoundUndo = _compoundUndo.copy;
 						__weak EditorView *weakSelf = self;
 						id undoAllBlocksBlock = ^{
-							for (id key in undoBlocks) {
-								void (^block)() = undoBlocks[key];
-								block();
+							for (id key in compoundUndo) {
+								id undo = compoundUndo[key];
+								[undo[@"object"] setValue:undo[@"value"] forKey:key];
 							}
 							[weakSelf setNode:object];
 						};
 
-						_undoBlocks = nil;
+						_compoundUndo = nil;
 
 						NSUndoManager *undoManager = [self undoManager];
 						[[undoManager prepareWithInvocationTarget:self] performUndoBlock:undoAllBlocksBlock];
@@ -1014,12 +1014,10 @@ anchorPoint = _anchorPoint;
 					} else {
 						/* Some undo operations are compound of several observed changes,
 						   thus store this single undo operation for later registration */
-						if (!_undoBlocks)
-							_undoBlocks = [NSMutableDictionary dictionary];
+						if (!_compoundUndo)
+							_compoundUndo = [NSMutableDictionary dictionary];
 
-						[_undoBlocks setObject:^{
-							[object setValue:oldValue forKey:keyPath];
-						} forKey:keyPath];
+						[_compoundUndo setObject:@{@"object": object, @"value": oldValue} forKey:keyPath];
 					}
 				}
 			}
@@ -1046,7 +1044,7 @@ anchorPoint = _anchorPoint;
 - (void)performUndoBlock:(void (^)())block {
 	block();
 	_registeredUndo = NO;
-	_undoBlocks = nil;
+	_compoundUndo = nil;
 	[self setNeedsDisplay:YES];
 }
 
