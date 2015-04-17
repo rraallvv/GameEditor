@@ -993,23 +993,7 @@ anchorPoint = _anchorPoint;
 
 					if ([_compoundUndo valueForKey:keyPath]) {
 						/* Register all the stored undo operations in a single invocation by the undo manager */
-						id info = _compoundUndo.copy;
-
-						__weak id weakSelf = self;
-						id block = ^id (id info){
-							NSMutableDictionary *redoInfo = [NSMutableDictionary dictionary];
-							for (id key in info) {
-								id undo = info[key];
-								[redoInfo setObject:@{@"object": undo[@"object"],
-													  @"value": [undo[@"object"] valueForKey:key]} forKey:key];
-								[undo[@"object"] setValue:undo[@"value"] forKey:key];
-							}
-							[weakSelf setNode:object];
-							return redoInfo;
-						};
-
-						NSUndoManager *undoManager = [self undoManager];
-						[[undoManager prepareWithInvocationTarget:self] performUndoBlock:block withInfo:info];
+						[[[self undoManager] prepareWithInvocationTarget:self] performUndoWithInfo:_compoundUndo.copy];
 
 						_compoundUndo = nil;
 						_registeredUndo = YES;
@@ -1044,12 +1028,22 @@ anchorPoint = _anchorPoint;
 	}
 }
 
-- (void)performUndoBlock:(id (^)(id))block withInfo:(id)info {
-	NSUndoManager *undoManager = [self undoManager];
-	[[undoManager prepareWithInvocationTarget:self] performUndoBlock:block withInfo:block(info)];
+- (void)performUndoWithInfo:(id)info {
+
+	NSMutableDictionary *redoInfo = [NSMutableDictionary dictionary];
+	for (id key in info) {
+		id operation = info[key];
+		[redoInfo setObject:@{@"object": operation[@"object"],
+							  @"value": [operation[@"object"] valueForKey:key]} forKey:key];
+		[operation[@"object"] setValue:operation[@"value"] forKey:key];
+		[self setNode:operation[@"object"]];
+	}
+
+	[[[self undoManager] prepareWithInvocationTarget:self] performUndoWithInfo:redoInfo];
 
 	_registeredUndo = NO;
 	_compoundUndo = nil;
+
 	[self setNeedsDisplay:YES];
 }
 
