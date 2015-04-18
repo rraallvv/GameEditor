@@ -211,7 +211,7 @@
 	BOOL hasParticleColorAlpha = NO;
 
 	if (count) {
-		for(unsigned int i = 0; i < count; i++) {
+		for (unsigned int i = 0; i < count; i++) {
 			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
 			NSString *propertyAttributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
 
@@ -474,12 +474,12 @@
 #pragma mark Helper methods
 
 - (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray*)nodes {
-	for(int i = 0; i < nodes.count; ++i) {
+	for (int i = 0; i < nodes.count; ++i) {
 		NSTreeNode* node = nodes[i];
-		if([[[node representedObject] node] isEqual:anObject]) {
+		if ([[[node representedObject] node] isEqual:anObject]) {
 			return node;
 		}
-		if([[node childNodes] count]) {
+		if ([[node childNodes] count]) {
 			id result = [self navigationNodeOfObject:anObject inNodes:[node childNodes]];
 			if (result) {
 				return result;

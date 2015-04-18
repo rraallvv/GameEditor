@@ -944,7 +944,7 @@ anchorPoint = _anchorPoint;
 		objc_property_t *properties = class_copyPropertyList(classType, &count);
 
 		if (count) {
-			for(unsigned int i = 0; i < count; i++) {
+			for (unsigned int i = 0; i < count; i++) {
 				NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
 				[_node addObserver:self forKeyPath:key options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
 			}

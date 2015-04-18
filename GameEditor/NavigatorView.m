@@ -36,10 +36,19 @@
 	__weak id _actualDataSource;
 	NSIndexPath *_fromIndexPath;
 	NSIndexPath *_toIndexPath;
+	__weak NSTreeController *_treeController;
+}
+
+- (void)bind:(NSString *)binding toObject:(id)observable withKeyPath:(NSString *)keyPath options:(NSDictionary *)options {
+	[super bind:binding toObject:observable withKeyPath:keyPath options:options];
+	if ([binding isEqualToString:NSContentBinding]
+		&& [observable isKindOfClass:[NSTreeController class]]) {
+		_treeController = observable;
+	}
 }
 
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification {
-	id selectedObject = [[[[self infoForBinding:NSContentBinding] valueForKey:NSObservedObjectKey] selectedObjects] firstObject];
+	id selectedObject = [[_treeController selectedObjects] firstObject];
 	[_actualDelegate navigatorView:self didSelectObject:selectedObject];
 }
 
@@ -75,7 +84,7 @@
 #pragma mark Drag & Drop
 
 - (NSTreeNode *)nodeWithIndexPath:(NSIndexPath *)indexPath inNodes:(NSArray *)nodes {
-	for(NSTreeNode *node in nodes) {
+	for (NSTreeNode *node in nodes) {
 		if ([[node indexPath] compare:indexPath] == NSOrderedSame)
 			return node;
 		if ([[node childNodes] count]) {
@@ -89,7 +98,7 @@
 }
 
 - (NSIndexPath *)indexPathForNode:(NSTreeNode *)aNode inNodes:(NSArray *)nodes {
-	for(NSTreeNode *node in nodes) {
+	for (NSTreeNode *node in nodes) {
 		if ([node isEqual:aNode])
 			return [node indexPath];
 		if ([[node childNodes] count]) {
@@ -134,11 +143,10 @@
 
 		if (_fromIndexPath.length < _toIndexPath.length) {
 			/* Can't drop the item on itself nor one of its children */
-			NSUInteger position = 0;
-			while (position < _fromIndexPath.length) {
-				if ([_fromIndexPath indexAtPosition:position] != [_toIndexPath indexAtPosition:position])
+			for (NSUInteger position = 0; position < _fromIndexPath.length; ++position) {
+				if ([_fromIndexPath indexAtPosition:position] != [_toIndexPath indexAtPosition:position]) {
 					return NSDragOperationMove;
-				position++;
+				}
 			}
 			return NSDragOperationNone;
 		}
@@ -153,15 +161,14 @@
 	if ([self outlineView:outlineView validateDrop:info proposedItem:item proposedChildIndex:index] == NSDragOperationMove) {
 
 		/* Move the node to its new location */
-		NSTreeController *treeController = [[self infoForBinding:NSContentBinding] valueForKey:NSObservedObjectKey];
-		NSTreeNode *rootNode = [treeController arrangedObjects];
+		NSTreeNode *rootNode = [_treeController arrangedObjects];
 		NSTreeNode *selectedNode = [self nodeWithIndexPath:_fromIndexPath inNodes:rootNode.childNodes];
 
 		NSMutableArray *savedExpadedNodesInfo = [NSMutableArray array];
 		[self getExpandedNodesInfo:savedExpadedNodesInfo forNode:selectedNode];
 
 		/* Move the node to its new location */
-		[treeController moveNode:selectedNode toIndexPath:_toIndexPath];
+		[_treeController moveNode:selectedNode toIndexPath:_toIndexPath];
 
 		/* Retrieve the selected node if it's being dropped on an item */
 		if (index == NSOutlineViewDropOnItemIndex) {
