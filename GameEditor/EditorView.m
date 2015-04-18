@@ -618,21 +618,21 @@ anchorPoint = _anchorPoint;
 	return _node;
 }
 
-- (NSArray *)nodesInArray:(NSArray *)nodes containingPoint:(CGPoint)point {
+- (NSArray *)nodesContainingPoint:(CGPoint)point inNode:(SKNode *)aNode {
 	NSMutableArray *array = [NSMutableArray array];
-	for (SKNode *child in nodes) {
+	for (SKNode *node in aNode.children) {
 
 		CGMutablePathRef path = CGPathCreateMutable();
 
 		/* Construct the path using the transformed frame */
-		if ([child respondsToSelector:@selector(size)]) {
+		if ([node respondsToSelector:@selector(size)]) {
 			CGPoint points[5];
-			[self getFramePoints:points forNode:child];
+			[self getFramePoints:points forNode:node];
 			CGPathAddLines(path, NULL, &points[1], 4);
 
 		/* Construct the path using a rectangle of arbitrary size centered at the node's position*/
 		} else {
-			CGPoint center = [_scene convertPoint:CGPointZero fromNode:child];
+			CGPoint center = [_scene convertPoint:CGPointZero fromNode:node];
 			center.x /= _viewScale;
 			center.y /= _viewScale;
 			center.x += _viewOrigin.x;
@@ -649,10 +649,10 @@ anchorPoint = _anchorPoint;
 		CGPathCloseSubpath(path);
 
 		if (CGPathContainsPoint(path, NULL, point, NO)) {
-			[array addObject:child];
+			[array addObject:node];
 		}
-		if (child.children.count) {
-			[array addObjectsFromArray:[self nodesInArray:child.children containingPoint:point]];
+		if (node.children.count > 0) {
+			[array addObjectsFromArray:[self nodesContainingPoint:point inNode:node]];
 		}
 
 		CGPathRelease(path);
@@ -667,7 +667,7 @@ anchorPoint = _anchorPoint;
 	if (_scene) {
 		CGPoint locationInScene = [self convertPoint:theEvent.locationInWindow fromView:nil];
 		if (!(_node && [self shouldManipulateHandleWithPoint:locationInScene])) {
-			NSArray *nodes = [self nodesInArray:_scene.children containingPoint:locationInScene];
+			NSArray *nodes = [self nodesContainingPoint:locationInScene inNode:_scene];
 			if (nodes.count) {
 				NSUInteger index = ([nodes indexOfObject:_node] + 1) % nodes.count;
 				self.node = [nodes objectAtIndex:index];
