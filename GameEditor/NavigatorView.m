@@ -128,20 +128,12 @@
 
 - (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index {
 	if (item) {
-		NSPasteboard *p = [info draggingPasteboard];
-		_fromIndexPath = [NSKeyedUnarchiver unarchiveObjectWithData:[p dataForType:@"public.binary"]];
-		NSTreeNode *rootNode = [[[self infoForBinding:NSContentBinding] valueForKey:NSObservedObjectKey] arrangedObjects];
-
-		NSTreeNode *sourceNode = [self nodeWithIndexPath:_fromIndexPath inNodes:rootNode.childNodes];
-
-		if(!sourceNode) {
-			// Not found
-			return NSDragOperationNone;
-		}
-
+		NSPasteboard *pasteBoard = [info draggingPasteboard];
+		_fromIndexPath = [NSKeyedUnarchiver unarchiveObjectWithData:[pasteBoard dataForType:@"public.binary"]];
 		_toIndexPath = [[item indexPath] indexPathByAddingIndex:MAX(0, index)];
 
 		if (_fromIndexPath.length < _toIndexPath.length) {
+			/* Can't drop the item on itself nor one of its children */
 			NSUInteger position = 0;
 			while (position < _fromIndexPath.length) {
 				if ([_fromIndexPath indexAtPosition:position] != [_toIndexPath indexAtPosition:position])
