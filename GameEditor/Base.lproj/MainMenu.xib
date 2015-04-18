@@ -406,7 +406,8 @@
                                                         </tableColumn>
                                                     </tableColumns>
                                                     <connections>
-                                                        <binding destination="FfK-Wg-7Xj" name="content" keyPath="arrangedObjects.objectValue" id="SCc-L5-2Fi"/>
+                                                        <binding destination="FfK-Wg-7Xj" name="content" keyPath="arrangedObjects" id="K7T-Nx-2Qh"/>
+                                                        <binding destination="FfK-Wg-7Xj" name="selectionIndexPaths" keyPath="selectionIndexPaths" previousBinding="K7T-Nx-2Qh" id="aGv-gk-C4Y"/>
                                                     </connections>
                                                 </outlineView>
                                             </subviews>
@@ -616,7 +617,8 @@
                                                         </tableColumn>
                                                     </tableColumns>
                                                     <connections>
-                                                        <binding destination="IEK-xe-ugr" name="content" keyPath="arrangedObjects.objectValue" id="YX3-iT-NnT"/>
+                                                        <binding destination="IEK-xe-ugr" name="content" keyPath="arrangedObjects" id="p3n-1J-pbA"/>
+                                                        <binding destination="IEK-xe-ugr" name="selectionIndexPaths" keyPath="selectionIndexPaths" previousBinding="p3n-1J-pbA" id="5Hm-fl-qr1"/>
                                                     </connections>
                                                 </outlineView>
                                             </subviews>
@@ -696,8 +698,8 @@
             </connections>
         </customObject>
         <customObject id="420" customClass="NSFontManager"/>
-        <treeController objectClassName="" childrenKeyPath="children" leafKeyPath="isLeaf" id="IEK-xe-ugr" userLabel="Attributes Tree Controller"/>
-        <treeController objectClassName="" childrenKeyPath="children" leafKeyPath="isLeaf" id="FfK-Wg-7Xj" userLabel="Navigator Tree Controller"/>
+        <treeController childrenKeyPath="children" leafKeyPath="isLeaf" id="IEK-xe-ugr" userLabel="Attributes Tree Controller"/>
+        <treeController childrenKeyPath="children" leafKeyPath="isLeaf" id="FfK-Wg-7Xj" userLabel="Navigator Tree Controller"/>
     </objects>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>

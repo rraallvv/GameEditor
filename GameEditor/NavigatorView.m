@@ -39,9 +39,8 @@
 }
 
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification {
-	NSInteger selectedRow = [self selectedRow];
-	id object = selectedRow != -1 ? [[self itemAtRow:selectedRow] representedObject] : nil;
-	[_actualDelegate navigatorView:self didSelectObject:object];
+	id selectedObject = [[[[self infoForBinding:NSContentBinding] valueForKey:NSObservedObjectKey] selectedObjects] firstObject];
+	[_actualDelegate navigatorView:self didSelectObject:selectedObject];
 }
 
 - (void)setDelegate:(id<NSOutlineViewDelegate>)anObject {

@@ -539,7 +539,7 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)setPosition:(CGPoint)position {
-	if (_node != _scene)
+	if (_node.parent)
 		_position = [_scene convertPoint:position fromNode:_node.parent];
 }
 
