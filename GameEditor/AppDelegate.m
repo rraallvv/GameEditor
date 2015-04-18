@@ -474,7 +474,8 @@
 #pragma mark Helper methods
 
 - (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray*)nodes {
-	for(NSTreeNode* node in nodes) {
+	for(int i = 0; i < nodes.count; ++i) {
+		NSTreeNode* node = nodes[i];
 		if([[[node representedObject] node] isEqual:anObject]) {
 			return node;
 		}
