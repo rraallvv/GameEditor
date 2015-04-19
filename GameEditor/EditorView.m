@@ -221,7 +221,7 @@ typedef enum {
 	CGPoint _handleOffset;
 	BOOL _manipulatingHandle;
 	ManipulatedHandle _manipulatedHandle;
-	NSMutableSet *_boundAttributes;
+	NSMutableArray *_boundAttributes;
 	BOOL _registeredUndo;
 	NSMutableDictionary *_compoundUndo;
 	CGPoint _viewOrigin;
@@ -937,7 +937,7 @@ anchorPoint = _anchorPoint;
 
 - (void)bindToSelectedNode {
 	/* Start observing all properties in the selected node */
-	_boundAttributes = [NSMutableSet set];
+	_boundAttributes = [NSMutableArray array];
 	Class classType = [_node class];
 	do {
 		unsigned int count;
