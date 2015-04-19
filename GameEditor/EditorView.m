@@ -226,6 +226,7 @@ typedef enum {
 	NSMutableDictionary *_compoundUndo;
 	CGPoint _viewOrigin;
 	CGFloat _viewScale;
+	NSBezierPath *_selectionPath;
 
 	/* Outline handle points */
 	CGPoint _handlePoints[MaxHandle];
@@ -258,10 +259,27 @@ anchorPoint = _anchorPoint;
 
 	[path stroke];
 
+	/* Draw the scene nodes */
+	_selectionPath = nil;
 	[self drawSelectionInNode:_scene];
 
-	if (_node && _node != _scene)
+	/* Draw selection */
+	if (_selectionPath && !_selectionPath.isEmpty) {
+		[[NSColor colorWithRed:0.4 green:0.5 blue:1.0 alpha:1.0] setStroke];
+
+		/* Set the glow effect */
+		NSShadow *shadow = [[NSShadow alloc] init];
+		[shadow setShadowBlurRadius:2.0];
+		[shadow setShadowColor:[NSColor whiteColor]];
+		[shadow set];
+
+		// TODO: Avoid drawing multiple times to get the glow effect
+		for (int i = 0; i < 8; ++i) {
+			[_selectionPath stroke];
+		}
+	} else if (_node && _node != _scene) {
 		[self drawHandles];
+	}
 }
 
 - (void)drawSelectionInNode:(SKNode *)aNode {
@@ -360,19 +378,8 @@ anchorPoint = _anchorPoint;
 
 	}
 
-	if (_node == aNode) {
-		[[NSColor colorWithRed:0.4 green:0.5 blue:1.0 alpha:1.0] setStroke];
-
-		/* Set the glow effect */
-		NSShadow *shadow = [[NSShadow alloc] init];
-		[shadow setShadowBlurRadius:2.0];
-		[shadow setShadowColor:[NSColor whiteColor]];
-		[shadow set];
-
-		// TODO: Avoid drawing multiple times to get the glow effect
-		for (int i = 0; i < 8; ++i) {
-			[path stroke];
-		}
+	if (_node != _scene && _node == aNode) {
+		_selectionPath = path.copy;
 	} else {
 		[color setStroke];
 		[path stroke];
