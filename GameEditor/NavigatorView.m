@@ -136,19 +136,20 @@
 		NSTreeNode *rootNode = [_treeController arrangedObjects];
 		NSTreeNode *selectedNode = [rootNode descendantNodeAtIndexPath:_fromIndexPath];
 
+		/* Save the state of node to be moved */
 		NSMutableArray *savedExpadedNodesInfo = [NSMutableArray array];
 		[self getExpandedNodesInfo:savedExpadedNodesInfo forNode:selectedNode];
 
 		/* Move the node to its new location */
 		[_treeController moveNode:selectedNode toIndexPath:_toIndexPath];
 
-		/* Retrieve the selected node if it's being dropped on an item */
-		if (index == NSOutlineViewDropOnItemIndex) {
-			selectedNode = [rootNode descendantNodeAtIndexPath:_toIndexPath];
-		}
+		/* Retrieve the selected node at its new location */
+		selectedNode = [rootNode descendantNodeAtIndexPath:_toIndexPath];
 
-		/* Expand the nodes */
-		[self expandItem:item];
+		/* Expand the new parent node */
+		[self expandItem:selectedNode.parentNode];
+
+		/* Expand the moved node */
 		[self expandNode:selectedNode withInfo:savedExpadedNodesInfo];
 
 		/* Select the node at it's new location */
