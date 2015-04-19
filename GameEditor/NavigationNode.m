@@ -29,16 +29,32 @@
 
 #pragma mark NavigationNode
 
-@implementation NavigationNode {
-	NSMutableArray *_childrenNavigationNodes;
-}
+@implementation NavigationNode
 
-@synthesize node = _node;
+@synthesize
+node = _node,
+name = _name,
+children = _childrenNavigationNodes;
 
 + (instancetype)navigationNodeWithNode:(id)node {
 	NavigationNode *navigationNode = [[NavigationNode alloc] init];
 	navigationNode.node = node;
 	return navigationNode;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		_node = [aDecoder decodeObjectForKey:@"node"];
+		_name = [aDecoder decodeObjectForKey:@"name"];
+		_childrenNavigationNodes = [aDecoder decodeObjectForKey:@"children"];
+	}
+	return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeObject:_node forKey:@"node"];
+	[aCoder encodeObject:_name forKey:@"name"];
+	[aCoder encodeObject:_childrenNavigationNodes forKey:@"children"];
 }
 
 - (void)setNode:(id)node {
@@ -63,8 +79,13 @@
 - (void)setChildren:(NSMutableArray *)children {
 	SKScene *scene = [_node scene];
 
+	NSMutableArray *childNodes = [NSMutableArray array];
+
+	/* Parent the children that have different parent */
 	for (NavigationNode *child in children) {
 		SKNode *node = [child node];
+
+		[childNodes addObject:node];
 
 		if (node.parent != _node) {
 			CGPoint position = node.position;
@@ -90,6 +111,13 @@
 			node.position = position;
 			node.zRotation = zRotation;
 			[_node addChild:node];
+		}
+	}
+
+	/* Remove the remaining children, i.e. children without a parent */
+	for (SKNode *child in _node.children) {
+		if ([childNodes indexOfObject:child] == NSNotFound) {
+			[child removeFromParent];
 		}
 	}
 

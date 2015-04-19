@@ -27,6 +27,31 @@
 #import "GameScene.h"
 #import "AttributesView.h"
 
+#pragma mark Main Window
+
+@interface Window : NSWindow
+@end
+
+@implementation Window
+
+- (void)keyDown:(NSEvent *)theEvent {
+	unichar key = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
+
+	switch (key) {
+		case NSDeleteCharacter:
+		case NSBackTabCharacter:
+			/* Forward Del and Backspace to the delete action */
+			[[NSApp delegate] delete:self];
+			return;
+	}
+
+	[super keyDown:theEvent];
+}
+
+@end
+
+#pragma mark Scene save/load
+
 @implementation SKScene (Archiving)
 
 + (instancetype)unarchiveFromFile:(NSString *)file {
@@ -66,6 +91,8 @@
 }
 
 @end
+
+#pragma mark Application Delegate
 
 @implementation AppDelegate {
 	IBOutlet EditorView *_editorView;
@@ -116,6 +143,68 @@
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
 	return YES;
+}
+
+#pragma mark Basic editing
+
+- (IBAction)copy:(id)sender {
+	NavigationNode *selection = _navigatorTreeController.selectedObjects.firstObject;
+	if (selection && selection.node.parent) {
+		NSData* clipData = [NSKeyedArchiver archivedDataWithRootObject:selection];
+		NSPasteboard* cb = [NSPasteboard generalPasteboard];
+
+		[cb declareTypes:[NSArray arrayWithObjects:@"public.binary", nil] owner:self];
+		[cb setData:clipData forType:@"public.binary"];
+	}
+}
+
+- (IBAction)paste:(id)sender {
+	NSPasteboard* cb = [NSPasteboard generalPasteboard];
+	NSString* type = [cb availableTypeFromArray:[NSArray arrayWithObjects:@"public.binary", nil]];
+
+	if (type) {
+		NSData* clipData = [cb dataForType:type];
+		NavigationNode* object = [NSKeyedUnarchiver unarchiveObjectWithData:clipData];
+
+		NSIndexPath *selectionIndexPath = _navigatorTreeController.selectionIndexPath;
+		NSInteger numberOfChildren = [_navigatorTreeController.selectedNodes.firstObject childNodes].count;
+
+		NSIndexPath *insertionIndexPath = nil;
+
+		if (selectionIndexPath.length > 1) {
+			/* IndexPath as a sibling of the selected node */
+			NSInteger index = [selectionIndexPath indexAtPosition:selectionIndexPath.length - 1];
+			insertionIndexPath = [[selectionIndexPath indexPathByRemovingLastIndex] indexPathByAddingIndex:index + 1];
+		} else {
+			/* IndexPath as a child of the scene */
+			insertionIndexPath = [selectionIndexPath indexPathByAddingIndex:numberOfChildren];
+		}
+
+		[self insertObject:object atIndexPath:insertionIndexPath];
+	}
+}
+
+- (IBAction)delete:(id)sender {
+	NavigationNode *selection = _navigatorTreeController.selectedObjects.firstObject;
+	if (selection && selection.node.parent) {
+		[self removeObjectAtIndexPath:_navigatorTreeController.selectionIndexPath];
+	}
+}
+
+- (IBAction)cut:(id)sender {
+	[self copy:sender];
+	[self delete:sender];
+}
+
+- (void)insertObject:(NavigationNode *)object atIndexPath:(NSIndexPath *)indexPath {
+	[[self.window.undoManager prepareWithInvocationTarget:self] removeObjectAtIndexPath:indexPath];
+	[_navigatorTreeController insertObject:object atArrangedObjectIndexPath:indexPath];
+}
+
+- (void)removeObjectAtIndexPath:(NSIndexPath *)indexPath {
+	NavigationNode *object = [[_navigatorTreeController.arrangedObjects descendantNodeAtIndexPath:indexPath] representedObject];
+	[[self.window.undoManager prepareWithInvocationTarget:self] insertObject:object atIndexPath:indexPath];
+	[_navigatorTreeController removeObjectAtArrangedObjectIndexPath:indexPath];
 }
 
 #pragma mark Selection handling
