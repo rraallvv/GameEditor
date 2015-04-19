@@ -83,13 +83,6 @@
 
 #pragma mark Drag & Drop
 
-- (NSTreeNode *)nodeWithIndexPath:(NSIndexPath *)indexPath inTreeNode:(NSTreeNode *)aNode {
-	for (int i = 0; i < indexPath.length; ++i) {
-		aNode = [aNode.childNodes objectAtIndex:[indexPath indexAtPosition:i]];
-	}
-	return aNode;
-}
-
 - (void)getExpandedNodesInfo:(NSMutableArray *)array forNode:(NSTreeNode *)aNode {
 	[array addObject:[NSNumber numberWithBool:[self isItemExpanded:aNode]]];
 	for (NSTreeNode *node in aNode.childNodes) {
@@ -141,7 +134,7 @@
 
 		/* Move the node to its new location */
 		NSTreeNode *rootNode = [_treeController arrangedObjects];
-		NSTreeNode *selectedNode = [self nodeWithIndexPath:_fromIndexPath inTreeNode:rootNode];
+		NSTreeNode *selectedNode = [rootNode descendantNodeAtIndexPath:_fromIndexPath];
 
 		NSMutableArray *savedExpadedNodesInfo = [NSMutableArray array];
 		[self getExpandedNodesInfo:savedExpadedNodesInfo forNode:selectedNode];
@@ -151,7 +144,7 @@
 
 		/* Retrieve the selected node if it's being dropped on an item */
 		if (index == NSOutlineViewDropOnItemIndex) {
-			selectedNode = [self nodeWithIndexPath:_toIndexPath inTreeNode:rootNode];
+			selectedNode = [rootNode descendantNodeAtIndexPath:_toIndexPath];
 		}
 
 		/* Expand the nodes */
