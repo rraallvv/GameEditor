@@ -26,7 +26,7 @@
 #import <Foundation/Foundation.h>
 #import <SpriteKit/SpriteKit.h>
 
-@interface NavigationNode : NSObject
+@interface NavigationNode : NSObject <NSCoding>
 + (instancetype)navigationNodeWithNode:(id)node;
 @property SKNode *node;
 @property NSString *name;

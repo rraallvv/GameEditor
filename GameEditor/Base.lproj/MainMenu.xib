@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7531"/>
     </dependencies>
@@ -319,7 +319,7 @@
                 </menuItem>
             </items>
         </menu>
-        <window title="GameEditor" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="371">
+        <window title="GameEditor" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="371" customClass="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="1024" height="600"/>
@@ -350,7 +350,7 @@
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                     <tableColumns>
                                                         <tableColumn width="184.7109375" minWidth="40" maxWidth="1000" id="fZm-TB-kfy">
-                                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -363,11 +363,11 @@
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView id="FEl-7x-Wqd">
-                                                                    <rect key="frame" x="1" y="19" width="185" height="17"/>
+                                                                    <rect key="frame" x="1" y="1" width="185" height="17"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
-                                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uo9-9m-F1F">
-                                                                            <rect key="frame" x="3" y="0.0" width="17" height="17"/>
+                                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Uo9-9m-F1F">
+                                                                            <rect key="frame" x="0.0" y="3" width="14" height="14"/>
                                                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" image="NSActionTemplate" id="Kie-eN-aeL">
                                                                                 <connections>
                                                                                     <binding destination="FEl-7x-Wqd" name="value" keyPath="objectValue.image" id="TNC-i2-uCt"/>
@@ -377,9 +377,9 @@
                                                                                 <binding destination="FEl-7x-Wqd" name="value" keyPath="objectValue.image" id="qqT-0R-qpC"/>
                                                                             </connections>
                                                                         </imageView>
-                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SAt-Hc-87n">
-                                                                            <rect key="frame" x="21" y="-1" width="105" height="17"/>
-                                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Name" id="eTq-dT-GBq">
+                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SAt-Hc-87n">
+                                                                            <rect key="frame" x="12" y="3" width="175" height="14"/>
+                                                                            <textFieldCell key="cell" lineBreakMode="truncatingMiddle" sendsActionOnEndEditing="YES" title="Name" id="eTq-dT-GBq">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -390,6 +390,13 @@
                                                                             </connections>
                                                                         </textField>
                                                                     </subviews>
+                                                                    <constraints>
+                                                                        <constraint firstItem="SAt-Hc-87n" firstAttribute="leading" secondItem="Uo9-9m-F1F" secondAttribute="trailing" id="78m-x2-SlI"/>
+                                                                        <constraint firstItem="Uo9-9m-F1F" firstAttribute="leading" secondItem="FEl-7x-Wqd" secondAttribute="leading" id="KuE-sF-Ah6"/>
+                                                                        <constraint firstItem="Uo9-9m-F1F" firstAttribute="top" secondItem="FEl-7x-Wqd" secondAttribute="top" id="f8I-qH-734"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="SAt-Hc-87n" secondAttribute="trailing" id="mbv-5D-hth"/>
+                                                                        <constraint firstItem="Uo9-9m-F1F" firstAttribute="centerY" secondItem="SAt-Hc-87n" secondAttribute="centerY" id="q2h-KG-RFk"/>
+                                                                    </constraints>
                                                                     <connections>
                                                                         <outlet property="imageView" destination="Uo9-9m-F1F" id="gCM-lm-E3e"/>
                                                                         <outlet property="textField" destination="SAt-Hc-87n" id="8Ue-mb-KBY"/>
@@ -399,7 +406,8 @@
                                                         </tableColumn>
                                                     </tableColumns>
                                                     <connections>
-                                                        <binding destination="FfK-Wg-7Xj" name="content" keyPath="arrangedObjects.objectValue" id="SCc-L5-2Fi"/>
+                                                        <binding destination="FfK-Wg-7Xj" name="content" keyPath="arrangedObjects" id="K7T-Nx-2Qh"/>
+                                                        <binding destination="FfK-Wg-7Xj" name="selectionIndexPaths" keyPath="selectionIndexPaths" previousBinding="K7T-Nx-2Qh" id="aGv-gk-C4Y"/>
                                                     </connections>
                                                 </outlineView>
                                             </subviews>
@@ -409,7 +417,7 @@
                                             <rect key="frame" x="1" y="119" width="223" height="15"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="Rq9-QH-Swl">
+                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="Rq9-QH-Swl">
                                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
@@ -609,7 +617,8 @@
                                                         </tableColumn>
                                                     </tableColumns>
                                                     <connections>
-                                                        <binding destination="IEK-xe-ugr" name="content" keyPath="arrangedObjects.objectValue" id="YX3-iT-NnT"/>
+                                                        <binding destination="IEK-xe-ugr" name="content" keyPath="arrangedObjects" id="p3n-1J-pbA"/>
+                                                        <binding destination="IEK-xe-ugr" name="selectionIndexPaths" keyPath="selectionIndexPaths" previousBinding="p3n-1J-pbA" id="5Hm-fl-qr1"/>
                                                     </connections>
                                                 </outlineView>
                                             </subviews>
@@ -689,8 +698,8 @@
             </connections>
         </customObject>
         <customObject id="420" customClass="NSFontManager"/>
-        <treeController objectClassName="" childrenKeyPath="children" leafKeyPath="isLeaf" id="IEK-xe-ugr" userLabel="Attributes Tree Controller"/>
-        <treeController objectClassName="" childrenKeyPath="children" leafKeyPath="isLeaf" id="FfK-Wg-7Xj" userLabel="Navigator Tree Controller"/>
+        <treeController childrenKeyPath="children" leafKeyPath="isLeaf" id="IEK-xe-ugr" userLabel="Attributes Tree Controller"/>
+        <treeController childrenKeyPath="children" leafKeyPath="isLeaf" id="FfK-Wg-7Xj" userLabel="Navigator Tree Controller"/>
     </objects>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>
