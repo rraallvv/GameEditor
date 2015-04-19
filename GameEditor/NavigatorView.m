@@ -131,34 +131,38 @@
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index {
 	if ([self outlineView:outlineView validateDrop:info proposedItem:item proposedChildIndex:index] == NSDragOperationMove) {
-
-		/* Move the node to its new location */
-		NSTreeNode *rootNode = [_treeController arrangedObjects];
-		NSTreeNode *selectedNode = [rootNode descendantNodeAtIndexPath:_fromIndexPath];
-
-		/* Save the state of node to be moved */
-		NSMutableArray *savedExpadedNodesInfo = [NSMutableArray array];
-		[self getExpandedNodesInfo:savedExpadedNodesInfo forNode:selectedNode];
-
-		/* Move the node to its new location */
-		[_treeController moveNode:selectedNode toIndexPath:_toIndexPath];
-
-		/* Retrieve the selected node at its new location */
-		selectedNode = [rootNode descendantNodeAtIndexPath:_toIndexPath];
-
-		/* Expand the new parent node */
-		[self expandItem:selectedNode.parentNode];
-
-		/* Expand the moved node */
-		[self expandNode:selectedNode withInfo:savedExpadedNodesInfo];
-
-		/* Select the node at it's new location */
-		[self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:selectedNode]] byExtendingSelection:NO];
-
+		[self moveNodeFromIndexPath:_fromIndexPath toIndexPath:_toIndexPath];
 		return YES;
-	} else {
-		return NO;
 	}
+	return NO;
+}
+
+- (void)moveNodeFromIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+	/* Move the node to its new location */
+	NSTreeNode *rootNode = [_treeController arrangedObjects];
+	NSTreeNode *selectedNode = [rootNode descendantNodeAtIndexPath:fromIndexPath];
+
+	/* Save the state of node to be moved */
+	NSMutableArray *savedExpadedNodesInfo = [NSMutableArray array];
+	[self getExpandedNodesInfo:savedExpadedNodesInfo forNode:selectedNode];
+
+	/* Move the node to its new location */
+	[_treeController moveNode:selectedNode toIndexPath:toIndexPath];
+
+	/* Retrieve the selected node at its new location */
+	selectedNode = [rootNode descendantNodeAtIndexPath:toIndexPath];
+
+	/* Expand the new parent node */
+	[self expandItem:selectedNode.parentNode];
+
+	/* Expand the moved node */
+	[self expandNode:selectedNode withInfo:savedExpadedNodesInfo];
+
+	/* Select the node at it's new location */
+	[self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:selectedNode]] byExtendingSelection:NO];
+
+	/* Register undo operation */
+	[[self.undoManager prepareWithInvocationTarget:self] moveNodeFromIndexPath:toIndexPath toIndexPath:fromIndexPath];
 }
 
 @end
