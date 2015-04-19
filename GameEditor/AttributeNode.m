@@ -33,48 +33,42 @@
 	return [[self alloc] initWithValue:aValue objCType:aTypeDescription];
 }
 
-/// For the constants see: <http://developer.apple.com/documentation/Cocoa/Conceptual/ObjectiveC/Articles/chapter_14_section_9.html>
+/// For the constants see: <https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html>
 - (instancetype)initWithValue:(const void *)aValue objCType:(const char *)aTypeDescription {
 	if ('^' == *aTypeDescription
 		&& nil == aValue) {
 		self = nil; // nil should stay nil, even if it's technically a (void *)
 	} else {
-		id number = [NSNumber alloc];
 		switch (*aTypeDescription)
 		{
 			case 'c': // BOOL, char
-				self = [number initWithChar:*(char *)aValue];
+				self = [self initWithChar:*(char *)aValue];
 				break;
-			case 'C': self = [number initWithUnsignedChar:*(unsigned char *)aValue];
+			case 'C': self = [self initWithUnsignedChar:*(unsigned char *)aValue];
 				break;
-			case 's': self = [number initWithShort:*(short *)aValue];
+			case 's': self = [self initWithShort:*(short *)aValue];
 				break;
-			case 'S': self = [number initWithUnsignedShort:*(unsigned short *)aValue];
+			case 'S': self = [self initWithUnsignedShort:*(unsigned short *)aValue];
 				break;
-			case 'i': self = [number initWithInt:*(int *)aValue];
+			case 'i': self = [self initWithInt:*(int *)aValue];
 				break;
-			case 'I': self = [number initWithUnsignedInt:*(unsigned *)aValue];
+			case 'I': self = [self initWithUnsignedInt:*(unsigned *)aValue];
 				break;
-			case 'l': self = [number initWithLong:*(long *)aValue];
+			case 'l': self = [self initWithLong:*(long *)aValue];
 				break;
-			case 'L': self = [number initWithUnsignedLong:*(unsigned long *)aValue];
+			case 'L': self = [self initWithUnsignedLong:*(unsigned long *)aValue];
 				break;
-			case 'q': self = [number initWithLongLong:*(long long *)aValue];
+			case 'q': self = [self initWithLongLong:*(long long *)aValue];
 				break;
-			case 'Q': self = [number initWithUnsignedLongLong:*(unsigned long long *)aValue];
+			case 'Q': self = [self initWithUnsignedLongLong:*(unsigned long long *)aValue];
 				break;
-			case 'f': self = [number initWithFloat:*(float *)aValue];
+			case 'f': self = [self initWithFloat:*(float *)aValue];
 				break;
-			case 'd': self = [number initWithDouble:*(double *)aValue];
+			case 'd': self = [self initWithDouble:*(double *)aValue];
 				break;
-			case '@': self = (__bridge NSNumber *)(aValue);
-				break;
-			case '^': // pointer, no string stuff supported right now
-			case '{': // struct, only simple ones containing only basic types right now
-			case '[': // array, of whatever, just gets the address
 			default:
 				//NSLog(@"converting unknown format %s", aTypeDescription);
-				self = [number initWithBytes:aValue objCType:aTypeDescription];
+				self = [self initWithBytes:aValue objCType:aTypeDescription];
 		}
 	}
 	return self;
@@ -108,11 +102,6 @@
 			break;
 		case 'd': *(double *)value = [self doubleValue];
 			break;
-		case '@': value = (__bridge void *)(self);
-			break;
-		case '^':
-		case '{':
-		case '[':
 		default:
 			[self getValue:value];
 	}

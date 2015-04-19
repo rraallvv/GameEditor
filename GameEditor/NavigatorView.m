@@ -36,12 +36,20 @@
 	__weak id _actualDataSource;
 	NSIndexPath *_fromIndexPath;
 	NSIndexPath *_toIndexPath;
+	__weak NSTreeController *_treeController;
+}
+
+- (void)bind:(NSString *)binding toObject:(id)observable withKeyPath:(NSString *)keyPath options:(NSDictionary *)options {
+	[super bind:binding toObject:observable withKeyPath:keyPath options:options];
+	if ([binding isEqualToString:NSContentBinding]
+		&& [observable isKindOfClass:[NSTreeController class]]) {
+		_treeController = observable;
+	}
 }
 
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification {
-	NSInteger selectedRow = [self selectedRow];
-	id object = selectedRow != -1 ? [[self itemAtRow:selectedRow] representedObject] : nil;
-	[_actualDelegate navigatorView:self didSelectObject:object];
+	id selectedObject = [[_treeController selectedObjects] firstObject];
+	[_actualDelegate navigatorView:self didSelectObject:selectedObject];
 }
 
 - (void)setDelegate:(id<NSOutlineViewDelegate>)anObject {
@@ -75,34 +83,6 @@
 
 #pragma mark Drag & Drop
 
-- (NSTreeNode *)nodeWithIndexPath:(NSIndexPath *)indexPath inNodes:(NSArray *)nodes {
-	for(NSTreeNode *node in nodes) {
-		if ([[node indexPath] compare:indexPath] == NSOrderedSame)
-			return node;
-		if ([[node childNodes] count]) {
-			NSTreeNode *result = [self nodeWithIndexPath:indexPath inNodes:[node childNodes]];
-			if (result) {
-				return result;
-			}
-		}
-	}
-	return nil;
-}
-
-- (NSIndexPath *)indexPathForNode:(NSTreeNode *)aNode inNodes:(NSArray *)nodes {
-	for(NSTreeNode *node in nodes) {
-		if ([node isEqual:aNode])
-			return [node indexPath];
-		if ([[node childNodes] count]) {
-			NSIndexPath *result = [self indexPathForNode:aNode inNodes:[node childNodes]];
-			if (result) {
-				return result;
-			}
-		}
-	}
-	return nil;
-}
-
 - (void)getExpandedNodesInfo:(NSMutableArray *)array forNode:(NSTreeNode *)aNode {
 	[array addObject:[NSNumber numberWithBool:[self isItemExpanded:aNode]]];
 	for (NSTreeNode *node in aNode.childNodes) {
@@ -129,25 +109,16 @@
 
 - (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index {
 	if (item) {
-		NSPasteboard *p = [info draggingPasteboard];
-		_fromIndexPath = [NSKeyedUnarchiver unarchiveObjectWithData:[p dataForType:@"public.binary"]];
-		NSTreeNode *rootNode = [[[self infoForBinding:NSContentBinding] valueForKey:NSObservedObjectKey] arrangedObjects];
-
-		NSTreeNode *sourceNode = [self nodeWithIndexPath:_fromIndexPath inNodes:rootNode.childNodes];
-
-		if(!sourceNode) {
-			// Not found
-			return NSDragOperationNone;
-		}
-
+		NSPasteboard *pasteBoard = [info draggingPasteboard];
+		_fromIndexPath = [NSKeyedUnarchiver unarchiveObjectWithData:[pasteBoard dataForType:@"public.binary"]];
 		_toIndexPath = [[item indexPath] indexPathByAddingIndex:MAX(0, index)];
 
 		if (_fromIndexPath.length < _toIndexPath.length) {
-			NSUInteger position = 0;
-			while (position < _fromIndexPath.length) {
-				if ([_fromIndexPath indexAtPosition:position] != [_toIndexPath indexAtPosition:position])
+			/* Can't drop the item on itself nor one of its children */
+			for (NSUInteger position = 0; position < _fromIndexPath.length; ++position) {
+				if ([_fromIndexPath indexAtPosition:position] != [_toIndexPath indexAtPosition:position]) {
 					return NSDragOperationMove;
-				position++;
+				}
 			}
 			return NSDragOperationNone;
 		}
@@ -160,34 +131,38 @@
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index {
 	if ([self outlineView:outlineView validateDrop:info proposedItem:item proposedChildIndex:index] == NSDragOperationMove) {
-
-		/* Move the node to its new location */
-		NSTreeController *treeController = [[self infoForBinding:NSContentBinding] valueForKey:NSObservedObjectKey];
-		NSTreeNode *rootNode = [treeController arrangedObjects];
-		NSTreeNode *selectedNode = [self nodeWithIndexPath:_fromIndexPath inNodes:rootNode.childNodes];
-
-		NSMutableArray *savedExpadedNodesInfo = [NSMutableArray array];
-		[self getExpandedNodesInfo:savedExpadedNodesInfo forNode:selectedNode];
-
-		/* Move the node to its new location */
-		[treeController moveNode:selectedNode toIndexPath:_toIndexPath];
-
-		/* Retrieve the selected node if it's being dropped on an item */
-		if (index == NSOutlineViewDropOnItemIndex) {
-			selectedNode = [self nodeWithIndexPath:[[self indexPathForNode:item inNodes:rootNode.childNodes] indexPathByAddingIndex:0] inNodes:rootNode.childNodes];
-		}
-
-		/* Expand the nodes */
-		[self expandItem:item];
-		[self expandNode:selectedNode withInfo:savedExpadedNodesInfo];
-
-		/* Select the node at it's new location */
-		[self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:selectedNode]] byExtendingSelection:NO];
-
+		[self moveNodeFromIndexPath:_fromIndexPath toIndexPath:_toIndexPath];
 		return YES;
-	} else {
-		return NO;
 	}
+	return NO;
+}
+
+- (void)moveNodeFromIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+	/* Move the node to its new location */
+	NSTreeNode *rootNode = [_treeController arrangedObjects];
+	NSTreeNode *selectedNode = [rootNode descendantNodeAtIndexPath:fromIndexPath];
+
+	/* Save the state of node to be moved */
+	NSMutableArray *savedExpadedNodesInfo = [NSMutableArray array];
+	[self getExpandedNodesInfo:savedExpadedNodesInfo forNode:selectedNode];
+
+	/* Move the node to its new location */
+	[_treeController moveNode:selectedNode toIndexPath:toIndexPath];
+
+	/* Retrieve the selected node at its new location */
+	selectedNode = [rootNode descendantNodeAtIndexPath:toIndexPath];
+
+	/* Expand the new parent node */
+	[self expandItem:selectedNode.parentNode];
+
+	/* Expand the moved node */
+	[self expandNode:selectedNode withInfo:savedExpadedNodesInfo];
+
+	/* Select the node at it's new location */
+	[self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:selectedNode]] byExtendingSelection:NO];
+
+	/* Register undo operation */
+	[[self.undoManager prepareWithInvocationTarget:self] moveNodeFromIndexPath:toIndexPath toIndexPath:fromIndexPath];
 }
 
 @end

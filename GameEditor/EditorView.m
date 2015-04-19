@@ -223,7 +223,7 @@ typedef enum {
 	ManipulatedHandle _manipulatedHandle;
 	NSMutableSet *_boundAttributes;
 	BOOL _registeredUndo;
-	NSMutableDictionary *_undoBlocks;
+	NSMutableDictionary *_compoundUndo;
 	CGPoint _viewOrigin;
 	CGFloat _viewScale;
 
@@ -461,7 +461,7 @@ anchorPoint = _anchorPoint;
 	[self drawCircleWithCenter:_handlePoints[RotationHandle] radius:rotationHandleRadius fillColor:nil strokeColor:strokeColor lineWidth:handleLineWidth];
 }
 
-- (void)drawCircleWithCenter:(CGPoint)center radius:(CGFloat)radius fillColor:(NSColor *)fillColor strokeColor:(NSColor *)strokeColor lineWidth:(CGFloat)lineWidth{
+- (void)drawCircleWithCenter:(CGPoint)center radius:(CGFloat)radius fillColor:(NSColor *)fillColor strokeColor:(NSColor *)strokeColor lineWidth:(CGFloat)lineWidth {
 	NSBezierPath *path = [NSBezierPath bezierPath];
 	[path appendBezierPathWithArcWithCenter:center radius:radius startAngle:0 endAngle:M_2_PI clockwise:YES];
 	[path setLineWidth:lineWidth];
@@ -539,7 +539,7 @@ anchorPoint = _anchorPoint;
 }
 
 - (void)setPosition:(CGPoint)position {
-	if (_node != _scene)
+	if (_node.parent)
 		_position = [_scene convertPoint:position fromNode:_node.parent];
 }
 
@@ -618,21 +618,21 @@ anchorPoint = _anchorPoint;
 	return _node;
 }
 
-- (NSArray *)nodesInArray:(NSArray *)nodes containingPoint:(CGPoint)point {
+- (NSArray *)nodesContainingPoint:(CGPoint)point inNode:(SKNode *)aNode {
 	NSMutableArray *array = [NSMutableArray array];
-	for (SKNode *child in nodes) {
+	for (SKNode *node in aNode.children) {
 
 		CGMutablePathRef path = CGPathCreateMutable();
 
 		/* Construct the path using the transformed frame */
-		if ([child respondsToSelector:@selector(size)]) {
+		if ([node respondsToSelector:@selector(size)]) {
 			CGPoint points[5];
-			[self getFramePoints:points forNode:child];
+			[self getFramePoints:points forNode:node];
 			CGPathAddLines(path, NULL, &points[1], 4);
 
 		/* Construct the path using a rectangle of arbitrary size centered at the node's position*/
 		} else {
-			CGPoint center = [_scene convertPoint:CGPointZero fromNode:child];
+			CGPoint center = [_scene convertPoint:CGPointZero fromNode:node];
 			center.x /= _viewScale;
 			center.y /= _viewScale;
 			center.x += _viewOrigin.x;
@@ -649,10 +649,10 @@ anchorPoint = _anchorPoint;
 		CGPathCloseSubpath(path);
 
 		if (CGPathContainsPoint(path, NULL, point, NO)) {
-			[array addObject:child];
+			[array addObject:node];
 		}
-		if (child.children.count) {
-			[array addObjectsFromArray:[self nodesInArray:child.children containingPoint:point]];
+		if (node.children.count > 0) {
+			[array addObjectsFromArray:[self nodesContainingPoint:point inNode:node]];
 		}
 
 		CGPathRelease(path);
@@ -667,7 +667,7 @@ anchorPoint = _anchorPoint;
 	if (_scene) {
 		CGPoint locationInScene = [self convertPoint:theEvent.locationInWindow fromView:nil];
 		if (!(_node && [self shouldManipulateHandleWithPoint:locationInScene])) {
-			NSArray *nodes = [self nodesInArray:_scene.children containingPoint:locationInScene];
+			NSArray *nodes = [self nodesContainingPoint:locationInScene inNode:_scene];
 			if (nodes.count) {
 				NSUInteger index = ([nodes indexOfObject:_node] + 1) % nodes.count;
 				self.node = [nodes objectAtIndex:index];
@@ -944,7 +944,7 @@ anchorPoint = _anchorPoint;
 		objc_property_t *properties = class_copyPropertyList(classType, &count);
 
 		if (count) {
-			for(unsigned int i = 0; i < count; i++) {
+			for (unsigned int i = 0; i < count; i++) {
 				NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
 				[_node addObserver:self forKeyPath:key options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
 			}
@@ -991,33 +991,20 @@ anchorPoint = _anchorPoint;
 
 				if (!_registeredUndo && ![oldValue isEqual:newValue]) {
 
-					if ([_undoBlocks valueForKey:keyPath]) {
+					if ([_compoundUndo valueForKey:keyPath]) {
 						/* Register all the stored undo operations in a single invocation by the undo manager */
-						id undoBlocks = _undoBlocks.copy;
-						id undoAllBlocksBlock = ^{
-							for (id key in undoBlocks) {
-								void (^block)() = undoBlocks[key];
-								block();
-							}
-						};
+						[[[self undoManager] prepareWithInvocationTarget:self] performUndoWithInfo:_compoundUndo.copy];
 
-						_undoBlocks = nil;
-
-						NSUndoManager *undoManager = [self undoManager];
-						[[undoManager prepareWithInvocationTarget:self] performUndoBlock:undoAllBlocksBlock];
-						[undoManager setActionName:keyPath];
-
+						_compoundUndo = nil;
 						_registeredUndo = YES;
 
 					} else {
 						/* Some undo operations are compound of several observed changes,
 						   thus store this single undo operation for later registration */
-						if (!_undoBlocks)
-							_undoBlocks = [NSMutableDictionary dictionary];
+						if (!_compoundUndo)
+							_compoundUndo = [NSMutableDictionary dictionary];
 
-						[_undoBlocks setObject:^{
-							[object setValue:oldValue forKey:keyPath];
-						} forKey:keyPath];
+						[_compoundUndo setObject:@{@"object": object, @"value": oldValue} forKey:keyPath];
 					}
 				}
 			}
@@ -1041,11 +1028,22 @@ anchorPoint = _anchorPoint;
 	}
 }
 
-- (void)performUndoBlock:(void (^)())block {
-	block();
-	[self setNode:nil];
+- (void)performUndoWithInfo:(id)info {
+
+	NSMutableDictionary *redoInfo = [NSMutableDictionary dictionary];
+	for (id key in info) {
+		id operation = info[key];
+		[redoInfo setObject:@{@"object": operation[@"object"],
+							  @"value": [operation[@"object"] valueForKey:key]} forKey:key];
+		[operation[@"object"] setValue:operation[@"value"] forKey:key];
+		[self setNode:operation[@"object"]];
+	}
+
+	[[[self undoManager] prepareWithInvocationTarget:self] performUndoWithInfo:redoInfo];
+
 	_registeredUndo = NO;
-	_undoBlocks = nil;
+	_compoundUndo = nil;
+
 	[self setNeedsDisplay:YES];
 }
 
