@@ -225,14 +225,20 @@
 
 	[_editorView setNode:node];
 
+	// TODO: enable Grand Central Dispatch and add a custom queue to process input events
+#define USE_GCD	0
+#if USE_GCD
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+#endif
 		/* Build the tree of attributes in the background thread */
 		NSMutableArray *contents = [self attributesForAllClassesWithNode:node];
 
 		/* Look up for the row to be selected */
 		NSInteger row = [_navigatorView rowForItem:[self navigationNodeOfObject:node inNodes:[[_navigatorTreeController arrangedObjects] childNodes]]];
 
+#if USE_GCD
 		dispatch_async(dispatch_get_main_queue(), ^{
+#endif
 			/* Replace the attributes table */
 			[_attributesTreeController setContent:contents];
 
@@ -245,8 +251,10 @@
 
 			/* Update the selection in the navigator view */
 			[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
+#if USE_GCD
 		});
 	});
+#endif
 }
 
 #pragma mark Attributes creation
