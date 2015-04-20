@@ -147,7 +147,26 @@
 	[self getExpandedNodesInfo:savedExpadedNodesInfo forNode:selectedNode];
 
 	/* Move the node to its new location */
+#if 1// remove and insert instead of moving the node
+	[_treeController removeObjectAtArrangedObjectIndexPath:fromIndexPath];
+	NSInteger position = 0;
+	NSIndexPath *indexPath = [[NSIndexPath alloc] init];
+	while (position < toIndexPath.length) {
+		NSInteger fromIndex = [fromIndexPath indexAtPosition:position];
+		NSInteger toIndex = [toIndexPath indexAtPosition:position];
+		if (fromIndex == toIndex) {
+			indexPath = [indexPath indexPathByAddingIndex:fromIndex];
+		} else if (fromIndexPath.length - 1 == position && fromIndex < toIndex) {
+			indexPath = [indexPath indexPathByAddingIndex:toIndex - 1];
+		} else {
+			indexPath = [indexPath indexPathByAddingIndex:toIndex];
+		}
+		position++;
+	}
+	[_treeController insertObject:[selectedNode representedObject] atArrangedObjectIndexPath:indexPath];
+#else
 	[_treeController moveNode:selectedNode toIndexPath:toIndexPath];
+#endif
 
 	/* Retrieve the selected node at its new location */
 	selectedNode = [rootNode descendantNodeAtIndexPath:toIndexPath];
