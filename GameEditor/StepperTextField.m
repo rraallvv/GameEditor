@@ -119,7 +119,7 @@ IB_DESIGNABLE
 	_showsSelection = showsSelection;
 
 	NSTextField *controlView = (NSTextField *)[self controlView];
-	NSTextView *fieldEditor = (NSTextView*)[controlView.window fieldEditor:YES forObject:self];
+	NSTextView *fieldEditor = (NSTextView *)[controlView.window fieldEditor:YES forObject:self];
 
 	if (_showsSelection) {
 		[controlView performSelector:@selector(selectText:) withObject:controlView afterDelay:0.125];
@@ -166,7 +166,7 @@ draggingMult = _sensitivity;
 - (instancetype)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
 
-		/* Default values for inspectable properties*/
+		/* Default values for inspectable properties */
 		_increment = 1;
 		_increaseImage = [NSImage imageNamed:NSImageNameAddTemplate];
 		_decreaseImage = [NSImage imageNamed:NSImageNameRemoveTemplate];
@@ -318,9 +318,9 @@ draggingMult = _sensitivity;
 	NSNumber *value = @(self.floatValue);
 
 	/* Apply the value transformer, if one has been set */
-	NSDictionary* bindingOptions = bindingInfo[NSOptionsKey];
+	NSDictionary *bindingOptions = bindingInfo[NSOptionsKey];
 	if (bindingOptions) {
-		NSValueTransformer* transformer = bindingOptions[NSValueTransformerBindingOption];
+		NSValueTransformer *transformer = bindingOptions[NSValueTransformerBindingOption];
 		if (transformer && (id)transformer != [NSNull null]) {
 			if ([[transformer class] allowsReverseTransformation]) {
 				value = [transformer reverseTransformedValue:value];

@@ -607,7 +607,7 @@ anchorPoint = _anchorPoint;
 		self.wantsLayer = YES;
 	}
 
-	/* Clear the properties bindings*/
+	/* Clear the properties bindings */
 	[self unbindFromSelectedNode];
 
 	_node = node;
@@ -637,7 +637,7 @@ anchorPoint = _anchorPoint;
 			[self getFramePoints:points forNode:node];
 			CGPathAddLines(path, NULL, &points[1], 4);
 
-		/* Construct the path using a rectangle of arbitrary size centered at the node's position*/
+		/* Construct the path using a rectangle of arbitrary size centered at the node's position */
 		} else {
 			CGPoint center = [_scene convertPoint:CGPointZero fromNode:node];
 			center.x /= _viewScale;

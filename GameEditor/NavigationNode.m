@@ -77,50 +77,15 @@ children = _childrenNavigationNodes;
 }
 
 - (void)setChildren:(NSMutableArray *)children {
-	NSMutableArray *childNodes = [NSMutableArray array];
 
-	/* Parent the children that have different parent */
-	for (NavigationNode *child in children) {
-		SKNode *node = [child node];
-
-		[childNodes addObject:node];
-
-		if (node.parent != _node) {
-			[node removeFromParent];
-
-#if 0//reposition the child nodes
-			CGPoint position = node.position;
-			CGFloat zRotation = node.zRotation;
-
-			if (node.parent == node.scene) {
-				position = [_node.scene convertPoint:position toNode:_node];
-				SKNode *parent = _node;
-				while (parent) {
-					zRotation -= parent.zRotation;
-					parent = parent.parent;
-				}
-			} else if (_node == _node.scene) {
-				position = [_node.scene convertPoint:[_node.scene convertPoint:CGPointZero fromNode:node] toNode:_node];
-				SKNode *parent = node.parent;
-				while (parent) {
-					zRotation += parent.zRotation;
-					parent = parent.parent;
-				}
-			}
-
-			node.position = position;
-			node.zRotation = zRotation;
-#endif
-
-			[_node addChild:node];
-		}
+	/* Remove all the children */
+	for (SKNode *child in _node.children) {
+		[child removeFromParent];
 	}
 
-	/* Remove the remaining children, i.e. children without a parent */
-	for (SKNode *child in _node.children) {
-		if ([childNodes indexOfObject:child] == NSNotFound) {
-			[child removeFromParent];
-		}
+	/* Add the new children */
+	for (NavigationNode *child in children) {
+		[_node addChild:child.node];
 	}
 
 	_childrenNavigationNodes = children;

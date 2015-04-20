@@ -99,7 +99,7 @@
 	IBOutlet NSTreeController *_attributesTreeController;
 	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet AttributesView *_attributesView;
-	IBOutlet NSOutlineView *_navigatorView;
+	IBOutlet NavigatorView *_navigatorView;
 	SKNode *_selectedNode;
 }
 
@@ -159,8 +159,8 @@
 }
 
 - (IBAction)paste:(id)sender {
-	NSPasteboard* cb = [NSPasteboard generalPasteboard];
-	NSString* type = [cb availableTypeFromArray:[NSArray arrayWithObjects:@"public.binary", nil]];
+	NSPasteboard *cb = [NSPasteboard generalPasteboard];
+	NSString *type = [cb availableTypeFromArray:[NSArray arrayWithObjects:@"public.binary", nil]];
 
 	if (type) {
 		NSData* clipData = [cb dataForType:type];
@@ -570,9 +570,9 @@
 
 #pragma mark Helper methods
 
-- (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray*)nodes {
+- (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray *)nodes {
 	for (int i = 0; i < nodes.count; ++i) {
-		NSTreeNode* node = nodes[i];
+		NSTreeNode *node = nodes[i];
 		if ([[[node representedObject] node] isEqual:anObject]) {
 			return node;
 		}

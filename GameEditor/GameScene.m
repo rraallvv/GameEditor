@@ -45,7 +45,7 @@
 
 	/* Add the scene physics body */
 
-	SKPhysicsBody* borderBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
+	SKPhysicsBody *borderBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
 	self.physicsBody = borderBody;
 #endif
 
