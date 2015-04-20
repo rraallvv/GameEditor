@@ -1002,7 +1002,7 @@ anchorPoint = _anchorPoint;
 
 				if ([_compoundUndo valueForKey:keyPath]) {
 					/* Register all the stored undo operations in a single invocation by the undo manager */
-					[[[self undoManager] prepareWithInvocationTarget:self] performUndoWithInfo:_compoundUndo.copy];
+					[[[self undoManager] prepareWithInvocationTarget:self] performUndoWithInfo:_compoundUndo];
 
 					_compoundUndo = nil;
 					_registeredUndo = YES;
