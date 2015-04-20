@@ -221,7 +221,7 @@ typedef enum {
 	CGPoint _handleOffset;
 	BOOL _manipulatingHandle;
 	ManipulatedHandle _manipulatedHandle;
-	NSMutableArray *_boundAttributes;
+	NSMutableSet *_boundAttributes;
 	BOOL _registeredUndo;
 	NSMutableDictionary *_compoundUndo;
 	CGPoint _viewOrigin;
@@ -944,7 +944,7 @@ anchorPoint = _anchorPoint;
 
 - (void)bindToSelectedNode {
 	/* Start observing all properties in the selected node */
-	_boundAttributes = [NSMutableArray array];
+	_boundAttributes = [NSMutableSet set];
 	Class classType = [_node class];
 	do {
 		unsigned int count;
@@ -953,7 +953,10 @@ anchorPoint = _anchorPoint;
 		if (count) {
 			for (unsigned int i = 0; i < count; i++) {
 				NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
-				[_node addObserver:self forKeyPath:key options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
+				if (![_boundAttributes containsObject:key]) {
+					[_boundAttributes addObject:key];
+					[_node addObserver:self forKeyPath:key options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
+				}
 			}
 			free(properties);
 		}
@@ -990,33 +993,29 @@ anchorPoint = _anchorPoint;
 	if (object == _node) {
 
 		/* Try to register the undo operation for the observed change */
-		if ([_boundAttributes containsObject:keyPath]) {
-			if (![keyPath isEqualToString:@"visibleRect"]) {
+		if (![keyPath isEqualToString:@"visibleRect"]) {
 
-				id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
-				id newValue = [change objectForKey:NSKeyValueChangeNewKey];
+			id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
+			id newValue = [change objectForKey:NSKeyValueChangeNewKey];
 
-				if (!_registeredUndo && ![oldValue isEqual:newValue]) {
+			if (!_registeredUndo && ![oldValue isEqual:newValue]) {
 
-					if ([_compoundUndo valueForKey:keyPath]) {
-						/* Register all the stored undo operations in a single invocation by the undo manager */
-						[[[self undoManager] prepareWithInvocationTarget:self] performUndoWithInfo:_compoundUndo.copy];
+				if ([_compoundUndo valueForKey:keyPath]) {
+					/* Register all the stored undo operations in a single invocation by the undo manager */
+					[[[self undoManager] prepareWithInvocationTarget:self] performUndoWithInfo:_compoundUndo.copy];
 
-						_compoundUndo = nil;
-						_registeredUndo = YES;
+					_compoundUndo = nil;
+					_registeredUndo = YES;
 
-					} else {
-						/* Some undo operations are compound of several observed changes,
-						   thus store this single undo operation for later registration */
-						if (!_compoundUndo)
-							_compoundUndo = [NSMutableDictionary dictionary];
+				} else {
+					/* Some undo operations are compound of several observed changes,
+					 thus store this single undo operation for later registration */
+					if (!_compoundUndo)
+						_compoundUndo = [NSMutableDictionary dictionary];
 
-						[_compoundUndo setObject:@{@"object": object, @"value": oldValue} forKey:keyPath];
-					}
+					[_compoundUndo setObject:@{@"object": object, @"value": oldValue} forKey:keyPath];
 				}
 			}
-		} else {
-			[_boundAttributes addObject:keyPath];
 		}
 
 		/* Update the current selection and editor view's visible rect */
