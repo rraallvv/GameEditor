@@ -138,6 +138,10 @@
 }
 
 - (void)moveNodeFromIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+
+	/* Register undo operation */
+	[[self.undoManager prepareWithInvocationTarget:self] moveNodeFromIndexPath:toIndexPath toIndexPath:fromIndexPath];
+
 	/* Move the node to its new location */
 	NSTreeNode *rootNode = [_treeController arrangedObjects];
 	NSTreeNode *selectedNode = [rootNode descendantNodeAtIndexPath:fromIndexPath];
@@ -179,9 +183,6 @@
 
 	/* Select the node at it's new location */
 	[self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:selectedNode]] byExtendingSelection:NO];
-
-	/* Register undo operation */
-	[[self.undoManager prepareWithInvocationTarget:self] moveNodeFromIndexPath:toIndexPath toIndexPath:fromIndexPath];
 }
 
 @end
