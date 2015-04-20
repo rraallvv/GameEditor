@@ -83,6 +83,12 @@
 
 #pragma mark Drag & Drop
 
+- (NSMutableArray *)expansionInfoWithNode:(NSTreeNode *)aNode {
+	NSMutableArray *expansionInfo = [NSMutableArray array];
+	[self getExpandedNodesInfo:expansionInfo forNode:aNode];
+	return expansionInfo;
+}
+
 - (void)getExpandedNodesInfo:(NSMutableArray *)array forNode:(NSTreeNode *)aNode {
 	[array addObject:[NSNumber numberWithBool:[self isItemExpanded:aNode]]];
 	for (NSTreeNode *node in aNode.childNodes) {
@@ -147,8 +153,7 @@
 	NSTreeNode *selectedNode = [rootNode descendantNodeAtIndexPath:fromIndexPath];
 
 	/* Save the state of node to be moved */
-	NSMutableArray *savedExpadedNodesInfo = [NSMutableArray array];
-	[self getExpandedNodesInfo:savedExpadedNodesInfo forNode:selectedNode];
+	NSMutableArray *expansionInfo = [self expansionInfoWithNode:selectedNode];
 
 	/* Move the node to its new location */
 #if 0// remove and insert instead of moving the node
@@ -177,7 +182,7 @@
 	[self expandItem:selectedNode.parentNode];
 
 	/* Expand the moved node */
-	[self expandNode:selectedNode withInfo:savedExpadedNodesInfo];
+	[self expandNode:selectedNode withInfo:expansionInfo];
 
 	/* Select the node at it's new location */
 	[self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:selectedNode]] byExtendingSelection:NO];

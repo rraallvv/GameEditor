@@ -150,8 +150,11 @@
 - (IBAction)copy:(id)sender {
 	NavigationNode *selection = _navigatorTreeController.selectedObjects.firstObject;
 	if (selection && selection.node.parent) {
-		NSData* clipData = [NSKeyedArchiver archivedDataWithRootObject:selection];
-		NSPasteboard* cb = [NSPasteboard generalPasteboard];
+
+		NSMutableArray *expansionInfo = [_navigatorView expansionInfoWithNode:_navigatorTreeController.selectedNodes.firstObject];
+
+		NSData *clipData = [NSKeyedArchiver archivedDataWithRootObject:@[selection, expansionInfo]];
+		NSPasteboard *cb = [NSPasteboard generalPasteboard];
 
 		[cb declareTypes:[NSArray arrayWithObjects:@"public.binary", nil] owner:self];
 		[cb setData:clipData forType:@"public.binary"];
@@ -163,8 +166,8 @@
 	NSString *type = [cb availableTypeFromArray:[NSArray arrayWithObjects:@"public.binary", nil]];
 
 	if (type) {
-		NSData* clipData = [cb dataForType:type];
-		NavigationNode* object = [NSKeyedUnarchiver unarchiveObjectWithData:clipData];
+		NSData *clipData = [cb dataForType:type];
+		id object = [NSKeyedUnarchiver unarchiveObjectWithData:clipData];
 
 		NSIndexPath *selectionIndexPath = _navigatorTreeController.selectionIndexPath;
 		NSInteger numberOfChildren = [_navigatorTreeController.selectedNodes.firstObject childNodes].count;
@@ -196,14 +199,19 @@
 	[self delete:sender];
 }
 
-- (void)insertObject:(NavigationNode *)object atIndexPath:(NSIndexPath *)indexPath {
+- (void)insertObject:(id)object atIndexPath:(NSIndexPath *)indexPath {
 	[[self.window.undoManager prepareWithInvocationTarget:self] removeObjectAtIndexPath:indexPath];
-	[_navigatorTreeController insertObject:object atArrangedObjectIndexPath:indexPath];
+	[_navigatorTreeController insertObject:object[0] atArrangedObjectIndexPath:indexPath];
+
+	[_navigatorView expandNode:[_navigatorTreeController.arrangedObjects descendantNodeAtIndexPath:indexPath] withInfo:object[1]];
 }
 
 - (void)removeObjectAtIndexPath:(NSIndexPath *)indexPath {
 	NavigationNode *object = [[_navigatorTreeController.arrangedObjects descendantNodeAtIndexPath:indexPath] representedObject];
-	[[self.window.undoManager prepareWithInvocationTarget:self] insertObject:object atIndexPath:indexPath];
+
+	NSMutableArray *expansionInfo = [_navigatorView expansionInfoWithNode:[_navigatorTreeController.arrangedObjects descendantNodeAtIndexPath:indexPath]];
+
+	[[self.window.undoManager prepareWithInvocationTarget:self] insertObject:@[object, expansionInfo] atIndexPath:indexPath];
 	[_navigatorTreeController removeObjectAtArrangedObjectIndexPath:indexPath];
 }
 
