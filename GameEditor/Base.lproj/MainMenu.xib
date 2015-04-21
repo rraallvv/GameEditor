@@ -62,6 +62,68 @@
                         </items>
                     </menu>
                 </menuItem>
+                <menuItem title="File" id="cdb-31-YBu">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="File" id="9oZ-DN-ffM">
+                        <items>
+                            <menuItem title="New" keyEquivalent="n" id="HBk-Jd-Gfl">
+                                <connections>
+                                    <action selector="newDocument:" target="-1" id="ONK-Q5-Ijz"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Open…" keyEquivalent="o" id="VaI-qw-laA">
+                                <connections>
+                                    <action selector="openDocument:" target="-1" id="O0t-on-KDH"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Open Recent" id="17l-Dd-lev">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Open Recent" systemMenu="recentDocuments" id="EHd-iI-sRr">
+                                    <items>
+                                        <menuItem title="Clear Menu" id="BYj-ai-uSt">
+                                            <connections>
+                                                <action selector="clearRecentDocuments:" target="-1" id="HSq-YZ-K5B"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="kqP-6I-z2s"/>
+                            <menuItem title="Close" keyEquivalent="w" id="L9v-hs-rNc">
+                                <connections>
+                                    <action selector="performClose:" target="-1" id="mwJ-LC-Gke"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Save" keyEquivalent="s" id="pIW-65-tKv">
+                                <connections>
+                                    <action selector="saveDocument:" target="-1" id="Zi4-Hk-kV0"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Save As…" keyEquivalent="S" id="bpk-ZA-fSB">
+                                <connections>
+                                    <action selector="saveDocumentAs:" target="-1" id="z9x-CW-Pb4"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Revert to Saved" id="Cep-3c-m6E">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="revertDocumentToSaved:" target="-1" id="kIP-qH-zdT"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="xLi-Bj-giR"/>
+                            <menuItem title="Page Setup…" keyEquivalent="P" id="1Pw-xk-H1R">
+                                <connections>
+                                    <action selector="runPageLayout:" target="-1" id="ha9-7a-IgI"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Print…" keyEquivalent="p" id="4VJ-xW-hsG">
+                                <connections>
+                                    <action selector="print:" target="-1" id="bF2-W5-iVf"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
                 <menuItem title="Edit" id="vx7-CW-hyg">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Edit" id="GnZ-TX-6Ds">
@@ -462,7 +524,7 @@
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="22" horizontalPageScroll="10" verticalLineScroll="22" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WEo-lF-8ul">
-                                        <rect key="frame" x="0.0" y="46" width="260" height="554"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="260" height="600"/>
                                         <clipView key="contentView" id="Kmw-kU-HNX">
                                             <rect key="frame" x="1" y="0.0" width="238" height="134"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -633,25 +695,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
-                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="k1U-YT-dMh">
-                                        <rect key="frame" x="175" y="13" width="71" height="32"/>
-                                        <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Pkg-eH-gld">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
-                                        </buttonCell>
-                                        <connections>
-                                            <action selector="saveAction:" target="494" id="h5y-VK-7Ka"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="k1U-YT-dMh" firstAttribute="top" secondItem="WEo-lF-8ul" secondAttribute="bottom" constant="5" id="7AP-ac-hs3"/>
+                                    <constraint firstAttribute="bottom" secondItem="WEo-lF-8ul" secondAttribute="bottom" id="0dr-PH-Rl9"/>
                                     <constraint firstAttribute="trailing" secondItem="WEo-lF-8ul" secondAttribute="trailing" id="FIJ-SA-hp1"/>
                                     <constraint firstItem="WEo-lF-8ul" firstAttribute="leading" secondItem="JhP-CH-4pm" secondAttribute="leading" id="PA2-ql-B5l"/>
                                     <constraint firstItem="WEo-lF-8ul" firstAttribute="top" secondItem="JhP-CH-4pm" secondAttribute="top" id="S8X-Ae-iTP"/>
-                                    <constraint firstAttribute="bottom" secondItem="k1U-YT-dMh" secondAttribute="bottom" constant="20" symbolic="YES" id="YKG-iw-rQX"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="260" id="g08-yi-m9J"/>
-                                    <constraint firstAttribute="trailing" secondItem="k1U-YT-dMh" secondAttribute="trailing" constant="20" symbolic="YES" id="hKO-A9-yxi"/>
                                 </constraints>
                             </customView>
                         </subviews>

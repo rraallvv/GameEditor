@@ -594,9 +594,9 @@
 	return nil;
 }
 
-#pragma mark Actions
+#pragma mark File actions
 
-- (IBAction)saveAction:(id)sender {
+- (IBAction)saveDocument:(id)sender {
 	[SKScene archiveScene:self.skView.scene toFile:@"GameScene"];
 }
 
