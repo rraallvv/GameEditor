@@ -596,6 +596,31 @@
 
 #pragma mark File actions
 
+- (IBAction)openDocument:(id)sender {
+	/* Get a copy of an open file dialogue */
+	NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+
+	/* Filter the file list showing SpriteKit files */
+	openPanel.allowedFileTypes = @[@"sks"];
+
+	/* Launch the open dialogue */
+	[openPanel beginSheetModalForWindow:self.window
+					  completionHandler:^(NSInteger result) {
+
+						  if (result == NSModalResponseOK) {
+
+							  /* Get the selected file's URL */
+							  NSURL *selection = openPanel.URLs[0];
+
+							  /* Store the selected file's path as a string */
+							  NSString* path = [[selection path] stringByResolvingSymlinksInPath];
+
+							  NSLog(@"Open: '%@'", path);
+						  }
+						  
+					  }];
+}
+
 - (IBAction)saveDocument:(id)sender {
 	[SKScene archiveScene:self.skView.scene toFile:@"GameScene"];
 }
