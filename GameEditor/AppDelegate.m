@@ -679,4 +679,18 @@
 	[userDefaults synchronize];
 }
 
+- (IBAction)performClose:(id)sender {
+	[_navigatorTreeController setContent:nil];
+
+	[self.skView presentScene:nil];
+
+	_editorView.scene = nil;
+
+	//[_editorView updateVisibleRect];
+
+	[self performSelector:@selector(updateSelectionWithNode:) withObject:nil afterDelay:0.5];
+
+	_currentFilename = nil;
+}
+
 @end
