@@ -78,10 +78,7 @@ children = _childrenNavigationNodes;
 
 - (void)setChildren:(NSMutableArray *)children {
 
-	/* Remove all the children */
-	for (SKNode *child in _node.children) {
-		[child removeFromParent];
-	}
+	[_node removeAllChildren];
 
 	/* Add the new children */
 	for (NavigationNode *child in children) {

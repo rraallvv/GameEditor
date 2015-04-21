@@ -156,7 +156,7 @@
 	NSMutableArray *expansionInfo = [self expansionInfoWithNode:selectedNode];
 
 	/* Move the node to its new location */
-#if 0// remove and insert instead of moving the node
+#if 1// remove and insert instead of moving the node
 	[_treeController removeObjectAtArrangedObjectIndexPath:fromIndexPath];
 	NSIndexPath *indexPath = [[NSIndexPath alloc] init];
 	for (NSInteger position = 0; position < toIndexPath.length; ++position) {
