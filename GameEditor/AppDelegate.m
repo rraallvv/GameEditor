@@ -78,7 +78,7 @@
 	NSMutableData *data = [NSMutableData data];
 	NSKeyedArchiver *arch = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
 
-#if 1// Save to XML plist format
+#if 0// Save to XML plist format
 	[arch setOutputFormat:NSPropertyListXMLFormat_v1_0];
 #else
 	[arch setOutputFormat:NSPropertyListBinaryFormat_v1_0];
@@ -632,7 +632,7 @@
 #pragma mark File actions
 
 - (IBAction)openDocument:(id)sender {
-	/* Get a copy of an open file dialogue */
+	/* Get an instance of the open file dialogue */
 	NSOpenPanel* openPanel = [NSOpenPanel openPanel];
 
 	/* Filter the file list showing SpriteKit files */
@@ -641,15 +641,11 @@
 	/* Launch the open dialogue */
 	[openPanel beginSheetModalForWindow:self.window
 					  completionHandler:^(NSInteger result) {
-
 						  if (result == NSModalResponseOK) {
-
 							  /* Get the selected file's URL */
-							  NSURL *selection = openPanel.URLs[0];
-
+							  NSURL *selection = openPanel.URLs.firstObject;
 							  /* Store the selected file's path as a string */
 							  NSString *filename = [[selection path] stringByResolvingSymlinksInPath];
-
 							  /* Try to open the file */
 							  [self openSceneWithFilename:filename];
 						  }
@@ -663,6 +659,28 @@
 
 - (IBAction)saveDocument:(id)sender {
 	[SKScene archiveScene:self.skView.scene toFile:_currentFilename];
+}
+
+- (IBAction)saveDocumentAs:(id)sender {
+	/* Get an instance of the save file dialogue */
+	NSSavePanel * savePanel = [NSSavePanel savePanel];
+
+	/* Filter the file list showing SpriteKit files */
+	[savePanel setAllowedFileTypes:@[@"sks"]];
+
+	/* Launch the save dialogue */
+	[savePanel beginSheetModalForWindow:self.window
+					  completionHandler:^(NSInteger result) {
+						  if (result == NSModalResponseOK) {
+							  /* Get the selected file's URL */
+							  NSURL *selection = savePanel.URL;
+							  /* Store the selected file's path as a string */
+							  NSString *filename = [[selection path] stringByResolvingSymlinksInPath];
+							  /* Save to the selected the file */
+							  [SKScene archiveScene:self.skView.scene toFile:filename];
+							  _currentFilename = filename;
+						  }
+					  }];
 }
 
 - (void)addRecentDocument:(NSString *)filename {
