@@ -144,7 +144,7 @@
 	return YES;
 }
 
-#pragma mark Basic editing
+#pragma mark Editing
 
 - (IBAction)copy:(id)sender {
 	NavigationNode *selection = _navigatorTreeController.selectedObjects.firstObject;
@@ -575,6 +575,99 @@
 	return attributesArray;
 }
 
+#pragma mark File handling
+
+- (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename {
+	return [self openSceneWithFilename:filename];
+}
+
+- (IBAction)newDocument:(id)sender {
+	/* Create a new scene with the default size */
+	GameScene *scene = [GameScene sceneWithSize:CGSizeMake(1024.0, 768.0)];
+
+	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
+	[_navigatorView expandItem:nil expandChildren:YES];
+
+	/* Set the scale mode to scale to fit the window */
+	scene.scaleMode = SKSceneScaleModeAspectFit;
+
+	[self.skView presentScene:scene];
+
+	_editorView.scene = scene;
+
+	[_editorView updateVisibleRect];
+
+	[self performSelector:@selector(updateSelectionWithNode:) withObject:scene afterDelay:0.5];
+
+	_currentFilename = nil;
+}
+
+- (IBAction)openDocument:(id)sender {
+	/* Get an instance of the open file dialogue */
+	NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+
+	/* Filter the file list showing SpriteKit files */
+	openPanel.allowedFileTypes = @[@"sks"];
+
+	/* Launch the open dialogue */
+	[openPanel beginSheetModalForWindow:self.window
+					  completionHandler:^(NSInteger result) {
+						  if (result == NSModalResponseOK) {
+							  /* Get the selected file's URL */
+							  NSURL *selection = openPanel.URLs.firstObject;
+							  /* Store the selected file's path as a string */
+							  NSString *filename = [[selection path] stringByResolvingSymlinksInPath];
+							  /* Try to open the file */
+							  [self openSceneWithFilename:filename];
+						  }
+						  
+					  }];
+}
+
+- (IBAction)saveDocument:(id)sender {
+	if (_currentFilename) {
+		[SKScene archiveScene:self.skView.scene toFile:_currentFilename];
+	} else {
+		[self saveDocumentAs:sender];
+	}
+}
+
+- (IBAction)saveDocumentAs:(id)sender {
+	/* Get an instance of the save file dialogue */
+	NSSavePanel * savePanel = [NSSavePanel savePanel];
+
+	/* Filter the file list showing SpriteKit files */
+	[savePanel setAllowedFileTypes:@[@"sks"]];
+
+	/* Launch the save dialogue */
+	[savePanel beginSheetModalForWindow:self.window
+					  completionHandler:^(NSInteger result) {
+						  if (result == NSModalResponseOK) {
+							  /* Get the selected file's URL */
+							  NSURL *selection = savePanel.URL;
+							  /* Store the selected file's path as a string */
+							  NSString *filename = [[selection path] stringByResolvingSymlinksInPath];
+							  /* Save to the selected the file */
+							  [SKScene archiveScene:self.skView.scene toFile:filename];
+							  _currentFilename = filename;
+						  }
+					  }];
+}
+
+- (IBAction)performClose:(id)sender {
+	[_navigatorTreeController setContent:nil];
+
+	[self.skView presentScene:nil];
+
+	_editorView.scene = nil;
+
+	//[_editorView updateVisibleRect];
+
+	[self performSelector:@selector(updateSelectionWithNode:) withObject:nil afterDelay:0.5];
+
+	_currentFilename = nil;
+}
+
 #pragma mark Helper methods
 
 - (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray *)nodes {
@@ -629,60 +722,6 @@
 	return YES;
 }
 
-#pragma mark File actions
-
-- (IBAction)openDocument:(id)sender {
-	/* Get an instance of the open file dialogue */
-	NSOpenPanel* openPanel = [NSOpenPanel openPanel];
-
-	/* Filter the file list showing SpriteKit files */
-	openPanel.allowedFileTypes = @[@"sks"];
-
-	/* Launch the open dialogue */
-	[openPanel beginSheetModalForWindow:self.window
-					  completionHandler:^(NSInteger result) {
-						  if (result == NSModalResponseOK) {
-							  /* Get the selected file's URL */
-							  NSURL *selection = openPanel.URLs.firstObject;
-							  /* Store the selected file's path as a string */
-							  NSString *filename = [[selection path] stringByResolvingSymlinksInPath];
-							  /* Try to open the file */
-							  [self openSceneWithFilename:filename];
-						  }
-						  
-					  }];
-}
-
-- (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename {
-	return [self openSceneWithFilename:filename];
-}
-
-- (IBAction)saveDocument:(id)sender {
-	[SKScene archiveScene:self.skView.scene toFile:_currentFilename];
-}
-
-- (IBAction)saveDocumentAs:(id)sender {
-	/* Get an instance of the save file dialogue */
-	NSSavePanel * savePanel = [NSSavePanel savePanel];
-
-	/* Filter the file list showing SpriteKit files */
-	[savePanel setAllowedFileTypes:@[@"sks"]];
-
-	/* Launch the save dialogue */
-	[savePanel beginSheetModalForWindow:self.window
-					  completionHandler:^(NSInteger result) {
-						  if (result == NSModalResponseOK) {
-							  /* Get the selected file's URL */
-							  NSURL *selection = savePanel.URL;
-							  /* Store the selected file's path as a string */
-							  NSString *filename = [[selection path] stringByResolvingSymlinksInPath];
-							  /* Save to the selected the file */
-							  [SKScene archiveScene:self.skView.scene toFile:filename];
-							  _currentFilename = filename;
-						  }
-					  }];
-}
-
 - (void)addRecentDocument:(NSString *)filename {
 	[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -695,20 +734,6 @@
 	[recentDocuments addObject:filename];
 	[userDefaults setObject:recentDocuments forKey:@"recentDocuments"];
 	[userDefaults synchronize];
-}
-
-- (IBAction)performClose:(id)sender {
-	[_navigatorTreeController setContent:nil];
-
-	[self.skView presentScene:nil];
-
-	_editorView.scene = nil;
-
-	//[_editorView updateVisibleRect];
-
-	[self performSelector:@selector(updateSelectionWithNode:) withObject:nil afterDelay:0.5];
-
-	_currentFilename = nil;
 }
 
 @end
