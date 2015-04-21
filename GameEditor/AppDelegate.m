@@ -132,6 +132,12 @@
 
 	/* Enable Drag & Drop */
 	[_navigatorView registerForDraggedTypes: [NSArray arrayWithObject: @"public.binary"]];
+
+	/* Populate the 'Open Recent' file menu from the User default settings */
+	NSMutableArray *recentDocuments = [[NSUserDefaults standardUserDefaults] valueForKey:@"recentDocuments"];
+	for (NSString *filename in recentDocuments) {
+		[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
+	}
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
@@ -616,7 +622,7 @@
 	[self performSelector:@selector(updateSelectionWithNode:) withObject:scene afterDelay:0.5];
 
 	/* Add the file to the 'Open Recent' file menu */
-	[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
+	[self addRecentDocument:filename];
 
 	_currentFilename = filename;
 
@@ -657,6 +663,20 @@
 
 - (IBAction)saveDocument:(id)sender {
 	[SKScene archiveScene:self.skView.scene toFile:_currentFilename];
+}
+
+- (void)addRecentDocument:(NSString *)filename {
+	[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSMutableArray *recentDocuments = [[userDefaults valueForKey:@"recentDocuments"] mutableCopy];
+	if (!recentDocuments) {
+		recentDocuments = [NSMutableArray array];
+	} else if ([recentDocuments indexOfObject:filename] != NSNotFound) {
+		return;
+	}
+	[recentDocuments addObject:filename];
+	[userDefaults setObject:recentDocuments forKey:@"recentDocuments"];
+	[userDefaults synchronize];
 }
 
 @end
