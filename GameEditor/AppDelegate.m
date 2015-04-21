@@ -24,7 +24,6 @@
  */
 
 #import "AppDelegate.h"
-#import "GameScene.h"
 #import "AttributesView.h"
 
 #pragma mark Main Window
@@ -63,7 +62,7 @@
 										  options:NSDataReadingMappedIfSafe
 											error:nil];
 	NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-	[arch setClass:self forClassName:@"SKScene"];
+	//[arch setClass:self forClassName:@"GameScene"];
 	SKScene *scene = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
 	[arch finishDecoding];
 
@@ -583,7 +582,7 @@
 
 - (IBAction)newDocument:(id)sender {
 	/* Create a new scene with the default size */
-	GameScene *scene = [GameScene sceneWithSize:CGSizeMake(1024.0, 768.0)];
+	SKScene *scene = [SKScene sceneWithSize:CGSizeMake(1024.0, 768.0)];
 
 	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
 	[_navigatorView expandItem:nil expandChildren:YES];
@@ -693,7 +692,7 @@
 		return YES;
 	}
 
-	GameScene *scene = [GameScene unarchiveFromFile:filename];
+	SKScene *scene = [SKScene unarchiveFromFile:filename];
 
 	if (!scene) {
 		NSLog(@"Couldn't open file: '%@'", filename);
@@ -734,6 +733,63 @@
 	[recentDocuments addObject:filename];
 	[userDefaults setObject:recentDocuments forKey:@"recentDocuments"];
 	[userDefaults synchronize];
+}
+
+- (void)prepareScene:(SKScene *)scene {
+#if 0
+	/* Create test shape from points */
+
+	CGPoint points[] = {{0,0}, {-40, -40}, {80, 0}, {0, 120}, {0,0}};
+	SKShapeNode *shapeNode1 = [SKShapeNode shapeNodeWithPoints:points count:5];
+	shapeNode1.strokeColor = [SKColor blueColor];
+	shapeNode1.lineWidth = 5.0;
+	shapeNode1.position = CGPointMake(200, 100);
+	shapeNode1.zRotation = -M_PI_4;
+	[self addChild:shapeNode1];
+
+	/* Create shape from path */
+
+	CGMutablePathRef path = CGPathCreateMutable();
+	CGPathMoveToPoint(path, nil, 0, 0);
+	CGPathAddLineToPoint(path, nil, 80, -50);
+	CGPathAddLineToPoint(path, nil, 0, 100);
+	CGPathAddLineToPoint(path, nil, -80, -50);
+	CGPathCloseSubpath(path);
+	SKShapeNode *shapeNode2 = [SKShapeNode shapeNodeWithPath:path];
+	CGPathRelease(path);
+	shapeNode2.strokeColor = [SKColor yellowColor];
+	shapeNode2.fillColor = [SKColor colorWithCalibratedRed:0 green:0 blue:1 alpha:0.5];
+	shapeNode2.lineWidth = 5.0;
+	shapeNode2.position = CGPointMake(400, 100);
+	shapeNode2.zRotation = M_PI_4;
+	[self addChild:shapeNode2];
+
+	/* Add a particles emitter */
+
+	NSString *particlesPath = [[NSBundle mainBundle] pathForResource:@"Particles" ofType:@"sks"];
+	SKEmitterNode *emitter = [NSKeyedUnarchiver unarchiveObjectWithFile:particlesPath];
+	emitter.position = CGPointMake(self.size.width/2, self.size.height/2);
+	[self addChild:emitter];
+
+	/* Add the scene physics body */
+
+	SKPhysicsBody *borderBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
+	self.physicsBody = borderBody;
+#endif
+
+	[self advanceEmittersInNode:self];
+
+	[scene setPaused:YES];
+}
+
+- (void)advanceEmittersInNode:(id)node {
+	if ([node isKindOfClass:[SKEmitterNode class]]) {
+		SKEmitterNode *emitter = node;
+		[emitter advanceSimulationTime:0.41 * emitter.particleLifetime];
+	}
+	for (id child in [node children]) {
+		[self advanceEmittersInNode:child];
+	}
 }
 
 @end

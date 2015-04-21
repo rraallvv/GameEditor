@@ -16,7 +16,6 @@
 		E474192F1AD84EDC00061932 /* NewGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E474192E1AD84EDC00061932 /* NewGameScene.sks */; };
 		E4ABDB4F1AB3933900AAE82E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */; };
 		E4ABDB511AB3933900AAE82E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB501AB3933900AAE82E /* main.m */; };
-		E4ABDB541AB3933900AAE82E /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB531AB3933900AAE82E /* GameScene.m */; };
 		E4ABDB561AB3933900AAE82E /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4ABDB551AB3933900AAE82E /* GameScene.sks */; };
 		E4ABDB581AB3933900AAE82E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4ABDB571AB3933900AAE82E /* Images.xcassets */; };
 		E4ABDB5B1AB3933900AAE82E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = E4ABDB591AB3933900AAE82E /* MainMenu.xib */; };
@@ -55,8 +54,6 @@
 		E4ABDB4D1AB3933900AAE82E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		E4ABDB501AB3933900AAE82E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		E4ABDB521AB3933900AAE82E /* GameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
-		E4ABDB531AB3933900AAE82E /* GameScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
 		E4ABDB551AB3933900AAE82E /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		E4ABDB571AB3933900AAE82E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E4ABDB5A1AB3933900AAE82E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -139,8 +136,6 @@
 			children = (
 				E4ABDB4D1AB3933900AAE82E /* AppDelegate.h */,
 				E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */,
-				E4ABDB521AB3933900AAE82E /* GameScene.h */,
-				E4ABDB531AB3933900AAE82E /* GameScene.m */,
 				E40813A01AC64C7600F54824 /* AttributesInspector */,
 				E4F3B6A81ACD7ECA001482D2 /* Navigator */,
 				E4BB58AC1ABB510A0021A467 /* EditorView.h */,
@@ -304,7 +299,6 @@
 				E4BB58AE1ABB510A0021A467 /* EditorView.m in Sources */,
 				E40813951AC42FFF00F54824 /* ColorWell.m in Sources */,
 				E4ABDB511AB3933900AAE82E /* main.m in Sources */,
-				E4ABDB541AB3933900AAE82E /* GameScene.m in Sources */,
 				E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */,
 				E4F3B6A71ACD7EC4001482D2 /* NavigationNode.m in Sources */,
 				E4ABDB761AB47BB700AAE82E /* AttributeNode.m in Sources */,
