@@ -56,10 +56,10 @@
 
 + (instancetype)unarchiveFromFile:(NSString *)file {
 	/* Retrieve scene file path from the application bundle */
-	NSString *nodePath = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
+	//file = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
 
 	/* Unarchive the file to an SKScene object */
-	NSData *data = [NSData dataWithContentsOfFile:nodePath
+	NSData *data = [NSData dataWithContentsOfFile:file
 										  options:NSDataReadingMappedIfSafe
 											error:nil];
 	NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
@@ -72,7 +72,7 @@
 
 + (BOOL)archiveScene:(SKScene *)scene toFile:(NSString *)file {
 	/* Retrieve scene file path from the application bundle */
-	NSString *nodePath = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
+	//file = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
 
 	/* Archive the file to an SKScene object */
 	NSMutableData *data = [NSMutableData data];
@@ -87,7 +87,7 @@
 	[arch encodeObject:scene forKey:NSKeyedArchiveRootObjectKey];
 	[arch finishEncoding];
 
-	return [data writeToFile:nodePath atomically:YES];
+	return [data writeToFile:file atomically:YES];
 }
 
 @end
@@ -101,6 +101,7 @@
 	IBOutlet AttributesView *_attributesView;
 	IBOutlet NavigatorView *_navigatorView;
 	SKNode *_selectedNode;
+	NSString *_currentFilename;
 }
 
 @synthesize window = _window;
@@ -110,16 +111,6 @@
 	self.window.styleMask = self.window.styleMask;
 	self.window.titleVisibility = NSWindowTitleHidden;
 
-	/* Pick the scene */
-	GameScene *scene = [GameScene unarchiveFromFile:@"GameScene"];
-	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
-	[_navigatorView expandItem:nil expandChildren:YES];
-
-	/* Set the scale mode to scale to fit the window */
-	scene.scaleMode = SKSceneScaleModeAspectFit;
-
-	[self.skView presentScene:scene];
-
 	/* Sprite Kit applies additional optimizations to improve rendering performance */
 	self.skView.ignoresSiblingOrder = YES;
 
@@ -127,11 +118,13 @@
 	self.skView.showsNodeCount = YES;
 	//self.skView.showsPhysics = YES;
 
+
+	/* Default scene */
+	//[self openSceneWithFilename:@"GameScene"];
+
+
 	/* Setup the editor view */
-	_editorView.scene = scene;
 	_editorView.delegate = self;
-	[_editorView updateVisibleRect];
-	[self performSelector:@selector(updateSelectionWithNode:) withObject:_editorView.scene afterDelay:0.5];
 
 	/* Setup the navigator view */
 	_navigatorView.delegate = self;
@@ -594,6 +587,42 @@
 	return nil;
 }
 
+- (BOOL)openSceneWithFilename:(NSString *)filename {
+
+	if ([_currentFilename isEqualToString:filename]) {
+		/* The file is already open */
+		return YES;
+	}
+
+	GameScene *scene = [GameScene unarchiveFromFile:filename];
+
+	if (!scene) {
+		NSLog(@"Couldn't open file: '%@'", filename);
+		return NO;
+	}
+
+	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
+	[_navigatorView expandItem:nil expandChildren:YES];
+
+	/* Set the scale mode to scale to fit the window */
+	scene.scaleMode = SKSceneScaleModeAspectFit;
+
+	[self.skView presentScene:scene];
+
+	_editorView.scene = scene;
+
+	[_editorView updateVisibleRect];
+
+	[self performSelector:@selector(updateSelectionWithNode:) withObject:scene afterDelay:0.5];
+
+	/* Add the file to the 'Open Recent' file menu */
+	[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
+
+	_currentFilename = filename;
+
+	return YES;
+}
+
 #pragma mark File actions
 
 - (IBAction)openDocument:(id)sender {
@@ -613,16 +642,21 @@
 							  NSURL *selection = openPanel.URLs[0];
 
 							  /* Store the selected file's path as a string */
-							  NSString* path = [[selection path] stringByResolvingSymlinksInPath];
+							  NSString *filename = [[selection path] stringByResolvingSymlinksInPath];
 
-							  NSLog(@"Open: '%@'", path);
+							  /* Try to open the file */
+							  [self openSceneWithFilename:filename];
 						  }
 						  
 					  }];
 }
 
+- (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename {
+	return [self openSceneWithFilename:filename];
+}
+
 - (IBAction)saveDocument:(id)sender {
-	[SKScene archiveScene:self.skView.scene toFile:@"GameScene"];
+	[SKScene archiveScene:self.skView.scene toFile:_currentFilename];
 }
 
 @end
