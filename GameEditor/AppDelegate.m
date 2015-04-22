@@ -24,7 +24,6 @@
  */
 
 #import "AppDelegate.h"
-#import "GameScene.h"
 #import "AttributesView.h"
 
 #pragma mark Main Window
@@ -56,14 +55,31 @@
 
 + (instancetype)unarchiveFromFile:(NSString *)file {
 	/* Retrieve scene file path from the application bundle */
-	NSString *nodePath = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
+	//file = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
 
 	/* Unarchive the file to an SKScene object */
-	NSData *data = [NSData dataWithContentsOfFile:nodePath
+#if 0// convert scene data to binary before passing it to the unarchiver
+	NSData *plistData = [NSData dataWithContentsOfFile:file];
+	NSPropertyListFormat format;
+	NSError *error;
+
+	id plist = [NSPropertyListSerialization propertyListWithData:plistData
+														 options:NSPropertyListImmutable
+														  format:&format
+														   error:&error];
+
+	NSData *data = [NSPropertyListSerialization dataWithPropertyList:plist
+															  format:NSPropertyListBinaryFormat_v1_0
+															 options:0
+															   error:&error];
+#else
+	NSData *data = [NSData dataWithContentsOfFile:file
 										  options:NSDataReadingMappedIfSafe
 											error:nil];
+#endif
+
 	NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-	[arch setClass:self forClassName:@"SKScene"];
+	//[arch setClass:self forClassName:@"GameScene"];
 	SKScene *scene = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
 	[arch finishDecoding];
 
@@ -72,22 +88,29 @@
 
 + (BOOL)archiveScene:(SKScene *)scene toFile:(NSString *)file {
 	/* Retrieve scene file path from the application bundle */
-	NSString *nodePath = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
+	//file = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
 
 	/* Archive the file to an SKScene object */
 	NSMutableData *data = [NSMutableData data];
 	NSKeyedArchiver *arch = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
 
-#if 1// Save to XML plist format
+#if 0// Save to XML plist format
 	[arch setOutputFormat:NSPropertyListXMLFormat_v1_0];
 #else
 	[arch setOutputFormat:NSPropertyListBinaryFormat_v1_0];
 #endif
 
-	[arch encodeObject:scene forKey:NSKeyedArchiveRootObjectKey];
+	id object = scene.hasSingleNode ? scene.children.firstObject : scene;
+
+	[arch encodeObject:object forKey:NSKeyedArchiveRootObjectKey];
 	[arch finishEncoding];
 
-	return [data writeToFile:nodePath atomically:YES];
+	return [data writeToFile:file atomically:YES];
+}
+
+- (BOOL)hasSingleNode {
+	NSRect frame = self.frame;
+	return NSWidth(frame) == 1.0 && NSHeight(frame) == 1.0 && self.children.count == 1;
 }
 
 @end
@@ -99,8 +122,9 @@
 	IBOutlet NSTreeController *_attributesTreeController;
 	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet AttributesView *_attributesView;
-	IBOutlet NSOutlineView *_navigatorView;
+	IBOutlet NavigatorView *_navigatorView;
 	SKNode *_selectedNode;
+	NSString *_currentFilename;
 }
 
 @synthesize window = _window;
@@ -110,16 +134,6 @@
 	self.window.styleMask = self.window.styleMask;
 	self.window.titleVisibility = NSWindowTitleHidden;
 
-	/* Pick the scene */
-	GameScene *scene = [GameScene unarchiveFromFile:@"GameScene"];
-	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
-	[_navigatorView expandItem:nil expandChildren:YES];
-
-	/* Set the scale mode to scale to fit the window */
-	scene.scaleMode = SKSceneScaleModeAspectFit;
-
-	[self.skView presentScene:scene];
-
 	/* Sprite Kit applies additional optimizations to improve rendering performance */
 	self.skView.ignoresSiblingOrder = YES;
 
@@ -127,11 +141,13 @@
 	self.skView.showsNodeCount = YES;
 	//self.skView.showsPhysics = YES;
 
+
+	/* Default scene */
+	//[self openSceneWithFilename:@"GameScene"];
+
+
 	/* Setup the editor view */
-	_editorView.scene = scene;
 	_editorView.delegate = self;
-	[_editorView updateVisibleRect];
-	[self performSelector:@selector(updateSelectionWithNode:) withObject:_editorView.scene afterDelay:0.5];
 
 	/* Setup the navigator view */
 	_navigatorView.delegate = self;
@@ -139,19 +155,28 @@
 
 	/* Enable Drag & Drop */
 	[_navigatorView registerForDraggedTypes: [NSArray arrayWithObject: @"public.binary"]];
+
+	/* Populate the 'Open Recent' file menu from the User default settings */
+	NSMutableArray *recentDocuments = [[NSUserDefaults standardUserDefaults] valueForKey:@"recentDocuments"];
+	for (NSString *filename in recentDocuments) {
+		[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
+	}
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
 	return YES;
 }
 
-#pragma mark Basic editing
+#pragma mark Editing
 
 - (IBAction)copy:(id)sender {
 	NavigationNode *selection = _navigatorTreeController.selectedObjects.firstObject;
 	if (selection && selection.node.parent) {
-		NSData* clipData = [NSKeyedArchiver archivedDataWithRootObject:selection];
-		NSPasteboard* cb = [NSPasteboard generalPasteboard];
+
+		NSMutableArray *expansionInfo = [_navigatorView expansionInfoWithNode:_navigatorTreeController.selectedNodes.firstObject];
+
+		NSData *clipData = [NSKeyedArchiver archivedDataWithRootObject:@[selection, expansionInfo]];
+		NSPasteboard *cb = [NSPasteboard generalPasteboard];
 
 		[cb declareTypes:[NSArray arrayWithObjects:@"public.binary", nil] owner:self];
 		[cb setData:clipData forType:@"public.binary"];
@@ -159,12 +184,12 @@
 }
 
 - (IBAction)paste:(id)sender {
-	NSPasteboard* cb = [NSPasteboard generalPasteboard];
-	NSString* type = [cb availableTypeFromArray:[NSArray arrayWithObjects:@"public.binary", nil]];
+	NSPasteboard *cb = [NSPasteboard generalPasteboard];
+	NSString *type = [cb availableTypeFromArray:[NSArray arrayWithObjects:@"public.binary", nil]];
 
 	if (type) {
-		NSData* clipData = [cb dataForType:type];
-		NavigationNode* object = [NSKeyedUnarchiver unarchiveObjectWithData:clipData];
+		NSData *clipData = [cb dataForType:type];
+		id object = [NSKeyedUnarchiver unarchiveObjectWithData:clipData];
 
 		NSIndexPath *selectionIndexPath = _navigatorTreeController.selectionIndexPath;
 		NSInteger numberOfChildren = [_navigatorTreeController.selectedNodes.firstObject childNodes].count;
@@ -196,14 +221,19 @@
 	[self delete:sender];
 }
 
-- (void)insertObject:(NavigationNode *)object atIndexPath:(NSIndexPath *)indexPath {
+- (void)insertObject:(id)object atIndexPath:(NSIndexPath *)indexPath {
 	[[self.window.undoManager prepareWithInvocationTarget:self] removeObjectAtIndexPath:indexPath];
-	[_navigatorTreeController insertObject:object atArrangedObjectIndexPath:indexPath];
+	[_navigatorTreeController insertObject:object[0] atArrangedObjectIndexPath:indexPath];
+
+	[_navigatorView expandNode:[_navigatorTreeController.arrangedObjects descendantNodeAtIndexPath:indexPath] withInfo:object[1]];
 }
 
 - (void)removeObjectAtIndexPath:(NSIndexPath *)indexPath {
 	NavigationNode *object = [[_navigatorTreeController.arrangedObjects descendantNodeAtIndexPath:indexPath] representedObject];
-	[[self.window.undoManager prepareWithInvocationTarget:self] insertObject:object atIndexPath:indexPath];
+
+	NSMutableArray *expansionInfo = [_navigatorView expansionInfoWithNode:[_navigatorTreeController.arrangedObjects descendantNodeAtIndexPath:indexPath]];
+
+	[[self.window.undoManager prepareWithInvocationTarget:self] insertObject:@[object, expansionInfo] atIndexPath:indexPath];
 	[_navigatorTreeController removeObjectAtArrangedObjectIndexPath:indexPath];
 }
 
@@ -225,14 +255,20 @@
 
 	[_editorView setNode:node];
 
+	// TODO: enable Grand Central Dispatch and add a custom queue to process input events
+#define USE_GCD	0
+#if USE_GCD
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+#endif
 		/* Build the tree of attributes in the background thread */
 		NSMutableArray *contents = [self attributesForAllClassesWithNode:node];
 
 		/* Look up for the row to be selected */
 		NSInteger row = [_navigatorView rowForItem:[self navigationNodeOfObject:node inNodes:[[_navigatorTreeController arrangedObjects] childNodes]]];
 
+#if USE_GCD
 		dispatch_async(dispatch_get_main_queue(), ^{
+#endif
 			/* Replace the attributes table */
 			[_attributesTreeController setContent:contents];
 
@@ -245,8 +281,10 @@
 
 			/* Update the selection in the navigator view */
 			[_navigatorView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
+#if USE_GCD
 		});
 	});
+#endif
 }
 
 #pragma mark Attributes creation
@@ -560,11 +598,81 @@
 	return attributesArray;
 }
 
+#pragma mark File handling
+
+- (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename {
+	return [self openSceneWithFilename:filename];
+}
+
+- (IBAction)newDocument:(id)sender {
+	/* Create a new scene with the default size */
+	SKScene *scene = [SKScene sceneWithSize:CGSizeMake(1024.0, 768.0)];
+	[self useScene:scene];
+	_currentFilename = nil;
+}
+
+- (IBAction)openDocument:(id)sender {
+	/* Get an instance of the open file dialogue */
+	NSOpenPanel* openPanel = [NSOpenPanel openPanel];
+
+	/* Filter the file list showing SpriteKit files */
+	openPanel.allowedFileTypes = @[@"sks"];
+
+	/* Launch the open dialogue */
+	[openPanel beginSheetModalForWindow:self.window
+					  completionHandler:^(NSInteger result) {
+						  if (result == NSModalResponseOK) {
+							  /* Get the selected file's URL */
+							  NSURL *selection = openPanel.URLs.firstObject;
+							  /* Store the selected file's path as a string */
+							  NSString *filename = [[selection path] stringByResolvingSymlinksInPath];
+							  /* Try to open the file */
+							  [self openSceneWithFilename:filename];
+						  }
+						  
+					  }];
+}
+
+- (IBAction)saveDocument:(id)sender {
+	if (_currentFilename) {
+		[SKScene archiveScene:self.skView.scene toFile:_currentFilename];
+	} else {
+		[self saveDocumentAs:sender];
+	}
+}
+
+- (IBAction)saveDocumentAs:(id)sender {
+	/* Get an instance of the save file dialogue */
+	NSSavePanel * savePanel = [NSSavePanel savePanel];
+
+	/* Filter the file list showing SpriteKit files */
+	[savePanel setAllowedFileTypes:@[@"sks"]];
+
+	/* Launch the save dialogue */
+	[savePanel beginSheetModalForWindow:self.window
+					  completionHandler:^(NSInteger result) {
+						  if (result == NSModalResponseOK) {
+							  /* Get the selected file's URL */
+							  NSURL *selection = savePanel.URL;
+							  /* Store the selected file's path as a string */
+							  NSString *filename = [[selection path] stringByResolvingSymlinksInPath];
+							  /* Save to the selected the file */
+							  [SKScene archiveScene:self.skView.scene toFile:filename];
+							  _currentFilename = filename;
+						  }
+					  }];
+}
+
+- (IBAction)performClose:(id)sender {
+	[self removeScene];
+	_currentFilename = nil;
+}
+
 #pragma mark Helper methods
 
-- (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray*)nodes {
+- (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray *)nodes {
 	for (int i = 0; i < nodes.count; ++i) {
-		NSTreeNode* node = nodes[i];
+		NSTreeNode *node = nodes[i];
 		if ([[[node representedObject] node] isEqual:anObject]) {
 			return node;
 		}
@@ -578,10 +686,129 @@
 	return nil;
 }
 
-#pragma mark Actions
+- (BOOL)openSceneWithFilename:(NSString *)filename {
 
-- (IBAction)saveAction:(id)sender {
-	[SKScene archiveScene:self.skView.scene toFile:@"GameScene"];
+	if ([_currentFilename isEqualToString:filename]) {
+		/* The file is already open */
+		return YES;
+	}
+
+	SKScene *scene = [SKScene unarchiveFromFile:filename];
+
+	if (!scene) {
+		NSLog(@"Couldn't open file: '%@'", filename);
+		return NO;
+	}
+
+	[self useScene:scene];
+
+	/* Add the file to the 'Open Recent' file menu */
+	[self addRecentDocument:filename];
+
+	_currentFilename = filename;
+
+	return YES;
+}
+
+- (void)addRecentDocument:(NSString *)filename {
+	[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSMutableArray *recentDocuments = [[userDefaults valueForKey:@"recentDocuments"] mutableCopy];
+	if (!recentDocuments) {
+		recentDocuments = [NSMutableArray array];
+	} else if ([recentDocuments indexOfObject:filename] != NSNotFound) {
+		return;
+	}
+	[recentDocuments addObject:filename];
+	[userDefaults setObject:recentDocuments forKey:@"recentDocuments"];
+	[userDefaults synchronize];
+}
+
+- (void)prepareScene:(SKScene *)scene {
+#if 0
+	/* Create test shape from points */
+
+	CGPoint points[] = {{0,0}, {-40, -40}, {80, 0}, {0, 120}, {0,0}};
+	SKShapeNode *shapeNode1 = [SKShapeNode shapeNodeWithPoints:points count:5];
+	shapeNode1.strokeColor = [SKColor blueColor];
+	shapeNode1.lineWidth = 5.0;
+	shapeNode1.position = CGPointMake(200, 100);
+	shapeNode1.zRotation = -M_PI_4;
+	[self addChild:shapeNode1];
+
+	/* Create shape from path */
+
+	CGMutablePathRef path = CGPathCreateMutable();
+	CGPathMoveToPoint(path, nil, 0, 0);
+	CGPathAddLineToPoint(path, nil, 80, -50);
+	CGPathAddLineToPoint(path, nil, 0, 100);
+	CGPathAddLineToPoint(path, nil, -80, -50);
+	CGPathCloseSubpath(path);
+	SKShapeNode *shapeNode2 = [SKShapeNode shapeNodeWithPath:path];
+	CGPathRelease(path);
+	shapeNode2.strokeColor = [SKColor yellowColor];
+	shapeNode2.fillColor = [SKColor colorWithCalibratedRed:0 green:0 blue:1 alpha:0.5];
+	shapeNode2.lineWidth = 5.0;
+	shapeNode2.position = CGPointMake(400, 100);
+	shapeNode2.zRotation = M_PI_4;
+	[self addChild:shapeNode2];
+
+	/* Add a particles emitter */
+
+	NSString *particlesPath = [[NSBundle mainBundle] pathForResource:@"Particles" ofType:@"sks"];
+	SKEmitterNode *emitter = [NSKeyedUnarchiver unarchiveObjectWithFile:particlesPath];
+	emitter.position = CGPointMake(self.size.width/2, self.size.height/2);
+	[self addChild:emitter];
+
+	/* Add the scene physics body */
+
+	SKPhysicsBody *borderBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
+	self.physicsBody = borderBody;
+#endif
+
+	[self advanceEmittersInNode:self];
+
+	[scene setPaused:YES];
+}
+
+- (void)advanceEmittersInNode:(id)node {
+	if ([node isKindOfClass:[SKEmitterNode class]]) {
+		SKEmitterNode *emitter = node;
+		[emitter advanceSimulationTime:0.41 * emitter.particleLifetime];
+	}
+	for (id child in [node children]) {
+		[self advanceEmittersInNode:child];
+	}
+}
+
+- (void)removeScene {
+	[_attributesTreeController setContent:nil];
+	[_navigatorTreeController setContent:nil];
+	_editorView.scene = nil;
+	_editorView.needsDisplay = YES;
+	[self.skView presentScene:nil];
+}
+
+- (void)useScene:(SKScene *)scene {
+	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
+	[_navigatorView expandItem:nil expandChildren:YES];
+
+	/* Set the scale mode to scale to fit the window */
+	if (![scene isKindOfClass:[SKScene class]]) {
+		id node = scene;
+		scene = [[SKScene alloc] init];
+		[scene addChild:node];
+	}
+
+	scene.scaleMode = SKSceneScaleModeAspectFit;
+
+	[self.skView presentScene:scene];
+
+	_editorView.scene = scene;
+
+	[_editorView updateVisibleRect];
+
+	[self performSelector:@selector(updateSelectionWithNode:) withObject:scene afterDelay:0.5];
 }
 
 @end

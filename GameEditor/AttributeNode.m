@@ -127,7 +127,7 @@
 	return nil;
 }
 
-- (BOOL)isEqualToEncodedType:(const char*)type {
+- (BOOL)isEqualToEncodedType:(const char *)type {
 	NSString *className = [self extractClassName];
 	if (className) {
 		return [[NSString stringWithFormat:@"{%@=#}", className] isEqualToString:[NSString stringWithUTF8String:type]];
@@ -361,7 +361,7 @@
 	NSMutableArray *_types;
 	NSMutableArray *_typeSizes;
 	int _typeSize;
-	NSMutableData* _data;
+	NSMutableData *_data;
 	unsigned char *_pdata;
 }
 
@@ -371,7 +371,7 @@ formatter = _formatter,
 valueTransformer = _valueTransformer,
 labels = _labels;
 
-- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer {
+- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer {
 	if (self = [super init]) {
 		_name = name;
 		_node = node;
@@ -445,47 +445,47 @@ labels = _labels;
 	return self;
 }
 
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer {
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer {
 	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:type formatter:formatter valueTransformer:valueTransformer];
 }
 
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type {
 	return [self attributeWithName:name node:node type:type formatter:nil valueTransformer:nil];
 }
 
-+ (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode* )node {
++ (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode *)node {
 	return [self attributeWithName:name node:node type:@"color"];
 }
 
-+ (instancetype)attributeForRotationAngleWithName:name node:(SKNode* )node {
++ (instancetype)attributeForRotationAngleWithName:name node:(SKNode *)node {
 	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:@"d"
 													  formatter:[NSNumberFormatter degreesFormatter]
 											   valueTransformer:[DegreesTransformer transformer]];
 	return attribute;
 }
 
-+ (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
++ (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type {
 	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
 													  formatter:[NSNumberFormatter highPrecisionFormatter]
 											   valueTransformer:[PrecisionTransformer transformer]];
 	return attribute;
 }
 
-+ (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
++ (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type {
 	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
 													  formatter:[NSNumberFormatter normalPrecisionFormatter]
 											   valueTransformer:nil];
 	return attribute;
 }
 
-+ (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
++ (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type {
 	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
 													  formatter:[NSNumberFormatter normalizedFormatter]
 											   valueTransformer:[PrecisionTransformer transformer]];
 	return attribute;
 }
 
-+ (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type {
++ (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type {
 	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
 													  formatter:[NSNumberFormatter integerFormatter]
 											   valueTransformer:nil];
