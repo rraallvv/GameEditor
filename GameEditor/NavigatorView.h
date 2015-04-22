@@ -27,7 +27,8 @@
 #import "NavigationNode.h"
 
 @interface NavigatorView : NSOutlineView
-
+- (NSMutableArray *)expansionInfoWithNode:(NSTreeNode *)aNode;
+- (void)expandNode:(NSTreeNode *)aNode withInfo:(NSMutableArray *)array;
 @end
 
 @protocol NavigatorViewDelegate

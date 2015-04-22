@@ -44,7 +44,7 @@
 
 		AttributeNode *attribute = (AttributeNode *)objectValue;
 
-		/* Get all the text fields in the table cell*/
+		/* Get all the text fields in the table cell */
 		[self listTextFields:self];
 
 		/* Walk the text fields */
@@ -342,7 +342,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 
 		/* Prepare the editors for the outline view */
 		NSNib *nib = [[NSNib alloc] initWithNibNamed:@"ValueEditors" bundle:nil];
-		NSArray* objects;
+		NSArray *objects;
 		[nib instantiateWithOwner:self topLevelObjects:&objects];
 
 		_editorIdentifiers = [NSMutableArray array];

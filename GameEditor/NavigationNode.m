@@ -37,9 +37,12 @@ name = _name,
 children = _childrenNavigationNodes;
 
 + (instancetype)navigationNodeWithNode:(id)node {
-	NavigationNode *navigationNode = [[NavigationNode alloc] init];
-	navigationNode.node = node;
-	return navigationNode;
+	if (node) {
+		NavigationNode *navigationNode = [[NavigationNode alloc] init];
+		navigationNode.node = node;
+		return navigationNode;
+	}
+	return nil;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -77,48 +80,12 @@ children = _childrenNavigationNodes;
 }
 
 - (void)setChildren:(NSMutableArray *)children {
-	SKScene *scene = [_node scene];
 
-	NSMutableArray *childNodes = [NSMutableArray array];
+	[_node removeAllChildren];
 
-	/* Parent the children that have different parent */
+	/* Add the new children */
 	for (NavigationNode *child in children) {
-		SKNode *node = [child node];
-
-		[childNodes addObject:node];
-
-		if (node.parent != _node) {
-			CGPoint position = node.position;
-			CGFloat zRotation = node.zRotation;
-
-			if (node.parent == node.scene) {
-				position = [scene convertPoint:position toNode:_node];
-				SKNode *parent = _node;
-				while (parent) {
-					zRotation -= parent.zRotation;
-					parent = parent.parent;
-				}
-			} else if (_node == _node.scene) {
-				position = [scene convertPoint:[scene convertPoint:CGPointZero fromNode:node] toNode:_node];
-				SKNode *parent = node.parent;
-				while (parent) {
-					zRotation += parent.zRotation;
-					parent = parent.parent;
-				}
-			}
-
-			[node removeFromParent];
-			node.position = position;
-			node.zRotation = zRotation;
-			[_node addChild:node];
-		}
-	}
-
-	/* Remove the remaining children, i.e. children without a parent */
-	for (SKNode *child in _node.children) {
-		if ([childNodes indexOfObject:child] == NSNotFound) {
-			[child removeFromParent];
-		}
+		[_node addChild:child.node];
 	}
 
 	_childrenNavigationNodes = children;

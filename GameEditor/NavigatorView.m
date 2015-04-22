@@ -83,6 +83,12 @@
 
 #pragma mark Drag & Drop
 
+- (NSMutableArray *)expansionInfoWithNode:(NSTreeNode *)aNode {
+	NSMutableArray *expansionInfo = [NSMutableArray array];
+	[self getExpandedNodesInfo:expansionInfo forNode:aNode];
+	return expansionInfo;
+}
+
 - (void)getExpandedNodesInfo:(NSMutableArray *)array forNode:(NSTreeNode *)aNode {
 	[array addObject:[NSNumber numberWithBool:[self isItemExpanded:aNode]]];
 	for (NSTreeNode *node in aNode.childNodes) {
@@ -138,16 +144,36 @@
 }
 
 - (void)moveNodeFromIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+
+	/* Register undo operation */
+	[[self.undoManager prepareWithInvocationTarget:self] moveNodeFromIndexPath:toIndexPath toIndexPath:fromIndexPath];
+
 	/* Move the node to its new location */
 	NSTreeNode *rootNode = [_treeController arrangedObjects];
 	NSTreeNode *selectedNode = [rootNode descendantNodeAtIndexPath:fromIndexPath];
 
 	/* Save the state of node to be moved */
-	NSMutableArray *savedExpadedNodesInfo = [NSMutableArray array];
-	[self getExpandedNodesInfo:savedExpadedNodesInfo forNode:selectedNode];
+	NSMutableArray *expansionInfo = [self expansionInfoWithNode:selectedNode];
 
 	/* Move the node to its new location */
+#if 1// remove and insert instead of moving the node
+	[_treeController removeObjectAtArrangedObjectIndexPath:fromIndexPath];
+	NSIndexPath *indexPath = [[NSIndexPath alloc] init];
+	for (NSInteger position = 0; position < toIndexPath.length; ++position) {
+		NSInteger fromIndex = [fromIndexPath indexAtPosition:position];
+		NSInteger toIndex = [toIndexPath indexAtPosition:position];
+		if (fromIndex == toIndex) {
+			indexPath = [indexPath indexPathByAddingIndex:fromIndex];
+		} else if (fromIndexPath.length - 1 == position && fromIndex < toIndex) {
+			indexPath = [indexPath indexPathByAddingIndex:toIndex - 1];
+		} else {
+			indexPath = [indexPath indexPathByAddingIndex:toIndex];
+		}
+	}
+	[_treeController insertObject:[selectedNode representedObject] atArrangedObjectIndexPath:indexPath];
+#else
 	[_treeController moveNode:selectedNode toIndexPath:toIndexPath];
+#endif
 
 	/* Retrieve the selected node at its new location */
 	selectedNode = [rootNode descendantNodeAtIndexPath:toIndexPath];
@@ -156,13 +182,10 @@
 	[self expandItem:selectedNode.parentNode];
 
 	/* Expand the moved node */
-	[self expandNode:selectedNode withInfo:savedExpadedNodesInfo];
+	[self expandNode:selectedNode withInfo:expansionInfo];
 
 	/* Select the node at it's new location */
 	[self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:selectedNode]] byExtendingSelection:NO];
-
-	/* Register undo operation */
-	[[self.undoManager prepareWithInvocationTarget:self] moveNodeFromIndexPath:toIndexPath toIndexPath:fromIndexPath];
 }
 
 @end

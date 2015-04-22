@@ -30,7 +30,7 @@
 @interface NSString (Types)
 - (NSString *)extractClassName;
 - (Class)classType;
-- (BOOL)isEqualToEncodedType:(const char*)type;
+- (BOOL)isEqualToEncodedType:(const char *)type;
 @end
 
 @interface NSString (Regex)
@@ -67,14 +67,14 @@
 @end
 
 @interface AttributeNode : NSObject
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer;
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
-+ (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode* )node;
-+ (instancetype)attributeForRotationAngleWithName:(NSString *)name node:(SKNode* )node;
-+ (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
-+ (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
-+ (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
-+ (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode* )node type:(NSString *)type;
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer;
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type;
++ (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode *)node;
++ (instancetype)attributeForRotationAngleWithName:(NSString *)name node:(SKNode *)node;
++ (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type;
++ (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type;
++ (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type;
++ (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type;
 + (NSDictionary *)attributeForNonEditableValue:(NSString *)name type:(NSString *)type;
 @property (copy) NSString *name;
 @property id formatter;

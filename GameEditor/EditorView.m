@@ -226,6 +226,7 @@ typedef enum {
 	NSMutableDictionary *_compoundUndo;
 	CGPoint _viewOrigin;
 	CGFloat _viewScale;
+	NSBezierPath *_selectionPath;
 
 	/* Outline handle points */
 	CGPoint _handlePoints[MaxHandle];
@@ -258,10 +259,28 @@ anchorPoint = _anchorPoint;
 
 	[path stroke];
 
+	/* Draw the scene nodes */
+	_selectionPath = nil;
 	[self drawSelectionInNode:_scene];
 
-	if (_node && _node != _scene)
+	/* Draw selection */
+	if (_selectionPath && !_selectionPath.isEmpty) {
+		[[NSColor colorWithRed:0.4 green:0.5 blue:1.0 alpha:1.0] setStroke];
+
+		/* Set the glow effect */
+		NSShadow *shadow = [[NSShadow alloc] init];
+		[shadow setShadowBlurRadius:2.0];
+		[shadow setShadowColor:[NSColor whiteColor]];
+		[shadow set];
+
+		// TODO: Avoid drawing multiple times to get the glow effect
+		for (int i = 0; i < 8; ++i) {
+			[_selectionPath stroke];
+		}
+	}
+	if (_node && _node != _scene) {
 		[self drawHandles];
+	}
 }
 
 - (void)drawSelectionInNode:(SKNode *)aNode {
@@ -360,19 +379,8 @@ anchorPoint = _anchorPoint;
 
 	}
 
-	if (_node == aNode) {
-		[[NSColor colorWithRed:0.4 green:0.5 blue:1.0 alpha:1.0] setStroke];
-
-		/* Set the glow effect */
-		NSShadow *shadow = [[NSShadow alloc] init];
-		[shadow setShadowBlurRadius:2.0];
-		[shadow setShadowColor:[NSColor whiteColor]];
-		[shadow set];
-
-		// TODO: Avoid drawing multiple times to get the glow effect
-		for (int i = 0; i < 8; ++i) {
-			[path stroke];
-		}
+	if (_node != _scene && _node == aNode) {
+		_selectionPath = path.copy;
 	} else {
 		[color setStroke];
 		[path stroke];
@@ -600,7 +608,7 @@ anchorPoint = _anchorPoint;
 		self.wantsLayer = YES;
 	}
 
-	/* Clear the properties bindings*/
+	/* Clear the properties bindings */
 	[self unbindFromSelectedNode];
 
 	_node = node;
@@ -630,7 +638,7 @@ anchorPoint = _anchorPoint;
 			[self getFramePoints:points forNode:node];
 			CGPathAddLines(path, NULL, &points[1], 4);
 
-		/* Construct the path using a rectangle of arbitrary size centered at the node's position*/
+		/* Construct the path using a rectangle of arbitrary size centered at the node's position */
 		} else {
 			CGPoint center = [_scene convertPoint:CGPointZero fromNode:node];
 			center.x /= _viewScale;
@@ -946,7 +954,10 @@ anchorPoint = _anchorPoint;
 		if (count) {
 			for (unsigned int i = 0; i < count; i++) {
 				NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
-				[_node addObserver:self forKeyPath:key options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
+				if (![_boundAttributes containsObject:key]) {
+					[_boundAttributes addObject:key];
+					[_node addObserver:self forKeyPath:key options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
+				}
 			}
 			free(properties);
 		}
@@ -983,33 +994,29 @@ anchorPoint = _anchorPoint;
 	if (object == _node) {
 
 		/* Try to register the undo operation for the observed change */
-		if ([_boundAttributes containsObject:keyPath]) {
-			if (![keyPath isEqualToString:@"visibleRect"]) {
+		if (![keyPath isEqualToString:@"visibleRect"]) {
 
-				id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
-				id newValue = [change objectForKey:NSKeyValueChangeNewKey];
+			id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
+			id newValue = [change objectForKey:NSKeyValueChangeNewKey];
 
-				if (!_registeredUndo && ![oldValue isEqual:newValue]) {
+			if (!_registeredUndo && ![oldValue isEqual:newValue]) {
 
-					if ([_compoundUndo valueForKey:keyPath]) {
-						/* Register all the stored undo operations in a single invocation by the undo manager */
-						[[[self undoManager] prepareWithInvocationTarget:self] performUndoWithInfo:_compoundUndo.copy];
+				if ([_compoundUndo valueForKey:keyPath]) {
+					/* Register all the stored undo operations in a single invocation by the undo manager */
+					[[[self undoManager] prepareWithInvocationTarget:self] performUndoWithInfo:_compoundUndo];
 
-						_compoundUndo = nil;
-						_registeredUndo = YES;
+					_compoundUndo = nil;
+					_registeredUndo = YES;
 
-					} else {
-						/* Some undo operations are compound of several observed changes,
-						   thus store this single undo operation for later registration */
-						if (!_compoundUndo)
-							_compoundUndo = [NSMutableDictionary dictionary];
+				} else {
+					/* Some undo operations are compound of several observed changes,
+					 thus store this single undo operation for later registration */
+					if (!_compoundUndo)
+						_compoundUndo = [NSMutableDictionary dictionary];
 
-						[_compoundUndo setObject:@{@"object": object, @"value": oldValue} forKey:keyPath];
-					}
+					[_compoundUndo setObject:@{@"object": object, @"value": oldValue} forKey:keyPath];
 				}
 			}
-		} else {
-			[_boundAttributes addObject:keyPath];
 		}
 
 		/* Update the current selection and editor view's visible rect */
