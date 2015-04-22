@@ -200,6 +200,20 @@ const CGFloat kHandleRadius = 4.5;
 
 @end
 
+#pragma mark SK3DNode
+
+@implementation SK3DNode (Size)
+
+- (void)setSize:(CGSize)size {
+	[self setViewportSize:size];
+}
+
+- (CGSize)size {
+	return [self viewportSize];
+}
+
+@end
+
 #pragma mark EditorView
 
 typedef enum {
