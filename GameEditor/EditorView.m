@@ -214,6 +214,14 @@ const CGFloat kHandleRadius = 4.5;
 	return [self viewportSize];
 }
 
+- (void)setAnchorPoint:(CGPoint)point {
+	[self setValue:[NSValue valueWithPoint:point] forKey:@"_anchorPoint"];
+}
+
+- (CGPoint)anchorPoint {
+	return 	[[self valueForKey:@"_anchorPoint"] pointValue];
+}
+
 @end
 
 #pragma mark EditorView
