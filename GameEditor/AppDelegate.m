@@ -100,10 +100,17 @@
 	[arch setOutputFormat:NSPropertyListBinaryFormat_v1_0];
 #endif
 
-	[arch encodeObject:scene forKey:NSKeyedArchiveRootObjectKey];
+	id object = scene.hasSingleNode ? scene.children.firstObject : scene;
+
+	[arch encodeObject:object forKey:NSKeyedArchiveRootObjectKey];
 	[arch finishEncoding];
 
 	return [data writeToFile:file atomically:YES];
+}
+
+- (BOOL)hasSingleNode {
+	NSRect frame = self.frame;
+	return NSWidth(frame) == 1.0 && NSHeight(frame) == 1.0 && self.children.count == 1;
 }
 
 @end
@@ -787,6 +794,12 @@
 	[_navigatorView expandItem:nil expandChildren:YES];
 
 	/* Set the scale mode to scale to fit the window */
+	if (![scene isKindOfClass:[SKScene class]]) {
+		id node = scene;
+		scene = [[SKScene alloc] init];
+		[scene addChild:node];
+	}
+
 	scene.scaleMode = SKSceneScaleModeAspectFit;
 
 	[self.skView presentScene:scene];
