@@ -133,6 +133,8 @@ children = _childrenNavigationNodes;
 		return [NSImage imageNamed:@"SKLabelNode"];
 	} else if ([_node isKindOfClass:[SKFieldNode class]]) {
 		return [NSImage imageNamed:@"SKFieldNode"];
+	} else if ([_node isKindOfClass:[SK3DNode class]]) {
+		return [NSImage imageNamed:@"SK3DNode"];
 	} else {
 		return [NSImage imageNamed:@"SKNode"];
 	}
