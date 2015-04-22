@@ -27,6 +27,30 @@
 #import "AttributesView.h"
 #import <SceneKit/SceneKit.h>
 
+#if 1// JavaScript
+#import <JavaScriptCore/JavaScriptCore.h>
+
+@protocol JSSpriteNodeExport <JSExport>
++ (instancetype)spriteNodeWithImageNamed:(NSString *)name;
+@end
+
+@interface SKSpriteNode (JS) <JSSpriteNodeExport>
+@end
+
+@implementation SKSpriteNode (JS)
+@end
+
+@protocol JSNodeExport <JSExport>
+- (void)addChild:(SKNode *)node;
+@end
+
+@interface SKNode (JS) <JSNodeExport>
+@end
+
+@implementation SKNode (JS)
+@end
+#endif
+
 #pragma mark Main Window
 
 @interface Window : NSWindow
@@ -812,6 +836,20 @@
 }
 
 - (void)useScene:(SKScene *)scene {
+
+#if 1// JavaScript
+	JSVirtualMachine * vm = [[JSVirtualMachine alloc] init];
+	JSContext * ctx = [[JSContext alloc] initWithVirtualMachine:vm];
+
+	ctx[@"SKSpriteNode"] = [SKSpriteNode class];
+	ctx[@"scene"] = scene;
+
+	[ctx evaluateScript:
+	 @"var obj = SKSpriteNode.spriteNodeWithImageNamed('Spaceship');"
+	 @"scene.addChild(obj);"
+	 ];
+#endif
+
 	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
 	[_navigatorView expandItem:nil expandChildren:YES];
 
