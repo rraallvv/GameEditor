@@ -14,6 +14,7 @@
 		E4220B2E1ACFF92B00753375 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2C1ACFF92B00753375 /* spark.png */; };
 		E460AB931ACDC9B900859EA2 /* NavigatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E460AB921ACDC9B900859EA2 /* NavigatorView.m */; };
 		E474192F1AD84EDC00061932 /* NewGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E474192E1AD84EDC00061932 /* NewGameScene.sks */; };
+		E48286631AE7D74F00C51F8D /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = E48286621AE7D74F00C51F8D /* art.scnassets */; };
 		E4ABDB4F1AB3933900AAE82E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */; };
 		E4ABDB511AB3933900AAE82E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB501AB3933900AAE82E /* main.m */; };
 		E4ABDB561AB3933900AAE82E /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4ABDB551AB3933900AAE82E /* GameScene.sks */; };
@@ -49,6 +50,7 @@
 		E460AB911ACDC9B900859EA2 /* NavigatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigatorView.h; sourceTree = "<group>"; };
 		E460AB921ACDC9B900859EA2 /* NavigatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigatorView.m; sourceTree = "<group>"; };
 		E474192E1AD84EDC00061932 /* NewGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = NewGameScene.sks; sourceTree = "<group>"; };
+		E48286621AE7D74F00C51F8D /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		E4ABDB481AB3933900AAE82E /* GameEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4ABDB4C1AB3933900AAE82E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4ABDB4D1AB3933900AAE82E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				E4BB58AA1ABB4D4B0021A467 /* Spaceship.png */,
 				E4BB58AF1ABB659C0021A467 /* SpaceshipTest.png */,
 				E4ABDB571AB3933900AAE82E /* Images.xcassets */,
+				E48286621AE7D74F00C51F8D /* art.scnassets */,
 				E4ABDB4B1AB3933900AAE82E /* Supporting Files */,
 			);
 			path = GameEditor;
@@ -277,6 +280,7 @@
 				E4ABDB5B1AB3933900AAE82E /* MainMenu.xib in Resources */,
 				E4220B2E1ACFF92B00753375 /* spark.png in Resources */,
 				E40813921AC3C45300F54824 /* ValueEditors.xib in Resources */,
+				E48286631AE7D74F00C51F8D /* art.scnassets in Resources */,
 				E474192F1AD84EDC00061932 /* NewGameScene.sks in Resources */,
 				E4BB58B01ABB659C0021A467 /* SpaceshipTest.png in Resources */,
 			);

@@ -25,6 +25,7 @@
 
 #import "AppDelegate.h"
 #import "AttributesView.h"
+#import <SceneKit/SceneKit.h>
 
 #pragma mark Main Window
 
@@ -764,6 +765,15 @@
 
 	SKPhysicsBody *borderBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
 	self.physicsBody = borderBody;
+
+	/* Add a SceneKit scene */
+	
+	CGPoint center = CGPointMake(CGRectGetMidX(scene.frame),CGRectGetMidY(scene.frame));
+	SCNScene *spaceShip = [SCNScene sceneNamed:@"art.scnassets/ship.dae"];
+	SK3DNode *spaceShipNode = [SK3DNode nodeWithViewportSize:CGSizeMake(200, 200)];
+	spaceShipNode.scnScene = spaceShip;
+	spaceShipNode.position = center;
+	[scene addChild:spaceShipNode];
 #endif
 
 	[self advanceEmittersInNode:self];
