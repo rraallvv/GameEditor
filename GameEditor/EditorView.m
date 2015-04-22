@@ -102,10 +102,12 @@ const CGFloat kHandleRadius = 4.5;
 
 #pragma mark SKShapeNode
 
+#if 0// show the size and anchorPoint attributes for the class SKShapeNode in the attributes inspector
 @interface SKShapeNode (SizeAndAnchorPoint)
 @property (nonatomic) CGSize size;
 @property (nonatomic) CGPoint anchorPoint;
 @end
+#endif
 
 @implementation SKShapeNode (SizeAndAnchorPoint)
 
