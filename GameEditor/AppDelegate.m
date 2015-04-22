@@ -58,9 +58,26 @@
 	//file = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
 
 	/* Unarchive the file to an SKScene object */
+#if 0// convert scene data to binary before passing it to the unarchiver
+	NSData *plistData = [NSData dataWithContentsOfFile:file];
+	NSPropertyListFormat format;
+	NSError *error;
+
+	id plist = [NSPropertyListSerialization propertyListWithData:plistData
+														 options:NSPropertyListImmutable
+														  format:&format
+														   error:&error];
+
+	NSData *data = [NSPropertyListSerialization dataWithPropertyList:plist
+															  format:NSPropertyListBinaryFormat_v1_0
+															 options:0
+															   error:&error];
+#else
 	NSData *data = [NSData dataWithContentsOfFile:file
 										  options:NSDataReadingMappedIfSafe
 											error:nil];
+#endif
+
 	NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
 	//[arch setClass:self forClassName:@"GameScene"];
 	SKScene *scene = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
@@ -583,21 +600,7 @@
 - (IBAction)newDocument:(id)sender {
 	/* Create a new scene with the default size */
 	SKScene *scene = [SKScene sceneWithSize:CGSizeMake(1024.0, 768.0)];
-
-	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
-	[_navigatorView expandItem:nil expandChildren:YES];
-
-	/* Set the scale mode to scale to fit the window */
-	scene.scaleMode = SKSceneScaleModeAspectFit;
-
-	[self.skView presentScene:scene];
-
-	_editorView.scene = scene;
-
-	[_editorView updateVisibleRect];
-
-	[self performSelector:@selector(updateSelectionWithNode:) withObject:scene afterDelay:0.5];
-
+	[self useScene:scene];
 	_currentFilename = nil;
 }
 
@@ -654,16 +657,7 @@
 }
 
 - (IBAction)performClose:(id)sender {
-	[_navigatorTreeController setContent:nil];
-
-	[self.skView presentScene:nil];
-
-	_editorView.scene = nil;
-
-	//[_editorView updateVisibleRect];
-
-	[self performSelector:@selector(updateSelectionWithNode:) withObject:nil afterDelay:0.5];
-
+	[self removeScene];
 	_currentFilename = nil;
 }
 
@@ -699,19 +693,7 @@
 		return NO;
 	}
 
-	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
-	[_navigatorView expandItem:nil expandChildren:YES];
-
-	/* Set the scale mode to scale to fit the window */
-	scene.scaleMode = SKSceneScaleModeAspectFit;
-
-	[self.skView presentScene:scene];
-
-	_editorView.scene = scene;
-
-	[_editorView updateVisibleRect];
-
-	[self performSelector:@selector(updateSelectionWithNode:) withObject:scene afterDelay:0.5];
+	[self useScene:scene];
 
 	/* Add the file to the 'Open Recent' file menu */
 	[self addRecentDocument:filename];
@@ -790,6 +772,30 @@
 	for (id child in [node children]) {
 		[self advanceEmittersInNode:child];
 	}
+}
+
+- (void)removeScene {
+	[_attributesTreeController setContent:nil];
+	[_navigatorTreeController setContent:nil];
+	_editorView.scene = nil;
+	_editorView.needsDisplay = YES;
+	[self.skView presentScene:nil];
+}
+
+- (void)useScene:(SKScene *)scene {
+	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
+	[_navigatorView expandItem:nil expandChildren:YES];
+
+	/* Set the scale mode to scale to fit the window */
+	scene.scaleMode = SKSceneScaleModeAspectFit;
+
+	[self.skView presentScene:scene];
+
+	_editorView.scene = scene;
+
+	[_editorView updateVisibleRect];
+
+	[self performSelector:@selector(updateSelectionWithNode:) withObject:scene afterDelay:0.5];
 }
 
 @end

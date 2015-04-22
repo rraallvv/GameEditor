@@ -37,9 +37,12 @@ name = _name,
 children = _childrenNavigationNodes;
 
 + (instancetype)navigationNodeWithNode:(id)node {
-	NavigationNode *navigationNode = [[NavigationNode alloc] init];
-	navigationNode.node = node;
-	return navigationNode;
+	if (node) {
+		NavigationNode *navigationNode = [[NavigationNode alloc] init];
+		navigationNode.node = node;
+		return navigationNode;
+	}
+	return nil;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
