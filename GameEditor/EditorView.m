@@ -277,7 +277,8 @@ anchorPoint = _anchorPoint;
 		for (int i = 0; i < 8; ++i) {
 			[_selectionPath stroke];
 		}
-	} else if (_node && _node != _scene) {
+	}
+	if (_node && _node != _scene) {
 		[self drawHandles];
 	}
 }
