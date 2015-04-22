@@ -52,6 +52,18 @@
 
 #pragma mark Scene save/load
 
+/* _SCNScene workarounds the error sometimes thrown when unarchiving an SCNScene contained within an SK3DNode */
+@interface _SCNScene : SCNScene
+@end
+
+@implementation _SCNScene
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+	return (id)[[SCNScene alloc] initWithCoder:aDecoder];
+}
+
+@end
+
 @implementation SKScene (Archiving)
 
 + (instancetype)unarchiveFromFile:(NSString *)file {
@@ -80,7 +92,7 @@
 #endif
 
 	NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-	//[arch setClass:self forClassName:@"GameScene"];
+	[arch setClass:[_SCNScene class] forClassName:@"SCNScene"];
 	SKScene *scene = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
 	[arch finishDecoding];
 
@@ -159,7 +171,7 @@
 
 	/* Populate the 'Open Recent' file menu from the User default settings */
 	NSMutableArray *recentDocuments = [[NSUserDefaults standardUserDefaults] valueForKey:@"recentDocuments"];
-	for (NSString *filename in recentDocuments) {
+	for (NSString *filename in [recentDocuments reverseObjectEnumerator]) {
 		[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
 	}
 }
