@@ -201,12 +201,10 @@
 		[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
 	}
 
-	[_libraryArrayController setContent:@[
-										  @{@"label": @"label 1",
-											@"image": [NSImage imageNamed:NSImageNameInfo]}.mutableCopy,
-										  @{@"label": @"long label, lond label, lond label, lond label, lond label, lond label, lond label, lond label, lond label",
-											@"image": [NSImage imageNamed:NSImageNameInfo]}.mutableCopy
-										  ].mutableCopy];
+	for (NSInteger i = 0; i < 15; ++i) {
+		[_libraryArrayController addObject:@{@"label": [NSString stringWithFormat:@"label %ld", i],
+											 @"image": [NSImage imageNamed:NSImageNameInfo]}];
+	}
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
