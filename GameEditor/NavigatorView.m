@@ -52,35 +52,6 @@
 	[_actualDelegate navigatorView:self didSelectObject:selectedObject];
 }
 
-- (void)setDelegate:(id<NSOutlineViewDelegate>)anObject {
-	[super setDelegate:nil];
-	_actualDelegate = anObject;
-	[super setDelegate:self];
-}
-
-- (id)delegate {
-	return self;
-}
-
-- (void)setDataSource:(id<NSOutlineViewDataSource>)aSource {
-	[super setDataSource:nil];
-	_actualDataSource = aSource;
-	[super setDataSource:self];
-}
-
-- (id<NSOutlineViewDataSource>)dataSource {
-	return self;
-}
-
-- (id)forwardingTargetForSelector:(SEL)aSelector {
-	if ([_actualDelegate respondsToSelector:aSelector]) { return _actualDelegate; }
-	return [super forwardingTargetForSelector:aSelector];
-}
-
-- (BOOL)respondsToSelector:(SEL)aSelector {
-	return [super respondsToSelector:aSelector] || [_actualDelegate respondsToSelector:aSelector];
-}
-
 #pragma mark Drag & Drop
 
 - (NSMutableArray *)expansionInfoWithNode:(NSTreeNode *)aNode {
@@ -186,6 +157,37 @@
 
 	/* Select the node at it's new location */
 	[self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:selectedNode]] byExtendingSelection:NO];
+}
+
+#pragma mark Delegate methods interception
+
+- (void)setDelegate:(id<NSOutlineViewDelegate>)anObject {
+	[super setDelegate:nil];
+	_actualDelegate = anObject;
+	[super setDelegate:self];
+}
+
+- (id)delegate {
+	return self;
+}
+
+- (void)setDataSource:(id<NSOutlineViewDataSource>)aSource {
+	[super setDataSource:nil];
+	_actualDataSource = aSource;
+	[super setDataSource:self];
+}
+
+- (id<NSOutlineViewDataSource>)dataSource {
+	return self;
+}
+
+- (id)forwardingTargetForSelector:(SEL)aSelector {
+	if ([_actualDelegate respondsToSelector:aSelector]) { return _actualDelegate; }
+	return [super forwardingTargetForSelector:aSelector];
+}
+
+- (BOOL)respondsToSelector:(SEL)aSelector {
+	return [super respondsToSelector:aSelector] || [_actualDelegate respondsToSelector:aSelector];
 }
 
 @end

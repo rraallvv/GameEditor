@@ -332,6 +332,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 
 @implementation AttributesView {
 	__weak id _actualDelegate;
+	__weak id _actualDataSource;
 	NSMutableDictionary *_prefferedSizes;
 	NSMutableArray *_editorIdentifiers;
 }
@@ -390,25 +391,6 @@ static const CGFloat kIndentationPerLevel = 0.0;
 
 - (NSTableRowView *)outlineView:(NSOutlineView *)outlineView rowViewForItem:(id)item {
 	return [[AttributesTableRowView alloc] init];
-}
-
-- (void)setDelegate:(id)newDelegate {
-	[super setDelegate:nil];
-	_actualDelegate = newDelegate;
-	[super setDelegate:self];
-}
-
-- (id)delegate {
-	return self;
-}
-
-- (id)forwardingTargetForSelector:(SEL)aSelector {
-	if ([_actualDelegate respondsToSelector:aSelector]) { return _actualDelegate; }
-	return [super forwardingTargetForSelector:aSelector];
-}
-
-- (BOOL)respondsToSelector:(SEL)aSelector {
-	return [super respondsToSelector:aSelector] || [_actualDelegate respondsToSelector:aSelector];
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
@@ -475,6 +457,37 @@ static const CGFloat kIndentationPerLevel = 0.0;
 	NSInteger row = [self rowForItem:notification.userInfo[@"NSObject"]];
 	NSView *rowView = [self rowViewAtRow:row makeIfNecessary:NO];
 	[rowView setNeedsDisplay:YES];
+}
+
+#pragma mark Delegate methods interception
+
+- (void)setDelegate:(id<NSOutlineViewDelegate>)anObject {
+	[super setDelegate:nil];
+	_actualDelegate = anObject;
+	[super setDelegate:self];
+}
+
+- (id)delegate {
+	return self;
+}
+
+- (void)setDataSource:(id<NSOutlineViewDataSource>)aSource {
+	[super setDataSource:nil];
+	_actualDataSource = aSource;
+	[super setDataSource:self];
+}
+
+- (id<NSOutlineViewDataSource>)dataSource {
+	return self;
+}
+
+- (id)forwardingTargetForSelector:(SEL)aSelector {
+	if ([_actualDelegate respondsToSelector:aSelector]) { return _actualDelegate; }
+	return [super forwardingTargetForSelector:aSelector];
+}
+
+- (BOOL)respondsToSelector:(SEL)aSelector {
+	return [super respondsToSelector:aSelector] || [_actualDelegate respondsToSelector:aSelector];
 }
 
 @end

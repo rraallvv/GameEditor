@@ -25,6 +25,7 @@
 
 #import "AppDelegate.h"
 #import "AttributesView.h"
+#import "LibraryView.h"
 #import <SceneKit/SceneKit.h>
 
 #if 1// JavaScript
@@ -156,12 +157,12 @@
 
 @implementation AppDelegate {
 	IBOutlet EditorView *_editorView;
+	IBOutlet AttributesView *_attributesView;
+	IBOutlet NavigatorView *_navigatorView;
+	IBOutlet LibraryView *_libraryCollectionView;
 	IBOutlet NSTreeController *_attributesTreeController;
 	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet NSArrayController *_libraryArrayController;
-	IBOutlet AttributesView *_attributesView;
-	IBOutlet NavigatorView *_navigatorView;
-	IBOutlet NSCollectionView *_libraryCollectionView;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
 }
@@ -201,6 +202,7 @@
 		[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
 	}
 
+	/* Populate the library */
 	for (NSInteger i = 1; i <= 4; ++i) {
 		[_libraryArrayController addObject:@{@"label": [NSString stringWithFormat:@"Label %ld", i],
 											 @"image": [NSImage imageNamed:NSImageNameInfo]}];
