@@ -201,8 +201,10 @@
 		[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
 	}
 
-	for (NSInteger i = 0; i < 15; ++i) {
-		[_libraryArrayController addObject:@{@"label": [NSString stringWithFormat:@"label %ld", i],
+	for (NSInteger i = 1; i <= 4; ++i) {
+		[_libraryArrayController addObject:@{@"label": [NSString stringWithFormat:@"Label %ld", i],
+											 @"image": [NSImage imageNamed:NSImageNameInfo]}];
+		[_libraryArrayController addObject:@{@"label": [NSString stringWithFormat:@"Item %ld", i],
 											 @"image": [NSImage imageNamed:NSImageNameInfo]}];
 	}
 }

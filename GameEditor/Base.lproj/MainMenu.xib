@@ -715,7 +715,7 @@
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0kB-Zw-fjX">
-                                                        <rect key="frame" x="0.0" y="0.0" width="260" height="200"/>
+                                                        <rect key="frame" x="0.0" y="47" width="260" height="153"/>
                                                         <clipView key="contentView" id="dys-lA-lM4">
                                                             <rect key="frame" x="1" y="1" width="248" height="158"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -741,13 +741,31 @@
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                     </scrollView>
+                                                    <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JOl-ek-8VA">
+                                                        <rect key="frame" x="20" y="20" width="220" height="19"/>
+                                                        <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" bezelStyle="round" id="eab-SF-2Gw">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            <connections>
+                                                                <binding destination="ybe-5J-ot9" name="predicate" keyPath="filterPredicate" id="h9s-5O-dBa">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSPredicateFormat">label contains[c] $value</string>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
+                                                        </searchFieldCell>
+                                                    </searchField>
                                                 </subviews>
                                                 <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="JOl-ek-8VA" secondAttribute="trailing" constant="20" id="3qj-15-yBc"/>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="74F-PN-nRU"/>
-                                                    <constraint firstAttribute="centerY" secondItem="0kB-Zw-fjX" secondAttribute="centerY" id="HUM-i5-tIK"/>
-                                                    <constraint firstAttribute="centerX" secondItem="0kB-Zw-fjX" secondAttribute="centerX" id="JHT-PC-K6J"/>
+                                                    <constraint firstAttribute="trailing" secondItem="0kB-Zw-fjX" secondAttribute="trailing" id="HfU-xc-AR9"/>
+                                                    <constraint firstItem="JOl-ek-8VA" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" constant="20" id="UBD-XY-w5i"/>
                                                     <constraint firstItem="0kB-Zw-fjX" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="Z71-P9-xcV"/>
+                                                    <constraint firstAttribute="bottom" secondItem="JOl-ek-8VA" secondAttribute="bottom" constant="20" id="Z9V-g6-Kbo"/>
                                                     <constraint firstItem="0kB-Zw-fjX" firstAttribute="top" secondItem="REE-3d-rnp" secondAttribute="top" id="kJp-9I-0eZ"/>
+                                                    <constraint firstItem="JOl-ek-8VA" firstAttribute="top" secondItem="0kB-Zw-fjX" secondAttribute="bottom" constant="8" id="nBC-cp-lP5"/>
                                                 </constraints>
                                             </customView>
                                         </subviews>
