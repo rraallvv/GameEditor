@@ -158,8 +158,10 @@
 	IBOutlet EditorView *_editorView;
 	IBOutlet NSTreeController *_attributesTreeController;
 	IBOutlet NSTreeController *_navigatorTreeController;
+	IBOutlet NSArrayController *_libraryArrayController;
 	IBOutlet AttributesView *_attributesView;
 	IBOutlet NavigatorView *_navigatorView;
+	IBOutlet NSCollectionView *_libraryCollectionView;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
 }
@@ -198,6 +200,13 @@
 	for (NSString *filename in [recentDocuments reverseObjectEnumerator]) {
 		[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
 	}
+
+	[_libraryArrayController setContent:@[
+										  @{@"label": @"label 1",
+											@"image": [NSImage imageNamed:NSImageNameInfo]}.mutableCopy,
+										  @{@"label": @"long label, lond label, lond label, lond label, lond label, lond label, lond label, lond label, lond label",
+											@"image": [NSImage imageNamed:NSImageNameInfo]}.mutableCopy
+										  ].mutableCopy];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {

@@ -713,8 +713,41 @@
                                             <customView id="REE-3d-rnp">
                                                 <rect key="frame" x="0.0" y="400" width="260" height="200"/>
                                                 <autoresizingMask key="autoresizingMask"/>
+                                                <subviews>
+                                                    <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0kB-Zw-fjX">
+                                                        <rect key="frame" x="0.0" y="0.0" width="260" height="200"/>
+                                                        <clipView key="contentView" id="dys-lA-lM4">
+                                                            <rect key="frame" x="1" y="1" width="248" height="158"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <collectionView selectable="YES" id="53q-Pc-ZVo">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="248" height="158"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    <connections>
+                                                                        <binding destination="ybe-5J-ot9" name="content" keyPath="arrangedObjects" id="H3h-I0-rUf"/>
+                                                                        <binding destination="ybe-5J-ot9" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="H3h-I0-rUf" id="wDL-UO-kHL"/>
+                                                                        <outlet property="itemPrototype" destination="vBT-rm-Cna" id="ODh-Ln-Ewn"/>
+                                                                    </connections>
+                                                                </collectionView>
+                                                            </subviews>
+                                                        </clipView>
+                                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="d9H-JJ-8JK">
+                                                            <rect key="frame" x="1" y="144" width="233" height="15"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                        </scroller>
+                                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="WH5-rM-EA1">
+                                                            <rect key="frame" x="234" y="1" width="15" height="143"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                        </scroller>
+                                                    </scrollView>
+                                                </subviews>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="74F-PN-nRU"/>
+                                                    <constraint firstAttribute="centerY" secondItem="0kB-Zw-fjX" secondAttribute="centerY" id="HUM-i5-tIK"/>
+                                                    <constraint firstAttribute="centerX" secondItem="0kB-Zw-fjX" secondAttribute="centerX" id="JHT-PC-K6J"/>
+                                                    <constraint firstItem="0kB-Zw-fjX" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="Z71-P9-xcV"/>
+                                                    <constraint firstItem="0kB-Zw-fjX" firstAttribute="top" secondItem="REE-3d-rnp" secondAttribute="top" id="kJp-9I-0eZ"/>
                                                 </constraints>
                                             </customView>
                                         </subviews>
@@ -769,6 +802,8 @@
                 <outlet property="_attributesTreeController" destination="IEK-xe-ugr" id="TYh-UN-I2P"/>
                 <outlet property="_attributesView" destination="zW2-BO-taF" id="19t-eI-oFU"/>
                 <outlet property="_editorView" destination="suo-YO-fqM" id="D5W-Hu-pTw"/>
+                <outlet property="_libraryArrayController" destination="ybe-5J-ot9" id="iwT-3F-n1L"/>
+                <outlet property="_libraryCollectionView" destination="53q-Pc-ZVo" id="99Y-Vf-Sy2"/>
                 <outlet property="_navigatorTreeController" destination="FfK-Wg-7Xj" id="bBG-5I-i7L"/>
                 <outlet property="_navigatorView" destination="Y4L-tX-zfk" id="Gju-ZL-6rD"/>
                 <outlet property="skView" destination="BAm-0B-vb9" id="MCo-T6-F5E"/>
@@ -778,6 +813,50 @@
         <customObject id="420" customClass="NSFontManager"/>
         <treeController childrenKeyPath="children" leafKeyPath="isLeaf" id="IEK-xe-ugr" userLabel="Attributes Tree Controller"/>
         <treeController childrenKeyPath="children" leafKeyPath="isLeaf" id="FfK-Wg-7Xj" userLabel="Navigator Tree Controller"/>
+        <arrayController id="ybe-5J-ot9" userLabel="Library Array Controller"/>
+        <collectionViewItem id="vBT-rm-Cna">
+            <connections>
+                <outlet property="view" destination="9Nu-LJ-3Af" id="PvT-kj-tt6"/>
+            </connections>
+        </collectionViewItem>
+        <box autoresizesSubviews="NO" transparent="YES" boxType="custom" borderType="none" id="9Nu-LJ-3Af">
+            <rect key="frame" x="0.0" y="1" width="171" height="61"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <view key="contentView">
+                <rect key="frame" x="0.0" y="0.0" width="171" height="61"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <subviews>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QEY-m8-IvW">
+                        <rect key="frame" x="16" y="6" width="48" height="48"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="Mtg-eZ-xms"/>
+                        <connections>
+                            <binding destination="vBT-rm-Cna" name="value" keyPath="representedObject.image" id="htd-km-Vzd"/>
+                        </connections>
+                    </imageView>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="st4-zo-9L7">
+                        <rect key="frame" x="70" y="13" width="87" height="34"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Multiline Label" id="N02-oI-rIY">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="vBT-rm-Cna" name="value" keyPath="representedObject.label" id="ejy-OS-KFg"/>
+                        </connections>
+                    </textField>
+                </subviews>
+            </view>
+            <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+            <color key="fillColor" name="selectedControlColor" catalog="System" colorSpace="catalog"/>
+            <connections>
+                <binding destination="vBT-rm-Cna" name="transparent" keyPath="selected" id="5of-06-PtB">
+                    <dictionary key="options">
+                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                    </dictionary>
+                </binding>
+            </connections>
+            <point key="canvasLocation" x="488.5" y="866.5"/>
+        </box>
     </objects>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>
