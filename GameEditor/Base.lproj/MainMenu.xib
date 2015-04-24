@@ -837,18 +837,18 @@
                 <outlet property="view" destination="9Nu-LJ-3Af" id="PvT-kj-tt6"/>
             </connections>
         </collectionViewItem>
-        <box autoresizesSubviews="NO" transparent="YES" boxType="custom" borderType="none" id="9Nu-LJ-3Af" customClass="LibraryItem">
-            <rect key="frame" x="0.0" y="0.0" width="171" height="64"/>
+        <box autoresizesSubviews="NO" transparent="YES" boxType="custom" borderType="line" id="9Nu-LJ-3Af" customClass="LibraryItem">
+            <rect key="frame" x="0.0" y="0.0" width="171" height="63"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <view key="contentView">
-                <rect key="frame" x="0.0" y="0.0" width="171" height="64"/>
+                <rect key="frame" x="1" y="1" width="169" height="61"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QEY-m8-IvW">
-                        <rect key="frame" x="56" y="2" width="59" height="59"/>
+                        <rect key="frame" x="56" y="3" width="56" height="56"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="53" id="9Vy-Vu-9gl"/>
-                            <constraint firstAttribute="width" constant="53" id="S94-gd-Urx"/>
+                            <constraint firstAttribute="height" constant="50" id="9Vy-Vu-9gl"/>
+                            <constraint firstAttribute="width" constant="50" id="S94-gd-Urx"/>
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="photo" id="Mtg-eZ-xms"/>
                         <connections>
@@ -856,7 +856,7 @@
                         </connections>
                     </imageView>
                     <textField hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="st4-zo-9L7">
-                        <rect key="frame" x="70" y="3" width="103" height="61"/>
+                        <rect key="frame" x="70" y="0.0" width="103" height="61"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Multiline Label" id="N02-oI-rIY">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -870,7 +870,7 @@
             </view>
             <constraints>
                 <constraint firstAttribute="centerY" secondItem="QEY-m8-IvW" secondAttribute="centerY" id="BnI-YX-pNJ"/>
-                <constraint firstAttribute="centerX" secondItem="QEY-m8-IvW" secondAttribute="centerX" id="Q9M-ij-Ue7"/>
+                <constraint firstAttribute="centerX" secondItem="QEY-m8-IvW" secondAttribute="centerX" constant="1" id="Q9M-ij-Ue7"/>
             </constraints>
             <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
             <color key="fillColor" name="selectedControlColor" catalog="System" colorSpace="catalog"/>

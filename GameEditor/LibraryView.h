@@ -26,5 +26,5 @@
 #import <Cocoa/Cocoa.h>
 
 @interface LibraryView : NSCollectionView
-
+- (CGSize)itemSize;
 @end

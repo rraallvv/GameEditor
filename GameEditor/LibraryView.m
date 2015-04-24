@@ -28,21 +28,66 @@
 #pragma mark LibraryItem
 
 @interface LibraryItem : NSBox
-
 @end
 
 @implementation LibraryItem
+
+- (void)drawRect:(NSRect)dirtyRect {
+	LibraryView *libraryView = (LibraryView *)self.superview;
+	while (libraryView != nil && ![libraryView isKindOfClass:[LibraryView class]]) {
+		libraryView = (LibraryView *)[libraryView superview];
+	}
+
+	if (libraryView) {
+		CGSize size = libraryView.itemSize;
+
+		NSBezierPath *borderPath = [NSBezierPath bezierPath];
+		[borderPath moveToPoint:CGPointMake(0.5, 0.5)];
+		[borderPath lineToPoint:CGPointMake(size.width - 0.5, 0.5)];
+		[borderPath lineToPoint:CGPointMake(size.width - 0.5, size.height + 0.5)];
+
+		[[NSColor gridColor] set];
+		[borderPath stroke];
+
+		if (!self.transparent) {
+			CGRect rect;
+			const CGFloat border = 2.0;
+
+			rect.origin = CGPointMake(border, border + 1.0);
+			rect.size = CGSizeMake(size.width - 2.0 * border - 1.0, size.height - 2.0 * border - 1.0);
+
+			NSBezierPath *selectionPath = [NSBezierPath bezierPath];
+			[selectionPath moveToPoint:CGPointMake(NSMinX(rect) - 0.5, NSMinY(rect) - 0.5)];
+			[selectionPath lineToPoint:CGPointMake(NSMaxX(rect) + 0.5, NSMinY(rect) - 0.5)];
+			[selectionPath lineToPoint:CGPointMake(NSMaxX(rect) + 0.5, NSMaxY(rect) + 0.5)];
+			[selectionPath lineToPoint:CGPointMake(NSMinX(rect) - 0.5, NSMaxY(rect) + 0.5)];
+			[selectionPath closePath];
+
+			if (libraryView.firstResponder) {
+				[[NSColor alternateSelectedControlColor] setStroke];
+				[[NSColor selectedControlColor] setFill];
+			} else {
+				[[NSColor gridColor] setStroke];
+				[[NSColor controlColor] setFill];
+			}
+
+			[selectionPath fill];
+			[selectionPath stroke];
+		}
+	}
+}
 
 @end
 
 #pragma mark LibraryView
 
 @interface LibraryView () <NSCollectionViewDelegate>
-
 @end
 
 @implementation LibraryView {
 	__weak id _actualDelegate;
+	CGSize _itemSize;
+	BOOL _firstResponder;
 }
 
 - (void)awakeFromNib {
@@ -56,7 +101,33 @@
 - (void)setFrame:(NSRect)frame {
 	CGFloat width = self.superview.frame.size.width;
 	width = width / (int)(width / 64.0);
-	self.minItemSize = self.maxItemSize = CGSizeMake(width, 64.0);
+	_itemSize = CGSizeMake(width, 64);
+	self.minItemSize = self.maxItemSize = _itemSize;
+}
+
+- (CGSize)itemSize {
+	return _itemSize;
+}
+
+/*
+ Overriding isFirstResponder and keeping track of wheter the view has become
+ first responder or not seems to work better, otherwise the collection view's
+ selection is not grayed out properly when it resigns first responder
+ */
+
+- (BOOL)isFirstResponder {
+	return _firstResponder;
+}
+
+- (BOOL)becomeFirstResponder {
+	_firstResponder = YES;
+	return YES;
+}
+
+- (BOOL)resignFirstResponder {
+	_firstResponder = NO;
+	[self setNeedsDisplay:YES];
+	return YES;
 }
 
 #pragma mark Delegate methods interception
