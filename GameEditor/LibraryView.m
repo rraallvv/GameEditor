@@ -35,10 +35,12 @@
 	__weak id _actualDelegate;
 }
 
+- (void)awakeFromNib {
+	self.maxNumberOfColumns = self.maxNumberOfRows = 0;
+}
+
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
-    
-    // Drawing code here.
 }
 
 #pragma mark Delegate methods interception
@@ -60,6 +62,12 @@
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
 	return [super respondsToSelector:aSelector] || [_actualDelegate respondsToSelector:aSelector];
+}
+
+- (void)setFrame:(NSRect)frame {
+	CGFloat width = self.superview.frame.size.width;
+	width = width / (int)(width / 64.0);
+	self.minItemSize = self.maxItemSize = CGSizeMake(width, 64.0);
 }
 
 @end
