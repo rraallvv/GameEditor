@@ -25,6 +25,16 @@
 
 #import "LibraryView.h"
 
+#pragma mark LibraryItem
+
+@interface LibraryItem : NSBox
+
+@end
+
+@implementation LibraryItem
+
+@end
+
 #pragma mark LibraryView
 
 @interface LibraryView () <NSCollectionViewDelegate>
@@ -41,6 +51,12 @@
 
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
+}
+
+- (void)setFrame:(NSRect)frame {
+	CGFloat width = self.superview.frame.size.width;
+	width = width / (int)(width / 64.0);
+	self.minItemSize = self.maxItemSize = CGSizeMake(width, 64.0);
 }
 
 #pragma mark Delegate methods interception
@@ -62,12 +78,6 @@
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
 	return [super respondsToSelector:aSelector] || [_actualDelegate respondsToSelector:aSelector];
-}
-
-- (void)setFrame:(NSRect)frame {
-	CGFloat width = self.superview.frame.size.width;
-	width = width / (int)(width / 64.0);
-	self.minItemSize = self.maxItemSize = CGSizeMake(width, 64.0);
 }
 
 @end
