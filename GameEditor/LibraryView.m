@@ -25,6 +25,10 @@
 
 #import "LibraryView.h"
 
+@interface LibraryView () <NSCollectionViewDelegate>
+- (CGSize)itemSize;
+@end
+
 #pragma mark LibraryItem
 
 @interface LibraryItem : NSBox
@@ -81,18 +85,13 @@
 
 #pragma mark LibraryView
 
-@interface LibraryView () <NSCollectionViewDelegate>
-@end
-
 @implementation LibraryView {
 	__weak id _actualDelegate;
 	CGSize _itemSize;
 	BOOL _firstResponder;
 }
 
-- (void)awakeFromNib {
-	self.maxNumberOfColumns = self.maxNumberOfRows = 0;
-}
+@synthesize mode = _mode;
 
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
@@ -100,13 +99,30 @@
 
 - (void)setFrame:(NSRect)frame {
 	CGFloat width = self.superview.frame.size.width;
-	width = width / (int)(width / 64.0);
+	if (_mode == LibraryViewModeIcons) {
+		self.maxNumberOfRows = 0;
+		self.maxNumberOfColumns = 0;
+		width = width / (int)(width / 64.0);
+	} else {
+		self.maxNumberOfRows = 0;
+		self.maxNumberOfColumns = 1;
+	}
 	_itemSize = CGSizeMake(width, 64);
 	self.minItemSize = self.maxItemSize = _itemSize;
 }
 
 - (CGSize)itemSize {
 	return _itemSize;
+}
+
+- (void)setMode:(LibraryViewMode)mode {
+	_mode = mode;
+	/* Force re-layout of subviews */
+	self.frame = self.frame;
+}
+
+- (LibraryViewMode)mode {
+	return _mode;
 }
 
 /*

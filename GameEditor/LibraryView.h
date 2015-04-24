@@ -25,6 +25,11 @@
 
 #import <Cocoa/Cocoa.h>
 
+typedef enum LibraryViewMode {
+	LibraryViewModeList,
+	LibraryViewModeIcons
+} LibraryViewMode;
+
 @interface LibraryView : NSCollectionView
-- (CGSize)itemSize;
+@property (assign) LibraryViewMode mode;
 @end

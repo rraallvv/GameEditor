@@ -327,7 +327,7 @@
 
 static const CGFloat kIndentationPerLevel = 0.0;
 
-@interface AttributesView () <NSOutlineViewDelegate>
+@interface AttributesView () <NSOutlineViewDelegate, NSOutlineViewDataSource>
 @end
 
 @implementation AttributesView {

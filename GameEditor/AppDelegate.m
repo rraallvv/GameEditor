@@ -716,6 +716,12 @@
 	_currentFilename = nil;
 }
 
+#pragma mark Library
+
+- (IBAction)libraryModeAction:(NSButton *)sender {
+	_libraryCollectionView.mode = _libraryCollectionView.mode == LibraryViewModeIcons ? LibraryViewModeList : LibraryViewModeIcons;
+}
+
 #pragma mark Helper methods
 
 - (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray *)nodes {
