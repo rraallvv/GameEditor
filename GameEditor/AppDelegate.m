@@ -204,7 +204,7 @@
 
 	/* Populate the library */
 	for (NSInteger i = 1; i <= 4; ++i) {
-		[_libraryArrayController addObject:@{@"label": [NSString stringWithFormat:@"Label %ld", i],
+		[_libraryArrayController addObject:@{@"label": [NSString stringWithFormat:@"Label %ld - text text text text text text text text text text text text", i],
 											 @"image": [NSImage imageNamed:NSImageNameInfo]}];
 		[_libraryArrayController addObject:@{@"label": [NSString stringWithFormat:@"Item %ld", i],
 											 @"image": [NSImage imageNamed:NSImageNameInfo]}];
