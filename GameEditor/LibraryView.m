@@ -187,6 +187,7 @@
 
 - (BOOL)becomeFirstResponder {
 	_firstResponder = YES;
+	[self setNeedsDisplay:YES];
 	return YES;
 }
 
