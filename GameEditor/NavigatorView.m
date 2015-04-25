@@ -54,29 +54,6 @@
 
 #pragma mark Drag & Drop
 
-- (NSMutableArray *)expansionInfoWithNode:(NSTreeNode *)aNode {
-	NSMutableArray *expansionInfo = [NSMutableArray array];
-	[self getExpandedNodesInfo:expansionInfo forNode:aNode];
-	return expansionInfo;
-}
-
-- (void)getExpandedNodesInfo:(NSMutableArray *)array forNode:(NSTreeNode *)aNode {
-	[array addObject:[NSNumber numberWithBool:[self isItemExpanded:aNode]]];
-	for (NSTreeNode *node in aNode.childNodes) {
-		[self getExpandedNodesInfo:array forNode:node];
-	}
-}
-
-- (void)expandNode:(NSTreeNode *)aNode withInfo:(NSMutableArray *)array {
-	if ([[array firstObject] boolValue]) {
-		[self expandItem:aNode];
-	}
-	[array removeObjectAtIndex:0];
-	for (NSTreeNode *node in aNode.childNodes) {
-		[self expandNode:node withInfo:array];
-	}
-}
-
 - (id <NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item {
 	NSPasteboardItem *pboardItem = [[NSPasteboardItem alloc] init];
 	NSData *pboardData = [NSKeyedArchiver archivedDataWithRootObject:[item indexPath]];
@@ -112,6 +89,31 @@
 		return YES;
 	}
 	return NO;
+}
+
+#pragma mark Drag & Drop helper methods
+
+- (NSMutableArray *)expansionInfoWithNode:(NSTreeNode *)aNode {
+	NSMutableArray *expansionInfo = [NSMutableArray array];
+	[self getExpandedNodesInfo:expansionInfo forNode:aNode];
+	return expansionInfo;
+}
+
+- (void)getExpandedNodesInfo:(NSMutableArray *)array forNode:(NSTreeNode *)aNode {
+	[array addObject:[NSNumber numberWithBool:[self isItemExpanded:aNode]]];
+	for (NSTreeNode *node in aNode.childNodes) {
+		[self getExpandedNodesInfo:array forNode:node];
+	}
+}
+
+- (void)expandNode:(NSTreeNode *)aNode withInfo:(NSMutableArray *)array {
+	if ([[array firstObject] boolValue]) {
+		[self expandItem:aNode];
+	}
+	[array removeObjectAtIndex:0];
+	for (NSTreeNode *node in aNode.childNodes) {
+		[self expandNode:node withInfo:array];
+	}
 }
 
 - (void)moveNodeFromIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
