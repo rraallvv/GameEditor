@@ -721,7 +721,7 @@
 #pragma mark Library
 
 - (IBAction)libraryModeAction:(NSButton *)sender {
-	_libraryCollectionView.mode = _libraryCollectionView.mode == LibraryViewModeIcons ? LibraryViewModeList : LibraryViewModeIcons;
+	_libraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
 #pragma mark Helper methods
