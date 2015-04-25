@@ -74,53 +74,48 @@
 - (CGSize)itemSize;
 @end
 
-@interface LibraryItem : NSBox
+@interface LibraryItemView : NSBox
+@property (assign) NSUInteger index;
+@property (weak) LibraryView *libraryView;
 @end
 
-@implementation LibraryItem
+@implementation LibraryItemView
 
 - (void)drawRect:(NSRect)dirtyRect {
-	LibraryView *libraryView = (LibraryView *)self.superview;
-	while (libraryView != nil && ![libraryView isKindOfClass:[LibraryView class]]) {
-		libraryView = (LibraryView *)[libraryView superview];
-	}
+	CGSize size = self.libraryView.itemSize;
 
-	if (libraryView) {
-		CGSize size = libraryView.itemSize;
+	NSBezierPath *borderPath = [NSBezierPath bezierPath];
+	[borderPath moveToPoint:CGPointMake(0.5, 0.5)];
+	[borderPath lineToPoint:CGPointMake(size.width - 0.5, 0.5)];
+	[borderPath lineToPoint:CGPointMake(size.width - 0.5, size.height + 0.5)];
 
-		NSBezierPath *borderPath = [NSBezierPath bezierPath];
-		[borderPath moveToPoint:CGPointMake(0.5, 0.5)];
-		[borderPath lineToPoint:CGPointMake(size.width - 0.5, 0.5)];
-		[borderPath lineToPoint:CGPointMake(size.width - 0.5, size.height + 0.5)];
+	[[NSColor gridColor] set];
+	[borderPath stroke];
 
-		[[NSColor gridColor] set];
-		[borderPath stroke];
+	if (!self.transparent) {
+		CGRect rect;
+		const CGFloat border = 2.0;
 
-		if (!self.transparent) {
-			CGRect rect;
-			const CGFloat border = 2.0;
+		rect.origin = CGPointMake(border, border + 1.0);
+		rect.size = CGSizeMake(size.width - 2.0 * border - 1.0, size.height - 2.0 * border - 1.0);
 
-			rect.origin = CGPointMake(border, border + 1.0);
-			rect.size = CGSizeMake(size.width - 2.0 * border - 1.0, size.height - 2.0 * border - 1.0);
+		NSBezierPath *selectionPath = [NSBezierPath bezierPath];
+		[selectionPath moveToPoint:CGPointMake(NSMinX(rect) - 0.5, NSMinY(rect) - 0.5)];
+		[selectionPath lineToPoint:CGPointMake(NSMaxX(rect) + 0.5, NSMinY(rect) - 0.5)];
+		[selectionPath lineToPoint:CGPointMake(NSMaxX(rect) + 0.5, NSMaxY(rect) + 0.5)];
+		[selectionPath lineToPoint:CGPointMake(NSMinX(rect) - 0.5, NSMaxY(rect) + 0.5)];
+		[selectionPath closePath];
 
-			NSBezierPath *selectionPath = [NSBezierPath bezierPath];
-			[selectionPath moveToPoint:CGPointMake(NSMinX(rect) - 0.5, NSMinY(rect) - 0.5)];
-			[selectionPath lineToPoint:CGPointMake(NSMaxX(rect) + 0.5, NSMinY(rect) - 0.5)];
-			[selectionPath lineToPoint:CGPointMake(NSMaxX(rect) + 0.5, NSMaxY(rect) + 0.5)];
-			[selectionPath lineToPoint:CGPointMake(NSMinX(rect) - 0.5, NSMaxY(rect) + 0.5)];
-			[selectionPath closePath];
-
-			if (libraryView.firstResponder) {
-				[[NSColor alternateSelectedControlColor] setStroke];
-				[[NSColor selectedControlColor] setFill];
-			} else {
-				[[NSColor gridColor] setStroke];
-				[[NSColor controlColor] setFill];
-			}
-
-			[selectionPath fill];
-			[selectionPath stroke];
+		if (self.libraryView.firstResponder) {
+			[[NSColor alternateSelectedControlColor] setStroke];
+			[[NSColor selectedControlColor] setFill];
+		} else {
+			[[NSColor gridColor] setStroke];
+			[[NSColor controlColor] setFill];
 		}
+
+		[selectionPath fill];
+		[selectionPath stroke];
 	}
 }
 
@@ -173,6 +168,14 @@
 
 - (LibraryViewMode)mode {
 	return _mode;
+}
+
+- (NSCollectionViewItem *)newItemForRepresentedObject:(id)object {
+	NSCollectionViewItem *item = [super newItemForRepresentedObject:object];
+	LibraryItemView *itemView = (LibraryItemView *)item.view;
+	itemView.libraryView = self;
+	itemView.index = [self.content count] - 1;
+	return item;
 }
 
 /*

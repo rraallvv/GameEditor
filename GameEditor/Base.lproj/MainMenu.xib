@@ -848,7 +848,7 @@
                 <outlet property="view" destination="9Nu-LJ-3Af" id="PvT-kj-tt6"/>
             </connections>
         </collectionViewItem>
-        <box autoresizesSubviews="NO" transparent="YES" boxType="custom" borderType="line" id="9Nu-LJ-3Af" customClass="LibraryItem">
+        <box autoresizesSubviews="NO" transparent="YES" boxType="custom" borderType="line" id="9Nu-LJ-3Af" customClass="LibraryItemView">
             <rect key="frame" x="0.0" y="0.0" width="171" height="63"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <view key="contentView">
