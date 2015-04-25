@@ -825,6 +825,9 @@
                     <toolbarItem reference="mru-LD-XPv"/>
                 </defaultToolbarItems>
             </toolbar>
+            <connections>
+                <outlet property="initialFirstResponder" destination="suo-YO-fqM" id="nBg-y2-VnR"/>
+            </connections>
             <point key="canvasLocation" x="428" y="449"/>
         </window>
         <customObject id="494" customClass="AppDelegate">
