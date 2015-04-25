@@ -194,7 +194,9 @@
 	_navigatorView.dataSource = self;
 
 	/* Enable Drag & Drop */
-	[_navigatorView registerForDraggedTypes: [NSArray arrayWithObject: @"public.binary"]];
+	[_navigatorView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
+	[_libraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
+	[_editorView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
 
 	/* Populate the 'Open Recent' file menu from the User default settings */
 	NSMutableArray *recentDocuments = [[NSUserDefaults standardUserDefaults] valueForKey:@"recentDocuments"];
@@ -204,11 +206,11 @@
 
 	/* Populate the library */
 	for (NSInteger i = 1; i <= 4; ++i) {
-		[_libraryArrayController addObject:@{@"label": [NSString stringWithFormat:@"Label %ld - text text text text text text text text text text text text", i],
-											 @"image": [NSImage imageNamed:NSImageNameInfo],
-											 @"showLabel": @YES}.mutableCopy];
-		[_libraryArrayController addObject:@{@"label": [NSString stringWithFormat:@"Item %ld", i],
-											 @"image": [NSImage imageNamed:NSImageNameInfo],
+		[_libraryArrayController addObject:@{@"label":[NSString stringWithFormat:@"Label %ld - text text text text text text text text text text text text", i],
+											 @"image":[NSImage imageNamed:NSImageNameInfo],
+											 @"showLabel":@YES}.mutableCopy];
+		[_libraryArrayController addObject:@{@"label":[NSString stringWithFormat:@"Item %ld", i],
+											 @"image":[NSImage imageNamed:NSImageNameInfo],
 											 @"showLabel": @YES}.mutableCopy];
 	}
 }

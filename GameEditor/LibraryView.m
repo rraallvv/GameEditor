@@ -200,6 +200,24 @@
 	return YES;
 }
 
+#pragma mark Drag & Drop
+
+- (NSImage *)collectionView:(NSCollectionView *)collectionView draggingImageForItemsAtIndexes:(NSIndexSet *)indexes withEvent:(NSEvent *)event offset:(NSPointPointer)dragImageOffset {
+	id itemInfo = [[collectionView itemAtIndex:indexes.firstIndex] representedObject];
+	return [itemInfo valueForKey:@"image"];
+}
+
+- (BOOL)collectionView:(NSCollectionView *)collectionView writeItemsAtIndexes:(NSIndexSet *)indexes toPasteboard:(NSPasteboard *)pasteboard {
+	id itemInfo = [[collectionView itemAtIndex:indexes.firstIndex] representedObject];
+	NSData *pboardData = [NSKeyedArchiver archivedDataWithRootObject:[itemInfo valueForKey:@"label"]];
+	[pasteboard setData:pboardData forType:@"public.binary"];
+	return YES;
+}
+
+- (BOOL)collectionView:(NSCollectionView *)collectionView canDragItemsAtIndexes:(NSIndexSet *)indexes withEvent:(NSEvent *)event {
+	return YES;
+}
+
 #pragma mark Delegate methods interception
 
 - (void)setDelegate:(id)newDelegate {

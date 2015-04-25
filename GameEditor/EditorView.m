@@ -692,6 +692,21 @@ anchorPoint = _anchorPoint;
 	return array;
 };
 
+#pragma mark Dragging Destination
+
+- (NSDragOperation)draggingEntered:(id < NSDraggingInfo >)info {
+	return NSDragOperationCopy;
+}
+
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)info {
+	NSPasteboard *pasteBoard = [info draggingPasteboard];
+	CGPoint locationInView = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
+	CGPoint locationInScene = CGPointMake((locationInView.x - _viewOrigin.x) * _viewScale,
+										  (locationInView.y - _viewOrigin.y) * _viewScale);
+	NSLog(@"Dropped: %@ at (%f, %f)", [NSKeyedUnarchiver unarchiveObjectWithData:[pasteBoard dataForType:@"public.binary"]], locationInScene.x, locationInScene.y);
+	return YES;
+}
+
 #pragma mark Mouse event handling
 
 - (void)mouseDown:(NSEvent *)theEvent {
