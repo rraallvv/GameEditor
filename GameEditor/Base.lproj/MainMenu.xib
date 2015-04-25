@@ -863,6 +863,7 @@
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="photo" id="Mtg-eZ-xms"/>
                         <connections>
+                            <binding destination="vBT-rm-Cna" name="hidden" keyPath="representedObject.showLabel" id="DdP-w5-nyn"/>
                             <binding destination="vBT-rm-Cna" name="value" keyPath="representedObject.image" id="htd-km-Vzd"/>
                         </connections>
                     </imageView>
@@ -874,6 +875,11 @@
                         </constraints>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="photo" id="y4J-Gd-dCF"/>
                         <connections>
+                            <binding destination="vBT-rm-Cna" name="hidden" keyPath="representedObject.showLabel" id="YMx-Gi-cdr">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                             <binding destination="vBT-rm-Cna" name="value" keyPath="representedObject.image" id="Yqg-lf-WJA"/>
                         </connections>
                     </imageView>
@@ -885,6 +891,11 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
+                            <binding destination="vBT-rm-Cna" name="hidden" keyPath="representedObject.showLabel" id="Juk-6R-hEA">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
                             <binding destination="vBT-rm-Cna" name="value" keyPath="representedObject.label" id="ejy-OS-KFg"/>
                         </connections>
                     </textField>

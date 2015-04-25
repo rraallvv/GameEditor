@@ -160,6 +160,13 @@
 
 - (void)setMode:(LibraryViewMode)mode {
 	_mode = mode;
+
+	NSUInteger numberOfItems = [[self content] count];
+	for (NSUInteger itemIndex = 0; itemIndex < numberOfItems; itemIndex++) {
+		NSCollectionViewItem *item = [self itemAtIndex:itemIndex];
+		[item.representedObject setValue:@(mode == LibraryViewModeList) forKey:@"showLabel"];
+	}
+
 	/* Force re-layout of subviews */
 	self.frame = self.frame;
 }
