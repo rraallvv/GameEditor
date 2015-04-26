@@ -1,0 +1,4 @@
+language: objective-c
+xcode_project: GameEditor.xcodeproj
+xcode_scheme: GameEditor
+xcode_sdk: macosx10.10
