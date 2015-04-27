@@ -75,6 +75,7 @@
 		E4E6DA3A1AE9987500F4CE6F /* LibraryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryView.m; sourceTree = "<group>"; };
 		E4F3B6A51ACD7EC4001482D2 /* NavigationNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationNode.h; sourceTree = "<group>"; };
 		E4F3B6A61ACD7EC4001482D2 /* NavigationNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationNode.m; sourceTree = "<group>"; };
+		E4F454301AED868900501EED /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +140,7 @@
 		E4ABDB4A1AB3933900AAE82E /* GameEditor */ = {
 			isa = PBXGroup;
 			children = (
+				E4F454301AED868900501EED /* LICENSE */,
 				E4ABDB4D1AB3933900AAE82E /* AppDelegate.h */,
 				E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */,
 				E40813A01AC64C7600F54824 /* AttributesInspector */,
@@ -386,6 +388,8 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -428,6 +432,8 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -478,7 +484,6 @@
 				INFOPLIST_FILE = GameEditorTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_NAME = GameEditorTests;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GameEditor.app/Contents/MacOS/GameEditor";
 			};
 			name = Debug;
 		};
@@ -494,7 +499,6 @@
 				INFOPLIST_FILE = GameEditorTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_NAME = GameEditorTests;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GameEditor.app/Contents/MacOS/GameEditor";
 			};
 			name = Release;
 		};

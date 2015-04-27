@@ -1,0 +1,6 @@
+language: objective-c
+before_install: sudo easy_install cpp-coveralls
+xcode_project: GameEditor.xcodeproj
+xcode_scheme: GameEditor
+xcode_sdk: macosx10.10
+after_success: coveralls

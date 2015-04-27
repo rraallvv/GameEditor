@@ -54,6 +54,10 @@
 
 #pragma mark Main Window
 
+@interface AppDelegate ()
+- (IBAction)delete:(id)sender;
+@end
+
 @interface Window : NSWindow
 @end
 
@@ -66,7 +70,7 @@
 		case NSDeleteCharacter:
 		case NSBackTabCharacter:
 			/* Forward Del and Backspace to the delete action */
-			[[NSApp delegate] delete:self];
+			[(AppDelegate *)[NSApp delegate] delete:self];
 			return;
 	}
 
