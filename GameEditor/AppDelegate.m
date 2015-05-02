@@ -28,7 +28,10 @@
 #import "LibraryView.h"
 #import <SceneKit/SceneKit.h>
 
-#if 1// JavaScript
+#define USE_JAVASCRIPT 0
+#define USE_LUA 1
+
+#if USE_JAVASCRIPT
 #import <JavaScriptCore/JavaScriptCore.h>
 
 @protocol JSSpriteNodeExport <JSExport>
@@ -50,6 +53,10 @@
 
 @implementation SKNode (JS)
 @end
+#endif
+
+#if USE_LUA
+#import <Lua/LuaVirtualMachine.h>
 #endif
 
 #pragma mark Main Window
@@ -862,9 +869,9 @@
 
 - (void)useScene:(SKScene *)scene {
 
-#if 1// JavaScript
-	JSVirtualMachine * vm = [[JSVirtualMachine alloc] init];
-	JSContext * ctx = [[JSContext alloc] initWithVirtualMachine:vm];
+#if USE_JAVASCRIPT
+	JSVirtualMachine *vm = [[JSVirtualMachine alloc] init];
+	JSContext *ctx = [[JSContext alloc] initWithVirtualMachine:vm];
 
 	ctx[@"SKSpriteNode"] = [SKSpriteNode class];
 	ctx[@"scene"] = scene;
@@ -872,6 +879,19 @@
 	[ctx evaluateScript:
 	 @"var obj = SKSpriteNode.spriteNodeWithImageNamed('Spaceship');"
 	 @"scene.addChild(obj);"
+	 ];
+#endif
+
+#if USE_LUA
+	LuaVirtualMachine *vm = [[LuaVirtualMachine alloc] init];
+	LuaContext *ctx = [[LuaContext alloc] initWithVirtualMachine:vm];
+
+	ctx[@"SKSpriteNode"] = [SKSpriteNode class];
+	ctx[@"scene"] = scene;
+
+	[ctx evaluateScript:
+	 @"local obj = SKSpriteNode:spriteNodeWithImageNamed('Spaceship')"
+	 @"scene:addChild(obj)"
 	 ];
 #endif
 

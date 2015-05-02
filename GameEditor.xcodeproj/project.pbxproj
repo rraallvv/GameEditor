@@ -12,6 +12,7 @@
 		E40813951AC42FFF00F54824 /* ColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = E40813941AC42FFF00F54824 /* ColorWell.m */; };
 		E4220B2D1ACFF92B00753375 /* Particles.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2B1ACFF92B00753375 /* Particles.sks */; };
 		E4220B2E1ACFF92B00753375 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2C1ACFF92B00753375 /* spark.png */; };
+		E447058E1AF53739007738C9 /* Lua.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E447058B1AF5371C007738C9 /* Lua.framework */; };
 		E460AB931ACDC9B900859EA2 /* NavigatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E460AB921ACDC9B900859EA2 /* NavigatorView.m */; };
 		E474192F1AD84EDC00061932 /* NewGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E474192E1AD84EDC00061932 /* NewGameScene.sks */; };
 		E48286631AE7D74F00C51F8D /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = E48286621AE7D74F00C51F8D /* art.scnassets */; };
@@ -31,6 +32,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		E447058A1AF5371C007738C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E44705841AF5371C007738C9 /* Lua.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2982C07714D3D5D10079E3AF;
+			remoteInfo = Lua;
+		};
+		E447058C1AF53734007738C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E44705841AF5371C007738C9 /* Lua.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 2982C07614D3D5D10079E3AF;
+			remoteInfo = Lua;
+		};
 		E4ABDB611AB3933900AAE82E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E4ABDB401AB3933900AAE82E /* Project object */;
@@ -48,6 +63,7 @@
 		E40813941AC42FFF00F54824 /* ColorWell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorWell.m; sourceTree = "<group>"; };
 		E4220B2B1ACFF92B00753375 /* Particles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Particles.sks; sourceTree = "<group>"; };
 		E4220B2C1ACFF92B00753375 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
+		E44705841AF5371C007738C9 /* Lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lua.xcodeproj; path = "Lua-Framework/Lua.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		E460AB911ACDC9B900859EA2 /* NavigatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigatorView.h; sourceTree = "<group>"; };
 		E460AB921ACDC9B900859EA2 /* NavigatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigatorView.m; sourceTree = "<group>"; };
 		E474192E1AD84EDC00061932 /* NewGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = NewGameScene.sks; sourceTree = "<group>"; };
@@ -83,6 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E447058E1AF53739007738C9 /* Lua.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,11 +136,28 @@
 			name = Controls;
 			sourceTree = "<group>";
 		};
+		E44705851AF5371C007738C9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E447058B1AF5371C007738C9 /* Lua.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E447058F1AF5375F007738C9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E44705841AF5371C007738C9 /* Lua.xcodeproj */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E4ABDB3F1AB3933900AAE82E = {
 			isa = PBXGroup;
 			children = (
 				E4ABDB4A1AB3933900AAE82E /* GameEditor */,
 				E4ABDB631AB3933900AAE82E /* GameEditorTests */,
+				E447058F1AF5375F007738C9 /* Frameworks */,
 				E4ABDB491AB3933900AAE82E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -223,6 +257,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				E447058D1AF53734007738C9 /* PBXTargetDependency */,
 			);
 			name = GameEditor;
 			productName = GameEditor;
@@ -275,6 +310,12 @@
 			mainGroup = E4ABDB3F1AB3933900AAE82E;
 			productRefGroup = E4ABDB491AB3933900AAE82E /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = E44705851AF5371C007738C9 /* Products */;
+					ProjectRef = E44705841AF5371C007738C9 /* Lua.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				E4ABDB471AB3933900AAE82E /* GameEditor */,
@@ -282,6 +323,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		E447058B1AF5371C007738C9 /* Lua.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Lua.framework;
+			remoteRef = E447058A1AF5371C007738C9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		E4ABDB461AB3933900AAE82E /* Resources */ = {
@@ -339,6 +390,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		E447058D1AF53734007738C9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Lua;
+			targetProxy = E447058C1AF53734007738C9 /* PBXContainerItemProxy */;
+		};
 		E4ABDB621AB3933900AAE82E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E4ABDB471AB3933900AAE82E /* GameEditor */;
