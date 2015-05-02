@@ -27,7 +27,6 @@
 #import "AttributesView.h"
 #import "LibraryView.h"
 #import <SceneKit/SceneKit.h>
-#import <Lua/Lua.h>
 
 #if 1// JavaScript
 #import <JavaScriptCore/JavaScriptCore.h>
@@ -875,26 +874,6 @@
 	 @"scene.addChild(obj);"
 	 ];
 #endif
-
-	LuaScript *script = [Lua luaScriptWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"test" ofType:@"lua"]];
-
-	// override package.path (default is Resources dir inside the main bundle)
-	//script.packagePath = @"/foo/bar/?.lua";
-
-	// override package.cpath for native C modules (default is Resources dir inside the main bundle)
-	//script.packageCpath = @"/foo/bar/?.so";
-
-	[script run]; // prime the script to define globals
-
-	// call a function with one argument, ignoring return value
-	[script callFunction:@"hello" withArguments:@"world", nil];
-
-	// call a function that we know returns mixed results
-	NSDictionary *table = [script callFunction:@"test" withArguments:[SKNode new], nil];
-
-	for(id item in table) {
-		NSLog(@"%@ -> %@", item, [table objectForKey:item]);
-	}
 
 	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
 	[_navigatorView expandItem:nil expandChildren:YES];
