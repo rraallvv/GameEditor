@@ -124,7 +124,6 @@
 			children = (
 				E4ABDB4A1AB3933900AAE82E /* GameEditor */,
 				E4ABDB631AB3933900AAE82E /* GameEditorTests */,
-				E4F457381AEE065500501EED /* Frameworks */,
 				E4ABDB491AB3933900AAE82E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -208,13 +207,6 @@
 				E460AB921ACDC9B900859EA2 /* NavigatorView.m */,
 			);
 			name = Navigator;
-			sourceTree = "<group>";
-		};
-		E4F457381AEE065500501EED /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
