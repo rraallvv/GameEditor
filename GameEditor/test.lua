@@ -1,9 +1,8 @@
 -- Test the bridge
 local ffi = require('ffi')
-local objc = {
-}
 ffi.cdef[[
 	int printf(const char * __restrict, ...);
+	void import(const char *framework);
 ]]
 print('>>>!!!1')
 ffi.C.printf('>>>!!!2')
@@ -26,7 +25,15 @@ mock.foo()
 mock.foo('bar')
 mock.foo('bar', 5)
 
+function objc:import(framework)
+	ffi.C.import(framework)
+end
+
+objc:import("AVKit")
+print(objc:class("AVPlayerView"):alloc():init())
+
 -- Create a test sprite
-local obj = SKSpriteNode:spriteNodeWithImageNamed('Spaceship')
-obj:setName('test')
-scene:addChild(obj)
+local sprite = objc:class("SKSpriteNode"):spriteNodeWithImageNamed('Spaceship')
+sprite:setName('test')
+sprite:runAction(objc:class("SKAction"):repeatActionForever(objc:class("SKAction"):rotateByAngle_duration(5, 1)))
+scene:addChild(sprite)
