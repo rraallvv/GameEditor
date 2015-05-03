@@ -888,42 +888,7 @@
 
 	ctx[@"SKSpriteNode"] = [SKSpriteNode class];
 	ctx[@"scene"] = scene;
-
-	[ctx evaluateScript:
-	 @
-	 // test the bridge
-	 "local ffi = require('ffi')"
-	 "local objc = {"
-	 "}"
-	 "ffi.cdef[["
-	 "	int printf(const char * __restrict, ...);"
-	 "]]"
-	 "print('!!!1')"
-	 "ffi.C.printf('!!!2')"
-
-	 "local function capture(table, key, rest)\n"
-	 "	return	function(...)\n"
-	 "				local args = {...}\n"
-	 "				print(string.format('call to %s with key %s {',\n"
-	 "									tostring(table), tostring(key)))\n"
-	 "				for i=1, #args do\n"
-	 "					print(tostring(args[i]))\n"
-	 "				end\n"
-	 "				print('}')\n"
-	 "			end\n"
-	 "end\n"
-	 "mock = {}\n"
-	 "mt = { __index = capture }\n"
-	 "setmetatable(mock, mt)\n"
-	 "mock.foo()\n"
-	 "mock.foo('bar')\n"
-	 "mock.foo('baz', 5)\n"
-
-	 // create the test sprite
-	 "local obj = SKSpriteNode:spriteNodeWithImageNamed('Spaceship')"
-	 "obj:setName('test')"
-	 "scene:addChild(obj)"
-	 ];
+	[ctx evaluateScriptNamed:@"test"];
 #endif
 
 	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
