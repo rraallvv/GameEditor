@@ -889,7 +889,9 @@
 	ctx[@"text"] = @"hello world";
 	ctx[@"SKSpriteNode"] = [SKSpriteNode class];
 	ctx[@"scene"] = scene;
+	ctx[@"nil_value"] = nil;
 	[ctx evaluateScriptNamed:@"test"];
+	NSLog(@"%@", ctx[@"scene"]);
 #endif
 
 	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];

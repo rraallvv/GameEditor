@@ -1,4 +1,7 @@
 print(text)
+print(SKSpriteNode)
+print(scene)
+print(nil_value)
 
 -- Load the required frameworks
 objc.import('AVKit')
