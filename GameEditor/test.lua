@@ -1,3 +1,5 @@
+print(text)
+
 -- Load the required frameworks
 objc.import('AVKit')
 print(objc.AVPlayerView:alloc():init())

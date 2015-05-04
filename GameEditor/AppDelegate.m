@@ -886,6 +886,7 @@
 	LuaVirtualMachine *vm = [[LuaVirtualMachine alloc] init];
 	LuaContext *ctx = [[LuaContext alloc] initWithVirtualMachine:vm];
 
+	ctx[@"text"] = @"hello world";
 	ctx[@"SKSpriteNode"] = [SKSpriteNode class];
 	ctx[@"scene"] = scene;
 	[ctx evaluateScriptNamed:@"test"];
