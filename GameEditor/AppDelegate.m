@@ -889,7 +889,7 @@
 	ctx[@"text"] = @"hello world";
 	ctx[@"SKSpriteNode"] = [SKSpriteNode class];
 	ctx[@"scene"] = scene;
-	ctx[@"nil_value"] = nil;
+	ctx[@"nil value"] = nil;
 	[ctx evaluateScriptNamed:@"test"];
 	NSLog(@"%@", ctx[@"scene"]);
 	NSLog(@"%@", ctx[@"undefined_value"]);

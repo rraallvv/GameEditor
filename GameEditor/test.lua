@@ -1,7 +1,7 @@
-print(text)
-print(SKSpriteNode)
-print(scene)
-print(nil_value)
+print('text: '..tostring(text))
+print('SKSpriteNode class: '..tostring(SKSpriteNode))
+print('scene: '..tostring(scene))
+print('nil_value: '..tostring(nil_value))
 
 -- Load the required frameworks
 objc.import('AVKit')
