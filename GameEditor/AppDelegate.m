@@ -891,8 +891,8 @@
 	ctx[@"scene"] = scene;
 	ctx[@"nil value"] = nil;
 	[ctx evaluateScriptNamed:@"test"];
-	NSLog(@"%@", ctx[@"scene"]);
-	NSLog(@"%@", ctx[@"undefined_value"]);
+	NSLog(@"%@", [ctx[@"scene"] toObject]);
+	NSLog(@"%@", [ctx[@"undefined_value"] toObject]);
 #endif
 
 	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
