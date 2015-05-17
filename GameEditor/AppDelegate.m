@@ -886,7 +886,7 @@
 #if USE_LUA
 	LuaContext *ctx = [[LuaContext alloc] init];
 
-    [self exportClass:[SKNode class] toContext:ctx];
+	[self exportClass:[SKNode class] toContext:ctx];
     [self exportClass:[SKScene class] toContext:ctx];
     [self exportClass:[SKSpriteNode class] toContext:ctx];
     [self exportClass:[SKAction class] toContext:ctx];
@@ -924,48 +924,52 @@
 }
 
 - (void)exportClass:(Class)class toContext:(LuaContext *)context {
-    // Create a protocol that inherits from LuaContext and with all the public methods and properties of the class
-    const char *protocolName = class_getName(class);
-    Protocol *protocol = objc_allocateProtocol(protocolName);
-    protocol_addProtocol(protocol, @protocol(LuaExport));
+	// Create a protocol that inherits from LuaContext and with all the public methods and properties of the class
+	const char *protocolName = [NSString stringWithFormat:@"%sLuaExports", class_getName(class)].UTF8String;
+	Protocol *protocol = objc_getProtocol(protocolName);
+	if (!protocol) {
+		protocol = objc_allocateProtocol(protocolName);
 
-    // Add the public methods of the class to the protocol
-    unsigned int methodCount, classMethodCount, propertyCount;
-    Method *methods, *classMethods;
-    objc_property_t *properties;
+		protocol_addProtocol(protocol, @protocol(LuaExport));
 
-    methods = class_copyMethodList(class, &methodCount);
-    for (NSUInteger methodIndex = 0; methodIndex < methodCount; ++methodIndex) {
-        Method method = methods[methodIndex];
-        protocol_addMethodDescription(protocol, method_getName(method), method_getTypeEncoding(method), YES, YES);
-    }
+		// Add the public methods of the class to the protocol
+		unsigned int methodCount, classMethodCount, propertyCount;
+		Method *methods, *classMethods;
+		objc_property_t *properties;
 
-    classMethods = class_copyMethodList(object_getClass(class), &classMethodCount);
-    for (NSUInteger methodIndex = 0; methodIndex < classMethodCount; ++methodIndex) {
-        Method method = classMethods[methodIndex];
-        protocol_addMethodDescription(protocol, method_getName(method), method_getTypeEncoding(method), YES, NO);
-    }
+		methods = class_copyMethodList(class, &methodCount);
+		for (NSUInteger methodIndex = 0; methodIndex < methodCount; ++methodIndex) {
+			Method method = methods[methodIndex];
+			protocol_addMethodDescription(protocol, method_getName(method), method_getTypeEncoding(method), YES, YES);
+		}
 
-    properties = class_copyPropertyList(class, &propertyCount);
-    for (NSUInteger propertyIndex = 0; propertyIndex < propertyCount; ++propertyIndex) {
-        objc_property_t property = properties[propertyIndex];
+		classMethods = class_copyMethodList(object_getClass(class), &classMethodCount);
+		for (NSUInteger methodIndex = 0; methodIndex < classMethodCount; ++methodIndex) {
+			Method method = classMethods[methodIndex];
+			protocol_addMethodDescription(protocol, method_getName(method), method_getTypeEncoding(method), YES, NO);
+		}
 
-        unsigned int attributeCount;
-        objc_property_attribute_t *attributes = property_copyAttributeList(property, &attributeCount);
-        protocol_addProperty(protocol, property_getName(property), attributes, attributeCount, YES, YES);
-        free(attributes);
-    }
+		properties = class_copyPropertyList(class, &propertyCount);
+		for (NSUInteger propertyIndex = 0; propertyIndex < propertyCount; ++propertyIndex) {
+			objc_property_t property = properties[propertyIndex];
 
-    free(methods);
-    free(classMethods);
-    free(properties);
+			unsigned int attributeCount;
+			objc_property_attribute_t *attributes = property_copyAttributeList(property, &attributeCount);
+			protocol_addProperty(protocol, property_getName(property), attributes, attributeCount, YES, YES);
+			free(attributes);
+		}
 
-    // Add the new protocol to the class
-    objc_registerProtocol(protocol);
-    class_addProtocol(class, protocol);
+		free(methods);
+		free(classMethods);
+		free(properties);
 
-    NSString *className = [NSString stringWithCString:class_getName(class) encoding:NSUTF8StringEncoding];
-    context[className] = class;
+		// Add the new protocol to the class
+		objc_registerProtocol(protocol);
+	}
+	class_addProtocol(class, protocol);
+
+	NSString *className = [NSString stringWithCString:class_getName(class) encoding:NSUTF8StringEncoding];
+	context[className] = class;
 }
 
 @end
