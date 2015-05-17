@@ -56,7 +56,8 @@
 #endif
 
 #if USE_LUA
-#import <Lua/LuaVirtualMachine.h>
+#import "LuaContext.h"
+#import "LuaExport.h"
 #endif
 
 #pragma mark Main Window
@@ -883,16 +884,22 @@
 #endif
 
 #if USE_LUA
-	LuaVirtualMachine *vm = [[LuaVirtualMachine alloc] init];
-	LuaContext *ctx = [[LuaContext alloc] initWithVirtualMachine:vm];
+	LuaContext *ctx = [[LuaContext alloc] init];
+
+    [self exportClass:[SKNode class] toContext:ctx];
+    [self exportClass:[SKScene class] toContext:ctx];
+    [self exportClass:[SKSpriteNode class] toContext:ctx];
+    [self exportClass:[SKAction class] toContext:ctx];
 
 	ctx[@"text"] = @"hello world";
-	ctx[@"SKSpriteNode"] = [SKSpriteNode class];
 	ctx[@"scene"] = scene;
-	ctx[@"nil value"] = nil;
-	[ctx evaluateScriptNamed:@"test"];
-	NSLog(@"%@", [ctx[@"scene"] toObject]);
-	NSLog(@"%@", [ctx[@"undefined_value"] toObject]);
+
+    NSError *error = nil;
+	[ctx parseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"test" ofType:@"lua"]] error:&error];
+
+    if (error) {
+        NSLog(@"%@", error);
+    }
 #endif
 
 	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
@@ -914,6 +921,51 @@
 	[_editorView updateVisibleRect];
 
 	[self performSelector:@selector(updateSelectionWithNode:) withObject:scene afterDelay:0.5];
+}
+
+- (void)exportClass:(Class)class toContext:(LuaContext *)context {
+    // Create a protocol that inherits from LuaContext and with all the public methods and properties of the class
+    const char *protocolName = class_getName(class);
+    Protocol *protocol = objc_allocateProtocol(protocolName);
+    protocol_addProtocol(protocol, @protocol(LuaExport));
+
+    // Add the public methods of the class to the protocol
+    unsigned int methodCount, classMethodCount, propertyCount;
+    Method *methods, *classMethods;
+    objc_property_t *properties;
+
+    methods = class_copyMethodList(class, &methodCount);
+    for (NSUInteger methodIndex = 0; methodIndex < methodCount; ++methodIndex) {
+        Method method = methods[methodIndex];
+        protocol_addMethodDescription(protocol, method_getName(method), method_getTypeEncoding(method), YES, YES);
+    }
+
+    classMethods = class_copyMethodList(object_getClass(class), &classMethodCount);
+    for (NSUInteger methodIndex = 0; methodIndex < classMethodCount; ++methodIndex) {
+        Method method = classMethods[methodIndex];
+        protocol_addMethodDescription(protocol, method_getName(method), method_getTypeEncoding(method), YES, NO);
+    }
+
+    properties = class_copyPropertyList(class, &propertyCount);
+    for (NSUInteger propertyIndex = 0; propertyIndex < propertyCount; ++propertyIndex) {
+        objc_property_t property = properties[propertyIndex];
+
+        unsigned int attributeCount;
+        objc_property_attribute_t *attributes = property_copyAttributeList(property, &attributeCount);
+        protocol_addProperty(protocol, property_getName(property), attributes, attributeCount, YES, YES);
+        free(attributes);
+    }
+
+    free(methods);
+    free(classMethods);
+    free(properties);
+
+    // Add the new protocol to the class
+    objc_registerProtocol(protocol);
+    class_addProtocol(class, protocol);
+
+    NSString *className = [NSString stringWithCString:class_getName(class) encoding:NSUTF8StringEncoding];
+    context[className] = class;
 }
 
 @end
