@@ -26,39 +26,11 @@
 #import "AppDelegate.h"
 #import "AttributesView.h"
 #import "LibraryView.h"
+
 #import <SceneKit/SceneKit.h>
 
-#define USE_JAVASCRIPT 0
-#define USE_LUA 1
-
-#if USE_JAVASCRIPT
-#import <JavaScriptCore/JavaScriptCore.h>
-
-@protocol JSSpriteNodeExport <JSExport>
-+ (instancetype)spriteNodeWithImageNamed:(NSString *)name;
-@end
-
-@interface SKSpriteNode (JS) <JSSpriteNodeExport>
-@end
-
-@implementation SKSpriteNode (JS)
-@end
-
-@protocol JSNodeExport <JSExport>
-- (void)addChild:(SKNode *)node;
-@end
-
-@interface SKNode (JS) <JSNodeExport>
-@end
-
-@implementation SKNode (JS)
-@end
-#endif
-
-#if USE_LUA
 #import "LuaContext.h"
 #import "LuaExport.h"
-#endif
 
 #pragma mark Main Window
 
@@ -869,39 +841,6 @@
 }
 
 - (void)useScene:(SKScene *)scene {
-
-#if USE_JAVASCRIPT
-	JSVirtualMachine *vm = [[JSVirtualMachine alloc] init];
-	JSContext *ctx = [[JSContext alloc] initWithVirtualMachine:vm];
-
-	ctx[@"SKSpriteNode"] = [SKSpriteNode class];
-	ctx[@"scene"] = scene;
-
-	[ctx evaluateScript:
-	 @"var obj = SKSpriteNode.spriteNodeWithImageNamed('Spaceship');"
-	 @"scene.addChild(obj);"
-	 ];
-#endif
-
-#if USE_LUA
-	LuaContext *ctx = [[LuaContext alloc] init];
-
-	[self exportClass:[SKNode class] toContext:ctx];
-    [self exportClass:[SKScene class] toContext:ctx];
-    [self exportClass:[SKSpriteNode class] toContext:ctx];
-    [self exportClass:[SKAction class] toContext:ctx];
-
-	ctx[@"text"] = @"hello world";
-	ctx[@"scene"] = scene;
-
-    NSError *error = nil;
-	[ctx parseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"test" ofType:@"lua"]] error:&error];
-
-    if (error) {
-        NSLog(@"%@", error);
-    }
-#endif
-
 	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
 	[_navigatorView expandItem:nil expandChildren:YES];
 
