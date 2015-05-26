@@ -916,6 +916,10 @@
 
 	NSArray *directoryEntries = [directoryEnumerator.allObjects filteredArrayUsingPredicate: filter];
 
+	directoryEntries = [directoryEntries sortedArrayUsingComparator:^(NSURL* a, NSURL* b) {
+		return [[a lastPathComponent] compare:[b lastPathComponent] options:NSNumericSearch];
+	}];
+
 	for (NSURL *aURL in directoryEntries) {
 		NSNumber *isDirectory;
 		[aURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:NULL];
