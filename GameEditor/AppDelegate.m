@@ -189,13 +189,34 @@
 	}
 
 	/* Populate the library */
-	for (NSInteger i = 1; i <= 4; ++i) {
-		[_libraryArrayController addObject:@{@"label":[NSString stringWithFormat:@"Label %ld - text text text text text text text text text text text text", i],
-											 @"image":[NSImage imageNamed:NSImageNameInfo],
-											 @"showLabel":@YES}.mutableCopy];
-		[_libraryArrayController addObject:@{@"label":[NSString stringWithFormat:@"Item %ld", i],
-											 @"image":[NSImage imageNamed:NSImageNameInfo],
-											 @"showLabel": @YES}.mutableCopy];
+	NSURL *plugInsURL = [[NSBundle mainBundle] builtInPlugInsURL];
+
+	NSDirectoryEnumerator *directoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:plugInsURL
+																	  includingPropertiesForKeys:@[ NSURLNameKey, NSURLIsDirectoryKey ]
+																						 options:NSDirectoryEnumerationSkipsHiddenFiles | NSDirectoryEnumerationSkipsSubdirectoryDescendants
+																					errorHandler:nil];
+
+	NSPredicate *filter = [NSPredicate predicateWithFormat: @"pathExtension = 'geextension'"];
+
+	NSArray *directoryEntries = [directoryEnumerator.allObjects filteredArrayUsingPredicate: filter];
+
+	for (NSURL *aURL in directoryEntries) {
+		NSNumber *isDirectory;
+		[aURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:NULL];
+
+		if (isDirectory) {
+			NSString *iconPath = [aURL.path stringByAppendingPathComponent:@"Icon.png"];
+
+			NSImage *iconImage = [[NSImage alloc] initWithContentsOfFile:iconPath];
+
+			if (!iconImage) {
+				iconImage = [NSImage imageNamed:NSImageNameInfo];
+			}
+
+			[_libraryArrayController addObject:@{@"label":[NSString stringWithFormat:@"Label - text text text text text text text text text text text text"],
+												 @"image":iconImage,
+												 @"showLabel":@YES}.mutableCopy];
+		}
 	}
 }
 
