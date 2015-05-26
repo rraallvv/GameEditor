@@ -205,7 +205,10 @@
 		[aURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:NULL];
 
 		if (isDirectory) {
-			NSString *iconPath = [aURL.path stringByAppendingPathComponent:@"Icon.png"];
+			NSBundle *bundle = [NSBundle bundleWithURL:aURL];
+			NSDictionary *info = [bundle infoDictionary];
+
+			NSString *iconPath = [aURL.path stringByAppendingPathComponent:info[@"CFBundleIconFile"]];
 
 			NSImage *iconImage = [[NSImage alloc] initWithContentsOfFile:iconPath];
 
@@ -213,7 +216,9 @@
 				iconImage = [NSImage imageNamed:NSImageNameInfo];
 			}
 
-			[_libraryArrayController addObject:@{@"label":[NSString stringWithFormat:@"Label - text text text text text text text text text text text text"],
+			[_libraryArrayController addObject:@{@"label":[NSString stringWithFormat:@"%@ - %@",
+														   info[@"CFBundleDisplayName"],
+														   info[@"Description"]],
 												 @"image":iconImage,
 												 @"showLabel":@YES}.mutableCopy];
 		}
