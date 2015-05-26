@@ -189,40 +189,7 @@
 	}
 
 	/* Populate the library */
-	NSURL *plugInsURL = [[NSBundle mainBundle] builtInPlugInsURL];
-
-	NSDirectoryEnumerator *directoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:plugInsURL
-																	  includingPropertiesForKeys:@[ NSURLNameKey, NSURLIsDirectoryKey ]
-																						 options:NSDirectoryEnumerationSkipsHiddenFiles | NSDirectoryEnumerationSkipsSubdirectoryDescendants
-																					errorHandler:nil];
-
-	NSPredicate *filter = [NSPredicate predicateWithFormat: @"pathExtension = 'geextension'"];
-
-	NSArray *directoryEntries = [directoryEnumerator.allObjects filteredArrayUsingPredicate: filter];
-
-	for (NSURL *aURL in directoryEntries) {
-		NSNumber *isDirectory;
-		[aURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:NULL];
-
-		if (isDirectory) {
-			NSBundle *bundle = [NSBundle bundleWithURL:aURL];
-			NSDictionary *info = [bundle infoDictionary];
-
-			NSString *iconPath = [aURL.path stringByAppendingPathComponent:info[@"CFBundleIconFile"]];
-
-			NSImage *iconImage = [[NSImage alloc] initWithContentsOfFile:iconPath];
-
-			if (!iconImage) {
-				iconImage = [NSImage imageNamed:NSImageNameInfo];
-			}
-
-			[_libraryArrayController addObject:@{@"label":[NSString stringWithFormat:@"%@ - %@",
-														   info[@"CFBundleDisplayName"],
-														   info[@"Description"]],
-												 @"image":iconImage,
-												 @"showLabel":@YES}.mutableCopy];
-		}
-	}
+	[self populateLibrary];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
@@ -935,6 +902,62 @@
 
 	NSString *className = [NSString stringWithCString:class_getName(class) encoding:NSUTF8StringEncoding];
 	context[className] = class;
+}
+
+- (void)populateLibrary {
+	NSURL *plugInsURL = [[NSBundle mainBundle] builtInPlugInsURL];
+
+	NSDirectoryEnumerator *directoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:plugInsURL
+																	  includingPropertiesForKeys:@[ NSURLNameKey, NSURLIsDirectoryKey ]
+																						 options:NSDirectoryEnumerationSkipsHiddenFiles | NSDirectoryEnumerationSkipsSubdirectoryDescendants
+																					errorHandler:nil];
+
+	NSPredicate *filter = [NSPredicate predicateWithFormat: @"pathExtension = 'geextension'"];
+
+	NSArray *directoryEntries = [directoryEnumerator.allObjects filteredArrayUsingPredicate: filter];
+
+	for (NSURL *aURL in directoryEntries) {
+		NSNumber *isDirectory;
+		[aURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:NULL];
+
+		if (isDirectory) {
+			NSBundle *bundle = [NSBundle bundleWithURL:aURL];
+			NSDictionary *info = [bundle infoDictionary];
+
+			NSString *iconPath = [aURL.path stringByAppendingPathComponent:info[@"CFBundleIconFile"]];
+
+			NSImage *iconImage = [[NSImage alloc] initWithContentsOfFile:iconPath];
+
+			if (!iconImage) {
+				iconImage = [NSImage imageNamed:NSImageNameInfo];
+			}
+
+			NSString *name = info[@"CFBundleDisplayName"];
+			NSRange nameRange = NSMakeRange(0, [name length]);
+
+			NSString *fullDescription = [NSString stringWithFormat:@"%@ - %@",
+										 name,
+										 info[@"Description"]];
+			NSRange fullDescriptionRange = NSMakeRange(nameRange.length, fullDescription.length - nameRange.length);
+
+			NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullDescription];
+			[attributedString beginEditing];
+
+			[attributedString addAttribute:NSFontAttributeName
+							   value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
+							   range:nameRange];
+
+			[attributedString addAttribute:NSFontAttributeName
+							   value:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]
+							   range:fullDescriptionRange];
+
+			[attributedString endEditing];
+
+			[_libraryArrayController addObject:@{@"label":attributedString,
+												 @"image":iconImage,
+												 @"showLabel":@YES}.mutableCopy];
+		}
+	}
 }
 
 @end
