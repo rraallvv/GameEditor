@@ -931,37 +931,35 @@
 			NSBundle *bundle = [NSBundle bundleWithURL:aURL];
 			NSDictionary *info = [bundle infoDictionary];
 
-			NSString *iconPath = [aURL.path stringByAppendingPathComponent:info[@"CFBundleIconFile"]];
+			NSString *itemIconPath = [aURL.path stringByAppendingPathComponent:info[@"CFBundleIconFile"]];
 
-			NSImage *iconImage = [[NSImage alloc] initWithContentsOfFile:iconPath];
+			NSImage *itemIconImage = [[NSImage alloc] initWithContentsOfFile:itemIconPath];
 
-			if (!iconImage) {
-				iconImage = [NSImage imageNamed:NSImageNameInfo];
+			if (!itemIconImage) {
+				itemIconImage = [NSImage imageNamed:NSImageNameInfo];
 			}
 
-			NSString *name = info[@"CFBundleDisplayName"];
-			NSRange nameRange = NSMakeRange(0, [name length]);
+			NSString *itemName = info[@"CFBundleDisplayName"];
+			NSRange itemNameRange = NSMakeRange(0, [itemName length]);
 
-			NSString *fullDescription = [NSString stringWithFormat:@"%@ - %@",
-										 name,
-										 info[@"Description"]];
-			NSRange fullDescriptionRange = NSMakeRange(nameRange.length, fullDescription.length - nameRange.length);
+			NSString *fullDescription = [NSString stringWithFormat:@"%@ - %@", itemName, info[@"Description"]];
+			NSRange itemDescriptionRange = NSMakeRange(itemNameRange.length, fullDescription.length - itemNameRange.length);
 
 			NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullDescription];
 			[attributedString beginEditing];
 
 			[attributedString addAttribute:NSFontAttributeName
 							   value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
-							   range:nameRange];
+							   range:itemNameRange];
 
 			[attributedString addAttribute:NSFontAttributeName
 							   value:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]
-							   range:fullDescriptionRange];
+							   range:itemDescriptionRange];
 
 			[attributedString endEditing];
 
 			[_libraryArrayController addObject:@{@"label":attributedString,
-												 @"image":iconImage,
+												 @"image":itemIconImage,
 												 @"showLabel":@YES}.mutableCopy];
 		}
 	}
