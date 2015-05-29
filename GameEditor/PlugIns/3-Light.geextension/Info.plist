@@ -8,5 +8,7 @@
 	<string>Light</string>
 	<key>Description</key>
 	<string>Create a basic light.</string>
+	<key>Script File</key>
+	<string>script.lua</string>
 </dict>
 </plist>

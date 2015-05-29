@@ -195,7 +195,9 @@
 
 	/* Initialize the scripting support */
 	_sharedLuaContext = [LuaContext new];
-	_exportedClasses = @[[SKNode class], [SKScene class], [SKSpriteNode class], [NSColor class]];
+
+	/* Cache the exported classes */
+	_exportedClasses = @[[SKColor class], [SKNode class], [SKScene class], [SKSpriteNode class], [SKLightNode class]];
 	for (Class class in _exportedClasses) {
 		[self exportClass:class toContext:_sharedLuaContext];
 	}
