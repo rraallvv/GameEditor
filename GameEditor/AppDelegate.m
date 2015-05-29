@@ -962,6 +962,8 @@
 												 @"showLabel":@YES}.mutableCopy];
 		}
 	}
+
+	[_libraryArrayController setSelectionIndex:0];
 }
 
 @end
