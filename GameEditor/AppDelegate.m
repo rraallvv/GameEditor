@@ -190,6 +190,9 @@
 
 	/* Populate the library */
 	[self populateLibrary];
+
+	/* Set focus on the editor view */
+	[[self window] makeFirstResponder:_editorView];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
