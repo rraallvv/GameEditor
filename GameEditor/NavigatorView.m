@@ -52,59 +52,7 @@
 	[_actualDelegate navigatorView:self didSelectObject:selectedObject];
 }
 
-- (void)setDelegate:(id<NSOutlineViewDelegate>)anObject {
-	[super setDelegate:nil];
-	_actualDelegate = anObject;
-	[super setDelegate:self];
-}
-
-- (id)delegate {
-	return self;
-}
-
-- (void)setDataSource:(id<NSOutlineViewDataSource>)aSource {
-	[super setDataSource:nil];
-	_actualDataSource = aSource;
-	[super setDataSource:self];
-}
-
-- (id<NSOutlineViewDataSource>)dataSource {
-	return self;
-}
-
-- (id)forwardingTargetForSelector:(SEL)aSelector {
-	if ([_actualDelegate respondsToSelector:aSelector]) { return _actualDelegate; }
-	return [super forwardingTargetForSelector:aSelector];
-}
-
-- (BOOL)respondsToSelector:(SEL)aSelector {
-	return [super respondsToSelector:aSelector] || [_actualDelegate respondsToSelector:aSelector];
-}
-
 #pragma mark Drag & Drop
-
-- (NSMutableArray *)expansionInfoWithNode:(NSTreeNode *)aNode {
-	NSMutableArray *expansionInfo = [NSMutableArray array];
-	[self getExpandedNodesInfo:expansionInfo forNode:aNode];
-	return expansionInfo;
-}
-
-- (void)getExpandedNodesInfo:(NSMutableArray *)array forNode:(NSTreeNode *)aNode {
-	[array addObject:[NSNumber numberWithBool:[self isItemExpanded:aNode]]];
-	for (NSTreeNode *node in aNode.childNodes) {
-		[self getExpandedNodesInfo:array forNode:node];
-	}
-}
-
-- (void)expandNode:(NSTreeNode *)aNode withInfo:(NSMutableArray *)array {
-	if ([[array firstObject] boolValue]) {
-		[self expandItem:aNode];
-	}
-	[array removeObjectAtIndex:0];
-	for (NSTreeNode *node in aNode.childNodes) {
-		[self expandNode:node withInfo:array];
-	}
-}
 
 - (id <NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item {
 	NSPasteboardItem *pboardItem = [[NSPasteboardItem alloc] init];
@@ -141,6 +89,31 @@
 		return YES;
 	}
 	return NO;
+}
+
+#pragma mark Drag & Drop helper methods
+
+- (NSMutableArray *)expansionInfoWithNode:(NSTreeNode *)aNode {
+	NSMutableArray *expansionInfo = [NSMutableArray array];
+	[self getExpandedNodesInfo:expansionInfo forNode:aNode];
+	return expansionInfo;
+}
+
+- (void)getExpandedNodesInfo:(NSMutableArray *)array forNode:(NSTreeNode *)aNode {
+	[array addObject:[NSNumber numberWithBool:[self isItemExpanded:aNode]]];
+	for (NSTreeNode *node in aNode.childNodes) {
+		[self getExpandedNodesInfo:array forNode:node];
+	}
+}
+
+- (void)expandNode:(NSTreeNode *)aNode withInfo:(NSMutableArray *)array {
+	if ([[array firstObject] boolValue]) {
+		[self expandItem:aNode];
+	}
+	[array removeObjectAtIndex:0];
+	for (NSTreeNode *node in aNode.childNodes) {
+		[self expandNode:node withInfo:array];
+	}
 }
 
 - (void)moveNodeFromIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
@@ -186,6 +159,37 @@
 
 	/* Select the node at it's new location */
 	[self selectRowIndexes:[NSIndexSet indexSetWithIndex:[self rowForItem:selectedNode]] byExtendingSelection:NO];
+}
+
+#pragma mark Delegate methods interception
+
+- (void)setDelegate:(id<NSOutlineViewDelegate>)anObject {
+	[super setDelegate:nil];
+	_actualDelegate = anObject;
+	[super setDelegate:self];
+}
+
+- (id)delegate {
+	return self;
+}
+
+- (void)setDataSource:(id<NSOutlineViewDataSource>)aSource {
+	[super setDataSource:nil];
+	_actualDataSource = aSource;
+	[super setDataSource:self];
+}
+
+- (id<NSOutlineViewDataSource>)dataSource {
+	return self;
+}
+
+- (id)forwardingTargetForSelector:(SEL)aSelector {
+	if ([_actualDelegate respondsToSelector:aSelector]) { return _actualDelegate; }
+	return [super forwardingTargetForSelector:aSelector];
+}
+
+- (BOOL)respondsToSelector:(SEL)aSelector {
+	return [super respondsToSelector:aSelector] || [_actualDelegate respondsToSelector:aSelector];
 }
 
 @end

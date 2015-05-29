@@ -25,6 +25,12 @@
 
 #import "AppDelegate.h"
 #import "AttributesView.h"
+#import "LibraryView.h"
+
+#import <SceneKit/SceneKit.h>
+
+#import "LuaContext.h"
+#import "LuaExport.h"
 
 #pragma mark Main Window
 
@@ -55,6 +61,18 @@
 
 #pragma mark Scene save/load
 
+/* _SCNScene workarounds the error sometimes thrown when unarchiving an SCNScene contained within an SK3DNode */
+@interface _SCNScene : SCNScene
+@end
+
+@implementation _SCNScene
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+	return (id)[[SCNScene alloc] initWithCoder:aDecoder];
+}
+
+@end
+
 @implementation SKScene (Archiving)
 
 + (instancetype)unarchiveFromFile:(NSString *)file {
@@ -83,7 +101,7 @@
 #endif
 
 	NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-	//[arch setClass:self forClassName:@"GameScene"];
+	[arch setClass:[_SCNScene class] forClassName:@"SCNScene"];
 	SKScene *scene = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
 	[arch finishDecoding];
 
@@ -123,10 +141,12 @@
 
 @implementation AppDelegate {
 	IBOutlet EditorView *_editorView;
-	IBOutlet NSTreeController *_attributesTreeController;
-	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet AttributesView *_attributesView;
 	IBOutlet NavigatorView *_navigatorView;
+	IBOutlet LibraryView *_libraryCollectionView;
+	IBOutlet NSTreeController *_attributesTreeController;
+	IBOutlet NSTreeController *_navigatorTreeController;
+	IBOutlet NSArrayController *_libraryArrayController;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
 }
@@ -158,12 +178,24 @@
 	_navigatorView.dataSource = self;
 
 	/* Enable Drag & Drop */
-	[_navigatorView registerForDraggedTypes: [NSArray arrayWithObject: @"public.binary"]];
+	[_navigatorView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
+	[_libraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
+	[_editorView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
 
 	/* Populate the 'Open Recent' file menu from the User default settings */
 	NSMutableArray *recentDocuments = [[NSUserDefaults standardUserDefaults] valueForKey:@"recentDocuments"];
-	for (NSString *filename in recentDocuments) {
+	for (NSString *filename in [recentDocuments reverseObjectEnumerator]) {
 		[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
+	}
+
+	/* Populate the library */
+	for (NSInteger i = 1; i <= 4; ++i) {
+		[_libraryArrayController addObject:@{@"label":[NSString stringWithFormat:@"Label %ld - text text text text text text text text text text text text", i],
+											 @"image":[NSImage imageNamed:NSImageNameInfo],
+											 @"showLabel":@YES}.mutableCopy];
+		[_libraryArrayController addObject:@{@"label":[NSString stringWithFormat:@"Item %ld", i],
+											 @"image":[NSImage imageNamed:NSImageNameInfo],
+											 @"showLabel": @YES}.mutableCopy];
 	}
 }
 
@@ -672,6 +704,12 @@
 	_currentFilename = nil;
 }
 
+#pragma mark Library
+
+- (IBAction)libraryModeAction:(NSButton *)sender {
+	_libraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
+}
+
 #pragma mark Helper methods
 
 - (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray *)nodes {
@@ -768,6 +806,15 @@
 
 	SKPhysicsBody *borderBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
 	self.physicsBody = borderBody;
+
+	/* Add a SceneKit scene */
+	
+	CGPoint center = CGPointMake(CGRectGetMidX(scene.frame),CGRectGetMidY(scene.frame));
+	SCNScene *spaceShip = [SCNScene sceneNamed:@"art.scnassets/ship.dae"];
+	SK3DNode *spaceShipNode = [SK3DNode nodeWithViewportSize:CGSizeMake(200, 200)];
+	spaceShipNode.scnScene = spaceShip;
+	spaceShipNode.position = center;
+	[scene addChild:spaceShipNode];
 #endif
 
 	[self advanceEmittersInNode:self];
@@ -813,6 +860,55 @@
 	[_editorView updateVisibleRect];
 
 	[self performSelector:@selector(updateSelectionWithNode:) withObject:scene afterDelay:0.5];
+}
+
+- (void)exportClass:(Class)class toContext:(LuaContext *)context {
+	// Create a protocol that inherits from LuaContext and with all the public methods and properties of the class
+	const char *protocolName = [NSString stringWithFormat:@"%sLuaExports", class_getName(class)].UTF8String;
+	Protocol *protocol = objc_getProtocol(protocolName);
+	if (!protocol) {
+		protocol = objc_allocateProtocol(protocolName);
+
+		protocol_addProtocol(protocol, @protocol(LuaExport));
+
+		// Add the public methods of the class to the protocol
+		unsigned int methodCount, classMethodCount, propertyCount;
+		Method *methods, *classMethods;
+		objc_property_t *properties;
+
+		methods = class_copyMethodList(class, &methodCount);
+		for (NSUInteger methodIndex = 0; methodIndex < methodCount; ++methodIndex) {
+			Method method = methods[methodIndex];
+			protocol_addMethodDescription(protocol, method_getName(method), method_getTypeEncoding(method), YES, YES);
+		}
+
+		classMethods = class_copyMethodList(object_getClass(class), &classMethodCount);
+		for (NSUInteger methodIndex = 0; methodIndex < classMethodCount; ++methodIndex) {
+			Method method = classMethods[methodIndex];
+			protocol_addMethodDescription(protocol, method_getName(method), method_getTypeEncoding(method), YES, NO);
+		}
+
+		properties = class_copyPropertyList(class, &propertyCount);
+		for (NSUInteger propertyIndex = 0; propertyIndex < propertyCount; ++propertyIndex) {
+			objc_property_t property = properties[propertyIndex];
+
+			unsigned int attributeCount;
+			objc_property_attribute_t *attributes = property_copyAttributeList(property, &attributeCount);
+			protocol_addProperty(protocol, property_getName(property), attributes, attributeCount, YES, YES);
+			free(attributes);
+		}
+
+		free(methods);
+		free(classMethods);
+		free(properties);
+
+		// Add the new protocol to the class
+		objc_registerProtocol(protocol);
+	}
+	class_addProtocol(class, protocol);
+
+	NSString *className = [NSString stringWithCString:class_getName(class) encoding:NSUTF8StringEncoding];
+	context[className] = class;
 }
 
 @end

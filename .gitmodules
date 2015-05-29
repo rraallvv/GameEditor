@@ -1,0 +1,3 @@
+[submodule "ObjC-Lua"]
+	path = ObjC-Lua
+	url = https://github.com/rraallvv/ObjC-Lua
