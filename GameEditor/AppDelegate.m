@@ -700,65 +700,6 @@
 	_currentFilename = nil;
 }
 
-#pragma mark Library
-
-- (IBAction)libraryModeAction:(NSButton *)sender {
-	_libraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
-}
-
-#pragma mark Editor Dragging Destination
-
-- (NSDragOperation)editorView:(EditorView *)editorView draggingEntered:(id)item {
-	return NSDragOperationCopy;
-}
-
-- (BOOL)editorView:(EditorView *)editorView performDragOperation:(id)item atLocation:(CGPoint)locationInScene {
-	NSLog(@"Dropped: %@ at (%f, %f)", item, locationInScene.x, locationInScene.y);
-	return YES;
-}
-
-#pragma mark Helper methods
-
-- (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray *)nodes {
-	for (int i = 0; i < nodes.count; ++i) {
-		NSTreeNode *node = nodes[i];
-		if ([[[node representedObject] node] isEqual:anObject]) {
-			return node;
-		}
-		if ([[node childNodes] count]) {
-			id result = [self navigationNodeOfObject:anObject inNodes:[node childNodes]];
-			if (result) {
-				return result;
-			}
-		}
-	}
-	return nil;
-}
-
-- (BOOL)openSceneWithFilename:(NSString *)filename {
-
-	if ([_currentFilename isEqualToString:filename]) {
-		/* The file is already open */
-		return YES;
-	}
-
-	SKScene *scene = [SKScene unarchiveFromFile:filename];
-
-	if (!scene) {
-		NSLog(@"Couldn't open file: '%@'", filename);
-		return NO;
-	}
-
-	[self useScene:scene];
-
-	/* Add the file to the 'Open Recent' file menu */
-	[self addRecentDocument:filename];
-
-	_currentFilename = filename;
-
-	return YES;
-}
-
 - (void)addRecentDocument:(NSString *)filename {
 	[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
 	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -773,149 +714,10 @@
 	[userDefaults synchronize];
 }
 
-- (void)prepareScene:(SKScene *)scene {
-#if 0
-	/* Create test shape from points */
+#pragma mark Library
 
-	CGPoint points[] = {{0,0}, {-40, -40}, {80, 0}, {0, 120}, {0,0}};
-	SKShapeNode *shapeNode1 = [SKShapeNode shapeNodeWithPoints:points count:5];
-	shapeNode1.strokeColor = [SKColor blueColor];
-	shapeNode1.lineWidth = 5.0;
-	shapeNode1.position = CGPointMake(200, 100);
-	shapeNode1.zRotation = -M_PI_4;
-	[self addChild:shapeNode1];
-
-	/* Create shape from path */
-
-	CGMutablePathRef path = CGPathCreateMutable();
-	CGPathMoveToPoint(path, nil, 0, 0);
-	CGPathAddLineToPoint(path, nil, 80, -50);
-	CGPathAddLineToPoint(path, nil, 0, 100);
-	CGPathAddLineToPoint(path, nil, -80, -50);
-	CGPathCloseSubpath(path);
-	SKShapeNode *shapeNode2 = [SKShapeNode shapeNodeWithPath:path];
-	CGPathRelease(path);
-	shapeNode2.strokeColor = [SKColor yellowColor];
-	shapeNode2.fillColor = [SKColor colorWithCalibratedRed:0 green:0 blue:1 alpha:0.5];
-	shapeNode2.lineWidth = 5.0;
-	shapeNode2.position = CGPointMake(400, 100);
-	shapeNode2.zRotation = M_PI_4;
-	[self addChild:shapeNode2];
-
-	/* Add a particles emitter */
-
-	NSString *particlesPath = [[NSBundle mainBundle] pathForResource:@"Particles" ofType:@"sks"];
-	SKEmitterNode *emitter = [NSKeyedUnarchiver unarchiveObjectWithFile:particlesPath];
-	emitter.position = CGPointMake(self.size.width/2, self.size.height/2);
-	[self addChild:emitter];
-
-	/* Add the scene physics body */
-
-	SKPhysicsBody *borderBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
-	self.physicsBody = borderBody;
-
-	/* Add a SceneKit scene */
-	
-	CGPoint center = CGPointMake(CGRectGetMidX(scene.frame),CGRectGetMidY(scene.frame));
-	SCNScene *spaceShip = [SCNScene sceneNamed:@"art.scnassets/ship.dae"];
-	SK3DNode *spaceShipNode = [SK3DNode nodeWithViewportSize:CGSizeMake(200, 200)];
-	spaceShipNode.scnScene = spaceShip;
-	spaceShipNode.position = center;
-	[scene addChild:spaceShipNode];
-#endif
-
-	[self advanceEmittersInNode:self];
-
-	[scene setPaused:YES];
-}
-
-- (void)advanceEmittersInNode:(id)node {
-	if ([node isKindOfClass:[SKEmitterNode class]]) {
-		SKEmitterNode *emitter = node;
-		[emitter advanceSimulationTime:0.41 * emitter.particleLifetime];
-	}
-	for (id child in [node children]) {
-		[self advanceEmittersInNode:child];
-	}
-}
-
-- (void)removeScene {
-	[_attributesTreeController setContent:nil];
-	[_navigatorTreeController setContent:nil];
-	_editorView.scene = nil;
-	_editorView.needsDisplay = YES;
-	[self.skView presentScene:nil];
-}
-
-- (void)useScene:(SKScene *)scene {
-	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
-	[_navigatorView expandItem:nil expandChildren:YES];
-
-	/* Set the scale mode to scale to fit the window */
-	if (![scene isKindOfClass:[SKScene class]]) {
-		id node = scene;
-		scene = [[SKScene alloc] init];
-		[scene addChild:node];
-	}
-
-	scene.scaleMode = SKSceneScaleModeAspectFit;
-
-	[self.skView presentScene:scene];
-
-	_editorView.scene = scene;
-
-	[_editorView updateVisibleRect];
-
-	[self performSelector:@selector(updateSelectionWithNode:) withObject:scene afterDelay:0.5];
-}
-
-- (void)exportClass:(Class)class toContext:(LuaContext *)context {
-	// Create a protocol that inherits from LuaContext and with all the public methods and properties of the class
-	const char *protocolName = [NSString stringWithFormat:@"%sLuaExports", class_getName(class)].UTF8String;
-	Protocol *protocol = objc_getProtocol(protocolName);
-	if (!protocol) {
-		protocol = objc_allocateProtocol(protocolName);
-
-		protocol_addProtocol(protocol, @protocol(LuaExport));
-
-		// Add the public methods of the class to the protocol
-		unsigned int methodCount, classMethodCount, propertyCount;
-		Method *methods, *classMethods;
-		objc_property_t *properties;
-
-		methods = class_copyMethodList(class, &methodCount);
-		for (NSUInteger methodIndex = 0; methodIndex < methodCount; ++methodIndex) {
-			Method method = methods[methodIndex];
-			protocol_addMethodDescription(protocol, method_getName(method), method_getTypeEncoding(method), YES, YES);
-		}
-
-		classMethods = class_copyMethodList(object_getClass(class), &classMethodCount);
-		for (NSUInteger methodIndex = 0; methodIndex < classMethodCount; ++methodIndex) {
-			Method method = classMethods[methodIndex];
-			protocol_addMethodDescription(protocol, method_getName(method), method_getTypeEncoding(method), YES, NO);
-		}
-
-		properties = class_copyPropertyList(class, &propertyCount);
-		for (NSUInteger propertyIndex = 0; propertyIndex < propertyCount; ++propertyIndex) {
-			objc_property_t property = properties[propertyIndex];
-
-			unsigned int attributeCount;
-			objc_property_attribute_t *attributes = property_copyAttributeList(property, &attributeCount);
-			protocol_addProperty(protocol, property_getName(property), attributes, attributeCount, YES, YES);
-			free(attributes);
-		}
-
-		free(methods);
-		free(classMethods);
-		free(properties);
-
-		// Add the new protocol to the class
-		objc_registerProtocol(protocol);
-	}
-	class_addProtocol(class, protocol);
-
-	NSString *className = [NSString stringWithCString:class_getName(class) encoding:NSUTF8StringEncoding];
-	context[className] = class;
+- (IBAction)libraryModeAction:(NSButton *)sender {
+	_libraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
 - (void)populateLibrary {
@@ -976,6 +778,206 @@
 	}
 
 	[_libraryArrayController setSelectionIndex:0];
+}
+
+#pragma mark Editor Dragging Destination
+
+- (NSDragOperation)editorView:(EditorView *)editorView draggingEntered:(id)item {
+	return NSDragOperationCopy;
+}
+
+- (BOOL)editorView:(EditorView *)editorView performDragOperation:(id)item atLocation:(CGPoint)locationInScene {
+	NSLog(@"Dropped: %@ at (%f, %f)", item, locationInScene.x, locationInScene.y);
+	return YES;
+}
+
+#pragma mark Scene
+
+- (BOOL)openSceneWithFilename:(NSString *)filename {
+
+	if ([_currentFilename isEqualToString:filename]) {
+		/* The file is already open */
+		return YES;
+	}
+
+	SKScene *scene = [SKScene unarchiveFromFile:filename];
+
+	if (!scene) {
+		NSLog(@"Couldn't open file: '%@'", filename);
+		return NO;
+	}
+
+	[self useScene:scene];
+
+	/* Add the file to the 'Open Recent' file menu */
+	[self addRecentDocument:filename];
+
+	_currentFilename = filename;
+
+	return YES;
+}
+
+- (void)prepareScene:(SKScene *)scene {
+#if 0
+	/* Create test shape from points */
+
+	CGPoint points[] = {{0,0}, {-40, -40}, {80, 0}, {0, 120}, {0,0}};
+	SKShapeNode *shapeNode1 = [SKShapeNode shapeNodeWithPoints:points count:5];
+	shapeNode1.strokeColor = [SKColor blueColor];
+	shapeNode1.lineWidth = 5.0;
+	shapeNode1.position = CGPointMake(200, 100);
+	shapeNode1.zRotation = -M_PI_4;
+	[self addChild:shapeNode1];
+
+	/* Create shape from path */
+
+	CGMutablePathRef path = CGPathCreateMutable();
+	CGPathMoveToPoint(path, nil, 0, 0);
+	CGPathAddLineToPoint(path, nil, 80, -50);
+	CGPathAddLineToPoint(path, nil, 0, 100);
+	CGPathAddLineToPoint(path, nil, -80, -50);
+	CGPathCloseSubpath(path);
+	SKShapeNode *shapeNode2 = [SKShapeNode shapeNodeWithPath:path];
+	CGPathRelease(path);
+	shapeNode2.strokeColor = [SKColor yellowColor];
+	shapeNode2.fillColor = [SKColor colorWithCalibratedRed:0 green:0 blue:1 alpha:0.5];
+	shapeNode2.lineWidth = 5.0;
+	shapeNode2.position = CGPointMake(400, 100);
+	shapeNode2.zRotation = M_PI_4;
+	[self addChild:shapeNode2];
+
+	/* Add a particles emitter */
+
+	NSString *particlesPath = [[NSBundle mainBundle] pathForResource:@"Particles" ofType:@"sks"];
+	SKEmitterNode *emitter = [NSKeyedUnarchiver unarchiveObjectWithFile:particlesPath];
+	emitter.position = CGPointMake(self.size.width/2, self.size.height/2);
+	[self addChild:emitter];
+
+	/* Add the scene physics body */
+
+	SKPhysicsBody *borderBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
+	self.physicsBody = borderBody;
+
+	/* Add a SceneKit scene */
+
+	CGPoint center = CGPointMake(CGRectGetMidX(scene.frame),CGRectGetMidY(scene.frame));
+	SCNScene *spaceShip = [SCNScene sceneNamed:@"art.scnassets/ship.dae"];
+	SK3DNode *spaceShipNode = [SK3DNode nodeWithViewportSize:CGSizeMake(200, 200)];
+	spaceShipNode.scnScene = spaceShip;
+	spaceShipNode.position = center;
+	[scene addChild:spaceShipNode];
+#endif
+
+	[self advanceEmittersInNode:self];
+
+	[scene setPaused:YES];
+}
+
+- (void)removeScene {
+	[_attributesTreeController setContent:nil];
+	[_navigatorTreeController setContent:nil];
+	_editorView.scene = nil;
+	_editorView.needsDisplay = YES;
+	[self.skView presentScene:nil];
+}
+
+- (void)useScene:(SKScene *)scene {
+	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
+	[_navigatorView expandItem:nil expandChildren:YES];
+
+	/* Set the scale mode to scale to fit the window */
+	if (![scene isKindOfClass:[SKScene class]]) {
+		id node = scene;
+		scene = [[SKScene alloc] init];
+		[scene addChild:node];
+	}
+
+	scene.scaleMode = SKSceneScaleModeAspectFit;
+
+	[self.skView presentScene:scene];
+
+	_editorView.scene = scene;
+
+	[_editorView updateVisibleRect];
+
+	[self performSelector:@selector(updateSelectionWithNode:) withObject:scene afterDelay:0.5];
+}
+
+#pragma mark Helper methods
+
+- (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray *)nodes {
+	for (int i = 0; i < nodes.count; ++i) {
+		NSTreeNode *node = nodes[i];
+		if ([[[node representedObject] node] isEqual:anObject]) {
+			return node;
+		}
+		if ([[node childNodes] count]) {
+			id result = [self navigationNodeOfObject:anObject inNodes:[node childNodes]];
+			if (result) {
+				return result;
+			}
+		}
+	}
+	return nil;
+}
+
+- (void)advanceEmittersInNode:(id)node {
+	if ([node isKindOfClass:[SKEmitterNode class]]) {
+		SKEmitterNode *emitter = node;
+		[emitter advanceSimulationTime:0.41 * emitter.particleLifetime];
+	}
+	for (id child in [node children]) {
+		[self advanceEmittersInNode:child];
+	}
+}
+
+- (void)exportClass:(Class)class toContext:(LuaContext *)context {
+	// Create a protocol that inherits from LuaContext and with all the public methods and properties of the class
+	const char *protocolName = [NSString stringWithFormat:@"%sLuaExports", class_getName(class)].UTF8String;
+	Protocol *protocol = objc_getProtocol(protocolName);
+	if (!protocol) {
+		protocol = objc_allocateProtocol(protocolName);
+
+		protocol_addProtocol(protocol, @protocol(LuaExport));
+
+		// Add the public methods of the class to the protocol
+		unsigned int methodCount, classMethodCount, propertyCount;
+		Method *methods, *classMethods;
+		objc_property_t *properties;
+
+		methods = class_copyMethodList(class, &methodCount);
+		for (NSUInteger methodIndex = 0; methodIndex < methodCount; ++methodIndex) {
+			Method method = methods[methodIndex];
+			protocol_addMethodDescription(protocol, method_getName(method), method_getTypeEncoding(method), YES, YES);
+		}
+
+		classMethods = class_copyMethodList(object_getClass(class), &classMethodCount);
+		for (NSUInteger methodIndex = 0; methodIndex < classMethodCount; ++methodIndex) {
+			Method method = classMethods[methodIndex];
+			protocol_addMethodDescription(protocol, method_getName(method), method_getTypeEncoding(method), YES, NO);
+		}
+
+		properties = class_copyPropertyList(class, &propertyCount);
+		for (NSUInteger propertyIndex = 0; propertyIndex < propertyCount; ++propertyIndex) {
+			objc_property_t property = properties[propertyIndex];
+
+			unsigned int attributeCount;
+			objc_property_attribute_t *attributes = property_copyAttributeList(property, &attributeCount);
+			protocol_addProperty(protocol, property_getName(property), attributes, attributeCount, YES, YES);
+			free(attributes);
+		}
+
+		free(methods);
+		free(classMethods);
+		free(properties);
+
+		// Add the new protocol to the class
+		objc_registerProtocol(protocol);
+	}
+	class_addProtocol(class, protocol);
+
+	NSString *className = [NSString stringWithCString:class_getName(class) encoding:NSUTF8StringEncoding];
+	context[className] = class;
 }
 
 @end
