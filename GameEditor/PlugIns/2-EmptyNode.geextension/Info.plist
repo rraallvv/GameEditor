@@ -8,5 +8,7 @@
 	<string>Empty Node</string>
 	<key>Description</key>
 	<string>Create an empty node.</string>
+	<key>Script File</key>
+	<string>script.lua</string>
 </dict>
 </plist>
