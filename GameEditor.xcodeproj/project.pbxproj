@@ -14,6 +14,7 @@
 		E4220B2E1ACFF92B00753375 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2C1ACFF92B00753375 /* spark.png */; };
 		E460AB931ACDC9B900859EA2 /* NavigatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E460AB921ACDC9B900859EA2 /* NavigatorView.m */; };
 		E474192F1AD84EDC00061932 /* NewGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E474192E1AD84EDC00061932 /* NewGameScene.sks */; };
+		E48286631AE7D74F00C51F8D /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = E48286621AE7D74F00C51F8D /* art.scnassets */; };
 		E4ABDB4F1AB3933900AAE82E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */; };
 		E4ABDB511AB3933900AAE82E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB501AB3933900AAE82E /* main.m */; };
 		E4ABDB561AB3933900AAE82E /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4ABDB551AB3933900AAE82E /* GameScene.sks */; };
@@ -25,6 +26,9 @@
 		E4BB58AE1ABB510A0021A467 /* EditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BB58AD1ABB510A0021A467 /* EditorView.m */; };
 		E4BB58B01ABB659C0021A467 /* SpaceshipTest.png in Resources */ = {isa = PBXBuildFile; fileRef = E4BB58AF1ABB659C0021A467 /* SpaceshipTest.png */; };
 		E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */; };
+		E4D6F1D81AF5BEB3005D475D /* test.lua in Resources */ = {isa = PBXBuildFile; fileRef = E4D6F1D71AF5BEB3005D475D /* test.lua */; };
+		E4E6DA3B1AE9987500F4CE6F /* LibraryView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E6DA3A1AE9987500F4CE6F /* LibraryView.m */; };
+		E4E935F81B08AE88007A48C4 /* libobjc2lua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E935F21B08ABAF007A48C4 /* libobjc2lua.a */; };
 		E4F3B6A71ACD7EC4001482D2 /* NavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F3B6A61ACD7EC4001482D2 /* NavigationNode.m */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +39,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = E4ABDB471AB3933900AAE82E;
 			remoteInfo = GameEditor;
+		};
+		E4E935F11B08ABAF007A48C4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4E935EB1B08ABAF007A48C4 /* LuaTests.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D4A9E61818A95F6F002A9EA5;
+			remoteInfo = objc2lua;
+		};
+		E4E935F31B08ABAF007A48C4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4E935EB1B08ABAF007A48C4 /* LuaTests.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D4A9E68418A9616C002A9EA5;
+			remoteInfo = "obj2lua-ios";
+		};
+		E4E935F51B08ABAF007A48C4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4E935EB1B08ABAF007A48C4 /* LuaTests.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E47E87261B04845B00108EAE;
+			remoteInfo = LuaTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -49,6 +74,7 @@
 		E460AB911ACDC9B900859EA2 /* NavigatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigatorView.h; sourceTree = "<group>"; };
 		E460AB921ACDC9B900859EA2 /* NavigatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigatorView.m; sourceTree = "<group>"; };
 		E474192E1AD84EDC00061932 /* NewGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = NewGameScene.sks; sourceTree = "<group>"; };
+		E48286621AE7D74F00C51F8D /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		E4ABDB481AB3933900AAE82E /* GameEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4ABDB4C1AB3933900AAE82E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4ABDB4D1AB3933900AAE82E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -68,6 +94,10 @@
 		E4BB58AF1ABB659C0021A467 /* SpaceshipTest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SpaceshipTest.png; sourceTree = "<group>"; };
 		E4BFF4AE1AB78E24002DADD3 /* StepperTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StepperTextField.h; sourceTree = "<group>"; };
 		E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StepperTextField.m; sourceTree = "<group>"; };
+		E4D6F1D71AF5BEB3005D475D /* test.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.lua; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.lua; };
+		E4E6DA391AE9987500F4CE6F /* LibraryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryView.h; sourceTree = "<group>"; };
+		E4E6DA3A1AE9987500F4CE6F /* LibraryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryView.m; sourceTree = "<group>"; };
+		E4E935EB1B08ABAF007A48C4 /* LuaTests.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LuaTests.xcodeproj; path = "ObjC-Lua/LuaTests.xcodeproj"; sourceTree = "<group>"; };
 		E4F3B6A51ACD7EC4001482D2 /* NavigationNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationNode.h; sourceTree = "<group>"; };
 		E4F3B6A61ACD7EC4001482D2 /* NavigationNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationNode.m; sourceTree = "<group>"; };
 		E4F454301AED868900501EED /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
@@ -78,6 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4E935F81B08AE88007A48C4 /* libobjc2lua.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +150,7 @@
 			children = (
 				E4ABDB4A1AB3933900AAE82E /* GameEditor */,
 				E4ABDB631AB3933900AAE82E /* GameEditorTests */,
+				E4E935F71B08ABBE007A48C4 /* Lua */,
 				E4ABDB491AB3933900AAE82E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -140,6 +172,7 @@
 				E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */,
 				E40813A01AC64C7600F54824 /* AttributesInspector */,
 				E4F3B6A81ACD7ECA001482D2 /* Navigator */,
+				E4E6DA3C1AE9988100F4CE6F /* Library */,
 				E4BB58AC1ABB510A0021A467 /* EditorView.h */,
 				E4BB58AD1ABB510A0021A467 /* EditorView.m */,
 				E4ABDB591AB3933900AAE82E /* MainMenu.xib */,
@@ -150,7 +183,9 @@
 				E4220B2C1ACFF92B00753375 /* spark.png */,
 				E4BB58AA1ABB4D4B0021A467 /* Spaceship.png */,
 				E4BB58AF1ABB659C0021A467 /* SpaceshipTest.png */,
+				E4D6F1D71AF5BEB3005D475D /* test.lua */,
 				E4ABDB571AB3933900AAE82E /* Images.xcassets */,
+				E48286621AE7D74F00C51F8D /* art.scnassets */,
 				E4ABDB4B1AB3933900AAE82E /* Supporting Files */,
 			);
 			path = GameEditor;
@@ -180,6 +215,33 @@
 				E4ABDB651AB3933900AAE82E /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E4E6DA3C1AE9988100F4CE6F /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				E4E6DA391AE9987500F4CE6F /* LibraryView.h */,
+				E4E6DA3A1AE9987500F4CE6F /* LibraryView.m */,
+			);
+			name = Library;
+			sourceTree = "<group>";
+		};
+		E4E935EC1B08ABAF007A48C4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E4E935F21B08ABAF007A48C4 /* libobjc2lua.a */,
+				E4E935F41B08ABAF007A48C4 /* libobj2lua-ios.a */,
+				E4E935F61B08ABAF007A48C4 /* LuaTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E4E935F71B08ABBE007A48C4 /* Lua */ = {
+			isa = PBXGroup;
+			children = (
+				E4E935EB1B08ABAF007A48C4 /* LuaTests.xcodeproj */,
+			);
+			name = Lua;
 			sourceTree = "<group>";
 		};
 		E4F3B6A81ACD7ECA001482D2 /* Navigator */ = {
@@ -259,6 +321,12 @@
 			mainGroup = E4ABDB3F1AB3933900AAE82E;
 			productRefGroup = E4ABDB491AB3933900AAE82E /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = E4E935EC1B08ABAF007A48C4 /* Products */;
+					ProjectRef = E4E935EB1B08ABAF007A48C4 /* LuaTests.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				E4ABDB471AB3933900AAE82E /* GameEditor */,
@@ -266,6 +334,30 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		E4E935F21B08ABAF007A48C4 /* libobjc2lua.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libobjc2lua.a;
+			remoteRef = E4E935F11B08ABAF007A48C4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E4E935F41B08ABAF007A48C4 /* libobj2lua-ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libobj2lua-ios.a";
+			remoteRef = E4E935F31B08ABAF007A48C4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E4E935F61B08ABAF007A48C4 /* LuaTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = LuaTests.xctest;
+			remoteRef = E4E935F51B08ABAF007A48C4 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		E4ABDB461AB3933900AAE82E /* Resources */ = {
@@ -279,6 +371,8 @@
 				E4ABDB5B1AB3933900AAE82E /* MainMenu.xib in Resources */,
 				E4220B2E1ACFF92B00753375 /* spark.png in Resources */,
 				E40813921AC3C45300F54824 /* ValueEditors.xib in Resources */,
+				E4D6F1D81AF5BEB3005D475D /* test.lua in Resources */,
+				E48286631AE7D74F00C51F8D /* art.scnassets in Resources */,
 				E474192F1AD84EDC00061932 /* NewGameScene.sks in Resources */,
 				E4BB58B01ABB659C0021A467 /* SpaceshipTest.png in Resources */,
 			);
@@ -304,6 +398,7 @@
 				E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */,
 				E4F3B6A71ACD7EC4001482D2 /* NavigationNode.m in Sources */,
 				E4ABDB761AB47BB700AAE82E /* AttributeNode.m in Sources */,
+				E4E6DA3B1AE9987500F4CE6F /* LibraryView.m in Sources */,
 				E408138F1AC228F400F54824 /* AttributesView.m in Sources */,
 				E460AB931ACDC9B900859EA2 /* NavigatorView.m in Sources */,
 				E4ABDB4F1AB3933900AAE82E /* AppDelegate.m in Sources */,
@@ -365,7 +460,6 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -384,7 +478,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -408,21 +501,17 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
-				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};
@@ -433,8 +522,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"\"$(SRCROOT)/ObjC-Lua/classes\"",
+				);
 				INFOPLIST_FILE = GameEditor/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				OTHER_LDFLAGS = (
+					"-pagezero_size",
+					10000,
+					"-image_base",
+					100000000,
+				);
 				PRODUCT_NAME = GameEditor;
 			};
 			name = Debug;
@@ -444,8 +544,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"\"$(SRCROOT)/ObjC-Lua/classes\"",
+				);
 				INFOPLIST_FILE = GameEditor/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				OTHER_LDFLAGS = (
+					"-pagezero_size",
+					10000,
+					"-image_base",
+					100000000,
+				);
 				PRODUCT_NAME = GameEditor;
 			};
 			name = Release;

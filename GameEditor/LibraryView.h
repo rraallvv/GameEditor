@@ -1,5 +1,5 @@
 /*
- * AppDelegate.h
+ * LibraryView.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -24,13 +24,12 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import <SpriteKit/SpriteKit.h>
-#import "EditorView.h"
-#import "NavigatorView.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, EditorViewDelegate, NavigatorViewDelegate>
+typedef enum LibraryViewMode {
+	LibraryViewModeList,
+	LibraryViewModeIcons
+} LibraryViewMode;
 
-@property (assign) IBOutlet NSWindow *window;
-@property (assign) IBOutlet SKView *skView;
-
+@interface LibraryView : NSCollectionView
+@property (assign) LibraryViewMode mode;
 @end
