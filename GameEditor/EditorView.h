@@ -45,5 +45,5 @@
 @protocol EditorViewDelegate
 - (void)editorView:(EditorView *)editorView didSelectNode:(id)node;
 - (NSDragOperation)editorView:(EditorView *)editorView draggingEntered:(id)item;
-- (BOOL)editorView:(EditorView *)editorView performDragOperation:(id)item atLocation:(CGPoint)locationInScene;
+- (BOOL)editorView:(EditorView *)editorView performDragOperation:(id)item atLocation:(CGPoint)locationInSelection;
 @end

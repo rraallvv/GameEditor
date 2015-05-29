@@ -815,7 +815,7 @@
 	return NSDragOperationCopy;
 }
 
-- (BOOL)editorView:(EditorView *)editorView performDragOperation:(id)item atLocation:(CGPoint)locationInScene {
+- (BOOL)editorView:(EditorView *)editorView performDragOperation:(id)item atLocation:(CGPoint)locationInSelection {
 	if (!_editorView.scene) {
 		return NO;
 	}
@@ -839,7 +839,7 @@
 		return NO;
 	}
 
-	SKNode *node = [itemLuaContext call:@"createNodeAtPosition" with:@[[NSValue valueWithPoint:locationInScene]] error:&error];
+	SKNode *node = [itemLuaContext call:@"createNodeAtPosition" with:@[[NSValue valueWithPoint:locationInSelection]] error:&error];
 
 	if (error) {
 		NSAlert *alert = [NSAlert alertWithError:error];
