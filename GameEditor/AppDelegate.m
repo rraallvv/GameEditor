@@ -845,13 +845,18 @@
 		return NO;
 	}
 
-	if (node) {
-		NSIndexPath *selectionIndexPath = [_navigatorTreeController selectionIndexPath];
-		if (selectionIndexPath) {
-			[_navigatorTreeController insertObject:[NavigationNode navigationNodeWithNode:node]
-						 atArrangedObjectIndexPath:[selectionIndexPath indexPathByAddingIndex:0]];
-		}
+	if (!node) {
+		return NO;
 	}
+
+	NSIndexPath *selectionIndexPath = [_navigatorTreeController selectionIndexPath];
+
+	if (!selectionIndexPath) {
+		return NO;
+	}
+
+	[_navigatorTreeController insertObject:[NavigationNode navigationNodeWithNode:node]
+				 atArrangedObjectIndexPath:[selectionIndexPath indexPathByAddingIndex:0]];
 
 	return YES;
 }
