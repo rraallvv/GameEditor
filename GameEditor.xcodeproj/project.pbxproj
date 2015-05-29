@@ -207,8 +207,7 @@
 				E40813A01AC64C7600F54824 /* AttributesInspector */,
 				E4F3B6A81ACD7ECA001482D2 /* Navigator */,
 				E4E6DA3C1AE9988100F4CE6F /* Library */,
-				E4BB58AC1ABB510A0021A467 /* EditorView.h */,
-				E4BB58AD1ABB510A0021A467 /* EditorView.m */,
+				E4BDE4271B18501600721B9A /* Editor */,
 				E4ABDB591AB3933900AAE82E /* MainMenu.xib */,
 				E40813901AC3C45300F54824 /* ValueEditors.xib */,
 				E4ABDB551AB3933900AAE82E /* GameScene.sks */,
@@ -249,6 +248,15 @@
 				E4ABDB651AB3933900AAE82E /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E4BDE4271B18501600721B9A /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				E4BB58AC1ABB510A0021A467 /* EditorView.h */,
+				E4BB58AD1ABB510A0021A467 /* EditorView.m */,
+			);
+			name = Editor;
 			sourceTree = "<group>";
 		};
 		E4E6DA3C1AE9988100F4CE6F /* Library */ = {

@@ -137,7 +137,7 @@
 
 @end
 
-#pragma mark Application Delegate
+#pragma mark - Application Delegate
 
 @implementation AppDelegate {
 	IBOutlet EditorView *_editorView;
@@ -149,6 +149,8 @@
 	IBOutlet NSArrayController *_libraryArrayController;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
+	LuaContext *_sharedLuaContext;
+	NSArray *_exportedClasses;
 }
 
 @synthesize window = _window;
@@ -190,6 +192,13 @@
 
 	/* Populate the library */
 	[self populateLibrary];
+
+	/* Initialize the scripting support */
+	_sharedLuaContext = [LuaContext new];
+	_exportedClasses = @[[SKNode class], [SKScene class], [SKSpriteNode class], [NSColor class]];
+	for (Class class in _exportedClasses) {
+		[self exportClass:class toContext:_sharedLuaContext];
+	}
 
 	/* Set focus on the editor view */
 	[[self window] makeFirstResponder:_editorView];
@@ -807,7 +816,37 @@
 }
 
 - (BOOL)editorView:(EditorView *)editorView performDragOperation:(id)item atLocation:(CGPoint)locationInScene {
-	NSLog(@"Dropped: %@ at (%f, %f)", item, locationInScene.x, locationInScene.y);
+	if (!_editorView.scene) {
+		return NO;
+	}
+
+	LuaContext *itemLuaContext = [[LuaContext alloc] initWithVirtualMachine:_sharedLuaContext.virtualMachine];
+	itemLuaContext[@"scene"] = _editorView.scene;
+
+	for (Class class in _exportedClasses) {
+		itemLuaContext[[class className]] = class;
+	}
+
+	NSString *script = [item objectForKey:@"script"];
+	if ([script isEqual:[NSNull null]])
+		script = nil;
+	NSError *error = nil;
+	[itemLuaContext parse:script error:&error];
+
+	if (error) {
+		NSAlert *alert = [NSAlert alertWithError:error];
+		[alert runModal];
+		return NO;
+	}
+
+	[itemLuaContext call:@"addNodeAtPosition" with:@[[NSValue valueWithPoint:locationInScene]] error:&error];
+
+	if (error) {
+		NSAlert *alert = [NSAlert alertWithError:error];
+		[alert runModal];
+		return NO;
+	}
+
 	return YES;
 }
 
@@ -917,6 +956,7 @@
 	[self.skView presentScene:scene];
 
 	_editorView.scene = scene;
+	_sharedLuaContext[@"scene"] = scene;
 
 	[_editorView updateVisibleRect];
 

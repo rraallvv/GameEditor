@@ -8,5 +8,7 @@
 	<string>Color Sprite</string>
 	<key>Description</key>
 	<string>Create a simple sprite with color.</string>
+	<key>Script File</key>
+	<string>script.lua</string>
 </dict>
 </plist>
