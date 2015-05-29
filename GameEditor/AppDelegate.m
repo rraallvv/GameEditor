@@ -834,16 +834,14 @@
 	[itemLuaContext parse:script error:&error];
 
 	if (error) {
-		NSAlert *alert = [NSAlert alertWithError:error];
-		[alert runModal];
+		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
 		return NO;
 	}
 
 	SKNode *node = [itemLuaContext call:@"createNodeAtPosition" with:@[[NSValue valueWithPoint:locationInSelection]] error:&error];
 
 	if (error) {
-		NSAlert *alert = [NSAlert alertWithError:error];
-		[alert runModal];
+		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
 		return NO;
 	}
 
