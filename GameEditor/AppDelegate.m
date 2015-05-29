@@ -839,12 +839,20 @@
 		return NO;
 	}
 
-	[itemLuaContext call:@"addNodeAtPosition" with:@[[NSValue valueWithPoint:locationInScene]] error:&error];
+	SKNode *node = [itemLuaContext call:@"createNodeAtPosition" with:@[[NSValue valueWithPoint:locationInScene]] error:&error];
 
 	if (error) {
 		NSAlert *alert = [NSAlert alertWithError:error];
 		[alert runModal];
 		return NO;
+	}
+
+	if (node) {
+		NSIndexPath *selectionIndexPath = [_navigatorTreeController selectionIndexPath];
+		if (selectionIndexPath) {
+			[_navigatorTreeController insertObject:[NavigationNode navigationNodeWithNode:node]
+						 atArrangedObjectIndexPath:[selectionIndexPath indexPathByAddingIndex:0]];
+		}
 	}
 
 	return YES;

@@ -208,17 +208,7 @@
 				E4F3B6A81ACD7ECA001482D2 /* Navigator */,
 				E4E6DA3C1AE9988100F4CE6F /* Library */,
 				E4BDE4271B18501600721B9A /* Editor */,
-				E4ABDB591AB3933900AAE82E /* MainMenu.xib */,
-				E40813901AC3C45300F54824 /* ValueEditors.xib */,
-				E4ABDB551AB3933900AAE82E /* GameScene.sks */,
-				E474192E1AD84EDC00061932 /* NewGameScene.sks */,
-				E4220B2B1ACFF92B00753375 /* Particles.sks */,
-				E4220B2C1ACFF92B00753375 /* spark.png */,
-				E4BB58AA1ABB4D4B0021A467 /* Spaceship.png */,
-				E4BB58AF1ABB659C0021A467 /* SpaceshipTest.png */,
-				E4B594891B140D5000D45A33 /* PlugIns */,
-				E4ABDB571AB3933900AAE82E /* Images.xcassets */,
-				E48286621AE7D74F00C51F8D /* art.scnassets */,
+				E4C24C091B1884B9003D6E60 /* Resources */,
 				E4ABDB4B1AB3933900AAE82E /* Supporting Files */,
 			);
 			path = GameEditor;
@@ -257,6 +247,24 @@
 				E4BB58AD1ABB510A0021A467 /* EditorView.m */,
 			);
 			name = Editor;
+			sourceTree = "<group>";
+		};
+		E4C24C091B1884B9003D6E60 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E4ABDB591AB3933900AAE82E /* MainMenu.xib */,
+				E40813901AC3C45300F54824 /* ValueEditors.xib */,
+				E4ABDB551AB3933900AAE82E /* GameScene.sks */,
+				E474192E1AD84EDC00061932 /* NewGameScene.sks */,
+				E4220B2B1ACFF92B00753375 /* Particles.sks */,
+				E4220B2C1ACFF92B00753375 /* spark.png */,
+				E4BB58AA1ABB4D4B0021A467 /* Spaceship.png */,
+				E4BB58AF1ABB659C0021A467 /* SpaceshipTest.png */,
+				E4B594891B140D5000D45A33 /* PlugIns */,
+				E4ABDB571AB3933900AAE82E /* Images.xcassets */,
+				E48286621AE7D74F00C51F8D /* art.scnassets */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		E4E6DA3C1AE9988100F4CE6F /* Library */ = {
