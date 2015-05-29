@@ -801,16 +801,26 @@ anchorPoint = _anchorPoint;
 #pragma mark Dragging Destination
 
 - (NSDragOperation)draggingEntered:(id < NSDraggingInfo >)info {
-	return NSDragOperationCopy;
+	if (self.delegate) {
+		NSPasteboard *pasteBoard = [info draggingPasteboard];
+		id item = [NSKeyedUnarchiver unarchiveObjectWithData:[pasteBoard dataForType:@"public.binary"]];
+		return [self.delegate editorView:self draggingEntered:item];
+	}
+	return NSDragOperationNone;
 }
 
 - (BOOL)performDragOperation:(id <NSDraggingInfo>)info {
-	NSPasteboard *pasteBoard = [info draggingPasteboard];
-	CGPoint locationInView = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
-	CGPoint locationInScene = CGPointMake((locationInView.x - _viewOrigin.x) * _viewScale,
-										  (locationInView.y - _viewOrigin.y) * _viewScale);
-	NSLog(@"Dropped: %@ at (%f, %f)", [NSKeyedUnarchiver unarchiveObjectWithData:[pasteBoard dataForType:@"public.binary"]], locationInScene.x, locationInScene.y);
-	return YES;
+	if (self.delegate) {
+		NSPasteboard *pasteBoard = [info draggingPasteboard];
+		id item = [NSKeyedUnarchiver unarchiveObjectWithData:[pasteBoard dataForType:@"public.binary"]];
+
+		CGPoint locationInView = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
+		CGPoint locationInScene = CGPointMake((locationInView.x - _viewOrigin.x) * _viewScale,
+											  (locationInView.y - _viewOrigin.y) * _viewScale);
+
+		return [self.delegate editorView:self performDragOperation:item atLocation:locationInScene];
+	}
+	return NO;
 }
 
 #pragma mark Mouse events handling
@@ -1062,7 +1072,9 @@ anchorPoint = _anchorPoint;
 	[self bindToSelectedNode];
 
 	/* Nofify the delegate */
-	[self.delegate editorView:self didSelectNode:(SKNode *)node];
+	if (self.delegate) {
+		[self.delegate editorView:self didSelectNode:(SKNode *)node];
+	}
 }
 
 - (SKNode *)node {

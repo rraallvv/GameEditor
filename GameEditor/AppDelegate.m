@@ -706,6 +706,17 @@
 	_libraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
+#pragma mark Editor Dragging Destination
+
+- (NSDragOperation)editorView:(EditorView *)editorView draggingEntered:(id)item {
+	return NSDragOperationCopy;
+}
+
+- (BOOL)editorView:(EditorView *)editorView performDragOperation:(id)item atLocation:(CGPoint)locationInScene {
+	NSLog(@"Dropped: %@ at (%f, %f)", item, locationInScene.x, locationInScene.y);
+	return YES;
+}
+
 #pragma mark Helper methods
 
 - (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray *)nodes {
