@@ -744,36 +744,69 @@
 			NSBundle *bundle = [NSBundle bundleWithURL:aURL];
 			NSDictionary *info = [bundle infoDictionary];
 
-			NSString *itemIconPath = [aURL.path stringByAppendingPathComponent:info[@"CFBundleIconFile"]];
+			if (info) {
+				/* Item's name */
 
-			NSImage *itemIconImage = [[NSImage alloc] initWithContentsOfFile:itemIconPath];
+				NSString *itemName = info[@"CFBundleDisplayName"];
 
-			if (!itemIconImage) {
-				itemIconImage = [NSImage imageNamed:NSImageNameInfo];
+				if (!itemName) {
+					itemName = @"No name";
+				}
+
+				/* Item's description */
+
+				NSString *itemDescription = info[@"Description"];
+
+				if (!itemDescription) {
+					itemDescription = @"No description";
+				}
+
+				/* Item's image */
+
+				NSString *itemIconPath = [aURL.path stringByAppendingPathComponent:info[@"CFBundleIconFile"]];
+				NSImage *itemIconImage = [[NSImage alloc] initWithContentsOfFile:itemIconPath];
+
+				if (!itemIconImage) {
+					itemIconImage = [NSImage imageNamed:NSImageNameInfo];
+				}
+
+				/* Item's full description */
+				NSString *fullDescription = [NSString stringWithFormat:@"%@ - %@", itemName, itemDescription];
+				NSRange itemNameRange = NSMakeRange(0, [itemName length]);
+				NSRange itemDescriptionRange = NSMakeRange(itemNameRange.length, fullDescription.length - itemNameRange.length);
+
+				NSMutableAttributedString *fullDescriptionAttributedString = [[NSMutableAttributedString alloc] initWithString:fullDescription];
+				[fullDescriptionAttributedString beginEditing];
+
+				[fullDescriptionAttributedString addAttribute:NSFontAttributeName
+														value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
+														range:itemNameRange];
+
+				[fullDescriptionAttributedString addAttribute:NSFontAttributeName
+														value:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]
+														range:itemDescriptionRange];
+
+				[fullDescriptionAttributedString endEditing];
+
+				/* Item's script */
+
+				NSString *itemScript = info[@"Script"];
+
+				if (!itemScript) {
+					NSString *itemScriptPath = [aURL.path stringByAppendingPathComponent:info[@"Script File"]];
+					itemScript = [[NSString alloc] initWithContentsOfFile:itemScriptPath encoding:NSUTF8StringEncoding error:nil];
+				}
+
+				if (!itemScript) {
+					itemScript = (id)[NSNull null];
+				}
+
+				/* Add the item to the library */
+				[_libraryArrayController addObject:@{@"label":fullDescriptionAttributedString,
+													 @"image":itemIconImage,
+													 @"showLabel":@YES,
+													 @"script":itemScript}.mutableCopy];
 			}
-
-			NSString *itemName = info[@"CFBundleDisplayName"];
-			NSRange itemNameRange = NSMakeRange(0, [itemName length]);
-
-			NSString *fullDescription = [NSString stringWithFormat:@"%@ - %@", itemName, info[@"Description"]];
-			NSRange itemDescriptionRange = NSMakeRange(itemNameRange.length, fullDescription.length - itemNameRange.length);
-
-			NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullDescription];
-			[attributedString beginEditing];
-
-			[attributedString addAttribute:NSFontAttributeName
-							   value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
-							   range:itemNameRange];
-
-			[attributedString addAttribute:NSFontAttributeName
-							   value:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]
-							   range:itemDescriptionRange];
-
-			[attributedString endEditing];
-
-			[_libraryArrayController addObject:@{@"label":attributedString,
-												 @"image":itemIconImage,
-												 @"showLabel":@YES}.mutableCopy];
 		}
 	}
 
