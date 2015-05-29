@@ -8,5 +8,7 @@
 	<string>Emitter</string>
 	<key>Description</key>
 	<string>Create a basic emitter.</string>
+	<key>Script File</key>
+	<string>script.lua</string>
 </dict>
 </plist>
