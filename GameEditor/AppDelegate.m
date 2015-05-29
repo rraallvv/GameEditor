@@ -746,26 +746,20 @@
 
 			if (info) {
 				/* Item's name */
-
 				NSString *itemName = info[@"CFBundleDisplayName"];
-
 				if (!itemName) {
 					itemName = @"No name";
 				}
 
 				/* Item's description */
-
 				NSString *itemDescription = info[@"Description"];
-
 				if (!itemDescription) {
 					itemDescription = @"No description";
 				}
 
 				/* Item's image */
-
 				NSString *itemIconPath = [aURL.path stringByAppendingPathComponent:info[@"CFBundleIconFile"]];
 				NSImage *itemIconImage = [[NSImage alloc] initWithContentsOfFile:itemIconPath];
-
 				if (!itemIconImage) {
 					itemIconImage = [NSImage imageNamed:NSImageNameInfo];
 				}
@@ -774,29 +768,22 @@
 				NSString *fullDescription = [NSString stringWithFormat:@"%@ - %@", itemName, itemDescription];
 				NSRange itemNameRange = NSMakeRange(0, [itemName length]);
 				NSRange itemDescriptionRange = NSMakeRange(itemNameRange.length, fullDescription.length - itemNameRange.length);
-
 				NSMutableAttributedString *fullDescriptionAttributedString = [[NSMutableAttributedString alloc] initWithString:fullDescription];
 				[fullDescriptionAttributedString beginEditing];
-
 				[fullDescriptionAttributedString addAttribute:NSFontAttributeName
 														value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
 														range:itemNameRange];
-
 				[fullDescriptionAttributedString addAttribute:NSFontAttributeName
 														value:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]
 														range:itemDescriptionRange];
-
 				[fullDescriptionAttributedString endEditing];
 
 				/* Item's script */
-
 				NSString *itemScript = info[@"Script"];
-
 				if (!itemScript) {
 					NSString *itemScriptPath = [aURL.path stringByAppendingPathComponent:info[@"Script File"]];
 					itemScript = [[NSString alloc] initWithContentsOfFile:itemScriptPath encoding:NSUTF8StringEncoding error:nil];
 				}
-
 				if (!itemScript) {
 					itemScript = (id)[NSNull null];
 				}

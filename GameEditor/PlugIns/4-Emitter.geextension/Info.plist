@@ -6,17 +6,7 @@
 	<string>Icon.png</string>
 	<key>CFBundleDisplayName</key>
 	<string>Emitter</string>
-	<key>CFBundleIdentifier</key>
-	<string>developer.EmptyNode</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
-	<key>CFBundleVersion</key>
-	<string>1.0</string>
 	<key>Description</key>
 	<string>Create a basic emitter.</string>
-	<key>ExtensionInfoDictionaryVersion</key>
-	<string>1.0</string>
 </dict>
 </plist>
