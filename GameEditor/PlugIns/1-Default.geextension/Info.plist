@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>Default</string>
+	<key>Description</key>
+	<string>Default library items</string>
+	<key>Names</key>
+	<array>
+		<string>Color Sprite</string>
+		<string>Empty Node</string>
+		<string>Light</string>
+		<string>Emitter</string>
+	</array>
+	<key>Descriptions</key>
+	<array>
+		<string>Create a simple sprite with color.</string>
+		<string>Create an empty node.</string>
+		<string>Create a basic light.</string>
+		<string>Create a basic emitter.</string>
+	</array>
+	<key>Script File</key>
+	<string>script.lua</string>
+	<key>CFBundleIconFiles</key>
+	<array>
+		<string>ColorSprite.png</string>
+		<string>EmptyNode.png</string>
+		<string>Light.png</string>
+		<string>Emitter.png</string>
+	</array>
+</dict>
+</plist>

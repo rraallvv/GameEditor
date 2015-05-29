@@ -757,53 +757,94 @@
 
 			if (info) {
 				/* Item's name */
-				NSString *itemName = info[@"CFBundleDisplayName"];
-				if (!itemName) {
-					itemName = @"No name";
+				NSString *name = info[@"CFBundleDisplayName"];
+				if (!name) {
+					name = @"No name";
+				}
+				NSArray *names = info[@"Names"];
+				if (!names) {
+					names = @[name];
 				}
 
 				/* Item's description */
-				NSString *itemDescription = info[@"Description"];
-				if (!itemDescription) {
-					itemDescription = @"No description";
+				NSString *description = info[@"Description"];
+				if (!description) {
+					description = @"No description";
+				}
+				NSArray *descriptions = info[@"Descriptions"];
+				if (!descriptions) {
+					descriptions = @[description];
 				}
 
 				/* Item's image */
-				NSString *itemIconPath = [aURL.path stringByAppendingPathComponent:info[@"CFBundleIconFile"]];
-				NSImage *itemIconImage = [[NSImage alloc] initWithContentsOfFile:itemIconPath];
-				if (!itemIconImage) {
-					itemIconImage = [NSImage imageNamed:NSImageNameInfo];
+				NSString *iconPath = [aURL.path stringByAppendingPathComponent:info[@"CFBundleIconFile"]];
+				NSImage *iconImage = [[NSImage alloc] initWithContentsOfFile:iconPath];
+				NSImage *defaultIcon = [NSImage imageNamed:NSImageNameCaution];
+				if (!iconImage) {
+					iconImage = defaultIcon;
 				}
-
-				/* Item's full description */
-				NSString *fullDescription = [NSString stringWithFormat:@"%@ - %@", itemName, itemDescription];
-				NSRange itemNameRange = NSMakeRange(0, [itemName length]);
-				NSRange itemDescriptionRange = NSMakeRange(itemNameRange.length, fullDescription.length - itemNameRange.length);
-				NSMutableAttributedString *fullDescriptionAttributedString = [[NSMutableAttributedString alloc] initWithString:fullDescription];
-				[fullDescriptionAttributedString beginEditing];
-				[fullDescriptionAttributedString addAttribute:NSFontAttributeName
-														value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
-														range:itemNameRange];
-				[fullDescriptionAttributedString addAttribute:NSFontAttributeName
-														value:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]
-														range:itemDescriptionRange];
-				[fullDescriptionAttributedString endEditing];
+				NSArray *iconPaths = info[@"CFBundleIconFiles"];
+				NSMutableArray *iconImages = [NSMutableArray array];
+				for (int i=0; i<iconPaths.count; ++i) {
+					iconPath = [aURL.path stringByAppendingPathComponent:iconPaths[i]];
+					NSImage *anImage = [[NSImage alloc] initWithContentsOfFile:iconPath];
+					if (!anImage) {
+						iconImages[i] = defaultIcon;
+					} else {
+						iconImages[i] = anImage;
+					}
+				}
+				if (iconImages.count == 0) {
+					iconImages[0] = iconImage;
+				}
 
 				/* Item's script */
-				NSString *itemScript = info[@"Script"];
-				if (!itemScript) {
+				NSString *script = info[@"Script"];
+				if (!script) {
 					NSString *itemScriptPath = [aURL.path stringByAppendingPathComponent:info[@"Script File"]];
-					itemScript = [[NSString alloc] initWithContentsOfFile:itemScriptPath encoding:NSUTF8StringEncoding error:nil];
+					script = [[NSString alloc] initWithContentsOfFile:itemScriptPath encoding:NSUTF8StringEncoding error:nil];
 				}
-				if (!itemScript) {
-					itemScript = (id)[NSNull null];
+				if (!script) {
+					script = (id)[NSNull null];
 				}
 
-				/* Add the item to the library */
-				[_libraryArrayController addObject:@{@"label":fullDescriptionAttributedString,
-													 @"image":itemIconImage,
-													 @"showLabel":@YES,
-													 @"script":itemScript}.mutableCopy];
+				/* Populate the library items with the loaded data */
+				for (int i=0; i<names.count; ++i) {
+					name = [names[i] stringByReplacingOccurrencesOfString:@" " withString:@""];
+
+					if (i < descriptions.count) {
+						description = descriptions[i];
+					} else {
+						description = @"No description";
+					}
+
+					if (i < iconImages.count) {
+						iconImage = iconImages[i];
+					} else {
+						iconImage = defaultIcon;
+					}
+
+					/* Item's full description */
+					NSString *fullDescription = [NSString stringWithFormat:@"%@ - %@", name, description];
+					NSRange nameRange = NSMakeRange(0, [name length]);
+					NSRange descriptionRange = NSMakeRange(nameRange.length, fullDescription.length - nameRange.length);
+					NSMutableAttributedString *fullDescriptionAttributedString = [[NSMutableAttributedString alloc] initWithString:fullDescription];
+					[fullDescriptionAttributedString beginEditing];
+					[fullDescriptionAttributedString addAttribute:NSFontAttributeName
+															value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
+															range:nameRange];
+					[fullDescriptionAttributedString addAttribute:NSFontAttributeName
+															value:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]
+															range:descriptionRange];
+					[fullDescriptionAttributedString endEditing];
+
+					/* Add the item to the library */
+					[_libraryArrayController addObject:@{@"toolName":name,
+														 @"label":fullDescriptionAttributedString,
+														 @"image":iconImage,
+														 @"showLabel":@YES,
+														 @"script":script}.mutableCopy];
+				}
 			}
 		}
 	}
@@ -840,7 +881,7 @@
 		return NO;
 	}
 
-	SKNode *node = [itemLuaContext call:@"createNodeAtPosition" with:@[[NSValue valueWithPoint:locationInSelection]] error:&error];
+	SKNode *node = [itemLuaContext call:@"createNodeAtPosition" with:@[[NSValue valueWithPoint:locationInSelection], [item objectForKey:@"toolName"]] error:&error];
 
 	if (error) {
 		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
@@ -859,6 +900,9 @@
 
 	[_navigatorTreeController insertObject:[NavigationNode navigationNodeWithNode:node]
 				 atArrangedObjectIndexPath:[selectionIndexPath indexPathByAddingIndex:0]];
+
+	/* Set focus on the editor view */
+	[[self window] makeFirstResponder:_editorView];
 
 	return YES;
 }
