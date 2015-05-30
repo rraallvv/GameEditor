@@ -8,5 +8,7 @@
 	<string>Shape Node (Square)</string>
 	<key>Description</key>
 	<string>Create a square shape node.</string>
+	<key>Script File</key>
+	<string>script.lua</string>
 </dict>
 </plist>

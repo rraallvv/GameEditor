@@ -197,7 +197,7 @@
 	_sharedLuaContext = [LuaContext new];
 
 	/* Cache the exported classes */
-	_exportedClasses = @[[SKColor class], [SKNode class], [SKScene class], [SKSpriteNode class], [SKLightNode class], [SKEmitterNode class]];
+	_exportedClasses = @[[SKColor class], [SKNode class], [SKScene class], [SKSpriteNode class], [SKLightNode class], [SKEmitterNode class], [SKShapeNode class]];
 	for (Class class in _exportedClasses) {
 		[self exportClass:class toContext:_sharedLuaContext];
 	}
