@@ -149,7 +149,7 @@
 	IBOutlet NSArrayController *_libraryArrayController;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
-	LuaContext *_sharedLuaContext;
+	LuaContext *_sharedScriptingContext;
 	NSArray *_exportedClasses;
 }
 
@@ -194,12 +194,12 @@
 	[self populateLibrary];
 
 	/* Initialize the scripting support */
-	_sharedLuaContext = [LuaContext new];
+	_sharedScriptingContext = [LuaContext new];
 
 	/* Cache the exported classes */
 	_exportedClasses = @[[SKColor class], [SKNode class], [SKScene class], [SKSpriteNode class], [SKLightNode class], [SKEmitterNode class], [SKShapeNode class]];
 	for (Class class in _exportedClasses) {
-		[self exportClass:class toContext:_sharedLuaContext];
+		[self exportClass:class toContext:_sharedScriptingContext];
 	}
 
 	/* Set focus on the editor view */
@@ -863,11 +863,11 @@
 		return NO;
 	}
 
-	LuaContext *itemLuaContext = [[LuaContext alloc] initWithVirtualMachine:_sharedLuaContext.virtualMachine];
-	itemLuaContext[@"scene"] = _editorView.scene;
+	LuaContext *scriptingContext = [[LuaContext alloc] initWithVirtualMachine:_sharedScriptingContext.virtualMachine];
+	scriptingContext[@"scene"] = _editorView.scene;
 
 	for (Class class in _exportedClasses) {
-		itemLuaContext[[class className]] = class;
+		scriptingContext[[class className]] = class;
 	}
 
 	item = [[_libraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
@@ -876,14 +876,14 @@
 	if ([script isEqual:[NSNull null]])
 		script = nil;
 	NSError *error = nil;
-	[itemLuaContext parse:script error:&error];
+	[scriptingContext parse:script error:&error];
 
 	if (error) {
 		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
 		return NO;
 	}
 
-	SKNode *node = [itemLuaContext call:@"createNodeAtPosition" with:@[[NSValue valueWithPoint:locationInSelection], [item objectForKey:@"toolName"]] error:&error];
+	SKNode *node = [scriptingContext call:@"createNodeAtPosition" with:@[[NSValue valueWithPoint:locationInSelection], [item objectForKey:@"toolName"]] error:&error];
 
 	if (error) {
 		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
@@ -1015,7 +1015,7 @@
 	[self.skView presentScene:scene];
 
 	_editorView.scene = scene;
-	_sharedLuaContext[@"scene"] = scene;
+	_sharedScriptingContext[@"scene"] = scene;
 
 	[_editorView updateVisibleRect];
 
