@@ -31,6 +31,46 @@ function createShapeNode()
 	return SKShapeNode.shapeNodeWithRect(rect)
 end
 
+-- Linear Gravity Field
+function createLinearGravityField()
+	return SKFieldNode.node()
+end
+
+-- Radial Gravity Field
+function createRadialGravityField()
+	return SKFieldNode.node()
+end
+
+-- Spring Field
+function createSpringField()
+	return SKFieldNode.node()
+end
+
+-- Drag Field
+function createDragField()
+	return SKFieldNode.node()
+end
+
+-- Vortex Field
+function createVortexField()
+	return SKFieldNode.node()
+end
+
+-- Turbulence Field
+function createTurbulenceField()
+	return SKFieldNode.node()
+end
+
+-- Noise Field
+function createNoiseField()
+	return SKFieldNode.node()
+end
+
+-- Velocity Field
+function createVelocityField()
+	return SKFieldNode.node()
+end
+
 -- Call back function
 function createNodeAtPosition(position, toolName)
 	local tools = {
@@ -39,9 +79,16 @@ function createNodeAtPosition(position, toolName)
 		Light = createLight,
 		Emitter = createEmitter,
 		Label = createLabel,
-		ShapeNode = createShapeNode
+		ShapeNode = createShapeNode,
+		LinearGravityField = createLinearGravityField,
+		RadialGravityField = createRadialGravityField,
+		SpringField = createSpringField,
+		DragField = createDragField,
+		VortexField = createVortexField,
+		TurbulenceField = createTurbulenceField,
+		NoiseField = createNoiseField,
+		VelocityField = createVelocityField
 	}
-	print(toolName)
 	local createNode = tools[toolName]
     local node = createNode()
 	node.position = position
