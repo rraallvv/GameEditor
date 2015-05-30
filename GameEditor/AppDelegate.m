@@ -870,6 +870,8 @@
 		itemLuaContext[[class className]] = class;
 	}
 
+	item = [[_libraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
+
 	NSString *script = [item objectForKey:@"script"];
 	if ([script isEqual:[NSNull null]])
 		script = nil;
