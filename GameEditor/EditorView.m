@@ -818,7 +818,12 @@ anchorPoint = _anchorPoint;
 		CGPoint locationInScene = CGPointMake((locationInView.x - _viewOrigin.x) * _viewScale,
 											  (locationInView.y - _viewOrigin.y) * _viewScale);
 
-		CGPoint locationInSelection = [_scene convertPoint:locationInScene toNode:_node];
+		CGPoint locationInSelection;
+		if (!_node) {
+			locationInSelection = locationInScene;
+		} else {
+			locationInSelection = [_scene convertPoint:locationInScene toNode:_node];
+		}
 
 		return [self.delegate editorView:self performDragOperation:item atLocation:locationInSelection];
 	}

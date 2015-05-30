@@ -149,8 +149,10 @@
 	IBOutlet NSArrayController *_libraryArrayController;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
-	LuaContext *_sharedScriptingContext;
 	NSArray *_exportedClasses;
+	LuaContext *_sharedScriptingContext;
+	NSMutableArray *_scriptingContexts;
+	NSMutableArray *_scripts;
 }
 
 @synthesize window = _window;
@@ -747,6 +749,9 @@
 		return [[a lastPathComponent] compare:[b lastPathComponent] options:NSNumericSearch];
 	}];
 
+	_scripts = [NSMutableArray array];
+	_scriptingContexts = [NSMutableArray array];
+
 	for (NSURL *aURL in directoryEntries) {
 		NSNumber *isDirectory;
 		[aURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:NULL];
@@ -808,6 +813,8 @@
 					script = (id)[NSNull null];
 				}
 
+				[_scripts addObject:script];
+
 				/* Populate the library items with the loaded data */
 				for (int i=0; i<names.count; ++i) {
 					name = [names[i] stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -843,7 +850,7 @@
 														 @"label":fullDescriptionAttributedString,
 														 @"image":iconImage,
 														 @"showLabel":@YES,
-														 @"script":script}.mutableCopy];
+														 @"script":@(_scripts.count - 1)}.mutableCopy];
 				}
 			}
 		}
@@ -855,51 +862,75 @@
 #pragma mark Editor Dragging Destination
 
 - (NSDragOperation)editorView:(EditorView *)editorView draggingEntered:(id)item {
+	/* Check that there is a scene loaded */
+	if (!_editorView.scene) {
+		return NSDragOperationNone;
+	}
+
 	return NSDragOperationCopy;
 }
 
 - (BOOL)editorView:(EditorView *)editorView performDragOperation:(id)item atLocation:(CGPoint)locationInSelection {
-	if (!_editorView.scene) {
-		return NO;
+	/* Check that there is a valid selection */
+	NSIndexPath *selectionIndexPath = [_navigatorTreeController selectionIndexPath];
+	if (!selectionIndexPath) {
+		selectionIndexPath = [NSIndexPath indexPathWithIndex:0];
 	}
 
-	LuaContext *scriptingContext = [[LuaContext alloc] initWithVirtualMachine:_sharedScriptingContext.virtualMachine];
-	scriptingContext[@"scene"] = _editorView.scene;
-
-	for (Class class in _exportedClasses) {
-		scriptingContext[[class className]] = class;
-	}
-
+	/* Get the library item */
 	item = [[_libraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
 
-	NSString *script = [item objectForKey:@"script"];
-	if ([script isEqual:[NSNull null]])
-		script = nil;
+	/* Retrieve a valid context from the cache for the item */
+	NSNumber *itemIndex = [item objectForKey:@"context"];
+	LuaContext *scriptingContext = nil;
+	if (itemIndex) {
+		scriptingContext = [_scriptingContexts objectAtIndex:[itemIndex intValue]];
+	}
+
+	/* Create a new context if there isn't one already cached */
 	NSError *error = nil;
-	[scriptingContext parse:script error:&error];
+	if (!scriptingContext) {
+		/* Create the context */
+		scriptingContext = [[LuaContext alloc] initWithVirtualMachine:_sharedScriptingContext.virtualMachine];
 
-	if (error) {
-		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
-		return NO;
+		/* Copy the variables from the shared context */
+		scriptingContext[@"scene"] = _editorView.scene;
+		for (Class class in _exportedClasses) {
+			scriptingContext[[class className]] = class;
+		}
+
+		/* Retrieve the script */
+		itemIndex = [item objectForKey:@"script"];
+		NSString *script = nil;
+		if (itemIndex) {
+			script = [_scripts objectAtIndex:[itemIndex intValue]];
+		}
+		if ([script isEqual:[NSNull null]])
+			script = nil;
+
+		/* Run the script */
+		[scriptingContext parse:script error:&error];
+		if (error) {
+			[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
+			return NO;
+		}
+
+		/* Cache the scripting context if the script returned with no errors */
+		[_scriptingContexts addObject:scriptingContext];
+		[item setObject:@(_scriptingContexts.count - 1) forKey:@"context"];
 	}
 
+	/* Create the node from the script */
 	SKNode *node = [scriptingContext call:@"createNodeAtPosition" with:@[[NSValue valueWithPoint:locationInSelection], [item objectForKey:@"toolName"]] error:&error];
-
 	if (error) {
 		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
 		return NO;
 	}
-
 	if (!node) {
 		return NO;
 	}
 
-	NSIndexPath *selectionIndexPath = [_navigatorTreeController selectionIndexPath];
-
-	if (!selectionIndexPath) {
-		return NO;
-	}
-
+	/* Insert the created node into the scene hierarchy */
 	[_navigatorTreeController insertObject:[NavigationNode navigationNodeWithNode:node]
 				 atArrangedObjectIndexPath:[selectionIndexPath indexPathByAddingIndex:0]];
 
