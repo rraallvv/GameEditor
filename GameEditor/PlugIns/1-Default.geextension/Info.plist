@@ -12,6 +12,8 @@
 		<string>Empty Node</string>
 		<string>Light</string>
 		<string>Emitter</string>
+		<string>Label</string>
+		<string>Shape Node (Square)</string>
 	</array>
 	<key>Descriptions</key>
 	<array>
@@ -19,6 +21,8 @@
 		<string>Create an empty node.</string>
 		<string>Create a basic light.</string>
 		<string>Create a basic emitter.</string>
+		<string>Create a basic label.</string>
+		<string>Create a square shape node.</string>
 	</array>
 	<key>Script File</key>
 	<string>script.lua</string>
@@ -28,6 +32,8 @@
 		<string>EmptyNode.png</string>
 		<string>Light.png</string>
 		<string>Emitter.png</string>
+		<string>Label.png</string>
+		<string>ShapeNode.png</string>
 	</array>
 </dict>
 </plist>

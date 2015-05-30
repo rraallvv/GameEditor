@@ -16,12 +16,23 @@ function createEmitter()
 	return SKEmitterNode.node()
 end
 
+function createLabel()
+	return SKLabelNode.labelNodeWithText('Label')
+end
+
+function createShapeNode()
+	local rect = {x=-50, y=-50, width=100, height=100}
+	return SKShapeNode.shapeNodeWithRect(rect)
+end
+
 function createNodeAtPosition(position, toolName)
 	local tools = {
 		ColorSprite = createColorSprite,
 		EmptyNode = createEmptyNode,
 		Light = createLight,
-		Emitter = createEmitter
+		Emitter = createEmitter,
+		Label = createLabel,
+		ShapeNode = createShapeNode
 	}
 	print(toolName)
 	local createNode = tools[toolName]

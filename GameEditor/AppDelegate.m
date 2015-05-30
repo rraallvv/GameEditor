@@ -199,7 +199,14 @@
 	_sharedScriptingContext = [LuaContext new];
 
 	/* Cache the exported classes */
-	_exportedClasses = @[[SKColor class], [SKNode class], [SKScene class], [SKSpriteNode class], [SKLightNode class], [SKEmitterNode class], [SKShapeNode class]];
+	_exportedClasses = @[[SKColor class],
+						 [SKNode class],
+						 [SKScene class],
+						 [SKSpriteNode class],
+						 [SKLightNode class],
+						 [SKEmitterNode class],
+						 [SKShapeNode class],
+						 [SKLabelNode class]];
 	for (Class class in _exportedClasses) {
 		[self exportClass:class toContext:_sharedScriptingContext];
 	}
@@ -817,7 +824,12 @@
 
 				/* Populate the library items with the loaded data */
 				for (int i=0; i<names.count; ++i) {
-					name = [names[i] stringByReplacingOccurrencesOfString:@" " withString:@""];
+					name = names[i];
+					NSString *toolName = [name stringByReplacingOccurrencesOfString:@" " withString:@""];
+					NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(.*\\)"
+																						   options:NSRegularExpressionCaseInsensitive
+																							 error:nil];
+					toolName = [regex stringByReplacingMatchesInString:toolName options:0 range:NSMakeRange(0, [toolName length]) withTemplate:@""];
 
 					if (i < descriptions.count) {
 						description = descriptions[i];
@@ -846,7 +858,7 @@
 					[fullDescriptionAttributedString endEditing];
 
 					/* Add the item to the library */
-					[_libraryArrayController addObject:@{@"toolName":name,
+					[_libraryArrayController addObject:@{@"toolName":toolName,
 														 @"label":fullDescriptionAttributedString,
 														 @"image":iconImage,
 														 @"showLabel":@YES,
