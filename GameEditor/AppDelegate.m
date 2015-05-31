@@ -206,7 +206,8 @@
 						 [SKLightNode class],
 						 [SKEmitterNode class],
 						 [SKShapeNode class],
-						 [SKLabelNode class]];
+						 [SKLabelNode class],
+						 [SKFieldNode class]];
 	for (Class class in _exportedClasses) {
 		[self exportClass:class toContext:_sharedScriptingContext];
 	}
@@ -906,10 +907,10 @@
 		scriptingContext = [[LuaContext alloc] initWithVirtualMachine:_sharedScriptingContext.virtualMachine];
 
 		/* Copy the variables from the shared context */
-		scriptingContext[@"scene"] = _editorView.scene;
 		for (Class class in _exportedClasses) {
 			scriptingContext[[class className]] = class;
 		}
+		scriptingContext[@"scene"] = _editorView.scene;
 
 		/* Retrieve the script */
 		itemIndex = [item objectForKey:@"script"];

@@ -71,25 +71,26 @@ function createVelocityField()
 	return SKFieldNode.node()
 end
 
+toolFunctions = {
+	ColorSprite = createColorSprite,
+	EmptyNode = createEmptyNode,
+	Light = createLight,
+	Emitter = createEmitter,
+	Label = createLabel,
+	ShapeNode = createShapeNode,
+	LinearGravityField = createLinearGravityField,
+	RadialGravityField = createRadialGravityField,
+	SpringField = createSpringField,
+	DragField = createDragField,
+	VortexField = createVortexField,
+	TurbulenceField = createTurbulenceField,
+	NoiseField = createNoiseField,
+	VelocityField = createVelocityField
+}
+
 -- Call back function
 function createNodeAtPosition(position, toolName)
-	local tools = {
-		ColorSprite = createColorSprite,
-		EmptyNode = createEmptyNode,
-		Light = createLight,
-		Emitter = createEmitter,
-		Label = createLabel,
-		ShapeNode = createShapeNode,
-		LinearGravityField = createLinearGravityField,
-		RadialGravityField = createRadialGravityField,
-		SpringField = createSpringField,
-		DragField = createDragField,
-		VortexField = createVortexField,
-		TurbulenceField = createTurbulenceField,
-		NoiseField = createNoiseField,
-		VelocityField = createVelocityField
-	}
-	local createNode = tools[toolName]
+	local createNode = toolFunctions[toolName]
     local node = createNode()
 	node.position = position
 	return node
