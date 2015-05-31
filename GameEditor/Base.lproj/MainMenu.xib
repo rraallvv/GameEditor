@@ -391,7 +391,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="1024" height="600"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <splitView dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zp9-ka-bca">
+                    <splitView autosaveName="Panels divider" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zp9-ka-bca">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="600"/>
                         <subviews>
                             <customView id="eJi-p6-3Ak">
@@ -523,7 +523,7 @@
                                 <rect key="frame" x="764" y="0.0" width="260" height="600"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <splitView dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="LQe-nL-xD8">
+                                    <splitView autosaveName="Utilities divider" dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="LQe-nL-xD8">
                                         <rect key="frame" x="0.0" y="0.0" width="260" height="600"/>
                                         <subviews>
                                             <customView id="wfL-qM-DFG">
