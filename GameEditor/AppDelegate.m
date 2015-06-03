@@ -151,8 +151,7 @@
 	NSString *_currentFilename;
 	NSArray *_exportedClasses;
 	LuaContext *_sharedScriptingContext;
-	NSMutableArray *_scriptingContexts;
-	NSMutableArray *_scripts;
+	NSMutableArray *_contextsData;
 }
 
 @synthesize window = _window;
@@ -757,8 +756,7 @@
 		return [[a lastPathComponent] compare:[b lastPathComponent] options:NSNumericSearch];
 	}];
 
-	_scripts = [NSMutableArray array];
-	_scriptingContexts = [NSMutableArray array];
+	_contextsData = [NSMutableArray array];
 
 	for (NSURL *aURL in directoryEntries) {
 		NSNumber *isDirectory;
@@ -821,7 +819,7 @@
 					script = (id)[NSNull null];
 				}
 
-				[_scripts addObject:script];
+				[_contextsData addObject:@{@"script": script}.mutableCopy];
 
 				/* Populate the library items with the loaded data */
 				for (int i=0; i<names.count; ++i) {
@@ -863,7 +861,7 @@
 														 @"label":fullDescriptionAttributedString,
 														 @"image":iconImage,
 														 @"showLabel":@YES,
-														 @"script":@(_scripts.count - 1)}.mutableCopy];
+														 @"contextData":@(_contextsData.count - 1)}.mutableCopy];
 				}
 			}
 		}
@@ -891,50 +889,50 @@
 	}
 
 	/* Get the library item */
-	item = [[_libraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
+	NSMutableDictionary *libraryItem = [[_libraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
 
 	/* Retrieve a valid context from the cache for the item */
-	NSNumber *itemIndex = [item objectForKey:@"context"];
-	LuaContext *scriptingContext = nil;
+	NSNumber *itemIndex = [libraryItem objectForKey:@"contextData"];
+	LuaContext *scriptContext = nil;
+	NSMutableDictionary *contextData = nil;
 	if (itemIndex) {
-		scriptingContext = [_scriptingContexts objectAtIndex:[itemIndex intValue]];
+		contextData = [_contextsData objectAtIndex:[itemIndex intValue]];
+		scriptContext = [contextData objectForKey:@"context"];
 	}
 
 	/* Create a new context if there isn't one already cached */
 	NSError *error = nil;
-	if (!scriptingContext) {
+	if (!scriptContext) {
 		/* Create the context */
-		scriptingContext = [[LuaContext alloc] initWithVirtualMachine:_sharedScriptingContext.virtualMachine];
+		scriptContext = [[LuaContext alloc] initWithVirtualMachine:_sharedScriptingContext.virtualMachine];
 
 		/* Copy the variables from the shared context */
 		for (Class class in _exportedClasses) {
-			scriptingContext[[class className]] = class;
+			scriptContext[[class className]] = class;
 		}
-		scriptingContext[@"scene"] = _editorView.scene;
+		scriptContext[@"scene"] = _editorView.scene;
 
 		/* Retrieve the script */
-		itemIndex = [item objectForKey:@"script"];
-		NSString *script = nil;
-		if (itemIndex) {
-			script = [_scripts objectAtIndex:[itemIndex intValue]];
-		}
-		if ([script isEqual:[NSNull null]])
-			script = nil;
+		NSString *script = [contextData objectForKey:@"script"];
 
 		/* Run the script */
-		[scriptingContext parse:script error:&error];
+		[scriptContext parse:script error:&error];
 		if (error) {
 			[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
 			return NO;
 		}
 
 		/* Cache the scripting context if the script returned with no errors */
-		[_scriptingContexts addObject:scriptingContext];
-		[item setObject:@(_scriptingContexts.count - 1) forKey:@"context"];
+		[contextData setObject:scriptContext forKey:@"context"];
+	}
+
+	/* Esure the global variable scene is available in the context */
+	else if (![scriptContext[@"scene"] isEqual:_editorView.scene]) {
+		scriptContext[@"scene"] = _editorView.scene;
 	}
 
 	/* Create the node from the script */
-	SKNode *node = [scriptingContext call:@"createNodeAtPosition" with:@[[NSValue valueWithPoint:locationInSelection], [item objectForKey:@"toolName"]] error:&error];
+	SKNode *node = [scriptContext call:@"createNodeAtPosition" with:@[[NSValue valueWithPoint:locationInSelection], [libraryItem objectForKey:@"toolName"]] error:&error];
 	if (error) {
 		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
 		return NO;
