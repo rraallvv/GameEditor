@@ -137,7 +137,7 @@
 
 @end
 
-#pragma mark Application Delegate
+#pragma mark - Application Delegate
 
 @implementation AppDelegate {
 	IBOutlet EditorView *_editorView;
@@ -149,6 +149,9 @@
 	IBOutlet NSArrayController *_libraryArrayController;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
+	NSArray *_exportedClasses;
+	LuaContext *_sharedScriptingContext;
+	NSMutableArray *_contextsData;
 }
 
 @synthesize window = _window;
@@ -189,14 +192,27 @@
 	}
 
 	/* Populate the library */
-	for (NSInteger i = 1; i <= 4; ++i) {
-		[_libraryArrayController addObject:@{@"label":[NSString stringWithFormat:@"Label %ld - text text text text text text text text text text text text", i],
-											 @"image":[NSImage imageNamed:NSImageNameInfo],
-											 @"showLabel":@YES}.mutableCopy];
-		[_libraryArrayController addObject:@{@"label":[NSString stringWithFormat:@"Item %ld", i],
-											 @"image":[NSImage imageNamed:NSImageNameInfo],
-											 @"showLabel": @YES}.mutableCopy];
+	[self populateLibrary];
+
+	/* Initialize the scripting support */
+	_sharedScriptingContext = [LuaContext new];
+
+	/* Cache the exported classes */
+	_exportedClasses = @[[SKColor class],
+						 [SKNode class],
+						 [SKScene class],
+						 [SKSpriteNode class],
+						 [SKLightNode class],
+						 [SKEmitterNode class],
+						 [SKShapeNode class],
+						 [SKLabelNode class],
+						 [SKFieldNode class]];
+	for (Class class in _exportedClasses) {
+		[self exportClass:class toContext:_sharedScriptingContext];
 	}
+
+	/* Set focus on the editor view */
+	[[self window] makeFirstResponder:_editorView];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
@@ -704,29 +720,238 @@
 	_currentFilename = nil;
 }
 
+- (void)addRecentDocument:(NSString *)filename {
+	[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	NSMutableArray *recentDocuments = [[userDefaults valueForKey:@"recentDocuments"] mutableCopy];
+	if (!recentDocuments) {
+		recentDocuments = [NSMutableArray array];
+	} else if ([recentDocuments indexOfObject:filename] != NSNotFound) {
+		return;
+	}
+	[recentDocuments addObject:filename];
+	[userDefaults setObject:recentDocuments forKey:@"recentDocuments"];
+	[userDefaults synchronize];
+}
+
 #pragma mark Library
 
 - (IBAction)libraryModeAction:(NSButton *)sender {
 	_libraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
-#pragma mark Helper methods
+- (void)populateLibrary {
+	NSURL *plugInsURL = [[NSBundle mainBundle] builtInPlugInsURL];
 
-- (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray *)nodes {
-	for (int i = 0; i < nodes.count; ++i) {
-		NSTreeNode *node = nodes[i];
-		if ([[[node representedObject] node] isEqual:anObject]) {
-			return node;
-		}
-		if ([[node childNodes] count]) {
-			id result = [self navigationNodeOfObject:anObject inNodes:[node childNodes]];
-			if (result) {
-				return result;
+	NSDirectoryEnumerator *directoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:plugInsURL
+																	  includingPropertiesForKeys:@[ NSURLNameKey, NSURLIsDirectoryKey ]
+																						 options:NSDirectoryEnumerationSkipsHiddenFiles | NSDirectoryEnumerationSkipsSubdirectoryDescendants
+																					errorHandler:nil];
+
+	NSPredicate *filter = [NSPredicate predicateWithFormat: @"pathExtension = 'geextension'"];
+
+	NSArray *directoryEntries = [directoryEnumerator.allObjects filteredArrayUsingPredicate: filter];
+
+	directoryEntries = [directoryEntries sortedArrayUsingComparator:^(NSURL* a, NSURL* b) {
+		return [[a lastPathComponent] compare:[b lastPathComponent] options:NSNumericSearch];
+	}];
+
+	_contextsData = [NSMutableArray array];
+
+	for (NSURL *aURL in directoryEntries) {
+		NSNumber *isDirectory;
+		[aURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:NULL];
+
+		if (isDirectory) {
+			NSBundle *bundle = [NSBundle bundleWithURL:aURL];
+			NSDictionary *info = [bundle infoDictionary];
+
+			if (info) {
+				/* Item's name */
+				NSString *name = info[@"CFBundleDisplayName"];
+				if (!name) {
+					name = @"No name";
+				}
+				NSArray *names = info[@"Names"];
+				if (!names) {
+					names = @[name];
+				}
+
+				/* Item's description */
+				NSString *description = info[@"Description"];
+				if (!description) {
+					description = @"No description";
+				}
+				NSArray *descriptions = info[@"Descriptions"];
+				if (!descriptions) {
+					descriptions = @[description];
+				}
+
+				/* Item's image */
+				NSString *iconPath = [aURL.path stringByAppendingPathComponent:info[@"CFBundleIconFile"]];
+				NSImage *iconImage = [[NSImage alloc] initWithContentsOfFile:iconPath];
+				NSImage *defaultIcon = [NSImage imageNamed:NSImageNameCaution];
+				if (!iconImage) {
+					iconImage = defaultIcon;
+				}
+				NSArray *iconPaths = info[@"CFBundleIconFiles"];
+				NSMutableArray *iconImages = [NSMutableArray array];
+				for (int i=0; i<iconPaths.count; ++i) {
+					iconPath = [aURL.path stringByAppendingPathComponent:iconPaths[i]];
+					NSImage *anImage = [[NSImage alloc] initWithContentsOfFile:iconPath];
+					if (!anImage) {
+						iconImages[i] = defaultIcon;
+					} else {
+						iconImages[i] = anImage;
+					}
+				}
+				if (iconImages.count == 0) {
+					iconImages[0] = iconImage;
+				}
+
+				/* Item's script */
+				NSString *script = info[@"Script"];
+				if (!script) {
+					NSString *itemScriptPath = [aURL.path stringByAppendingPathComponent:info[@"Script File"]];
+					script = [[NSString alloc] initWithContentsOfFile:itemScriptPath encoding:NSUTF8StringEncoding error:nil];
+				}
+				if (!script) {
+					script = (id)[NSNull null];
+				}
+
+				[_contextsData addObject:@{@"script": script}.mutableCopy];
+
+				/* Populate the library items with the loaded data */
+				for (int i=0; i<names.count; ++i) {
+					name = names[i];
+					NSString *toolName = [name stringByReplacingOccurrencesOfString:@" " withString:@""];
+					NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(.*\\)"
+																						   options:NSRegularExpressionCaseInsensitive
+																							 error:nil];
+					toolName = [regex stringByReplacingMatchesInString:toolName options:0 range:NSMakeRange(0, [toolName length]) withTemplate:@""];
+
+					if (i < descriptions.count) {
+						description = descriptions[i];
+					} else {
+						description = @"No description";
+					}
+
+					if (i < iconImages.count) {
+						iconImage = iconImages[i];
+					} else {
+						iconImage = defaultIcon;
+					}
+
+					/* Item's full description */
+					NSString *fullDescription = [NSString stringWithFormat:@"%@ - %@", name, description];
+					NSRange nameRange = NSMakeRange(0, [name length]);
+					NSRange descriptionRange = NSMakeRange(nameRange.length, fullDescription.length - nameRange.length);
+					NSMutableAttributedString *fullDescriptionAttributedString = [[NSMutableAttributedString alloc] initWithString:fullDescription];
+					[fullDescriptionAttributedString beginEditing];
+					[fullDescriptionAttributedString addAttribute:NSFontAttributeName
+															value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
+															range:nameRange];
+					[fullDescriptionAttributedString addAttribute:NSFontAttributeName
+															value:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]
+															range:descriptionRange];
+					[fullDescriptionAttributedString endEditing];
+
+					/* Add the item to the library */
+					[_libraryArrayController addObject:@{@"toolName":toolName,
+														 @"label":fullDescriptionAttributedString,
+														 @"image":iconImage,
+														 @"showLabel":@YES,
+														 @"contextData":@(_contextsData.count - 1)}.mutableCopy];
+				}
 			}
 		}
 	}
-	return nil;
+
+	[_libraryArrayController setSelectionIndex:0];
 }
+
+#pragma mark Editor Dragging Destination
+
+- (NSDragOperation)editorView:(EditorView *)editorView draggingEntered:(id)item {
+	/* Check that there is a scene loaded */
+	if (!_editorView.scene) {
+		return NSDragOperationNone;
+	}
+
+	return NSDragOperationCopy;
+}
+
+- (BOOL)editorView:(EditorView *)editorView performDragOperation:(id)item atLocation:(CGPoint)locationInSelection {
+	/* Check that there is a valid selection */
+	NSIndexPath *selectionIndexPath = [_navigatorTreeController selectionIndexPath];
+	if (!selectionIndexPath) {
+		selectionIndexPath = [NSIndexPath indexPathWithIndex:0];
+	}
+
+	/* Get the library item */
+	NSMutableDictionary *libraryItem = [[_libraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
+
+	/* Retrieve a valid context from the cache for the item */
+	NSNumber *itemIndex = [libraryItem objectForKey:@"contextData"];
+	LuaContext *scriptContext = nil;
+	NSMutableDictionary *contextData = nil;
+	if (itemIndex) {
+		contextData = [_contextsData objectAtIndex:[itemIndex intValue]];
+		scriptContext = [contextData objectForKey:@"context"];
+	}
+
+	/* Create a new context if there isn't one already cached */
+	NSError *error = nil;
+	if (!scriptContext) {
+		/* Create the context */
+		scriptContext = [[LuaContext alloc] initWithVirtualMachine:_sharedScriptingContext.virtualMachine];
+
+		/* Copy the variables from the shared context */
+		for (Class class in _exportedClasses) {
+			scriptContext[[class className]] = class;
+		}
+		scriptContext[@"scene"] = _editorView.scene;
+
+		/* Retrieve the script */
+		NSString *script = [contextData objectForKey:@"script"];
+
+		/* Run the script */
+		[scriptContext parse:script error:&error];
+		if (error) {
+			[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
+			return NO;
+		}
+
+		/* Cache the scripting context if the script returned with no errors */
+		[contextData setObject:scriptContext forKey:@"context"];
+	}
+
+	/* Esure the global variable scene is available in the context */
+	else if (![scriptContext[@"scene"] isEqual:_editorView.scene]) {
+		scriptContext[@"scene"] = _editorView.scene;
+	}
+
+	/* Create the node from the script */
+	SKNode *node = [scriptContext call:@"createNodeAtPosition" with:@[[NSValue valueWithPoint:locationInSelection], [libraryItem objectForKey:@"toolName"]] error:&error];
+	if (error) {
+		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
+		return NO;
+	}
+	if (!node) {
+		return NO;
+	}
+
+	/* Insert the created node into the scene hierarchy */
+	[_navigatorTreeController insertObject:[NavigationNode navigationNodeWithNode:node]
+				 atArrangedObjectIndexPath:[selectionIndexPath indexPathByAddingIndex:0]];
+
+	/* Set focus on the editor view */
+	[[self window] makeFirstResponder:_editorView];
+
+	return YES;
+}
+
+#pragma mark Scene
 
 - (BOOL)openSceneWithFilename:(NSString *)filename {
 
@@ -750,20 +975,6 @@
 	_currentFilename = filename;
 
 	return YES;
-}
-
-- (void)addRecentDocument:(NSString *)filename {
-	[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
-	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-	NSMutableArray *recentDocuments = [[userDefaults valueForKey:@"recentDocuments"] mutableCopy];
-	if (!recentDocuments) {
-		recentDocuments = [NSMutableArray array];
-	} else if ([recentDocuments indexOfObject:filename] != NSNotFound) {
-		return;
-	}
-	[recentDocuments addObject:filename];
-	[userDefaults setObject:recentDocuments forKey:@"recentDocuments"];
-	[userDefaults synchronize];
 }
 
 - (void)prepareScene:(SKScene *)scene {
@@ -808,7 +1019,7 @@
 	self.physicsBody = borderBody;
 
 	/* Add a SceneKit scene */
-	
+
 	CGPoint center = CGPointMake(CGRectGetMidX(scene.frame),CGRectGetMidY(scene.frame));
 	SCNScene *spaceShip = [SCNScene sceneNamed:@"art.scnassets/ship.dae"];
 	SK3DNode *spaceShipNode = [SK3DNode nodeWithViewportSize:CGSizeMake(200, 200)];
@@ -820,16 +1031,6 @@
 	[self advanceEmittersInNode:self];
 
 	[scene setPaused:YES];
-}
-
-- (void)advanceEmittersInNode:(id)node {
-	if ([node isKindOfClass:[SKEmitterNode class]]) {
-		SKEmitterNode *emitter = node;
-		[emitter advanceSimulationTime:0.41 * emitter.particleLifetime];
-	}
-	for (id child in [node children]) {
-		[self advanceEmittersInNode:child];
-	}
 }
 
 - (void)removeScene {
@@ -856,10 +1057,39 @@
 	[self.skView presentScene:scene];
 
 	_editorView.scene = scene;
+	_sharedScriptingContext[@"scene"] = scene;
 
 	[_editorView updateVisibleRect];
 
 	[self performSelector:@selector(updateSelectionWithNode:) withObject:scene afterDelay:0.5];
+}
+
+#pragma mark Helper methods
+
+- (id)navigationNodeOfObject:(id)anObject inNodes:(NSArray *)nodes {
+	for (int i = 0; i < nodes.count; ++i) {
+		NSTreeNode *node = nodes[i];
+		if ([[[node representedObject] node] isEqual:anObject]) {
+			return node;
+		}
+		if ([[node childNodes] count]) {
+			id result = [self navigationNodeOfObject:anObject inNodes:[node childNodes]];
+			if (result) {
+				return result;
+			}
+		}
+	}
+	return nil;
+}
+
+- (void)advanceEmittersInNode:(id)node {
+	if ([node isKindOfClass:[SKEmitterNode class]]) {
+		SKEmitterNode *emitter = node;
+		[emitter advanceSimulationTime:0.41 * emitter.particleLifetime];
+	}
+	for (id child in [node children]) {
+		[self advanceEmittersInNode:child];
+	}
 }
 
 - (void)exportClass:(Class)class toContext:(LuaContext *)context {
