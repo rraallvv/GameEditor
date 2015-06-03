@@ -399,7 +399,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PcI-fz-rXt">
-                                        <rect key="frame" x="0.0" y="0.0" width="190" height="600"/>
+                                        <rect key="frame" x="0.0" y="26" width="190" height="574"/>
                                         <clipView key="contentView" id="Mhd-7L-ZJ2">
                                             <rect key="frame" x="1" y="0.0" width="238" height="134"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -484,13 +484,32 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
+                                    <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tr7-lo-aXw">
+                                        <rect key="frame" x="4" y="4" width="182" height="19"/>
+                                        <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="JdK-r0-Soj">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            <connections>
+                                                <binding destination="FfK-Wg-7Xj" name="predicate" keyPath="filterPredicate" id="KxT-dT-OAX">
+                                                    <dictionary key="options">
+                                                        <string key="NSDisplayName">predicate</string>
+                                                        <string key="NSPredicateFormat">name contains[c] $value</string>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </searchFieldCell>
+                                    </searchField>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="tr7-lo-aXw" secondAttribute="trailing" constant="4" id="1QT-f6-Xmv"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="190" id="G2x-pY-3It"/>
+                                    <constraint firstItem="tr7-lo-aXw" firstAttribute="leading" secondItem="eJi-p6-3Ak" secondAttribute="leading" constant="4" id="GAw-N3-KfY"/>
                                     <constraint firstItem="PcI-fz-rXt" firstAttribute="leading" secondItem="eJi-p6-3Ak" secondAttribute="leading" id="GqV-rK-S6k"/>
+                                    <constraint firstItem="tr7-lo-aXw" firstAttribute="top" secondItem="PcI-fz-rXt" secondAttribute="bottom" constant="3" id="aBV-vY-zET"/>
+                                    <constraint firstAttribute="bottom" secondItem="tr7-lo-aXw" secondAttribute="bottom" constant="4" id="rH4-Vu-XcI"/>
                                     <constraint firstItem="PcI-fz-rXt" firstAttribute="top" secondItem="eJi-p6-3Ak" secondAttribute="top" id="sPh-3p-5ah"/>
                                     <constraint firstAttribute="trailing" secondItem="PcI-fz-rXt" secondAttribute="trailing" id="xtg-OW-bCn"/>
-                                    <constraint firstAttribute="bottom" secondItem="PcI-fz-rXt" secondAttribute="bottom" id="xwz-6e-JGV"/>
                                 </constraints>
                             </customView>
                             <customView id="dlD-ai-f1u">
@@ -837,6 +856,7 @@
                 <outlet property="_editorView" destination="suo-YO-fqM" id="D5W-Hu-pTw"/>
                 <outlet property="_libraryArrayController" destination="ybe-5J-ot9" id="iwT-3F-n1L"/>
                 <outlet property="_libraryCollectionView" destination="53q-Pc-ZVo" id="99Y-Vf-Sy2"/>
+                <outlet property="_navigatorSearchField" destination="tr7-lo-aXw" id="TaK-sT-nEJ"/>
                 <outlet property="_navigatorTreeController" destination="FfK-Wg-7Xj" id="bBG-5I-i7L"/>
                 <outlet property="_navigatorView" destination="Y4L-tX-zfk" id="Gju-ZL-6rD"/>
                 <outlet property="skView" destination="BAm-0B-vb9" id="MCo-T6-F5E"/>
@@ -844,7 +864,7 @@
             </connections>
         </customObject>
         <treeController childrenKeyPath="children" leafKeyPath="isLeaf" id="IEK-xe-ugr" userLabel="Attributes Tree Controller"/>
-        <treeController childrenKeyPath="children" leafKeyPath="isLeaf" id="FfK-Wg-7Xj" userLabel="Navigator Tree Controller"/>
+        <treeController childrenKeyPath="children" leafKeyPath="isLeaf" id="FfK-Wg-7Xj" userLabel="Navigator Tree Controller" customClass="NavigationTreeController"/>
         <arrayController id="ybe-5J-ot9" userLabel="Library Array Controller"/>
         <collectionViewItem id="vBT-rm-Cna">
             <connections>

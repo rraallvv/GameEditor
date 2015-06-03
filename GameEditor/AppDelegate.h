@@ -28,7 +28,7 @@
 #import "EditorView.h"
 #import "NavigatorView.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, EditorViewDelegate, NavigatorViewDelegate>
+@interface AppDelegate : NSObject
 
 @property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet SKView *skView;

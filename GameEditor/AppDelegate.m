@@ -139,6 +139,10 @@
 
 #pragma mark - Application Delegate
 
+@interface AppDelegate () <NSApplicationDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, EditorViewDelegate, NavigatorViewDelegate>
+
+@end
+
 @implementation AppDelegate {
 	IBOutlet EditorView *_editorView;
 	IBOutlet AttributesView *_attributesView;

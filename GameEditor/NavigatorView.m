@@ -25,6 +25,30 @@
 
 #import "NavigatorView.h"
 
+#pragma mark NavigationTreeController
+
+@interface NavigationTreeController : NSTreeController
+@property (strong) NSPredicate *filterPredicate;
+@end
+
+@implementation NavigationTreeController
+@synthesize filterPredicate = _filterPredicate;
+
+- (void)setFilterPredicate:(NSPredicate *)aPredicate {
+	if (_filterPredicate != aPredicate) {
+		id rootNode = [self arrangedObjects];
+		id obj = [[rootNode descendantNodeAtIndexPath:[NSIndexPath indexPathWithIndex:0]] representedObject];
+		[obj setFilterPredicate:aPredicate];
+		_filterPredicate = aPredicate;
+	}
+}
+
+- (NSPredicate *)filterPredicate {
+	return _filterPredicate;
+}
+
+@end
+
 #pragma mark NavigatorView
 
 @interface NavigatorView () <NSOutlineViewDelegate, NSOutlineViewDataSource>
@@ -36,7 +60,7 @@
 	__weak id _actualDataSource;
 	NSIndexPath *_fromIndexPath;
 	NSIndexPath *_toIndexPath;
-	__weak NSTreeController *_treeController;
+	__weak NavigationTreeController *_treeController;
 }
 
 - (void)bind:(NSString *)binding toObject:(id)observable withKeyPath:(NSString *)keyPath options:(NSDictionary *)options {
@@ -62,7 +86,7 @@
 }
 
 - (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index {
-	if (item) {
+	if (item && !_treeController.filterPredicate) {
 		NSPasteboard *pasteBoard = [info draggingPasteboard];
 		_fromIndexPath = [NSKeyedUnarchiver unarchiveObjectWithData:[pasteBoard dataForType:@"public.binary"]];
 		_toIndexPath = [[item indexPath] indexPathByAddingIndex:MAX(0, index)];
@@ -78,9 +102,8 @@
 		}
 
 		return NSDragOperationMove;
-	} else {
-		return NSDragOperationNone;
 	}
+	return NSDragOperationNone;
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index {
