@@ -758,9 +758,9 @@
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             <connections>
-                                                                <binding destination="ybe-5J-ot9" name="predicate" keyPath="filterPredicate" id="h9s-5O-dBa">
+                                                                <binding destination="ybe-5J-ot9" name="predicate" keyPath="filterPredicate" id="uhr-Km-gsr">
                                                                     <dictionary key="options">
-                                                                        <string key="NSPredicateFormat">label contains[c] $value</string>
+                                                                        <string key="NSPredicateFormat">label.string contains[c] $value</string>
                                                                     </dictionary>
                                                                 </binding>
                                                             </connections>
