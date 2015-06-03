@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -381,7 +381,7 @@
                 </menuItem>
             </items>
         </menu>
-        <window title="GameEditor" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="371" customClass="Window">
+        <window title="GameEditor" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" frameAutosaveName="GameEditor window" animationBehavior="default" id="371" customClass="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="1024" height="600"/>
@@ -391,7 +391,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="1024" height="600"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <splitView dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zp9-ka-bca">
+                    <splitView autosaveName="Panels divider" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zp9-ka-bca">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="600"/>
                         <subviews>
                             <customView id="eJi-p6-3Ak">
@@ -523,7 +523,7 @@
                                 <rect key="frame" x="764" y="0.0" width="260" height="600"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
-                                    <splitView dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="LQe-nL-xD8">
+                                    <splitView autosaveName="Utilities divider" dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="LQe-nL-xD8">
                                         <rect key="frame" x="0.0" y="0.0" width="260" height="600"/>
                                         <subviews>
                                             <customView id="wfL-qM-DFG">
@@ -858,25 +858,25 @@
                 <rect key="frame" x="1" y="1" width="169" height="61"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
-                    <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QEY-m8-IvW">
-                        <rect key="frame" x="56" y="3" width="56" height="56"/>
+                    <imageView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QEY-m8-IvW">
+                        <rect key="frame" x="59" y="6" width="50" height="50"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="50" id="9Vy-Vu-9gl"/>
                             <constraint firstAttribute="width" constant="50" id="S94-gd-Urx"/>
                         </constraints>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="photo" id="Mtg-eZ-xms"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="Mtg-eZ-xms"/>
                         <connections>
                             <binding destination="vBT-rm-Cna" name="value" keyPath="representedObject.image" id="htd-km-Vzd"/>
                             <binding destination="vBT-rm-Cna" name="hidden" keyPath="representedObject.showLabel" id="DdP-w5-nyn"/>
                         </connections>
                     </imageView>
-                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="y7W-ub-Px8">
-                        <rect key="frame" x="2" y="2" width="56" height="56"/>
+                    <imageView translatesAutoresizingMaskIntoConstraints="NO" id="y7W-ub-Px8">
+                        <rect key="frame" x="2" y="5" width="50" height="50"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="50" id="FG5-75-Kne"/>
                             <constraint firstAttribute="width" constant="50" id="ODG-Wa-QI0"/>
                         </constraints>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="photo" id="y4J-Gd-dCF"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="y4J-Gd-dCF"/>
                         <connections>
                             <binding destination="vBT-rm-Cna" name="value" keyPath="representedObject.image" id="Yqg-lf-WJA"/>
                             <binding destination="vBT-rm-Cna" name="hidden" keyPath="representedObject.showLabel" id="YMx-Gi-cdr">
@@ -886,8 +886,8 @@
                             </binding>
                         </connections>
                     </imageView>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="st4-zo-9L7">
-                        <rect key="frame" x="61" y="5" width="105" height="50"/>
+                    <textField horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="st4-zo-9L7">
+                        <rect key="frame" x="55" y="5" width="111" height="50"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Multiline Label" id="N02-oI-rIY" customClass="VerticallyCenteredTextFieldCell">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -905,14 +905,14 @@
                 </subviews>
             </view>
             <constraints>
-                <constraint firstItem="st4-zo-9L7" firstAttribute="bottom" secondItem="y7W-ub-Px8" secondAttribute="bottom" id="8Uh-Ml-axr"/>
                 <constraint firstAttribute="centerY" secondItem="QEY-m8-IvW" secondAttribute="centerY" id="BnI-YX-pNJ"/>
+                <constraint firstItem="st4-zo-9L7" firstAttribute="height" secondItem="y7W-ub-Px8" secondAttribute="height" id="MhP-BV-dNq"/>
                 <constraint firstAttribute="trailing" secondItem="st4-zo-9L7" secondAttribute="trailing" constant="6" id="Oyy-6p-z9Q"/>
                 <constraint firstAttribute="centerX" secondItem="QEY-m8-IvW" secondAttribute="centerX" constant="1" id="Q9M-ij-Ue7"/>
+                <constraint firstAttribute="centerY" secondItem="st4-zo-9L7" secondAttribute="centerY" id="SYM-0q-SBh"/>
                 <constraint firstAttribute="centerY" secondItem="y7W-ub-Px8" secondAttribute="centerY" id="WAY-M7-vBj"/>
-                <constraint firstItem="st4-zo-9L7" firstAttribute="leading" secondItem="y7W-ub-Px8" secondAttribute="trailing" constant="8" id="Wbc-n3-J4L"/>
-                <constraint firstItem="y7W-ub-Px8" firstAttribute="leading" secondItem="9Nu-LJ-3Af" secondAttribute="leading" constant="6" id="ehU-qf-JcU"/>
-                <constraint firstItem="st4-zo-9L7" firstAttribute="top" secondItem="y7W-ub-Px8" secondAttribute="top" id="o4i-Zj-6GR"/>
+                <constraint firstItem="st4-zo-9L7" firstAttribute="leading" secondItem="y7W-ub-Px8" secondAttribute="trailing" constant="5" id="Wbc-n3-J4L"/>
+                <constraint firstItem="y7W-ub-Px8" firstAttribute="leading" secondItem="9Nu-LJ-3Af" secondAttribute="leading" constant="3" id="ehU-qf-JcU"/>
             </constraints>
             <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
             <color key="fillColor" name="selectedControlColor" catalog="System" colorSpace="catalog"/>

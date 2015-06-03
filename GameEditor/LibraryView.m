@@ -208,8 +208,7 @@
 }
 
 - (BOOL)collectionView:(NSCollectionView *)collectionView writeItemsAtIndexes:(NSIndexSet *)indexes toPasteboard:(NSPasteboard *)pasteboard {
-	id itemInfo = [[collectionView itemAtIndex:indexes.firstIndex] representedObject];
-	NSData *pboardData = [NSKeyedArchiver archivedDataWithRootObject:[itemInfo valueForKey:@"label"]];
+	NSData *pboardData = [NSKeyedArchiver archivedDataWithRootObject:@(indexes.firstIndex)];
 	[pasteboard setData:pboardData forType:@"public.binary"];
 	return YES;
 }
