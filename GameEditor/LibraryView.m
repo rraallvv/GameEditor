@@ -107,10 +107,13 @@
 	CGSize size = self.libraryView.itemSize;
 
 	NSBezierPath *borderPath = [NSBezierPath bezierPath];
-	[borderPath moveToPoint:CGPointMake(0.5, 0.5)];
-	[borderPath lineToPoint:CGPointMake(size.width - 0.5, 0.5)];
 	if (self.libraryView.mode == LibraryViewModeIcons) {
+		[borderPath moveToPoint:CGPointMake(0.5, 0.5)];
+		[borderPath lineToPoint:CGPointMake(size.width - 0.5, 0.5)];
 		[borderPath lineToPoint:CGPointMake(size.width - 0.5, size.height + 0.5)];
+	} else {
+		[borderPath moveToPoint:CGPointMake(3.0, 0.5)];
+		[borderPath lineToPoint:CGPointMake(size.width - 4.0, 0.5)];
 	}
 
 	[[NSColor gridColor] set];
@@ -118,17 +121,30 @@
 
 	if (!self.transparent) {
 		CGRect rect;
-		const CGFloat border = 2.0;
+		CGFloat border;
+		if (self.libraryView.mode == LibraryViewModeIcons) {
+			border = 2.0;
+		} else {
+			border = 1.0;
+		}
 
 		rect.origin = CGPointMake(border, border + 1.0);
 		rect.size = CGSizeMake(size.width - 2.0 * border - 1.0, size.height - 2.0 * border - 1.0);
 
 		NSBezierPath *selectionPath = [NSBezierPath bezierPath];
-		[selectionPath moveToPoint:CGPointMake(NSMinX(rect) - 0.5, NSMinY(rect) - 0.5)];
-		[selectionPath lineToPoint:CGPointMake(NSMaxX(rect) + 0.5, NSMinY(rect) - 0.5)];
-		[selectionPath lineToPoint:CGPointMake(NSMaxX(rect) + 0.5, NSMaxY(rect) + 0.5)];
-		[selectionPath lineToPoint:CGPointMake(NSMinX(rect) - 0.5, NSMaxY(rect) + 0.5)];
-		[selectionPath closePath];
+		if (self.libraryView.mode == LibraryViewModeIcons) {
+			[selectionPath moveToPoint:CGPointMake(NSMinX(rect) - 0.5, NSMinY(rect) - 0.5)];
+			[selectionPath lineToPoint:CGPointMake(NSMaxX(rect) + 0.5, NSMinY(rect) - 0.5)];
+			[selectionPath lineToPoint:CGPointMake(NSMaxX(rect) + 0.5, NSMaxY(rect) + 0.5)];
+			[selectionPath lineToPoint:CGPointMake(NSMinX(rect) - 0.5, NSMaxY(rect) + 0.5)];
+			[selectionPath closePath];
+		} else {
+			[selectionPath moveToPoint:CGPointMake(-1.0, NSMinY(rect) - 0.5)];
+			[selectionPath lineToPoint:CGPointMake(size.width + 1.0, NSMinY(rect) - 0.5)];
+			[selectionPath lineToPoint:CGPointMake(size.width + 1.0, NSMaxY(rect) + 0.5)];
+			[selectionPath lineToPoint:CGPointMake(-1.0, NSMaxY(rect) + 0.5)];
+			[selectionPath closePath];
+		}
 
 		if (self.libraryView.firstResponder) {
 			[[NSColor alternateSelectedControlColor] setStroke];

@@ -134,7 +134,6 @@
 		E4E935EB1B08ABAF007A48C4 /* LuaTests.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LuaTests.xcodeproj; path = "ObjC-Lua/LuaTests.xcodeproj"; sourceTree = "<group>"; };
 		E4F3B6A51ACD7EC4001482D2 /* NavigationNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationNode.h; sourceTree = "<group>"; };
 		E4F3B6A61ACD7EC4001482D2 /* NavigationNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationNode.m; sourceTree = "<group>"; };
-		E4F454301AED868900501EED /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,7 +200,6 @@
 		E4ABDB4A1AB3933900AAE82E /* GameEditor */ = {
 			isa = PBXGroup;
 			children = (
-				E4F454301AED868900501EED /* LICENSE */,
 				E4ABDB4D1AB3933900AAE82E /* AppDelegate.h */,
 				E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */,
 				E40813A01AC64C7600F54824 /* AttributesInspector */,
