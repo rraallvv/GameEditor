@@ -556,7 +556,7 @@
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="20" rowSizeStyle="automatic" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="16" outlineTableColumn="XrN-W1-UcV" id="zW2-BO-taF" customClass="AttributesView">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="258" height="0.0"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="260" height="0.0"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                                     <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="calibratedRGB"/>
@@ -729,7 +729,7 @@
                                                     <constraint firstAttribute="trailing" secondItem="WEo-lF-8ul" secondAttribute="trailing" id="rBp-T7-cWX"/>
                                                 </constraints>
                                             </customView>
-                                            <customView id="REE-3d-rnp" customClass="LibraryPanelView">
+                                            <customView id="REE-3d-rnp">
                                                 <rect key="frame" x="0.0" y="400" width="260" height="200"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
@@ -760,43 +760,54 @@
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                     </scrollView>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oSp-qF-DyS">
-                                                        <rect key="frame" x="5" y="4" width="19" height="17"/>
-                                                        <buttonCell key="cell" type="recessed" bezelStyle="recessed" image="LibraryListMode" imagePosition="only" alignment="center" alternateImage="LibraryIconsMode" controlSize="small" inset="2" id="g5q-68-Omu">
-                                                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="systemBold" size="12"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="libraryModeAction:" target="494" id="zZK-Px-cQF"/>
-                                                        </connections>
-                                                    </button>
-                                                    <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JOl-ek-8VA">
-                                                        <rect key="frame" x="28" y="3" width="229" height="19"/>
-                                                        <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" bezelStyle="round" id="eab-SF-2Gw">
-                                                            <font key="font" metaFont="smallSystem"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                            <connections>
-                                                                <binding destination="ybe-5J-ot9" name="predicate" keyPath="filterPredicate" id="uhr-Km-gsr">
-                                                                    <dictionary key="options">
-                                                                        <string key="NSPredicateFormat">label.string contains[c] $value</string>
-                                                                    </dictionary>
-                                                                </binding>
-                                                            </connections>
-                                                        </searchFieldCell>
-                                                    </searchField>
+                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="NjT-RW-5T2" customClass="LibraryPanelView">
+                                                        <rect key="frame" x="0.0" y="0.0" width="260" height="25"/>
+                                                        <subviews>
+                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oSp-qF-DyS">
+                                                                <rect key="frame" x="5" y="4" width="19" height="17"/>
+                                                                <buttonCell key="cell" type="recessed" bezelStyle="recessed" image="LibraryListMode" imagePosition="only" alignment="center" alternateImage="LibraryIconsMode" controlSize="small" inset="2" id="g5q-68-Omu">
+                                                                    <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                                                    <font key="font" metaFont="systemBold" size="12"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="libraryModeAction:" target="494" id="zZK-Px-cQF"/>
+                                                                </connections>
+                                                            </button>
+                                                            <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JOl-ek-8VA">
+                                                                <rect key="frame" x="28" y="3" width="229" height="19"/>
+                                                                <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" bezelStyle="round" id="eab-SF-2Gw">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    <connections>
+                                                                        <binding destination="ybe-5J-ot9" name="predicate" keyPath="filterPredicate" id="uhr-Km-gsr">
+                                                                            <dictionary key="options">
+                                                                                <string key="NSPredicateFormat">label.string contains[c] $value</string>
+                                                                            </dictionary>
+                                                                        </binding>
+                                                                    </connections>
+                                                                </searchFieldCell>
+                                                            </searchField>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="JOl-ek-8VA" firstAttribute="top" secondItem="NjT-RW-5T2" secondAttribute="top" constant="3" id="0eQ-FZ-Ugz"/>
+                                                            <constraint firstAttribute="bottom" secondItem="JOl-ek-8VA" secondAttribute="bottom" constant="3" id="4ZO-32-XdQ"/>
+                                                            <constraint firstItem="oSp-qF-DyS" firstAttribute="leading" secondItem="NjT-RW-5T2" secondAttribute="leading" constant="5" id="IZM-py-hLe"/>
+                                                            <constraint firstItem="oSp-qF-DyS" firstAttribute="centerY" secondItem="JOl-ek-8VA" secondAttribute="centerY" id="JP3-xS-N1w"/>
+                                                            <constraint firstItem="JOl-ek-8VA" firstAttribute="leading" secondItem="oSp-qF-DyS" secondAttribute="trailing" constant="4" id="KuC-MG-dub"/>
+                                                            <constraint firstAttribute="trailing" secondItem="JOl-ek-8VA" secondAttribute="trailing" constant="3" id="RGq-ZQ-1CY"/>
+                                                        </constraints>
+                                                    </customView>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstAttribute="trailing" secondItem="JOl-ek-8VA" secondAttribute="trailing" constant="3" id="3qj-15-yBc"/>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="74F-PN-nRU"/>
                                                     <constraint firstAttribute="trailing" secondItem="0kB-Zw-fjX" secondAttribute="trailing" id="HfU-xc-AR9"/>
+                                                    <constraint firstItem="NjT-RW-5T2" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="Ptw-gr-ixA"/>
+                                                    <constraint firstItem="NjT-RW-5T2" firstAttribute="top" secondItem="0kB-Zw-fjX" secondAttribute="bottom" id="YdF-IV-AgL"/>
                                                     <constraint firstItem="0kB-Zw-fjX" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="Z71-P9-xcV"/>
-                                                    <constraint firstAttribute="bottom" secondItem="JOl-ek-8VA" secondAttribute="bottom" constant="3" id="Z9V-g6-Kbo"/>
-                                                    <constraint firstItem="oSp-qF-DyS" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" constant="5" id="bZ9-4e-Bvh"/>
-                                                    <constraint firstAttribute="bottom" secondItem="oSp-qF-DyS" secondAttribute="bottom" constant="4" id="hx9-4g-XRd"/>
                                                     <constraint firstItem="0kB-Zw-fjX" firstAttribute="top" secondItem="REE-3d-rnp" secondAttribute="top" id="kJp-9I-0eZ"/>
-                                                    <constraint firstItem="JOl-ek-8VA" firstAttribute="top" secondItem="0kB-Zw-fjX" secondAttribute="bottom" constant="3" id="nBC-cp-lP5"/>
-                                                    <constraint firstItem="JOl-ek-8VA" firstAttribute="leading" secondItem="oSp-qF-DyS" secondAttribute="trailing" constant="4" id="w7q-Jv-9U3"/>
+                                                    <constraint firstAttribute="bottom" secondItem="NjT-RW-5T2" secondAttribute="bottom" id="mOO-AB-f2r"/>
+                                                    <constraint firstAttribute="trailing" secondItem="NjT-RW-5T2" secondAttribute="trailing" id="wwF-pr-GCT"/>
                                                 </constraints>
                                             </customView>
                                         </subviews>

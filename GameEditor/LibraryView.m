@@ -77,12 +77,13 @@
 @implementation LibraryPanelView
 
 - (void)drawRect:(NSRect)dirtyRect {
+	NSRect rect = [self frame];
 	[[NSColor whiteColor] set];
-	NSRectFill([self bounds]);
+	NSRectFill(rect);
 
 	NSBezierPath *path = [NSBezierPath bezierPath];
-	[path moveToPoint:CGPointMake(NSMinX(dirtyRect), NSMaxY(dirtyRect))];
-	[path lineToPoint:CGPointMake(NSMaxX(dirtyRect), NSMaxY(dirtyRect))];
+	[path moveToPoint:CGPointMake(NSMinX(rect), NSMaxY(rect))];
+	[path lineToPoint:CGPointMake(NSMaxX(rect), NSMaxY(rect))];
 	[[NSColor lightGrayColor] set];
 	[path stroke];
 }
