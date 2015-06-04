@@ -108,7 +108,9 @@
 	NSBezierPath *borderPath = [NSBezierPath bezierPath];
 	[borderPath moveToPoint:CGPointMake(0.5, 0.5)];
 	[borderPath lineToPoint:CGPointMake(size.width - 0.5, 0.5)];
-	[borderPath lineToPoint:CGPointMake(size.width - 0.5, size.height + 0.5)];
+	if (self.libraryView.mode == LibraryViewModeIcons) {
+		[borderPath lineToPoint:CGPointMake(size.width - 0.5, size.height + 0.5)];
+	}
 
 	[[NSColor gridColor] set];
 	[borderPath stroke];
@@ -161,6 +163,7 @@
 	if (_mode == LibraryViewModeIcons) {
 		self.maxNumberOfRows = 0;
 		self.maxNumberOfColumns = 0;
+		width -= 1.0;
 		width = width / (int)(width / 64.0);
 	} else {
 		self.maxNumberOfRows = 0;
