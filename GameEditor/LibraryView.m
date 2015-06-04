@@ -68,7 +68,28 @@
 
 @end
 
-#pragma mark LibraryItem
+#pragma mark - LibraryPanelView
+
+@interface LibraryPanelView : NSView
+
+@end
+
+@implementation LibraryPanelView
+
+- (void)drawRect:(NSRect)dirtyRect {
+	[[NSColor whiteColor] set];
+	NSRectFill([self bounds]);
+
+	NSBezierPath *path = [NSBezierPath bezierPath];
+	[path moveToPoint:CGPointMake(NSMinX(dirtyRect), NSMaxY(dirtyRect))];
+	[path lineToPoint:CGPointMake(NSMaxX(dirtyRect), NSMaxY(dirtyRect))];
+	[[NSColor lightGrayColor] set];
+	[path stroke];
+}
+
+@end
+
+#pragma mark - LibraryItem
 
 @interface LibraryView () <NSCollectionViewDelegate>
 - (CGSize)itemSize;
@@ -121,7 +142,7 @@
 
 @end
 
-#pragma mark LibraryView
+#pragma mark - LibraryView
 
 @implementation LibraryView {
 	__weak id _actualDelegate;

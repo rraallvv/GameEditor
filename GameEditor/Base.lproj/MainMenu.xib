@@ -399,7 +399,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PcI-fz-rXt">
-                                        <rect key="frame" x="0.0" y="26" width="190" height="574"/>
+                                        <rect key="frame" x="0.0" y="25" width="190" height="575"/>
                                         <clipView key="contentView" id="Mhd-7L-ZJ2">
                                             <rect key="frame" x="1" y="0.0" width="238" height="134"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -485,7 +485,7 @@
                                         </scroller>
                                     </scrollView>
                                     <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tr7-lo-aXw">
-                                        <rect key="frame" x="4" y="4" width="182" height="19"/>
+                                        <rect key="frame" x="3" y="3" width="184" height="19"/>
                                         <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="JdK-r0-Soj">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -502,12 +502,12 @@
                                     </searchField>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="tr7-lo-aXw" secondAttribute="trailing" constant="4" id="1QT-f6-Xmv"/>
+                                    <constraint firstAttribute="trailing" secondItem="tr7-lo-aXw" secondAttribute="trailing" constant="3" id="1QT-f6-Xmv"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="190" id="G2x-pY-3It"/>
-                                    <constraint firstItem="tr7-lo-aXw" firstAttribute="leading" secondItem="eJi-p6-3Ak" secondAttribute="leading" constant="4" id="GAw-N3-KfY"/>
+                                    <constraint firstItem="tr7-lo-aXw" firstAttribute="leading" secondItem="eJi-p6-3Ak" secondAttribute="leading" constant="3" id="GAw-N3-KfY"/>
                                     <constraint firstItem="PcI-fz-rXt" firstAttribute="leading" secondItem="eJi-p6-3Ak" secondAttribute="leading" id="GqV-rK-S6k"/>
                                     <constraint firstItem="tr7-lo-aXw" firstAttribute="top" secondItem="PcI-fz-rXt" secondAttribute="bottom" constant="3" id="aBV-vY-zET"/>
-                                    <constraint firstAttribute="bottom" secondItem="tr7-lo-aXw" secondAttribute="bottom" constant="4" id="rH4-Vu-XcI"/>
+                                    <constraint firstAttribute="bottom" secondItem="tr7-lo-aXw" secondAttribute="bottom" constant="3" id="rH4-Vu-XcI"/>
                                     <constraint firstItem="PcI-fz-rXt" firstAttribute="top" secondItem="eJi-p6-3Ak" secondAttribute="top" id="sPh-3p-5ah"/>
                                     <constraint firstAttribute="trailing" secondItem="PcI-fz-rXt" secondAttribute="trailing" id="xtg-OW-bCn"/>
                                 </constraints>
@@ -549,7 +549,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="260" height="399"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
-                                                    <scrollView autohidesScrollers="YES" horizontalLineScroll="22" horizontalPageScroll="10" verticalLineScroll="22" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WEo-lF-8ul">
+                                                    <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="22" horizontalPageScroll="10" verticalLineScroll="22" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WEo-lF-8ul">
                                                         <rect key="frame" x="0.0" y="0.0" width="260" height="399"/>
                                                         <clipView key="contentView" id="Kmw-kU-HNX">
                                                             <rect key="frame" x="1" y="0.0" width="238" height="134"/>
@@ -663,7 +663,7 @@
                                                                                 </tableCellView>
                                                                             </prototypeCellViews>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="value" width="174" minWidth="40" maxWidth="1000" id="NpV-TU-Qec">
+                                                                        <tableColumn identifier="value" width="176" minWidth="40" maxWidth="1000" id="NpV-TU-Qec">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -677,11 +677,11 @@
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                             <prototypeCellViews>
                                                                                 <tableCellView identifier="generic attribute" id="qps-DR-4Ot">
-                                                                                    <rect key="frame" x="82" y="1" width="174" height="20"/>
+                                                                                    <rect key="frame" x="82" y="1" width="176" height="20"/>
                                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                     <subviews>
                                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="5e3-B9-w1d">
-                                                                                            <rect key="frame" x="-2" y="3" width="178" height="14"/>
+                                                                                            <rect key="frame" x="-2" y="3" width="180" height="14"/>
                                                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="value" id="35B-li-VM5">
                                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -729,12 +729,12 @@
                                                     <constraint firstAttribute="trailing" secondItem="WEo-lF-8ul" secondAttribute="trailing" id="rBp-T7-cWX"/>
                                                 </constraints>
                                             </customView>
-                                            <customView id="REE-3d-rnp">
+                                            <customView id="REE-3d-rnp" customClass="LibraryPanelView">
                                                 <rect key="frame" x="0.0" y="400" width="260" height="200"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
-                                                    <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0kB-Zw-fjX">
-                                                        <rect key="frame" x="0.0" y="26" width="260" height="174"/>
+                                                    <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0kB-Zw-fjX">
+                                                        <rect key="frame" x="0.0" y="25" width="260" height="175"/>
                                                         <clipView key="contentView" id="dys-lA-lM4">
                                                             <rect key="frame" x="1" y="1" width="248" height="158"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -761,7 +761,7 @@
                                                         </scroller>
                                                     </scrollView>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oSp-qF-DyS">
-                                                        <rect key="frame" x="5" y="5" width="19" height="17"/>
+                                                        <rect key="frame" x="5" y="4" width="19" height="17"/>
                                                         <buttonCell key="cell" type="recessed" bezelStyle="recessed" image="LibraryListMode" imagePosition="only" alignment="center" alternateImage="LibraryIconsMode" controlSize="small" inset="2" id="g5q-68-Omu">
                                                             <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="systemBold" size="12"/>
@@ -771,7 +771,7 @@
                                                         </connections>
                                                     </button>
                                                     <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JOl-ek-8VA">
-                                                        <rect key="frame" x="28" y="4" width="228" height="19"/>
+                                                        <rect key="frame" x="28" y="3" width="229" height="19"/>
                                                         <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" bezelStyle="round" id="eab-SF-2Gw">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -787,13 +787,13 @@
                                                     </searchField>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstAttribute="trailing" secondItem="JOl-ek-8VA" secondAttribute="trailing" constant="4" id="3qj-15-yBc"/>
+                                                    <constraint firstAttribute="trailing" secondItem="JOl-ek-8VA" secondAttribute="trailing" constant="3" id="3qj-15-yBc"/>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="74F-PN-nRU"/>
                                                     <constraint firstAttribute="trailing" secondItem="0kB-Zw-fjX" secondAttribute="trailing" id="HfU-xc-AR9"/>
                                                     <constraint firstItem="0kB-Zw-fjX" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="Z71-P9-xcV"/>
-                                                    <constraint firstAttribute="bottom" secondItem="JOl-ek-8VA" secondAttribute="bottom" constant="4" id="Z9V-g6-Kbo"/>
+                                                    <constraint firstAttribute="bottom" secondItem="JOl-ek-8VA" secondAttribute="bottom" constant="3" id="Z9V-g6-Kbo"/>
                                                     <constraint firstItem="oSp-qF-DyS" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" constant="5" id="bZ9-4e-Bvh"/>
-                                                    <constraint firstAttribute="bottom" secondItem="oSp-qF-DyS" secondAttribute="bottom" constant="5" id="hx9-4g-XRd"/>
+                                                    <constraint firstAttribute="bottom" secondItem="oSp-qF-DyS" secondAttribute="bottom" constant="4" id="hx9-4g-XRd"/>
                                                     <constraint firstItem="0kB-Zw-fjX" firstAttribute="top" secondItem="REE-3d-rnp" secondAttribute="top" id="kJp-9I-0eZ"/>
                                                     <constraint firstItem="JOl-ek-8VA" firstAttribute="top" secondItem="0kB-Zw-fjX" secondAttribute="bottom" constant="3" id="nBC-cp-lP5"/>
                                                     <constraint firstItem="JOl-ek-8VA" firstAttribute="leading" secondItem="oSp-qF-DyS" secondAttribute="trailing" constant="4" id="w7q-Jv-9U3"/>
