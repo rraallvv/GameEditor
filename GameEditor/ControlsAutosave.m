@@ -1,5 +1,5 @@
 /*
- * Matrix.m
+ * ControlsAutosave.m
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,8 +23,9 @@
  * THE SOFTWARE.
  */
 
+#import "ControlsAutosave.h"
 
-#import "Matrix.h"
+#pragma mark Matrix
 
 @implementation Matrix
 
@@ -47,6 +48,33 @@
 		[userDefaults synchronize];
 	}
 	return selectedCol;
+}
+
+@end
+
+#pragma mark Button
+
+@implementation Button
+
+- (void)awakeFromNib {
+	if (self.autosaveName) {
+		NSInteger state = [[[NSUserDefaults standardUserDefaults] valueForKey:self.autosaveKey] integerValue];
+		[self setState:state];
+	}
+}
+
+- (NSString *)autosaveKey {
+	return [NSString stringWithFormat:@"%@ Button State %@", self.class, self.autosaveName];
+}
+
+- (NSInteger)state {
+	NSInteger state = [super state];
+	if (self.autosaveName) {
+		NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+		[userDefaults setObject:@(state) forKey:self.autosaveKey];
+		[userDefaults synchronize];
+	}
+	return state;
 }
 
 @end

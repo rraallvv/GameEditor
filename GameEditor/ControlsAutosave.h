@@ -1,5 +1,5 @@
 /*
- * Matrix.h
+ * ControlsAutosave.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,10 +23,14 @@
  * THE SOFTWARE.
  */
 
-
 #import <Cocoa/Cocoa.h>
 
 IB_DESIGNABLE
 @interface Matrix : NSMatrix
+@property (strong) IBInspectable NSString *autosaveName;
+@end
+
+IB_DESIGNABLE
+@interface Button : NSButton
 @property (strong) IBInspectable NSString *autosaveName;
 @end

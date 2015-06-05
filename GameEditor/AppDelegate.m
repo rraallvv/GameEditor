@@ -198,6 +198,7 @@
 	}
 
 	/* Populate the library */
+	_libraryCollectionView.mode = _libraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
 	if (_libraryTabButtons.selectedColumn) {
 		[_libraryArrayController setContent:nil];
 	} else {

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E401BDBA1B21DC2600280F27 /* Matrix.m in Sources */ = {isa = PBXBuildFile; fileRef = E401BDB91B21DC2600280F27 /* Matrix.m */; };
+		E401BDBA1B21DC2600280F27 /* ControlsAutosave.m in Sources */ = {isa = PBXBuildFile; fileRef = E401BDB91B21DC2600280F27 /* ControlsAutosave.m */; };
 		E408138F1AC228F400F54824 /* AttributesView.m in Sources */ = {isa = PBXBuildFile; fileRef = E408138E1AC228F400F54824 /* AttributesView.m */; };
 		E40813921AC3C45300F54824 /* ValueEditors.xib in Resources */ = {isa = PBXBuildFile; fileRef = E40813901AC3C45300F54824 /* ValueEditors.xib */; };
 		E40813951AC42FFF00F54824 /* ColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = E40813941AC42FFF00F54824 /* ColorWell.m */; };
@@ -99,8 +99,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E401BDB81B21DC2600280F27 /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Matrix.h; sourceTree = "<group>"; };
-		E401BDB91B21DC2600280F27 /* Matrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Matrix.m; sourceTree = "<group>"; };
+		E401BDB81B21DC2600280F27 /* ControlsAutosave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlsAutosave.h; sourceTree = "<group>"; };
+		E401BDB91B21DC2600280F27 /* ControlsAutosave.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControlsAutosave.m; sourceTree = "<group>"; };
 		E408138D1AC228F400F54824 /* AttributesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributesView.h; sourceTree = "<group>"; };
 		E408138E1AC228F400F54824 /* AttributesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributesView.m; sourceTree = "<group>"; };
 		E40813911AC3C45300F54824 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ValueEditors.xib; sourceTree = "<group>"; };
@@ -205,8 +205,8 @@
 			children = (
 				E4ABDB4D1AB3933900AAE82E /* AppDelegate.h */,
 				E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */,
-				E401BDB81B21DC2600280F27 /* Matrix.h */,
-				E401BDB91B21DC2600280F27 /* Matrix.m */,
+				E401BDB81B21DC2600280F27 /* ControlsAutosave.h */,
+				E401BDB91B21DC2600280F27 /* ControlsAutosave.m */,
 				E40813A01AC64C7600F54824 /* AttributesInspector */,
 				E4F3B6A81ACD7ECA001482D2 /* Navigator */,
 				E4E6DA3C1AE9988100F4CE6F /* Library */,
@@ -504,7 +504,7 @@
 				E4BB58AE1ABB510A0021A467 /* EditorView.m in Sources */,
 				E40813951AC42FFF00F54824 /* ColorWell.m in Sources */,
 				E4ABDB511AB3933900AAE82E /* main.m in Sources */,
-				E401BDBA1B21DC2600280F27 /* Matrix.m in Sources */,
+				E401BDBA1B21DC2600280F27 /* ControlsAutosave.m in Sources */,
 				E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */,
 				E4F3B6A71ACD7EC4001482D2 /* NavigationNode.m in Sources */,
 				E4ABDB761AB47BB700AAE82E /* AttributeNode.m in Sources */,

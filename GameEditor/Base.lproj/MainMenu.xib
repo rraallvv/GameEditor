@@ -807,12 +807,15 @@
                                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="NjT-RW-5T2" customClass="LibraryPanelView">
                                                         <rect key="frame" x="0.0" y="0.0" width="260" height="25"/>
                                                         <subviews>
-                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oSp-qF-DyS">
+                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oSp-qF-DyS" customClass="Button">
                                                                 <rect key="frame" x="5" y="4" width="19" height="17"/>
                                                                 <buttonCell key="cell" type="recessed" bezelStyle="recessed" image="LibraryListMode" imagePosition="only" alignment="center" alternateImage="LibraryIconsMode" controlSize="small" inset="2" id="g5q-68-Omu">
                                                                     <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                                                                     <font key="font" metaFont="systemBold" size="12"/>
                                                                 </buttonCell>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Library Mode"/>
+                                                                </userDefinedRuntimeAttributes>
                                                                 <connections>
                                                                     <action selector="libraryDidChangeMode:" target="494" id="2TN-4r-SZv"/>
                                                                 </connections>
@@ -920,7 +923,6 @@
                 <outlet property="_libraryCollectionView" destination="53q-Pc-ZVo" id="99Y-Vf-Sy2"/>
                 <outlet property="_libraryModeButton" destination="oSp-qF-DyS" id="d9q-Aa-t2d"/>
                 <outlet property="_libraryTabButtons" destination="pf4-VP-sjQ" id="1XR-iH-5BW"/>
-                <outlet property="_navigatorSearchField" destination="tr7-lo-aXw" id="TaK-sT-nEJ"/>
                 <outlet property="_navigatorTreeController" destination="FfK-Wg-7Xj" id="bBG-5I-i7L"/>
                 <outlet property="_navigatorView" destination="Y4L-tX-zfk" id="Gju-ZL-6rD"/>
                 <outlet property="skView" destination="BAm-0B-vb9" id="MCo-T6-F5E"/>
