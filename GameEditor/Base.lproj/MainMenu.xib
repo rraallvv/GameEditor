@@ -733,8 +733,49 @@
                                                 <rect key="frame" x="0.0" y="400" width="260" height="200"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
+                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="iCW-HX-D7E" customClass="LibraryPanelView">
+                                                        <rect key="frame" x="0.0" y="175" width="260" height="25"/>
+                                                        <subviews>
+                                                            <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pf4-VP-sjQ">
+                                                                <rect key="frame" x="106" y="3" width="49" height="19"/>
+                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                <size key="cellSize" width="18" height="19"/>
+                                                                <size key="intercellSpacing" width="13" height="0.0"/>
+                                                                <buttonCell key="prototype" type="square" title="Radio" bezelStyle="shadowlessSquare" imagePosition="only" controlSize="small" borderStyle="border" inset="2" id="fdZ-1B-cmt">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                </buttonCell>
+                                                                <cells>
+                                                                    <column>
+                                                                        <buttonCell type="recessed" bezelStyle="recessed" image="LibraryToolsTab" imagePosition="only" alignment="center" alternateImage="AltLibraryToolsTab" state="on" tag="1" inset="2" id="Qc1-Ls-fhJ">
+                                                                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                                                            <font key="font" metaFont="systemBold" size="12"/>
+                                                                        </buttonCell>
+                                                                    </column>
+                                                                    <column>
+                                                                        <buttonCell type="square" bezelStyle="shadowlessSquare" image="LibraryResourcesTab" imagePosition="overlaps" alternateImage="AltLibraryResourcesTab" controlSize="small" inset="2" id="deX-sk-fSf">
+                                                                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                                                            <font key="font" metaFont="smallSystem"/>
+                                                                        </buttonCell>
+                                                                    </column>
+                                                                </cells>
+                                                                <connections>
+                                                                    <action selector="libraryDidSwitchTab:" target="494" id="fZC-lb-cuD"/>
+                                                                </connections>
+                                                            </matrix>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="25" id="WME-Qe-aJW"/>
+                                                            <constraint firstAttribute="centerY" secondItem="pf4-VP-sjQ" secondAttribute="centerY" id="cFk-ov-svN"/>
+                                                            <constraint firstAttribute="centerX" secondItem="pf4-VP-sjQ" secondAttribute="centerX" id="d2j-JT-Vm1"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="topBorder" value="NO"/>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="bottomBorder" value="YES"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </customView>
                                                     <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0kB-Zw-fjX">
-                                                        <rect key="frame" x="0.0" y="25" width="260" height="175"/>
+                                                        <rect key="frame" x="0.0" y="25" width="260" height="150"/>
                                                         <clipView key="contentView" id="dys-lA-lM4">
                                                             <rect key="frame" x="1" y="1" width="248" height="158"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -770,7 +811,7 @@
                                                                     <font key="font" metaFont="systemBold" size="12"/>
                                                                 </buttonCell>
                                                                 <connections>
-                                                                    <action selector="libraryModeAction:" target="494" id="zZK-Px-cQF"/>
+                                                                    <action selector="libraryDidChangeMode:" target="494" id="2TN-4r-SZv"/>
                                                                 </connections>
                                                             </button>
                                                             <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JOl-ek-8VA">
@@ -797,6 +838,10 @@
                                                             <constraint firstItem="JOl-ek-8VA" firstAttribute="leading" secondItem="oSp-qF-DyS" secondAttribute="trailing" constant="4" id="KuC-MG-dub"/>
                                                             <constraint firstAttribute="trailing" secondItem="JOl-ek-8VA" secondAttribute="trailing" constant="3" id="RGq-ZQ-1CY"/>
                                                         </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="topBorder" value="YES"/>
+                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="bottomBorder" value="NO"/>
+                                                        </userDefinedRuntimeAttributes>
                                                     </customView>
                                                 </subviews>
                                                 <constraints>
@@ -805,9 +850,12 @@
                                                     <constraint firstItem="NjT-RW-5T2" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="Ptw-gr-ixA"/>
                                                     <constraint firstItem="NjT-RW-5T2" firstAttribute="top" secondItem="0kB-Zw-fjX" secondAttribute="bottom" id="YdF-IV-AgL"/>
                                                     <constraint firstItem="0kB-Zw-fjX" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="Z71-P9-xcV"/>
-                                                    <constraint firstItem="0kB-Zw-fjX" firstAttribute="top" secondItem="REE-3d-rnp" secondAttribute="top" id="kJp-9I-0eZ"/>
+                                                    <constraint firstItem="iCW-HX-D7E" firstAttribute="top" secondItem="REE-3d-rnp" secondAttribute="top" id="aYN-e4-sq7"/>
+                                                    <constraint firstItem="iCW-HX-D7E" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="ftD-Rz-47n"/>
+                                                    <constraint firstItem="0kB-Zw-fjX" firstAttribute="top" secondItem="iCW-HX-D7E" secondAttribute="bottom" id="jsj-7P-Z7c"/>
                                                     <constraint firstAttribute="bottom" secondItem="NjT-RW-5T2" secondAttribute="bottom" id="mOO-AB-f2r"/>
                                                     <constraint firstAttribute="trailing" secondItem="NjT-RW-5T2" secondAttribute="trailing" id="wwF-pr-GCT"/>
+                                                    <constraint firstAttribute="trailing" secondItem="iCW-HX-D7E" secondAttribute="trailing" id="xjI-j3-lYe"/>
                                                 </constraints>
                                             </customView>
                                         </subviews>
@@ -867,6 +915,8 @@
                 <outlet property="_editorView" destination="suo-YO-fqM" id="D5W-Hu-pTw"/>
                 <outlet property="_libraryArrayController" destination="ybe-5J-ot9" id="iwT-3F-n1L"/>
                 <outlet property="_libraryCollectionView" destination="53q-Pc-ZVo" id="99Y-Vf-Sy2"/>
+                <outlet property="_libraryModeButton" destination="oSp-qF-DyS" id="d9q-Aa-t2d"/>
+                <outlet property="_libraryTabButtons" destination="pf4-VP-sjQ" id="1XR-iH-5BW"/>
                 <outlet property="_navigatorSearchField" destination="tr7-lo-aXw" id="TaK-sT-nEJ"/>
                 <outlet property="_navigatorTreeController" destination="FfK-Wg-7Xj" id="bBG-5I-i7L"/>
                 <outlet property="_navigatorView" destination="Y4L-tX-zfk" id="Gju-ZL-6rD"/>
@@ -958,8 +1008,12 @@
         </box>
     </objects>
     <resources>
+        <image name="AltLibraryResourcesTab" width="17" height="17"/>
+        <image name="AltLibraryToolsTab" width="17" height="17"/>
         <image name="LibraryIconsMode" width="19" height="19"/>
         <image name="LibraryListMode" width="19" height="19"/>
+        <image name="LibraryResourcesTab" width="17" height="17"/>
+        <image name="LibraryToolsTab" width="17" height="17"/>
         <image name="NSActionTemplate" width="14" height="14"/>
     </resources>
 </document>

@@ -70,20 +70,28 @@
 
 #pragma mark - LibraryPanelView
 
+IB_DESIGNABLE
 @interface LibraryPanelView : NSView
-
+@property (assign) IBInspectable BOOL topBorder;
+@property (assign) IBInspectable BOOL bottomBorder;
 @end
 
 @implementation LibraryPanelView
 
 - (void)drawRect:(NSRect)dirtyRect {
-	NSRect rect = [self frame];
+	NSRect rect = [self bounds];
 	[[NSColor whiteColor] set];
 	NSRectFill(rect);
 
 	NSBezierPath *path = [NSBezierPath bezierPath];
-	[path moveToPoint:CGPointMake(NSMinX(rect), NSMaxY(rect))];
-	[path lineToPoint:CGPointMake(NSMaxX(rect), NSMaxY(rect))];
+	if (self.topBorder) {
+		[path moveToPoint:CGPointMake(NSMinX(rect), NSMaxY(rect))];
+		[path lineToPoint:CGPointMake(NSMaxX(rect), NSMaxY(rect))];
+	}
+	if (self.bottomBorder) {
+		[path moveToPoint:CGPointMake(NSMinX(rect), NSMinY(rect))];
+		[path lineToPoint:CGPointMake(NSMaxX(rect), NSMinY(rect))];
+	}
 	[[NSColor lightGrayColor] set];
 	[path stroke];
 }

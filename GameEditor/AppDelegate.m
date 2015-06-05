@@ -151,6 +151,8 @@
 	IBOutlet NSTreeController *_attributesTreeController;
 	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet NSArrayController *_libraryArrayController;
+	IBOutlet NSButton *_libraryModeButton;
+	IBOutlet NSMatrix *_libraryTabButtons;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
 	NSArray *_exportedClasses;
@@ -196,7 +198,11 @@
 	}
 
 	/* Populate the library */
-	[self populateLibrary];
+	if (_libraryTabButtons.selectedColumn) {
+		[_libraryArrayController setContent:nil];
+	} else {
+		[self populateLibraryTools];
+	}
 
 	/* Initialize the scripting support */
 	_sharedScriptingContext = [LuaContext new];
@@ -740,11 +746,11 @@
 
 #pragma mark Library
 
-- (IBAction)libraryModeAction:(NSButton *)sender {
+- (IBAction)libraryDidChangeMode:(NSButton *)sender {
 	_libraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
-- (void)populateLibrary {
+- (void)populateLibraryTools {
 	NSURL *plugInsURL = [[NSBundle mainBundle] builtInPlugInsURL];
 
 	NSDirectoryEnumerator *directoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:plugInsURL
@@ -864,7 +870,7 @@
 					[_libraryArrayController addObject:@{@"toolName":toolName,
 														 @"label":fullDescriptionAttributedString,
 														 @"image":iconImage,
-														 @"showLabel":@YES,
+														 @"showLabel":@(!_libraryModeButton.state),
 														 @"contextData":@(_contextsData.count - 1)}.mutableCopy];
 				}
 			}
@@ -872,6 +878,14 @@
 	}
 
 	[_libraryArrayController setSelectionIndex:0];
+}
+
+- (IBAction)libraryDidSwitchTab:(NSMatrix *)buttons {
+	if (buttons.selectedColumn) {
+		[_libraryArrayController setContent:nil];
+	} else {
+		[self populateLibraryTools];
+	}
 }
 
 #pragma mark Editor Dragging Destination
