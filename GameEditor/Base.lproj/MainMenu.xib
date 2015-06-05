@@ -736,7 +736,7 @@
                                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="iCW-HX-D7E" customClass="LibraryPanelView">
                                                         <rect key="frame" x="0.0" y="175" width="260" height="25"/>
                                                         <subviews>
-                                                            <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pf4-VP-sjQ">
+                                                            <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pf4-VP-sjQ" customClass="Matrix">
                                                                 <rect key="frame" x="106" y="3" width="49" height="19"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 <size key="cellSize" width="18" height="19"/>
@@ -759,6 +759,9 @@
                                                                         </buttonCell>
                                                                     </column>
                                                                 </cells>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Library Tabs"/>
+                                                                </userDefinedRuntimeAttributes>
                                                                 <connections>
                                                                     <action selector="libraryDidSwitchTab:" target="494" id="fZC-lb-cuD"/>
                                                                 </connections>
