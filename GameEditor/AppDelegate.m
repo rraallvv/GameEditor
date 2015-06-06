@@ -163,10 +163,6 @@
 @synthesize window = _window;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-	/* Main window appearance */
-	self.window.styleMask = self.window.styleMask;
-	self.window.titleVisibility = NSWindowTitleHidden;
-
 	/* Sprite Kit applies additional optimizations to improve rendering performance */
 	self.skView.ignoresSiblingOrder = YES;
 

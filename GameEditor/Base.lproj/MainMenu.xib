@@ -909,6 +909,11 @@
                     <toolbarItem reference="mru-LD-XPv"/>
                 </defaultToolbarItems>
             </toolbar>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="titleVisibility">
+                    <integer key="value" value="1"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="initialFirstResponder" destination="suo-YO-fqM" id="nBg-y2-VnR"/>
             </connections>
