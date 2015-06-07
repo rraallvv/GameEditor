@@ -52,6 +52,8 @@ children = _childrenNavigationNodes;
 		_node = [aDecoder decodeObjectForKey:@"node"];
 		_name = [aDecoder decodeObjectForKey:@"name"];
 		_childrenNavigationNodes = [aDecoder decodeObjectForKey:@"children"];
+
+		[_node addObserver:self forKeyPath:@"name" options:0 context:NULL];
 	}
 	return self;
 }

@@ -338,7 +338,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 	NSMutableArray *_editorIdentifiers;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (id)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
 		self.indentationPerLevel = kIndentationPerLevel;
 

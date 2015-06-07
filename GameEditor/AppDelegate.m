@@ -69,7 +69,7 @@
 
 @implementation _SCNScene
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+- (id)initWithCoder:(NSCoder *)aDecoder {
 	return (id)[[SCNScene alloc] initWithCoder:aDecoder];
 }
 
