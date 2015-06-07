@@ -77,7 +77,7 @@
 
 @implementation SKScene (Archiving)
 
-+ (instancetype)unarchiveFromFile:(NSString *)file {
++ (instancetype)unarchiveFromFile:(NSString *)file error:(NSError *__autoreleasing *)error {
 	/* Retrieve scene file path from the application bundle */
 	//file = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
 
@@ -85,7 +85,6 @@
 #if 0// convert scene data to binary before passing it to the unarchiver
 	NSData *plistData = [NSData dataWithContentsOfFile:file];
 	NSPropertyListFormat format;
-	NSError *error;
 
 	id plist = [NSPropertyListSerialization propertyListWithData:plistData
 														 options:NSPropertyListImmutable
@@ -99,7 +98,7 @@
 #else
 	NSData *data = [NSData dataWithContentsOfFile:file
 										  options:NSDataReadingMappedIfSafe
-											error:nil];
+											error:error];
 #endif
 
 	NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
@@ -1129,10 +1128,11 @@
 		return YES;
 	}
 
-	SKScene *scene = [SKScene unarchiveFromFile:filename];
+	NSError *error;
+	SKScene *scene = [SKScene unarchiveFromFile:filename error:&error];
 
-	if (!scene) {
-		NSLog(@"Couldn't open file: '%@'", filename);
+	if (error) {
+		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
 		return NO;
 	}
 
