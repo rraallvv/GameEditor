@@ -33,7 +33,6 @@
 	return [[self alloc] initWithValue:aValue objCType:aTypeDescription];
 }
 
-/// For the constants see: <https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html>
 - (instancetype)initWithValue:(const void *)aValue objCType:(const char *)aTypeDescription {
 	if ('^' == *aTypeDescription
 		&& nil == aValue) {
@@ -41,30 +40,30 @@
 	} else {
 		switch (*aTypeDescription)
 		{
-			case 'c': // BOOL, char
+			case _C_CHR: // BOOL, char
 				self = [self initWithChar:*(char *)aValue];
 				break;
-			case 'C': self = [self initWithUnsignedChar:*(unsigned char *)aValue];
+			case _C_UCHR: self = [self initWithUnsignedChar:*(unsigned char *)aValue];
 				break;
-			case 's': self = [self initWithShort:*(short *)aValue];
+			case _C_SHT: self = [self initWithShort:*(short *)aValue];
 				break;
-			case 'S': self = [self initWithUnsignedShort:*(unsigned short *)aValue];
+			case _C_USHT: self = [self initWithUnsignedShort:*(unsigned short *)aValue];
 				break;
-			case 'i': self = [self initWithInt:*(int *)aValue];
+			case _C_INT: self = [self initWithInt:*(int *)aValue];
 				break;
-			case 'I': self = [self initWithUnsignedInt:*(unsigned *)aValue];
+			case _C_UINT: self = [self initWithUnsignedInt:*(unsigned *)aValue];
 				break;
-			case 'l': self = [self initWithLong:*(long *)aValue];
+			case _C_LNG: self = [self initWithLong:*(long *)aValue];
 				break;
-			case 'L': self = [self initWithUnsignedLong:*(unsigned long *)aValue];
+			case _C_ULNG: self = [self initWithUnsignedLong:*(unsigned long *)aValue];
 				break;
-			case 'q': self = [self initWithLongLong:*(long long *)aValue];
+			case _C_LNG_LNG: self = [self initWithLongLong:*(long long *)aValue];
 				break;
-			case 'Q': self = [self initWithUnsignedLongLong:*(unsigned long long *)aValue];
+			case _C_ULNG_LNG: self = [self initWithUnsignedLongLong:*(unsigned long long *)aValue];
 				break;
-			case 'f': self = [self initWithFloat:*(float *)aValue];
+			case _C_FLT: self = [self initWithFloat:*(float *)aValue];
 				break;
-			case 'd': self = [self initWithDouble:*(double *)aValue];
+			case _C_DBL: self = [self initWithDouble:*(double *)aValue];
 				break;
 			default:
 				//NSLog(@"converting unknown format %s", aTypeDescription);
@@ -77,30 +76,30 @@
 - (void)getValue:(void *)value withObjCType:(const char *)aTypeDescription {
 	switch (*aTypeDescription)
 	{
-		case 'c': // BOOL, char
+		case _C_CHR: // BOOL, char
 			*(char *)value  = [self charValue];
 			break;
-		case 'C': *(unsigned char *)value = [self unsignedCharValue];
+		case _C_UCHR: *(unsigned char *)value = [self unsignedCharValue];
 			break;
-		case 's': *(short *)value = [self shortValue];
+		case _C_SHT: *(short *)value = [self shortValue];
 			break;
-		case 'S': *(unsigned short *)value = [self unsignedShortValue];
+		case _C_USHT: *(unsigned short *)value = [self unsignedShortValue];
 			break;
-		case 'i': *(int *)value = [self intValue];
+		case _C_INT: *(int *)value = [self intValue];
 			break;
-		case 'I': *(unsigned *)value = [self unsignedIntValue];
+		case _C_UINT: *(unsigned *)value = [self unsignedIntValue];
 			break;
-		case 'l': *(long *)value = [self longValue];
+		case _C_LNG: *(long *)value = [self longValue];
 			break;
-		case 'L': *(unsigned long *)value = [self unsignedLongValue];
+		case _C_ULNG: *(unsigned long *)value = [self unsignedLongValue];
 			break;
-		case 'q': *(long long *)value = [self longLongValue];
+		case _C_LNG_LNG: *(long long *)value = [self longLongValue];
 			break;
-		case 'Q': *(unsigned long long *)value = [self unsignedLongLongValue];
+		case _C_ULNG_LNG: *(unsigned long long *)value = [self unsignedLongLongValue];
 			break;
-		case 'f': *(float *)value = [self floatValue];
+		case _C_FLT: *(float *)value = [self floatValue];
 			break;
-		case 'd': *(double *)value = [self doubleValue];
+		case _C_DBL: *(double *)value = [self doubleValue];
 			break;
 		default:
 			[self getValue:value];
