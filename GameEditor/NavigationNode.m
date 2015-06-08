@@ -84,7 +84,17 @@ children = _childrenNavigationNodes;
 }
 
 - (void)setChildren:(NSMutableArray *)children {
+	/*
+	 Some times SpriteKit store the children of a node in an inmutable array.
+	 This quick and dirty fix workarounds that limitation by making the private array
+	 a mutable copy of the original
+	 */
+	id privateChildren = [_node valueForKey:@"_children"];
+	if (![privateChildren isKindOfClass:[NSMutableArray class]]) {
+		[_node setValue:[privateChildren mutableCopy] forKey:@"_children"];
+	}
 
+	/* Clean up all the children before adding the new ones */
 	[_node removeAllChildren];
 
 	/* Add the new children */
