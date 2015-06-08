@@ -250,20 +250,25 @@
 	if (type) {
 		NSData *clipData = [cb dataForType:type];
 		id object = [NSKeyedUnarchiver unarchiveObjectWithData:clipData];
-
-		NSIndexPath *selectionIndexPath = _navigatorTreeController.selectionIndexPath;
-		NSInteger numberOfChildren = [_navigatorTreeController.selectedNodes.firstObject childNodes].count;
-
 		NSIndexPath *insertionIndexPath = nil;
 
+		NSIndexPath *selectionIndexPath = _navigatorTreeController.selectionIndexPath;
+
+#if 0
+		/* Insert as sibling */
 		if (selectionIndexPath.length > 1) {
 			/* IndexPath as a sibling of the selected node */
 			NSInteger index = [selectionIndexPath indexAtPosition:selectionIndexPath.length - 1];
 			insertionIndexPath = [[selectionIndexPath indexPathByRemovingLastIndex] indexPathByAddingIndex:index + 1];
 		} else {
 			/* IndexPath as a child of the scene */
+			NSInteger numberOfChildren = [_navigatorTreeController.selectedNodes.firstObject childNodes].count;
 			insertionIndexPath = [selectionIndexPath indexPathByAddingIndex:numberOfChildren];
 		}
+#else
+		/* Insert as child */
+		insertionIndexPath = [selectionIndexPath indexPathByAddingIndex:0];
+#endif
 
 		[self insertObject:object atIndexPath:insertionIndexPath];
 	}
