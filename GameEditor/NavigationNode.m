@@ -176,6 +176,12 @@ children = _childrenNavigationNodes;
 	return _filterPredicate;
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+	NavigationNode *copy = [[[self class] allocWithZone: zone] init];
+	copy.node = [self.node copy];
+	return copy;
+}
+
 - (void)dealloc {
 	[_node removeObserver:self forKeyPath:@"name"];
 }
