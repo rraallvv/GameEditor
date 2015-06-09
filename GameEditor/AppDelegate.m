@@ -34,6 +34,8 @@
 
 #import "CoreUI.h"
 
+#define USE_XML 0 // Write/read the SKScene scene to/from XML plist format
+
 #pragma mark Main Window
 
 @interface AppDelegate ()
@@ -82,7 +84,8 @@
 	//file = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
 
 	/* Unarchive the file to an SKScene object */
-#if 0// convert scene data to binary before passing it to the unarchiver
+#if USE_XML
+	/* Convert scene data to binary before passing it to the unarchiver */
 	NSData *plistData = [NSData dataWithContentsOfFile:file];
 	NSPropertyListFormat format;
 
@@ -117,7 +120,7 @@
 	NSMutableData *data = [NSMutableData data];
 	NSKeyedArchiver *arch = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
 
-#if 0// Save to XML plist format
+#if USE_XML
 	[arch setOutputFormat:NSPropertyListXMLFormat_v1_0];
 #else
 	[arch setOutputFormat:NSPropertyListBinaryFormat_v1_0];
