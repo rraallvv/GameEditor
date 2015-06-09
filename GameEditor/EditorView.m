@@ -264,6 +264,15 @@ zRotation = _zRotation,
 size = _size,
 anchorPoint = _anchorPoint;
 
+- (void)keyDown:(NSEvent *)theEvent {
+	NSWindow *window = [self.delegate window];
+	if (window) {
+		[window keyDown:theEvent];
+	} else {
+		[super keyDown:theEvent];
+	}
+}
+
 - (void)getFramePoints:(CGPoint *)points forNode:(SKNode *)node {
 	CGPoint position = [_scene convertPoint:CGPointZero fromNode:node];
 
