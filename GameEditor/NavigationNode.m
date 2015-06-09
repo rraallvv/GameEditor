@@ -90,7 +90,7 @@ children = _childrenNavigationNodes;
 	 a mutable copy of the original
 	 */
 	id privateChildren = [_node valueForKey:@"_children"];
-	if (![privateChildren isKindOfClass:[NSMutableArray class]]) {
+	if (privateChildren && ![privateChildren isKindOfClass:[NSMutableArray class]]) {
 		[_node setValue:[privateChildren mutableCopy] forKey:@"_children"];
 	}
 

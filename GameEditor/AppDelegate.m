@@ -1115,8 +1115,7 @@
 	}
 
 	/* Insert the created node into the scene hierarchy */
-	[_navigatorTreeController insertObject:[NavigationNode navigationNodeWithNode:node]
-				 atArrangedObjectIndexPath:[selectionIndexPath indexPathByAddingIndex:0]];
+	[self insertObject:@[[NavigationNode navigationNodeWithNode:node], @[@YES].mutableCopy] atIndexPath:[selectionIndexPath indexPathByAddingIndex:0]];
 
 	/* Set focus on the editor view */
 	[[self window] makeFirstResponder:_editorView];
