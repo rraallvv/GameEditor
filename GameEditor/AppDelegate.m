@@ -302,6 +302,9 @@
 - (void)removeObjectAtIndexPath:(NSIndexPath *)indexPath {
 	NavigationNode *object = [[_navigatorTreeController.arrangedObjects descendantNodeAtIndexPath:indexPath] representedObject];
 
+	/* Make the current selection to be the parent of the removed node */
+	[_editorView setNode:object.node.parent];
+
 	NSMutableArray *expansionInfo = [_navigatorView expansionInfoWithNode:[_navigatorTreeController.arrangedObjects descendantNodeAtIndexPath:indexPath]];
 
 	[[self.window.undoManager prepareWithInvocationTarget:self] insertObject:@[object, expansionInfo] atIndexPath:indexPath];
