@@ -920,7 +920,8 @@ anchorPoint = _anchorPoint;
 	if (object == _node) {
 
 		/* Try to register the undo operation for the observed change */
-		if (![keyPath isEqualToString:@"visibleRect"]) {
+		if (![keyPath isEqualToString:@"visibleRect"]
+			&& ![keyPath isEqualToString:@"children"]) {
 
 			id oldValue = [change objectForKey:NSKeyValueChangeOldKey];
 			id newValue = [change objectForKey:NSKeyValueChangeNewKey];
@@ -966,10 +967,15 @@ anchorPoint = _anchorPoint;
 	NSMutableDictionary *redoInfo = [NSMutableDictionary dictionary];
 	for (id key in info) {
 		id operation = info[key];
-		[redoInfo setObject:@{@"object": operation[@"object"],
-							  @"value": [operation[@"object"] valueForKey:key]} forKey:key];
-		[operation[@"object"] setValue:operation[@"value"] forKey:key];
-		[self setNode:operation[@"object"]];
+
+		id object = operation[@"object"];
+		id value = operation[@"value"];
+		id redoValue = [object valueForKey:key];
+
+		redoInfo[key] = @{@"object": object, @"value": redoValue};
+
+		[object setValue:value forKey:key];
+		[self setNode:object];
 	}
 
 	[[[self undoManager] prepareWithInvocationTarget:self] performUndoWithInfo:redoInfo];
