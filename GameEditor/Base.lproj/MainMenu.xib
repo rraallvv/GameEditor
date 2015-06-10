@@ -91,7 +91,7 @@
                             <menuItem isSeparatorItem="YES" id="kqP-6I-z2s"/>
                             <menuItem title="Close" keyEquivalent="w" id="L9v-hs-rNc">
                                 <connections>
-                                    <action selector="performClose:" target="-1" id="mwJ-LC-Gke"/>
+                                    <action selector="closeScene:" target="494" id="94E-NM-Uvr"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Save" keyEquivalent="s" id="pIW-65-tKv">
@@ -484,6 +484,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qmx-Pn-rtd">
+                                        <rect key="frame" x="-2" y="0.0" width="81" height="21"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No Scene" id="Lxo-UY-S5f">
+                                            <font key="font" metaFont="system" size="17"/>
+                                            <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
                                     <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tr7-lo-aXw">
                                         <rect key="frame" x="3" y="3" width="184" height="19"/>
                                         <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="JdK-r0-Soj">
@@ -506,7 +514,9 @@
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="190" id="G2x-pY-3It"/>
                                     <constraint firstItem="tr7-lo-aXw" firstAttribute="leading" secondItem="eJi-p6-3Ak" secondAttribute="leading" constant="3" id="GAw-N3-KfY"/>
                                     <constraint firstItem="PcI-fz-rXt" firstAttribute="leading" secondItem="eJi-p6-3Ak" secondAttribute="leading" id="GqV-rK-S6k"/>
+                                    <constraint firstAttribute="centerY" secondItem="qmx-Pn-rtd" secondAttribute="centerY" id="PoG-LW-NJ5"/>
                                     <constraint firstItem="tr7-lo-aXw" firstAttribute="top" secondItem="PcI-fz-rXt" secondAttribute="bottom" constant="3" id="aBV-vY-zET"/>
+                                    <constraint firstAttribute="centerX" secondItem="qmx-Pn-rtd" secondAttribute="centerX" id="le2-FN-sHZ"/>
                                     <constraint firstAttribute="bottom" secondItem="tr7-lo-aXw" secondAttribute="bottom" constant="3" id="rH4-Vu-XcI"/>
                                     <constraint firstItem="PcI-fz-rXt" firstAttribute="top" secondItem="eJi-p6-3Ak" secondAttribute="top" id="sPh-3p-5ah"/>
                                     <constraint firstAttribute="trailing" secondItem="PcI-fz-rXt" secondAttribute="trailing" id="xtg-OW-bCn"/>
@@ -721,8 +731,8 @@
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                     </scrollView>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RUK-6O-o0H">
-                                                        <rect key="frame" x="78" y="189" width="105" height="21"/>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RUK-6O-o0H">
+                                                        <rect key="frame" x="-2" y="0.0" width="105" height="21"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No Selection" id="8Ej-7n-p15">
                                                             <font key="font" metaFont="system" size="17"/>
                                                             <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
@@ -942,6 +952,7 @@
                 <outlet property="_libraryTabButtons" destination="pf4-VP-sjQ" id="1XR-iH-5BW"/>
                 <outlet property="_navigatorTreeController" destination="FfK-Wg-7Xj" id="bBG-5I-i7L"/>
                 <outlet property="_navigatorView" destination="Y4L-tX-zfk" id="Gju-ZL-6rD"/>
+                <outlet property="_navigatorViewNoSceneLabel" destination="qmx-Pn-rtd" id="kre-0u-5u3"/>
                 <outlet property="skView" destination="BAm-0B-vb9" id="MCo-T6-F5E"/>
                 <outlet property="window" destination="371" id="532"/>
             </connections>

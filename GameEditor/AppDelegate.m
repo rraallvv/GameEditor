@@ -161,6 +161,7 @@
 	IBOutlet NSButton *_libraryModeButton;
 	IBOutlet NSMatrix *_libraryTabButtons;
 	IBOutlet NSTextField *_attributesViewNoSelectionLabel;
+	IBOutlet NSTextField *_navigatorViewNoSceneLabel;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
 	NSArray *_exportedClasses;
@@ -740,8 +741,8 @@
 					  }];
 }
 
-- (IBAction)performClose:(id)sender {
-	[self removeScene];
+- (IBAction)closeScene:(id)sender {
+	[self useScene:nil];
 	_currentFilename = nil;
 }
 
@@ -1218,15 +1219,21 @@
 	[scene setPaused:YES];
 }
 
-- (void)removeScene {
-	[_attributesTreeController setContent:nil];
-	[_navigatorTreeController setContent:nil];
-	_editorView.scene = nil;
-	_editorView.needsDisplay = YES;
-	[self.skView presentScene:nil];
-}
-
 - (void)useScene:(SKScene *)scene {
+	_navigatorViewNoSceneLabel.hidden = scene != nil;
+
+	if (!scene) {
+		_attributesViewNoSelectionLabel.hidden = NO;
+
+		[_attributesTreeController setContent:nil];
+		[_navigatorTreeController setContent:nil];
+		_editorView.scene = nil;
+		_editorView.needsDisplay = YES;
+		[self.skView presentScene:nil];
+
+		return;
+	}
+
 	[_navigatorTreeController setContent:[NavigationNode navigationNodeWithNode:scene]];
 	[_navigatorView expandItem:nil expandChildren:YES];
 
