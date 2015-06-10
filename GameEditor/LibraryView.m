@@ -68,7 +68,132 @@
 
 @end
 
-#pragma mark LibraryItem
+#pragma mark - LibraryPanelView
+
+IB_DESIGNABLE
+@interface LibraryPanelView : NSView
+@property (assign) IBInspectable BOOL topBorder;
+@property (assign) IBInspectable BOOL bottomBorder;
+@property (assign) IBInspectable BOOL draggable;
+@end
+
+@implementation LibraryPanelView {
+	NSMutableArray *_customTrackingAreas;
+	NSMutableArray *_customCursors;
+	NSMutableArray *_customTrackingRects;
+	NSPoint _draggingPoint;
+	BOOL _dragging;
+}
+
+- (void)drawRect:(NSRect)dirtyRect {
+	NSRect rect = [self bounds];
+	[[NSColor whiteColor] set];
+	NSRectFill(rect);
+
+	NSBezierPath *path = [NSBezierPath bezierPath];
+	if (self.topBorder) {
+		[path moveToPoint:CGPointMake(NSMinX(rect), NSMaxY(rect))];
+		[path lineToPoint:CGPointMake(NSMaxX(rect), NSMaxY(rect))];
+	}
+	if (self.bottomBorder) {
+		[path moveToPoint:CGPointMake(NSMinX(rect), NSMinY(rect))];
+		[path lineToPoint:CGPointMake(NSMaxX(rect), NSMinY(rect))];
+	}
+	[[NSColor lightGrayColor] set];
+	[path stroke];
+}
+
+-(void)mouseDown:(NSEvent *)event {
+	if (self.draggable) {
+		_draggingPoint = [self convertPoint:event.locationInWindow fromView:nil];
+		_dragging = YES;
+		[self.window disableCursorRects];
+		[self cursorUpdate: event];
+	}
+}
+
+- (void)mouseUp:(NSEvent *)event {
+	if (self.draggable) {
+		_dragging = NO;
+		[self.window enableCursorRects];
+		[self cursorUpdate: event];
+	}
+}
+
+- (void)mouseDragged:(NSEvent *)event {
+	if (self.draggable) {
+		NSPoint locationInView = [self convertPoint:event.locationInWindow fromView:nil];
+
+		NSSplitView *panelView = (NSSplitView *)[[self superview] superview];
+
+		NSRect frame = [[[panelView subviews] objectAtIndex:0] frame];
+		CGFloat delta = _draggingPoint.y - locationInView.y;
+		CGFloat newPosition = NSMaxY(frame) + delta;
+
+		[panelView setPosition:newPosition ofDividerAtIndex:0];
+
+		[self cursorUpdate: event];
+	}
+}
+
+- (void)cursorUpdate:(NSEvent *)event {
+	if (self.draggable) {
+		NSPoint locationInView = [self convertPoint:event.locationInWindow fromView:nil];
+		NSCursor *cursor = _dragging ? [NSCursor resizeUpDownCursor] : nil;
+		for (int i=0; i<_customTrackingRects.count; ++i) {
+			NSRect rect = [_customTrackingRects[i] rectValue];
+			if (NSPointInRect(locationInView, rect)) {
+				cursor = _customCursors[i];
+			}
+		}
+		[cursor set];
+	}
+}
+
+- (void)updateTrackingAreas {
+	[super updateTrackingAreas];
+
+	if (self.draggable) {
+		if (_customTrackingAreas == nil) {
+
+			_customTrackingAreas = [NSMutableArray array];
+			_customTrackingRects = [NSMutableArray array];
+			_customCursors = [NSMutableArray array];
+
+			NSRect rect = self.bounds;
+
+			for (NSView *subView in [self subviews]) {
+				NSRect subViewRect = subView.frame;
+				[self addTrackingRect:subViewRect forCursor:[NSCursor arrowCursor]];
+
+				NSRect trackingRect = NSMakeRect(NSMinX(rect), NSMinY(rect), NSMinX(subViewRect) - NSMinX(rect), NSHeight(rect));
+				[self addTrackingRect:trackingRect forCursor:[NSCursor resizeUpDownCursor]];
+
+				rect = NSMakeRect(NSMaxX(subViewRect), NSMinY(rect), NSMaxX(rect) - NSMaxX(subViewRect), NSHeight(rect));
+			}
+
+			[self addTrackingRect:rect forCursor:[NSCursor resizeUpDownCursor]];
+		}
+		for (NSTrackingArea *trackingArea in _customTrackingAreas) {
+			if (![[self trackingAreas] containsObject:trackingArea]) {
+				[self addTrackingArea:trackingArea];
+			}
+		}
+	}
+}
+
+- (void)addTrackingRect:(NSRect)rect forCursor:(NSCursor *)cursor {
+	[_customTrackingAreas addObject:[[NSTrackingArea alloc] initWithRect:rect
+																 options:NSTrackingActiveAlways | NSTrackingCursorUpdate
+																   owner:self
+																userInfo:nil]];
+	[_customTrackingRects addObject:[NSValue valueWithRect:rect]];
+	[_customCursors addObject:cursor];
+}
+
+@end
+
+#pragma mark - LibraryItem
 
 @interface LibraryView () <NSCollectionViewDelegate>
 - (CGSize)itemSize;
@@ -85,26 +210,44 @@
 	CGSize size = self.libraryView.itemSize;
 
 	NSBezierPath *borderPath = [NSBezierPath bezierPath];
-	[borderPath moveToPoint:CGPointMake(0.5, 0.5)];
-	[borderPath lineToPoint:CGPointMake(size.width - 0.5, 0.5)];
-	[borderPath lineToPoint:CGPointMake(size.width - 0.5, size.height + 0.5)];
+	if (self.libraryView.mode == LibraryViewModeIcons) {
+		[borderPath moveToPoint:CGPointMake(0.5, 0.5)];
+		[borderPath lineToPoint:CGPointMake(size.width - 0.5, 0.5)];
+		[borderPath lineToPoint:CGPointMake(size.width - 0.5, size.height + 0.5)];
+	} else {
+		[borderPath moveToPoint:CGPointMake(3.0, 0.5)];
+		[borderPath lineToPoint:CGPointMake(size.width - 4.0, 0.5)];
+	}
 
 	[[NSColor gridColor] set];
 	[borderPath stroke];
 
 	if (!self.transparent) {
 		CGRect rect;
-		const CGFloat border = 2.0;
+		CGFloat border;
+		if (self.libraryView.mode == LibraryViewModeIcons) {
+			border = 2.0;
+		} else {
+			border = 1.0;
+		}
 
 		rect.origin = CGPointMake(border, border + 1.0);
 		rect.size = CGSizeMake(size.width - 2.0 * border - 1.0, size.height - 2.0 * border - 1.0);
 
 		NSBezierPath *selectionPath = [NSBezierPath bezierPath];
-		[selectionPath moveToPoint:CGPointMake(NSMinX(rect) - 0.5, NSMinY(rect) - 0.5)];
-		[selectionPath lineToPoint:CGPointMake(NSMaxX(rect) + 0.5, NSMinY(rect) - 0.5)];
-		[selectionPath lineToPoint:CGPointMake(NSMaxX(rect) + 0.5, NSMaxY(rect) + 0.5)];
-		[selectionPath lineToPoint:CGPointMake(NSMinX(rect) - 0.5, NSMaxY(rect) + 0.5)];
-		[selectionPath closePath];
+		if (self.libraryView.mode == LibraryViewModeIcons) {
+			[selectionPath moveToPoint:CGPointMake(NSMinX(rect) - 0.5, NSMinY(rect) - 0.5)];
+			[selectionPath lineToPoint:CGPointMake(NSMaxX(rect) + 0.5, NSMinY(rect) - 0.5)];
+			[selectionPath lineToPoint:CGPointMake(NSMaxX(rect) + 0.5, NSMaxY(rect) + 0.5)];
+			[selectionPath lineToPoint:CGPointMake(NSMinX(rect) - 0.5, NSMaxY(rect) + 0.5)];
+			[selectionPath closePath];
+		} else {
+			[selectionPath moveToPoint:CGPointMake(-1.0, NSMinY(rect) - 0.5)];
+			[selectionPath lineToPoint:CGPointMake(size.width + 1.0, NSMinY(rect) - 0.5)];
+			[selectionPath lineToPoint:CGPointMake(size.width + 1.0, NSMaxY(rect) + 0.5)];
+			[selectionPath lineToPoint:CGPointMake(-1.0, NSMaxY(rect) + 0.5)];
+			[selectionPath closePath];
+		}
 
 		if (self.libraryView.firstResponder) {
 			[[NSColor alternateSelectedControlColor] setStroke];
@@ -121,7 +264,7 @@
 
 @end
 
-#pragma mark LibraryView
+#pragma mark - LibraryView
 
 @implementation LibraryView {
 	__weak id _actualDelegate;
@@ -140,6 +283,7 @@
 	if (_mode == LibraryViewModeIcons) {
 		self.maxNumberOfRows = 0;
 		self.maxNumberOfColumns = 0;
+		width -= 1.0;
 		width = width / (int)(width / 64.0);
 	} else {
 		self.maxNumberOfRows = 0;

@@ -2,8 +2,13 @@ language: objective-c
 before_install:
   - git submodule update --init --recursive
   - sudo easy_install cpp-coveralls
-xcode_project: GameEditor.xcodeproj
-xcode_scheme: GameEditor
+
+env:
+  - SCH=GameEditor CFG=Test SDK=macosx DEST='platform=OS X'
+
+script:
+  - xctool -project GameEditor.xcodeproj -scheme $SCH -configuration $CFG -sdk $SDK -destination "$DEST" test
+
 after_success:
   - find ~/Library/Developer/Xcode/DerivedData/ -name "*.gcno" -exec cp -v '{}' . \;
   - find ~/Library/Developer/Xcode/DerivedData/ -name "*.gcda" -exec cp -v '{}' . \;

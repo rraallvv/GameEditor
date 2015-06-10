@@ -165,8 +165,8 @@
 
 	CGFloat separatorMargin = 16;
 
-	NSColor *rootNodeSeparatorColor = [NSColor lightGrayColor];
-	NSColor *groupNodeSeparatorColor = [NSColor lightGrayColor];
+	NSColor *rootNodeSeparatorColor = outlineView.gridColor;
+	NSColor *groupNodeSeparatorColor = outlineView.gridColor;
 
 	[NSBezierPath setDefaultLineWidth:1.0];
 	CGFloat pixelOffset = 0.5;
@@ -270,11 +270,12 @@
 			_hideGroupButton.target = self;
 			_hideGroupButton.action = @selector(toggleGroupVisibility);
 			_hideGroupButton.hidden = YES;
+			[[_hideGroupButton cell] setBackgroundColor:outlineView.backgroundColor];
 			[self addSubview:_hideGroupButton];
 		}
 		[_hideGroupButton sizeToFit];
 		NSSize size = _hideGroupButton.frame.size;
-		_hideGroupButton.frame = NSMakeRect(NSMaxX(frame) - size.width, frame.size.height - size.height, size.width, size.height);
+		_hideGroupButton.frame = NSMakeRect(NSMaxX(frame) - size.width, frame.size.height - size.height - 1, size.width, size.height);
 		/*
 		for (NSControl *control in self.subviews) {
 			if ([control isKindOfClass:[NSTableCellView class]]) {
@@ -337,7 +338,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 	NSMutableArray *_editorIdentifiers;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (id)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
 		self.indentationPerLevel = kIndentationPerLevel;
 

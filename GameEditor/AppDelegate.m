@@ -32,6 +32,8 @@
 #import "LuaContext.h"
 #import "LuaExport.h"
 
+#import "CoreUI.h"
+
 #pragma mark Main Window
 
 @interface AppDelegate ()
@@ -67,7 +69,7 @@
 
 @implementation _SCNScene
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+- (id)initWithCoder:(NSCoder *)aDecoder {
 	return (id)[[SCNScene alloc] initWithCoder:aDecoder];
 }
 
@@ -75,7 +77,7 @@
 
 @implementation SKScene (Archiving)
 
-+ (instancetype)unarchiveFromFile:(NSString *)file {
++ (instancetype)unarchiveFromFile:(NSString *)file error:(NSError *__autoreleasing *)error {
 	/* Retrieve scene file path from the application bundle */
 	//file = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
 
@@ -83,7 +85,6 @@
 #if 0// convert scene data to binary before passing it to the unarchiver
 	NSData *plistData = [NSData dataWithContentsOfFile:file];
 	NSPropertyListFormat format;
-	NSError *error;
 
 	id plist = [NSPropertyListSerialization propertyListWithData:plistData
 														 options:NSPropertyListImmutable
@@ -97,7 +98,7 @@
 #else
 	NSData *data = [NSData dataWithContentsOfFile:file
 										  options:NSDataReadingMappedIfSafe
-											error:nil];
+											error:error];
 #endif
 
 	NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
@@ -139,6 +140,10 @@
 
 #pragma mark - Application Delegate
 
+@interface AppDelegate () <NSApplicationDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, EditorViewDelegate, NavigatorViewDelegate>
+
+@end
+
 @implementation AppDelegate {
 	IBOutlet EditorView *_editorView;
 	IBOutlet AttributesView *_attributesView;
@@ -147,6 +152,8 @@
 	IBOutlet NSTreeController *_attributesTreeController;
 	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet NSArrayController *_libraryArrayController;
+	IBOutlet NSButton *_libraryModeButton;
+	IBOutlet NSMatrix *_libraryTabButtons;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
 	NSArray *_exportedClasses;
@@ -157,10 +164,6 @@
 @synthesize window = _window;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-	/* Main window appearance */
-	self.window.styleMask = self.window.styleMask;
-	self.window.titleVisibility = NSWindowTitleHidden;
-
 	/* Sprite Kit applies additional optimizations to improve rendering performance */
 	self.skView.ignoresSiblingOrder = YES;
 
@@ -192,7 +195,12 @@
 	}
 
 	/* Populate the library */
-	[self populateLibrary];
+	_libraryCollectionView.mode = _libraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
+	if (_libraryTabButtons.selectedColumn) {
+		[self populateLibraryResources];
+	} else {
+		[self populateLibraryTools];
+	}
 
 	/* Initialize the scripting support */
 	_sharedScriptingContext = [LuaContext new];
@@ -242,20 +250,25 @@
 	if (type) {
 		NSData *clipData = [cb dataForType:type];
 		id object = [NSKeyedUnarchiver unarchiveObjectWithData:clipData];
-
-		NSIndexPath *selectionIndexPath = _navigatorTreeController.selectionIndexPath;
-		NSInteger numberOfChildren = [_navigatorTreeController.selectedNodes.firstObject childNodes].count;
-
 		NSIndexPath *insertionIndexPath = nil;
 
+		NSIndexPath *selectionIndexPath = _navigatorTreeController.selectionIndexPath;
+
+#if 0
+		/* Insert as sibling */
 		if (selectionIndexPath.length > 1) {
 			/* IndexPath as a sibling of the selected node */
 			NSInteger index = [selectionIndexPath indexAtPosition:selectionIndexPath.length - 1];
 			insertionIndexPath = [[selectionIndexPath indexPathByRemovingLastIndex] indexPathByAddingIndex:index + 1];
 		} else {
 			/* IndexPath as a child of the scene */
+			NSInteger numberOfChildren = [_navigatorTreeController.selectedNodes.firstObject childNodes].count;
 			insertionIndexPath = [selectionIndexPath indexPathByAddingIndex:numberOfChildren];
 		}
+#else
+		/* Insert as child */
+		insertionIndexPath = [selectionIndexPath indexPathByAddingIndex:0];
+#endif
 
 		[self insertObject:object atIndexPath:insertionIndexPath];
 	}
@@ -736,11 +749,11 @@
 
 #pragma mark Library
 
-- (IBAction)libraryModeAction:(NSButton *)sender {
+- (IBAction)libraryDidChangeMode:(NSButton *)sender {
 	_libraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
-- (void)populateLibrary {
+- (void)populateLibraryTools {
 	NSURL *plugInsURL = [[NSBundle mainBundle] builtInPlugInsURL];
 
 	NSDirectoryEnumerator *directoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:plugInsURL
@@ -757,6 +770,7 @@
 	}];
 
 	_contextsData = [NSMutableArray array];
+	[_libraryArrayController setContent:nil];
 
 	for (NSURL *aURL in directoryEntries) {
 		NSNumber *isDirectory;
@@ -860,7 +874,7 @@
 					[_libraryArrayController addObject:@{@"toolName":toolName,
 														 @"label":fullDescriptionAttributedString,
 														 @"image":iconImage,
-														 @"showLabel":@YES,
+														 @"showLabel":@(!_libraryModeButton.state),
 														 @"contextData":@(_contextsData.count - 1)}.mutableCopy];
 				}
 			}
@@ -868,6 +882,163 @@
 	}
 
 	[_libraryArrayController setSelectionIndex:0];
+}
+
+- (void)populateLibraryResources {
+	static NSString *const script = LUA_STRING
+	(
+	 function createNodeAtPosition(position, name)
+		local node = SKSpriteNode.spriteNodeWithImageNamed(name)
+		node.position = position
+		return node
+	 end
+	 );
+
+	_contextsData = [NSMutableArray array];
+	[_contextsData addObject:@{@"script": script}.mutableCopy];
+
+	[_libraryArrayController setContent:nil];
+
+	NSBundle *bundle = [NSBundle mainBundle];
+	NSString *resourcePath = [bundle resourcePath];
+
+	NSError *error = nil;
+	NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:resourcePath error:&error];
+	if (error) {
+		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
+		return;
+	}
+
+	for (NSString *filename in directoryContents) {
+		if ([[filename pathExtension] isEqualToString:@"car"]) {
+			/* Retrieve the assets catalog with the given name from the main bundle */
+			NSString *name = [filename stringByDeletingPathExtension];
+
+			CUICatalog *catalog = [[CUICatalog alloc] initWithName:name fromBundle:bundle];
+			NSArray *renditionNames = [[[catalog _themeStore] themeStore] allRenditionNames];
+
+			/* Get all the image names and the corresponding thumbnails in the catalog */
+			for (NSString *rendition in renditionNames) {
+				CGImageRef universalImage = NULL;
+				for (NSUInteger idiom = 0; idiom < 10; idiom++) {
+					CUINamedImage *namedImage = [catalog imageWithName:rendition scaleFactor:2.0 deviceIdiom:idiom];
+
+					if (namedImage == nil) {
+						continue;
+					}
+
+					/* Only universal images (i.e. images with idiom 0) and images that are different than the universal one */
+					if (idiom == 0) {
+						universalImage = namedImage.image;
+					} else if (universalImage == namedImage.image) {
+						continue;
+					}
+
+					/* Generate the image thumbnail */
+					NSSize size = namedImage.size;
+					CGFloat scale = MIN(1.0, 48.0 / MAX(size.width, size.height));
+					size.width *= scale;
+					size.height *= scale;
+					NSImage *imageThumbnail = [[NSImage alloc] initWithCGImage:namedImage.image size:size];
+
+					/* Generate the image name from the idiom */
+					NSString *imageName;
+					switch (idiom) {
+						case 0:
+							imageName = namedImage.name;
+							break;
+						case 1:
+							imageName = [NSString stringWithFormat:@"%@~iphone", namedImage.name];
+							break;
+						case 2:
+							imageName = [NSString stringWithFormat:@"%@~ipad", namedImage.name];
+							break;
+						default:
+							imageName = [NSString stringWithFormat:@"%@~%lu", namedImage.name, idiom];
+							break;
+					}
+
+					NSRange nameRange = NSMakeRange(0, imageName.length);
+					NSMutableAttributedString *imageNameAttributedString = [[NSMutableAttributedString alloc] initWithString:imageName];
+					[imageNameAttributedString beginEditing];
+					[imageNameAttributedString addAttribute:NSFontAttributeName
+													 value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
+													 range:nameRange];
+					[imageNameAttributedString endEditing];
+
+					/* Add the item to the library */
+					[_libraryArrayController addObject:@{@"toolName":imageName,
+														 @"label":imageNameAttributedString,
+														 @"image":imageThumbnail,
+														 @"showLabel":@(!_libraryModeButton.state),
+														 @"contextData":@(0)}.mutableCopy];
+				}
+			}
+
+		} else {
+			/* Retrieve an image reference from the image path */
+			NSString *fullPath = [resourcePath stringByAppendingPathComponent:filename];
+			CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)[NSURL fileURLWithPath:fullPath], NULL);
+
+			if (imageSource) {
+
+				/* Get the image properties */
+				NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+										 [NSNumber numberWithBool:NO], (NSString *)kCGImageSourceShouldCache,
+										 nil];
+				CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, (CFDictionaryRef)options);
+
+				if (imageProperties) {
+
+					/* Generate the image thumbnail */
+					NSNumber *width = (NSNumber *)CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelWidth);
+					NSNumber *height = (NSNumber *)CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelHeight);
+					CFRelease(imageProperties);
+
+					NSSize size = NSMakeSize([width floatValue], [height floatValue]);
+					CGFloat scale = MIN(1.0, 48.0 / MAX(size.width, size.height));
+					size.width *= scale;
+					size.height *= scale;
+
+					CGImageRef imageRef =  CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
+
+					NSImage *imageThumbnail = [[NSImage alloc] initWithCGImage:imageRef size:size];
+
+					CFRelease(imageRef);
+
+					if (imageThumbnail) {
+
+						NSRange nameRange = NSMakeRange(0, filename.length);
+						NSMutableAttributedString *filenameAttributedString = [[NSMutableAttributedString alloc] initWithString:filename];
+						[filenameAttributedString beginEditing];
+						[filenameAttributedString addAttribute:NSFontAttributeName
+																value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
+																range:nameRange];
+						[filenameAttributedString endEditing];
+
+						/* Add the item to the library */
+						[_libraryArrayController addObject:@{@"toolName":filename,
+															 @"label":filenameAttributedString,
+															 @"image":imageThumbnail,
+															 @"showLabel":@(!_libraryModeButton.state),
+															 @"contextData":@(0)}.mutableCopy];
+					}
+				}
+
+				CFRelease(imageSource);
+			}
+		}
+	}
+	
+	[_libraryArrayController setSelectionIndex:0];
+}
+
+- (IBAction)libraryDidSwitchTab:(NSMatrix *)buttons {
+	if (buttons.selectedColumn) {
+		[self populateLibraryResources];
+	} else {
+		[self populateLibraryTools];
+	}
 }
 
 #pragma mark Editor Dragging Destination
@@ -932,7 +1103,9 @@
 	}
 
 	/* Create the node from the script */
-	SKNode *node = [scriptContext call:@"createNodeAtPosition" with:@[[NSValue valueWithPoint:locationInSelection], [libraryItem objectForKey:@"toolName"]] error:&error];
+	NSValue *position = [NSValue valueWithPoint:locationInSelection];
+	NSString *toolName = [libraryItem objectForKey:@"toolName"];
+	SKNode *node = [scriptContext call:@"createNodeAtPosition" with:@[position, toolName] error:&error];
 	if (error) {
 		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
 		return NO;
@@ -960,10 +1133,11 @@
 		return YES;
 	}
 
-	SKScene *scene = [SKScene unarchiveFromFile:filename];
+	NSError *error;
+	SKScene *scene = [SKScene unarchiveFromFile:filename error:&error];
 
-	if (!scene) {
-		NSLog(@"Couldn't open file: '%@'", filename);
+	if (error) {
+		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
 		return NO;
 	}
 
