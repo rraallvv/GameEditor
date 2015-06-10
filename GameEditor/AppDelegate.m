@@ -160,6 +160,7 @@
 	IBOutlet NSArrayController *_libraryArrayController;
 	IBOutlet NSButton *_libraryModeButton;
 	IBOutlet NSMatrix *_libraryTabButtons;
+	IBOutlet NSTextField *_attributesViewNoSelectionLabel;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
 	NSArray *_exportedClasses;
@@ -324,6 +325,8 @@
 - (void)updateSelectionWithNode:(id)node {
 	if (_selectedNode == node)
 		return;
+
+	_attributesViewNoSelectionLabel.hidden = node != nil;
 
 	_selectedNode = node;
 

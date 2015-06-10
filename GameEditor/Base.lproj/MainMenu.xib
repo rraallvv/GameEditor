@@ -721,8 +721,18 @@
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                     </scrollView>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RUK-6O-o0H">
+                                                        <rect key="frame" x="78" y="189" width="105" height="21"/>
+                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No Selection" id="8Ej-7n-p15">
+                                                            <font key="font" metaFont="system" size="17"/>
+                                                            <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
                                                 </subviews>
                                                 <constraints>
+                                                    <constraint firstAttribute="centerY" secondItem="RUK-6O-o0H" secondAttribute="centerY" id="739-5z-ZhD"/>
+                                                    <constraint firstAttribute="centerX" secondItem="RUK-6O-o0H" secondAttribute="centerX" id="7TU-W9-jtb"/>
                                                     <constraint firstAttribute="bottom" secondItem="WEo-lF-8ul" secondAttribute="bottom" id="FlY-xB-mab"/>
                                                     <constraint firstItem="WEo-lF-8ul" firstAttribute="leading" secondItem="wfL-qM-DFG" secondAttribute="leading" id="ayk-qh-mKB"/>
                                                     <constraint firstItem="WEo-lF-8ul" firstAttribute="top" secondItem="wfL-qM-DFG" secondAttribute="top" id="eyL-ey-1Vh"/>
@@ -924,6 +934,7 @@
             <connections>
                 <outlet property="_attributesTreeController" destination="IEK-xe-ugr" id="TYh-UN-I2P"/>
                 <outlet property="_attributesView" destination="zW2-BO-taF" id="19t-eI-oFU"/>
+                <outlet property="_attributesViewNoSelectionLabel" destination="RUK-6O-o0H" id="w5p-gT-IgJ"/>
                 <outlet property="_editorView" destination="suo-YO-fqM" id="D5W-Hu-pTw"/>
                 <outlet property="_libraryArrayController" destination="ybe-5J-ot9" id="iwT-3F-n1L"/>
                 <outlet property="_libraryCollectionView" destination="53q-Pc-ZVo" id="99Y-Vf-Sy2"/>
