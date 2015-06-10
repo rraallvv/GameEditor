@@ -84,7 +84,7 @@ children = _childrenNavigationNodes;
 }
 
 - (void)setChildren:(NSMutableArray *)children {
-
+	/* Clean up all the children before adding the new ones */
 	[_node removeAllChildren];
 
 	/* Add the new children */
@@ -164,6 +164,12 @@ children = _childrenNavigationNodes;
 
 - (NSPredicate *)filterPredicate {
 	return _filterPredicate;
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+	NavigationNode *copy = [[[self class] allocWithZone: zone] init];
+	copy.node = [self.node copy];
+	return copy;
 }
 
 - (void)dealloc {

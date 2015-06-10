@@ -34,6 +34,8 @@
 
 #import "CoreUI.h"
 
+#define USE_XML 0 // Write/read the SKScene scene to/from XML plist format
+
 #pragma mark Main Window
 
 @interface AppDelegate ()
@@ -63,7 +65,10 @@
 
 #pragma mark Scene save/load
 
-/* _SCNScene workarounds the error sometimes thrown when unarchiving an SCNScene contained within an SK3DNode */
+/*
+ Used to workaround the error sometimes thrown when unarchiving an SCNScene contained within an SK3DNode
+ TODO: check wheter this is still lurking around
+ */
 @interface _SCNScene : SCNScene
 @end
 
@@ -82,7 +87,8 @@
 	//file = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
 
 	/* Unarchive the file to an SKScene object */
-#if 0// convert scene data to binary before passing it to the unarchiver
+#if USE_XML
+	/* Convert scene data to binary before passing it to the unarchiver */
 	NSData *plistData = [NSData dataWithContentsOfFile:file];
 	NSPropertyListFormat format;
 
@@ -117,7 +123,7 @@
 	NSMutableData *data = [NSMutableData data];
 	NSKeyedArchiver *arch = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
 
-#if 0// Save to XML plist format
+#if USE_XML
 	[arch setOutputFormat:NSPropertyListXMLFormat_v1_0];
 #else
 	[arch setOutputFormat:NSPropertyListBinaryFormat_v1_0];
@@ -295,6 +301,9 @@
 
 - (void)removeObjectAtIndexPath:(NSIndexPath *)indexPath {
 	NavigationNode *object = [[_navigatorTreeController.arrangedObjects descendantNodeAtIndexPath:indexPath] representedObject];
+
+	/* Make the current selection to be the parent of the removed node */
+	[_editorView setNode:object.node.parent];
 
 	NSMutableArray *expansionInfo = [_navigatorView expansionInfoWithNode:[_navigatorTreeController.arrangedObjects descendantNodeAtIndexPath:indexPath]];
 
@@ -1115,8 +1124,7 @@
 	}
 
 	/* Insert the created node into the scene hierarchy */
-	[_navigatorTreeController insertObject:[NavigationNode navigationNodeWithNode:node]
-				 atArrangedObjectIndexPath:[selectionIndexPath indexPathByAddingIndex:0]];
+	[self insertObject:@[[NavigationNode navigationNodeWithNode:node], @[@YES].mutableCopy] atIndexPath:[selectionIndexPath indexPathByAddingIndex:0]];
 
 	/* Set focus on the editor view */
 	[[self window] makeFirstResponder:_editorView];
