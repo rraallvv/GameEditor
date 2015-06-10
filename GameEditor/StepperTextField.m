@@ -163,7 +163,7 @@ alternateInc = _alternateIncreaseImage,
 alternateDec = _alternateDecreaseImage,
 draggingMult = _sensitivity;
 
-- (instancetype)initWithCoder:(NSCoder *)coder {
+- (id)initWithCoder:(NSCoder *)coder {
 	if (self = [super initWithCoder:coder]) {
 
 		/* Default values for inspectable properties */

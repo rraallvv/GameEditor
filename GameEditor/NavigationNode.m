@@ -29,7 +29,9 @@
 
 #pragma mark NavigationNode
 
-@implementation NavigationNode
+@implementation NavigationNode {
+	NSPredicate *_filterPredicate;
+}
 
 @synthesize
 node = _node,
@@ -50,6 +52,8 @@ children = _childrenNavigationNodes;
 		_node = [aDecoder decodeObjectForKey:@"node"];
 		_name = [aDecoder decodeObjectForKey:@"name"];
 		_childrenNavigationNodes = [aDecoder decodeObjectForKey:@"children"];
+
+		[_node addObserver:self forKeyPath:@"name" options:0 context:NULL];
 	}
 	return self;
 }
@@ -86,12 +90,16 @@ children = _childrenNavigationNodes;
 	/* Add the new children */
 	for (NavigationNode *child in children) {
 		[_node addChild:child.node];
+		[child setFilterPredicate:_filterPredicate];
 	}
 
 	_childrenNavigationNodes = children;
 }
 
 - (NSMutableArray *)children {
+	if (_filterPredicate) {
+		return (NSMutableArray *)[_childrenNavigationNodes filteredArrayUsingPredicate:_filterPredicate];
+	}
 	return _childrenNavigationNodes;
 }
 
@@ -144,6 +152,18 @@ children = _childrenNavigationNodes;
 	if ([keyPath isEqualToString:@"name"]) {
 		self.name = [_node valueForKey:@"name"];
 	}
+}
+
+- (void)setFilterPredicate:(NSPredicate *)newFilterPredicate {
+	if (_filterPredicate != newFilterPredicate) {
+		[self willChangeValueForKey:@"children"];
+		_filterPredicate = newFilterPredicate;
+		[self didChangeValueForKey:@"children"];
+	}
+}
+
+- (NSPredicate *)filterPredicate {
+	return _filterPredicate;
 }
 
 - (void)dealloc {

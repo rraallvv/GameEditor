@@ -1,5 +1,5 @@
 /*
- * AppDelegate.h
+ * ControlsAutosave.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -24,13 +24,13 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import <SpriteKit/SpriteKit.h>
-#import "EditorView.h"
-#import "NavigatorView.h"
 
-@interface AppDelegate : NSObject
+IB_DESIGNABLE
+@interface Matrix : NSMatrix
+@property (strong) IBInspectable NSString *autosaveName;
+@end
 
-@property (assign) IBOutlet NSWindow *window;
-@property (assign) IBOutlet SKView *skView;
-
+IB_DESIGNABLE
+@interface Button : NSButton
+@property (strong) IBInspectable NSString *autosaveName;
 @end
