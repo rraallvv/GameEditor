@@ -65,7 +65,10 @@
 
 #pragma mark Scene save/load
 
-/* _SCNScene workarounds the error sometimes thrown when unarchiving an SCNScene contained within an SK3DNode */
+/*
+ Used to workaround the error sometimes thrown when unarchiving an SCNScene contained within an SK3DNode
+ TODO: check wheter this is still lurking around
+ */
 @interface _SCNScene : SCNScene
 @end
 
