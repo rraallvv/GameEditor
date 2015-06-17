@@ -1269,6 +1269,7 @@
 		if ([[node childNodes] count]) {
 			id result = [self navigationNodeOfObject:anObject inNodes:[node childNodes]];
 			if (result) {
+				[_navigatorView expandItem:node];
 				return result;
 			}
 		}
