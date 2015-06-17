@@ -34,8 +34,6 @@
 
 #import "CoreUI.h"
 
-#define USE_XML 0 // Write/read the SKScene scene to/from XML plist format
-
 #pragma mark Main Window
 
 @interface AppDelegate ()
@@ -98,6 +96,8 @@
 	IBOutlet NSMatrix *_libraryTabButtons;
 	IBOutlet NSTextField *_attributesViewNoSelectionLabel;
 	IBOutlet NSTextField *_navigatorViewNoSceneLabel;
+	IBOutlet NSView *_saveSceneView;
+	IBOutlet NSButton *_useXMLFormatButton;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
 	NSArray *_exportedClasses;
@@ -628,6 +628,8 @@
 														  format:&_sceneFormat
 														   error:error];
 
+	_useXMLFormatButton.state = _sceneFormat == NSPropertyListXMLFormat_v1_0 ? 1 : 0;
+
 	if (_sceneFormat == NSPropertyListXMLFormat_v1_0) {
 		/* Convert scene data to binary before passing it to the unarchiver */
 		data = [NSPropertyListSerialization dataWithPropertyList:plist
@@ -654,11 +656,7 @@
 	NSMutableData *data = [NSMutableData data];
 	NSKeyedArchiver *arch = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
 
-#if USE_XML
-	[arch setOutputFormat:NSPropertyListXMLFormat_v1_0];
-#else
-	[arch setOutputFormat:NSPropertyListBinaryFormat_v1_0];
-#endif
+	[arch setOutputFormat:_sceneFormat];
 
 	NSRect frame = scene.frame;
 	BOOL hasSingleNode = NSWidth(frame) == 1.0 && NSHeight(frame) == 1.0 && scene.children.count == 1;
@@ -719,6 +717,13 @@
 	/* Filter the file list showing SpriteKit files */
 	[savePanel setAllowedFileTypes:@[@"sks"]];
 
+	/* Add the custom options */
+	[savePanel setAccessoryView:_saveSceneView];
+
+	/* Preset the current scene file as the one to save */
+	[savePanel setNameFieldStringValue:[_currentFilename lastPathComponent]];
+	[savePanel setDirectoryURL:[NSURL fileURLWithPath:_currentFilename]];
+
 	/* Launch the save dialogue */
 	[savePanel beginSheetModalForWindow:self.window
 					  completionHandler:^(NSInteger result) {
@@ -751,6 +756,10 @@
 	[recentDocuments addObject:filename];
 	[userDefaults setObject:recentDocuments forKey:@"recentDocuments"];
 	[userDefaults synchronize];
+}
+
+- (IBAction)didChangeUseXMLFormatButton:(NSButton *)button {
+	_sceneFormat = button.state ? NSPropertyListXMLFormat_v1_0 : NSPropertyListBinaryFormat_v1_0;
 }
 
 #pragma mark Library

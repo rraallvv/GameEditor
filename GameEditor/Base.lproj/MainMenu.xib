@@ -955,6 +955,8 @@
                 <outlet property="_navigatorTreeController" destination="FfK-Wg-7Xj" id="bBG-5I-i7L"/>
                 <outlet property="_navigatorView" destination="Y4L-tX-zfk" id="Gju-ZL-6rD"/>
                 <outlet property="_navigatorViewNoSceneLabel" destination="qmx-Pn-rtd" id="kre-0u-5u3"/>
+                <outlet property="_saveSceneView" destination="y7f-F6-SiA" id="GjD-PC-v0V"/>
+                <outlet property="_useXMLFormatButton" destination="dgr-lQ-gvM" id="9CG-ih-ueQ"/>
                 <outlet property="skView" destination="BAm-0B-vb9" id="MCo-T6-F5E"/>
                 <outlet property="window" destination="371" id="532"/>
             </connections>
@@ -1041,6 +1043,23 @@
             </connections>
             <point key="canvasLocation" x="488.5" y="865.5"/>
         </box>
+        <customView autoresizesSubviews="NO" id="y7f-F6-SiA" userLabel="View">
+            <rect key="frame" x="0.0" y="0.0" width="158" height="54"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dgr-lQ-gvM">
+                    <rect key="frame" x="18" y="18" width="122" height="18"/>
+                    <buttonCell key="cell" type="check" title="Use XML format" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="NXg-g5-y7W">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="didChangeUseXMLFormatButton:" target="494" id="qiM-Mh-aeV"/>
+                    </connections>
+                </button>
+            </subviews>
+            <point key="canvasLocation" x="133" y="845.5"/>
+        </customView>
     </objects>
     <resources>
         <image name="AltLibraryResourcesTab" width="17" height="17"/>
