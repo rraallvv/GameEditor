@@ -80,70 +80,6 @@
 
 @end
 
-@implementation SKScene (Archiving)
-
-+ (instancetype)unarchiveFromFile:(NSString *)file error:(NSError *__autoreleasing *)error {
-	/* Retrieve scene file path from the application bundle */
-	//file = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
-
-	/* Unarchive the file to an SKScene object */
-#if USE_XML
-	/* Convert scene data to binary before passing it to the unarchiver */
-	NSData *plistData = [NSData dataWithContentsOfFile:file];
-	NSPropertyListFormat format;
-
-	id plist = [NSPropertyListSerialization propertyListWithData:plistData
-														 options:NSPropertyListImmutable
-														  format:&format
-														   error:&error];
-
-	NSData *data = [NSPropertyListSerialization dataWithPropertyList:plist
-															  format:NSPropertyListBinaryFormat_v1_0
-															 options:0
-															   error:&error];
-#else
-	NSData *data = [NSData dataWithContentsOfFile:file
-										  options:NSDataReadingMappedIfSafe
-											error:error];
-#endif
-
-	NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-	[arch setClass:[_SCNScene class] forClassName:@"SCNScene"];
-	SKScene *scene = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
-	[arch finishDecoding];
-
-	return scene;
-}
-
-+ (BOOL)archiveScene:(SKScene *)scene toFile:(NSString *)file {
-	/* Retrieve scene file path from the application bundle */
-	//file = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
-
-	/* Archive the file to an SKScene object */
-	NSMutableData *data = [NSMutableData data];
-	NSKeyedArchiver *arch = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-
-#if USE_XML
-	[arch setOutputFormat:NSPropertyListXMLFormat_v1_0];
-#else
-	[arch setOutputFormat:NSPropertyListBinaryFormat_v1_0];
-#endif
-
-	id object = scene.hasSingleNode ? scene.children.firstObject : scene;
-
-	[arch encodeObject:object forKey:NSKeyedArchiveRootObjectKey];
-	[arch finishEncoding];
-
-	return [data writeToFile:file atomically:YES];
-}
-
-- (BOOL)hasSingleNode {
-	NSRect frame = self.frame;
-	return NSWidth(frame) == 1.0 && NSHeight(frame) == 1.0 && self.children.count == 1;
-}
-
-@end
-
 #pragma mark - Application Delegate
 
 @interface AppDelegate () <NSApplicationDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, EditorViewDelegate, NavigatorViewDelegate>
@@ -167,6 +103,7 @@
 	NSArray *_exportedClasses;
 	LuaContext *_sharedScriptingContext;
 	NSMutableArray *_contextsData;
+	NSPropertyListFormat _sceneFormat;
 }
 
 @synthesize window = _window;
@@ -678,6 +615,62 @@
 
 #pragma mark File handling
 
+- (SKScene *)unarchiveFromFile:(NSString *)file error:(NSError * __autoreleasing *)error {
+	/* Retrieve scene file path from the application bundle */
+	//file = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
+
+	NSData *data;
+
+	NSData *plistData = [NSData dataWithContentsOfFile:file];
+
+	id plist = [NSPropertyListSerialization propertyListWithData:plistData
+														 options:NSPropertyListImmutable
+														  format:&_sceneFormat
+														   error:error];
+
+	if (_sceneFormat == NSPropertyListXMLFormat_v1_0) {
+		/* Convert scene data to binary before passing it to the unarchiver */
+		data = [NSPropertyListSerialization dataWithPropertyList:plist
+														  format:NSPropertyListBinaryFormat_v1_0
+														 options:0
+														   error:error];
+	} else {
+		data = plistData;
+	}
+
+	NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+	[arch setClass:[_SCNScene class] forClassName:@"SCNScene"];
+	SKScene *scene = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
+	[arch finishDecoding];
+
+	return scene;
+}
+
+- (BOOL)archiveScene:(SKScene *)scene toFile:(NSString *)file {
+	/* Retrieve scene file path from the application bundle */
+	//file = [[NSBundle mainBundle] pathForResource:file ofType:@"sks"];
+
+	/* Archive the file to an SKScene object */
+	NSMutableData *data = [NSMutableData data];
+	NSKeyedArchiver *arch = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+
+#if USE_XML
+	[arch setOutputFormat:NSPropertyListXMLFormat_v1_0];
+#else
+	[arch setOutputFormat:NSPropertyListBinaryFormat_v1_0];
+#endif
+
+	NSRect frame = scene.frame;
+	BOOL hasSingleNode = NSWidth(frame) == 1.0 && NSHeight(frame) == 1.0 && scene.children.count == 1;
+
+	id object = hasSingleNode ? scene.children.firstObject : scene;
+
+	[arch encodeObject:object forKey:NSKeyedArchiveRootObjectKey];
+	[arch finishEncoding];
+
+	return [data writeToFile:file atomically:YES];
+}
+
 - (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename {
 	return [self openSceneWithFilename:filename];
 }
@@ -713,7 +706,7 @@
 
 - (IBAction)saveDocument:(id)sender {
 	if (_currentFilename) {
-		[SKScene archiveScene:self.skView.scene toFile:_currentFilename];
+		[self archiveScene:self.skView.scene toFile:_currentFilename];
 	} else {
 		[self saveDocumentAs:sender];
 	}
@@ -735,7 +728,7 @@
 							  /* Store the selected file's path as a string */
 							  NSString *filename = [[selection path] stringByResolvingSymlinksInPath];
 							  /* Save to the selected the file */
-							  [SKScene archiveScene:self.skView.scene toFile:filename];
+							  [self archiveScene:self.skView.scene toFile:filename];
 							  _currentFilename = filename;
 						  }
 					  }];
@@ -1146,7 +1139,7 @@
 	}
 
 	NSError *error;
-	SKScene *scene = [SKScene unarchiveFromFile:filename error:&error];
+	SKScene *scene = [self unarchiveFromFile:filename error:&error];
 
 	if (error) {
 		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
