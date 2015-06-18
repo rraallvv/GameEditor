@@ -101,6 +101,7 @@
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
 	NSBundle *_sceneBundle;
+	NSString *_sceneBundlePath;
 	NSArray *_exportedClasses;
 	LuaContext *_sharedScriptingContext;
 	NSMutableArray *_contextsData;
@@ -903,22 +904,32 @@
 }
 
 - (void)populateResourcesLibrary {
-	static NSString *const script = LUA_STRING
-	(
-	 function createNodeAtPosition(position, name)
-		local node = SKSpriteNode.spriteNodeWithImageNamed(name)
-		node.position = position
-		return node
-	 end
-	 );
+	NSString *bundlePath = [_sceneBundle bundlePath];
+	if (_sceneBundle && [_sceneBundlePath isEqualToString:bundlePath]) {
+		/* Return leaving the resource library untouched if the scene has the same bundle */
+		return;
+	}
 
+	/* Clear the context of the resource library */
 	_contextsData = [NSMutableArray array];
-	[_contextsData addObject:@{@"script": script}.mutableCopy];
+	[_contextsData addObject:@{@"script": LUA_STRING
+							   (
+								function createNodeAtPosition(position, name)
+									local node = SKSpriteNode.spriteNodeWithImageNamed(name)
+									node.position = position
+									return node
+								end
+								)}.mutableCopy];
 
+	/* Clear the resource library */
 	[_libraryArrayController setContent:nil];
 
-	if (!_sceneBundle)
+	if (!_sceneBundle) {
+		/* Return without populating the resource library if the scene has no bundle */
 		return;
+	}
+
+	_sceneBundlePath = bundlePath;
 
 	/* Get a list with all the files in the scene bundle */
 	NSString *resourcePath = [_sceneBundle resourcePath];
