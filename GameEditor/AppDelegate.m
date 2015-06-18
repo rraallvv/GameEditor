@@ -32,8 +32,6 @@
 #import "LuaContext.h"
 #import "LuaExport.h"
 
-#import "CoreUI.h"
-
 #pragma mark Main Window
 
 @interface AppDelegate ()

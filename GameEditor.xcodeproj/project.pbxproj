@@ -13,7 +13,6 @@
 		E40813951AC42FFF00F54824 /* ColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = E40813941AC42FFF00F54824 /* ColorWell.m */; };
 		E4220B2D1ACFF92B00753375 /* Particles.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2B1ACFF92B00753375 /* Particles.sks */; };
 		E4220B2E1ACFF92B00753375 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2C1ACFF92B00753375 /* spark.png */; };
-		E4308E411B230978003F3241 /* CoreUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4308E401B230978003F3241 /* CoreUI.framework */; };
 		E460AB931ACDC9B900859EA2 /* NavigatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E460AB921ACDC9B900859EA2 /* NavigatorView.m */; };
 		E474192F1AD84EDC00061932 /* NewGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E474192E1AD84EDC00061932 /* NewGameScene.sks */; };
 		E48286631AE7D74F00C51F8D /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = E48286621AE7D74F00C51F8D /* art.scnassets */; };
@@ -109,7 +108,6 @@
 		E40813941AC42FFF00F54824 /* ColorWell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorWell.m; sourceTree = "<group>"; };
 		E4220B2B1ACFF92B00753375 /* Particles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Particles.sks; sourceTree = "<group>"; };
 		E4220B2C1ACFF92B00753375 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
-		E4308E401B230978003F3241 /* CoreUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreUI.framework; path = /System/Library/PrivateFrameworks/CoreUI.framework; sourceTree = "<absolute>"; };
 		E4308E431B230A75003F3241 /* CoreUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreUI.h; sourceTree = "<group>"; };
 		E460AB911ACDC9B900859EA2 /* NavigatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigatorView.h; sourceTree = "<group>"; };
 		E460AB921ACDC9B900859EA2 /* NavigatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigatorView.m; sourceTree = "<group>"; };
@@ -148,7 +146,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4E935F81B08AE88007A48C4 /* libobjc2lua.a in Frameworks */,
-				E4308E411B230978003F3241 /* CoreUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,7 +195,6 @@
 		E4308E421B230A47003F3241 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E4308E401B230978003F3241 /* CoreUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -209,8 +205,8 @@
 				E4ABDB4A1AB3933900AAE82E /* GameEditor */,
 				E4ABDB631AB3933900AAE82E /* GameEditorTests */,
 				E4E935F71B08ABBE007A48C4 /* Lua */,
-				E4ABDB491AB3933900AAE82E /* Products */,
 				E4308E421B230A47003F3241 /* Frameworks */,
+				E4ABDB491AB3933900AAE82E /* Products */,
 			);
 			sourceTree = "<group>";
 		};
