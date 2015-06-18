@@ -80,7 +80,7 @@
 
 #pragma mark - Application Delegate
 
-@interface AppDelegate () <NSApplicationDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, EditorViewDelegate, NavigatorViewDelegate>
+@interface AppDelegate () <NSApplicationDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, EditorViewDelegate, NavigatorViewDelegate, LibraryViewDelegate>
 
 @end
 
@@ -108,6 +108,8 @@
 	NSPropertyListFormat _sceneFormat;
 	NSMutableArray *_toolsLibraryItems;
 	NSMutableArray *_resourcesLibraryItems;
+	NSInteger _toolsSelectedLibraryItem;
+	NSInteger _resourcesSelectedLibraryItem;
 }
 
 @synthesize window = _window;
@@ -143,7 +145,10 @@
 		[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
 	}
 
-	/* Populate the library */
+	/* Setup the library */
+	_libraryCollectionView.delegate = self;
+	_toolsSelectedLibraryItem = NSNotFound;
+	_resourcesSelectedLibraryItem = NSNotFound;
 	_libraryCollectionView.mode = _libraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
 	if (_libraryTabButtons.selectedColumn) {
 		[self populateResourcesLibrary];
@@ -903,7 +908,10 @@
 	}
 
 	[_libraryArrayController setContent:_toolsLibraryItems];
-	[_libraryArrayController setSelectionIndex:0];
+
+	if (_toolsSelectedLibraryItem == NSNotFound)
+		_toolsSelectedLibraryItem = 0;
+	[_libraryArrayController setSelectionIndex:_toolsSelectedLibraryItem];
 }
 
 - (void)populateResourcesLibrary {
@@ -1029,7 +1037,10 @@
 	}
 
 	[_libraryArrayController setContent:_resourcesLibraryItems];
-	[_libraryArrayController setSelectionIndex:0];
+
+	if (_resourcesSelectedLibraryItem == NSNotFound)
+		_resourcesSelectedLibraryItem = 0;
+	[_libraryArrayController setSelectionIndex:_resourcesSelectedLibraryItem];
 }
 
 - (IBAction)libraryDidSwitchTab:(NSMatrix *)buttons {
@@ -1037,6 +1048,14 @@
 		[self populateResourcesLibrary];
 	} else {
 		[self populateToolsLibrary];
+	}
+}
+
+- (void)libraryView:(LibraryView *)libraryView didSelectItemAtIndex:(NSInteger)index {
+	if (_libraryTabButtons.selectedColumn) {
+		_resourcesSelectedLibraryItem = index;
+	} else {
+		_toolsSelectedLibraryItem = index;
 	}
 }
 
