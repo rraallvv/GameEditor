@@ -100,6 +100,7 @@
 	IBOutlet NSButton *_useXMLFormatButton;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
+	NSBundle *_sceneBundle;
 	NSArray *_exportedClasses;
 	LuaContext *_sharedScriptingContext;
 	NSMutableArray *_contextsData;
@@ -742,6 +743,8 @@
 - (IBAction)closeScene:(id)sender {
 	[self useScene:nil];
 	_currentFilename = nil;
+	_sceneBundle = nil;
+	[self populateLibraryResources];
 }
 
 - (void)addRecentDocument:(NSString *)filename {
@@ -914,8 +917,10 @@
 
 	[_libraryArrayController setContent:nil];
 
-	NSBundle *bundle = [NSBundle mainBundle];
-	NSString *resourcePath = [bundle resourcePath];
+	if (!_sceneBundle)
+		return;
+
+	NSString *resourcePath = [_sceneBundle resourcePath];
 
 	NSError *error = nil;
 	NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:resourcePath error:&error];
@@ -929,7 +934,7 @@
 			/* Retrieve the assets catalog with the given name from the main bundle */
 			NSString *name = [filename stringByDeletingPathExtension];
 
-			CUICatalog *catalog = [[CUICatalog alloc] initWithName:name fromBundle:bundle];
+			CUICatalog *catalog = [[CUICatalog alloc] initWithName:name fromBundle:_sceneBundle];
 			NSArray *renditionNames = [[[catalog _themeStore] themeStore] allRenditionNames];
 
 			/* Get all the image names and the corresponding thumbnails in the catalog */
@@ -1161,6 +1166,15 @@
 	[self addRecentDocument:filename];
 
 	_currentFilename = filename;
+	_sceneBundle = nil;
+
+	NSString *bundlePath = filename;
+	while (!_sceneBundle && [[NSFileManager defaultManager] fileExistsAtPath:bundlePath]) {
+		_sceneBundle = [NSBundle bundleWithPath:bundlePath];
+		bundlePath = [bundlePath stringByDeletingLastPathComponent];
+	}
+
+	[self populateLibraryResources];
 
 	return YES;
 }
