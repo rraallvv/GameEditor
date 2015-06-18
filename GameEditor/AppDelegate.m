@@ -143,9 +143,9 @@
 	/* Populate the library */
 	_libraryCollectionView.mode = _libraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
 	if (_libraryTabButtons.selectedColumn) {
-		[self populateLibraryResources];
+		[self populateResourcesLibrary];
 	} else {
-		[self populateLibraryTools];
+		[self populateToolsLibrary];
 	}
 
 	/* Initialize the scripting support */
@@ -744,7 +744,7 @@
 	[self useScene:nil];
 	_currentFilename = nil;
 	_sceneBundle = nil;
-	[self populateLibraryResources];
+	[self populateResourcesLibrary];
 }
 
 - (void)addRecentDocument:(NSString *)filename {
@@ -771,7 +771,7 @@
 	_libraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
-- (void)populateLibraryTools {
+- (void)populateToolsLibrary {
 	NSURL *plugInsURL = [[NSBundle mainBundle] builtInPlugInsURL];
 
 	NSDirectoryEnumerator *directoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:plugInsURL
@@ -902,7 +902,7 @@
 	[_libraryArrayController setSelectionIndex:0];
 }
 
-- (void)populateLibraryResources {
+- (void)populateResourcesLibrary {
 	static NSString *const script = LUA_STRING
 	(
 	 function createNodeAtPosition(position, name)
@@ -1055,9 +1055,9 @@
 
 - (IBAction)libraryDidSwitchTab:(NSMatrix *)buttons {
 	if (buttons.selectedColumn) {
-		[self populateLibraryResources];
+		[self populateResourcesLibrary];
 	} else {
-		[self populateLibraryTools];
+		[self populateToolsLibrary];
 	}
 }
 
@@ -1174,7 +1174,7 @@
 		bundlePath = [bundlePath stringByDeletingLastPathComponent];
 	}
 
-	[self populateLibraryResources];
+	[self populateResourcesLibrary];
 
 	return YES;
 }
