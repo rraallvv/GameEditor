@@ -920,84 +920,28 @@
 	if (!_sceneBundle)
 		return;
 
+	/* Get a list with all the files in the scene bundle */
 	NSString *resourcePath = [_sceneBundle resourcePath];
+	NSURL *resourceURL = [[NSURL alloc] initFileURLWithPath:resourcePath];
+	NSArray *keys = [NSArray arrayWithObject:NSURLIsDirectoryKey];
+	NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager]
+										 enumeratorAtURL:resourceURL
+										 includingPropertiesForKeys:keys
+										 options:0
+										 errorHandler:^(NSURL *url, NSError *error) {
+											 [NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
+											 return NO;
+										 }];
 
-	NSError *error = nil;
-	NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:resourcePath error:&error];
-	if (error) {
-		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
-		return;
-	}
+	/* Traverse all the files in the retrieved list */
+	for (NSURL *url in enumerator) {
+		NSError *error;
+		NSNumber *isDirectory = nil;
+		if ([url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:&error] && ![isDirectory boolValue]) {
+			NSString *fullPath = [url path];
+			NSString *filename = [fullPath lastPathComponent];
 
-	for (NSString *filename in directoryContents) {
-		if ([[filename pathExtension] isEqualToString:@"car"]) {
-			/* Retrieve the assets catalog with the given name from the main bundle */
-			NSString *name = [filename stringByDeletingPathExtension];
-
-			CUICatalog *catalog = [[CUICatalog alloc] initWithName:name fromBundle:_sceneBundle];
-			NSArray *renditionNames = [[[catalog _themeStore] themeStore] allRenditionNames];
-
-			/* Get all the image names and the corresponding thumbnails in the catalog */
-			for (NSString *rendition in renditionNames) {
-				CGImageRef universalImage = NULL;
-				for (NSUInteger idiom = 0; idiom < 10; idiom++) {
-					CUINamedImage *namedImage = [catalog imageWithName:rendition scaleFactor:2.0 deviceIdiom:idiom];
-
-					if (namedImage == nil) {
-						continue;
-					}
-
-					/* Only universal images (i.e. images with idiom 0) and images that are different than the universal one */
-					if (idiom == 0) {
-						universalImage = namedImage.image;
-					} else if (universalImage == namedImage.image) {
-						continue;
-					}
-
-					/* Generate the image thumbnail */
-					NSSize size = namedImage.size;
-					CGFloat scale = MIN(1.0, 48.0 / MAX(size.width, size.height));
-					size.width *= scale;
-					size.height *= scale;
-					NSImage *imageThumbnail = [[NSImage alloc] initWithCGImage:namedImage.image size:size];
-
-					/* Generate the image name from the idiom */
-					NSString *imageName;
-					switch (idiom) {
-						case 0:
-							imageName = namedImage.name;
-							break;
-						case 1:
-							imageName = [NSString stringWithFormat:@"%@~iphone", namedImage.name];
-							break;
-						case 2:
-							imageName = [NSString stringWithFormat:@"%@~ipad", namedImage.name];
-							break;
-						default:
-							imageName = [NSString stringWithFormat:@"%@~%lu", namedImage.name, idiom];
-							break;
-					}
-
-					NSRange nameRange = NSMakeRange(0, imageName.length);
-					NSMutableAttributedString *imageNameAttributedString = [[NSMutableAttributedString alloc] initWithString:imageName];
-					[imageNameAttributedString beginEditing];
-					[imageNameAttributedString addAttribute:NSFontAttributeName
-													 value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
-													 range:nameRange];
-					[imageNameAttributedString endEditing];
-
-					/* Add the item to the library */
-					[_libraryArrayController addObject:@{@"toolName":imageName,
-														 @"label":imageNameAttributedString,
-														 @"image":imageThumbnail,
-														 @"showLabel":@(!_libraryModeButton.state),
-														 @"contextData":@(0)}.mutableCopy];
-				}
-			}
-
-		} else {
 			/* Retrieve an image reference from the image path */
-			NSString *fullPath = [resourcePath stringByAppendingPathComponent:filename];
 			CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)[NSURL fileURLWithPath:fullPath], NULL);
 
 			if (imageSource) {
@@ -1032,8 +976,8 @@
 						NSMutableAttributedString *filenameAttributedString = [[NSMutableAttributedString alloc] initWithString:filename];
 						[filenameAttributedString beginEditing];
 						[filenameAttributedString addAttribute:NSFontAttributeName
-																value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
-																range:nameRange];
+														 value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
+														 range:nameRange];
 						[filenameAttributedString endEditing];
 
 						/* Add the item to the library */
@@ -1048,8 +992,12 @@
 				CFRelease(imageSource);
 			}
 		}
+		else if (error) {
+			[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
+			break;
+		}
 	}
-	
+
 	[_libraryArrayController setSelectionIndex:0];
 }
 
