@@ -827,6 +827,17 @@
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                     </scrollView>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0Wb-R6-rZ4">
+                                                        <rect key="frame" x="81" y="90" width="99" height="21"/>
+                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No Matches" id="EGS-pQ-khQ">
+                                                            <font key="font" metaFont="system" size="17"/>
+                                                            <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="ybe-5J-ot9" name="hidden" keyPath="arrangedObjects.@count" id="C5T-C9-nXx"/>
+                                                        </connections>
+                                                    </textField>
                                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="NjT-RW-5T2" customClass="LibraryPanelView">
                                                         <rect key="frame" x="0.0" y="0.0" width="260" height="25"/>
                                                         <subviews>
@@ -875,6 +886,8 @@
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="74F-PN-nRU"/>
+                                                    <constraint firstItem="0Wb-R6-rZ4" firstAttribute="centerX" secondItem="REE-3d-rnp" secondAttribute="centerX" id="74v-LJ-n9U"/>
+                                                    <constraint firstItem="0Wb-R6-rZ4" firstAttribute="centerY" secondItem="REE-3d-rnp" secondAttribute="centerY" id="Aqg-g0-0y4"/>
                                                     <constraint firstAttribute="trailing" secondItem="0kB-Zw-fjX" secondAttribute="trailing" id="HfU-xc-AR9"/>
                                                     <constraint firstItem="NjT-RW-5T2" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="Ptw-gr-ixA"/>
                                                     <constraint firstItem="NjT-RW-5T2" firstAttribute="top" secondItem="0kB-Zw-fjX" secondAttribute="bottom" id="YdF-IV-AgL"/>
