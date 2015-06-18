@@ -33,3 +33,7 @@ typedef enum LibraryViewMode {
 @interface LibraryView : NSCollectionView
 @property (assign) LibraryViewMode mode;
 @end
+
+@protocol LibraryViewDelegate <NSCollectionViewDelegate>
+- (void)libraryView:(LibraryView *)libraryView didSelectItemAtIndex:(NSInteger)index;
+@end
