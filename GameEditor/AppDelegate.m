@@ -945,12 +945,30 @@
 										 }];
 
 	/* Traverse all the files in the retrieved list */
+	NSMutableArray *loadedFiles = [NSMutableArray array];
 	for (NSURL *url in enumerator) {
 		NSError *error;
 		NSNumber *isDirectory = nil;
 		if ([url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:&error] && ![isDirectory boolValue]) {
 			NSString *fullPath = [url path];
 			NSString *filename = [fullPath lastPathComponent];
+
+			/* Check whether the file is an image */
+			CFStringRef fileExtension = (__bridge CFStringRef)[filename pathExtension];
+			CFStringRef fileUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension, NULL);
+			BOOL isImage = UTTypeConformsTo(fileUTI, kUTTypeImage);
+			CFRelease(fileUTI);
+
+			if (!isImage)
+				continue;
+
+			/* Check whether the image was already added with a different idiom */
+			NSRange range = [filename rangeOfString:@"~[^~\\.]*\\." options:NSRegularExpressionSearch];
+			if (range.location != NSNotFound)
+				filename = [filename stringByReplacingCharactersInRange:range withString:@"."];
+			if ([loadedFiles indexOfObject:filename] != NSNotFound)
+				continue;
+			[loadedFiles addObject:filename];
 
 			/* Retrieve an image reference from the image path */
 			CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)[NSURL fileURLWithPath:fullPath], NULL);
