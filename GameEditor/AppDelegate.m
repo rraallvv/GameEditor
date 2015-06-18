@@ -104,12 +104,13 @@
 	NSString *_sceneBundlePath;
 	NSArray *_exportedClasses;
 	LuaContext *_sharedScriptingContext;
-	NSMutableArray *_contextsData;
 	NSPropertyListFormat _sceneFormat;
 	NSMutableArray *_toolsLibraryItems;
 	NSMutableArray *_resourcesLibraryItems;
 	NSInteger _toolsSelectedLibraryItem;
 	NSInteger _resourcesSelectedLibraryItem;
+	NSMutableArray *_toolsLibraryContext;
+	NSMutableArray *_resourcesLibraryContext;
 }
 
 @synthesize window = _window;
@@ -780,128 +781,130 @@
 }
 
 - (void)populateToolsLibrary {
-	NSURL *plugInsURL = [[NSBundle mainBundle] builtInPlugInsURL];
+	if (!_toolsLibraryItems) {
+		_toolsLibraryItems = [NSMutableArray array];
+		_toolsLibraryContext = [NSMutableArray array];
 
-	NSDirectoryEnumerator *directoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:plugInsURL
-																	  includingPropertiesForKeys:@[ NSURLNameKey, NSURLIsDirectoryKey ]
-																						 options:NSDirectoryEnumerationSkipsHiddenFiles | NSDirectoryEnumerationSkipsSubdirectoryDescendants
-																					errorHandler:nil];
+		NSURL *plugInsURL = [[NSBundle mainBundle] builtInPlugInsURL];
 
-	NSPredicate *filter = [NSPredicate predicateWithFormat: @"pathExtension = 'geextension'"];
+		NSDirectoryEnumerator *directoryEnumerator = [[NSFileManager defaultManager] enumeratorAtURL:plugInsURL
+																		  includingPropertiesForKeys:@[ NSURLNameKey, NSURLIsDirectoryKey ]
+																							 options:NSDirectoryEnumerationSkipsHiddenFiles | NSDirectoryEnumerationSkipsSubdirectoryDescendants
+																						errorHandler:nil];
 
-	NSArray *directoryEntries = [directoryEnumerator.allObjects filteredArrayUsingPredicate: filter];
+		NSPredicate *filter = [NSPredicate predicateWithFormat: @"pathExtension = 'geextension'"];
 
-	directoryEntries = [directoryEntries sortedArrayUsingComparator:^(NSURL* a, NSURL* b) {
-		return [[a lastPathComponent] compare:[b lastPathComponent] options:NSNumericSearch];
-	}];
+		NSArray *directoryEntries = [directoryEnumerator.allObjects filteredArrayUsingPredicate: filter];
 
-	_contextsData = [NSMutableArray array];
-	_toolsLibraryItems = [NSMutableArray array];
+		directoryEntries = [directoryEntries sortedArrayUsingComparator:^(NSURL* a, NSURL* b) {
+			return [[a lastPathComponent] compare:[b lastPathComponent] options:NSNumericSearch];
+		}];
 
-	for (NSURL *aURL in directoryEntries) {
-		NSNumber *isDirectory;
-		[aURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:NULL];
+		for (NSURL *aURL in directoryEntries) {
+			NSNumber *isDirectory;
+			[aURL getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:NULL];
 
-		if (isDirectory) {
-			NSBundle *bundle = [NSBundle bundleWithURL:aURL];
-			NSDictionary *info = [bundle infoDictionary];
+			if (isDirectory) {
+				NSBundle *bundle = [NSBundle bundleWithURL:aURL];
+				NSDictionary *info = [bundle infoDictionary];
 
-			if (info) {
-				/* Item's name */
-				NSString *name = info[@"CFBundleDisplayName"];
-				if (!name) {
-					name = @"No name";
-				}
-				NSArray *names = info[@"Names"];
-				if (!names) {
-					names = @[name];
-				}
-
-				/* Item's description */
-				NSString *description = info[@"Description"];
-				if (!description) {
-					description = @"No description";
-				}
-				NSArray *descriptions = info[@"Descriptions"];
-				if (!descriptions) {
-					descriptions = @[description];
-				}
-
-				/* Item's image */
-				NSString *iconPath = [aURL.path stringByAppendingPathComponent:info[@"CFBundleIconFile"]];
-				NSImage *iconImage = [[NSImage alloc] initWithContentsOfFile:iconPath];
-				NSImage *defaultIcon = [NSImage imageNamed:NSImageNameCaution];
-				if (!iconImage) {
-					iconImage = defaultIcon;
-				}
-				NSArray *iconPaths = info[@"CFBundleIconFiles"];
-				NSMutableArray *iconImages = [NSMutableArray array];
-				for (int i=0; i<iconPaths.count; ++i) {
-					iconPath = [aURL.path stringByAppendingPathComponent:iconPaths[i]];
-					NSImage *anImage = [[NSImage alloc] initWithContentsOfFile:iconPath];
-					if (!anImage) {
-						iconImages[i] = defaultIcon;
-					} else {
-						iconImages[i] = anImage;
+				if (info) {
+					/* Item's name */
+					NSString *name = info[@"CFBundleDisplayName"];
+					if (!name) {
+						name = @"No name";
 					}
-				}
-				if (iconImages.count == 0) {
-					iconImages[0] = iconImage;
-				}
+					NSArray *names = info[@"Names"];
+					if (!names) {
+						names = @[name];
+					}
 
-				/* Item's script */
-				NSString *script = info[@"Script"];
-				if (!script) {
-					NSString *itemScriptPath = [aURL.path stringByAppendingPathComponent:info[@"Script File"]];
-					script = [[NSString alloc] initWithContentsOfFile:itemScriptPath encoding:NSUTF8StringEncoding error:nil];
-				}
-				if (!script) {
-					script = (id)[NSNull null];
-				}
-
-				[_contextsData addObject:@{@"script": script}.mutableCopy];
-
-				/* Populate the library items with the loaded data */
-				for (int i=0; i<names.count; ++i) {
-					name = names[i];
-					NSString *toolName = [name stringByReplacingOccurrencesOfString:@" " withString:@""];
-					NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(.*\\)"
-																						   options:NSRegularExpressionCaseInsensitive
-																							 error:nil];
-					toolName = [regex stringByReplacingMatchesInString:toolName options:0 range:NSMakeRange(0, [toolName length]) withTemplate:@""];
-
-					if (i < descriptions.count) {
-						description = descriptions[i];
-					} else {
+					/* Item's description */
+					NSString *description = info[@"Description"];
+					if (!description) {
 						description = @"No description";
 					}
-
-					if (i < iconImages.count) {
-						iconImage = iconImages[i];
-					} else {
-						iconImage = defaultIcon;
+					NSArray *descriptions = info[@"Descriptions"];
+					if (!descriptions) {
+						descriptions = @[description];
 					}
 
-					/* Item's full description */
-					NSString *fullDescription = [NSString stringWithFormat:@"%@ - %@", name, description];
-					NSRange nameRange = NSMakeRange(0, [name length]);
-					NSRange descriptionRange = NSMakeRange(nameRange.length, fullDescription.length - nameRange.length);
-					NSMutableAttributedString *fullDescriptionAttributedString = [[NSMutableAttributedString alloc] initWithString:fullDescription];
-					[fullDescriptionAttributedString beginEditing];
-					[fullDescriptionAttributedString addAttribute:NSFontAttributeName
-															value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
-															range:nameRange];
-					[fullDescriptionAttributedString addAttribute:NSFontAttributeName
-															value:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]
-															range:descriptionRange];
-					[fullDescriptionAttributedString endEditing];
+					/* Item's image */
+					NSString *iconPath = [aURL.path stringByAppendingPathComponent:info[@"CFBundleIconFile"]];
+					NSImage *iconImage = [[NSImage alloc] initWithContentsOfFile:iconPath];
+					NSImage *defaultIcon = [NSImage imageNamed:NSImageNameCaution];
+					if (!iconImage) {
+						iconImage = defaultIcon;
+					}
+					NSArray *iconPaths = info[@"CFBundleIconFiles"];
+					NSMutableArray *iconImages = [NSMutableArray array];
+					for (int i=0; i<iconPaths.count; ++i) {
+						iconPath = [aURL.path stringByAppendingPathComponent:iconPaths[i]];
+						NSImage *anImage = [[NSImage alloc] initWithContentsOfFile:iconPath];
+						if (!anImage) {
+							iconImages[i] = defaultIcon;
+						} else {
+							iconImages[i] = anImage;
+						}
+					}
+					if (iconImages.count == 0) {
+						iconImages[0] = iconImage;
+					}
 
-					/* Add the item to the library */
-					[_toolsLibraryItems addObject:@{@"toolName":toolName,
-													@"label":fullDescriptionAttributedString,
-													@"image":iconImage,
-													@"showLabel":@(!_libraryModeButton.state),
-													@"contextData":@(_contextsData.count - 1)}.mutableCopy];
+					/* Item's script */
+					NSString *script = info[@"Script"];
+					if (!script) {
+						NSString *itemScriptPath = [aURL.path stringByAppendingPathComponent:info[@"Script File"]];
+						script = [[NSString alloc] initWithContentsOfFile:itemScriptPath encoding:NSUTF8StringEncoding error:nil];
+					}
+					if (!script) {
+						script = (id)[NSNull null];
+					}
+
+					[_toolsLibraryContext addObject:@{@"script": script}.mutableCopy];
+
+					/* Populate the library items with the loaded data */
+					for (int i=0; i<names.count; ++i) {
+						name = names[i];
+						NSString *toolName = [name stringByReplacingOccurrencesOfString:@" " withString:@""];
+						NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(.*\\)"
+																							   options:NSRegularExpressionCaseInsensitive
+																								 error:nil];
+						toolName = [regex stringByReplacingMatchesInString:toolName options:0 range:NSMakeRange(0, [toolName length]) withTemplate:@""];
+
+						if (i < descriptions.count) {
+							description = descriptions[i];
+						} else {
+							description = @"No description";
+						}
+
+						if (i < iconImages.count) {
+							iconImage = iconImages[i];
+						} else {
+							iconImage = defaultIcon;
+						}
+
+						/* Item's full description */
+						NSString *fullDescription = [NSString stringWithFormat:@"%@ - %@", name, description];
+						NSRange nameRange = NSMakeRange(0, [name length]);
+						NSRange descriptionRange = NSMakeRange(nameRange.length, fullDescription.length - nameRange.length);
+						NSMutableAttributedString *fullDescriptionAttributedString = [[NSMutableAttributedString alloc] initWithString:fullDescription];
+						[fullDescriptionAttributedString beginEditing];
+						[fullDescriptionAttributedString addAttribute:NSFontAttributeName
+																value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
+																range:nameRange];
+						[fullDescriptionAttributedString addAttribute:NSFontAttributeName
+																value:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]
+																range:descriptionRange];
+						[fullDescriptionAttributedString endEditing];
+
+						/* Add the item to the library */
+						[_toolsLibraryItems addObject:@{@"toolName":toolName,
+														@"label":fullDescriptionAttributedString,
+														@"image":iconImage,
+														@"showLabel":@(!_libraryModeButton.state),
+														@"contextData":@(_toolsLibraryContext.count - 1)}.mutableCopy];
+					}
 				}
 			}
 		}
@@ -915,21 +918,23 @@
 }
 
 - (void)populateResourcesLibrary {
-	/* Init the context of the resource library */
-	_contextsData = [NSMutableArray array];
-	[_contextsData addObject:@{@"script": LUA_STRING
-							   (
-								function createNodeAtPosition(position, name)
-									local node = SKSpriteNode.spriteNodeWithImageNamed(name)
-									node.position = position
-									return node
-								end
-								)}.mutableCopy];
-
 	NSString *bundlePath = [_sceneBundle bundlePath];
 
 	/* Check whether the loaded scene's bundle is the same */
 	if (!_sceneBundlePath || ![_sceneBundlePath isEqualToString:bundlePath]) {
+
+		/* Init the context of the resource library */
+		if (!_resourcesLibraryContext) {
+			_resourcesLibraryContext = [NSMutableArray array];
+			[_resourcesLibraryContext addObject:@{@"script": LUA_STRING
+												  (
+												   function createNodeAtPosition(position, name)
+												   local node = SKSpriteNode.spriteNodeWithImageNamed(name)
+												   node.position = position
+												   return node
+												   end
+												   )}.mutableCopy];
+		}
 
 		/* Clear the resource library */
 		_resourcesLibraryItems = [NSMutableArray array];
@@ -1085,7 +1090,11 @@
 	LuaContext *scriptContext = nil;
 	NSMutableDictionary *contextData = nil;
 	if (itemIndex) {
-		contextData = [_contextsData objectAtIndex:[itemIndex intValue]];
+		if (_libraryTabButtons.selectedColumn) {
+			contextData = [_resourcesLibraryContext objectAtIndex:[itemIndex intValue]];
+		} else {
+			contextData = [_toolsLibraryContext objectAtIndex:[itemIndex intValue]];
+		}
 		scriptContext = [contextData objectForKey:@"context"];
 	}
 
@@ -1172,7 +1181,11 @@
 		bundlePath = [bundlePath stringByDeletingLastPathComponent];
 	}
 
-	[self populateResourcesLibrary];
+	if (_libraryTabButtons.selectedColumn) {
+		[self populateResourcesLibrary];
+	} else {
+		[self populateToolsLibrary];
+	}
 
 	return YES;
 }
@@ -1235,6 +1248,8 @@
 
 - (void)useScene:(SKScene *)scene {
 	_navigatorViewNoSceneLabel.hidden = scene != nil;
+
+	_toolsLibraryItems = nil;
 
 	if (!scene) {
 		_attributesViewNoSelectionLabel.hidden = NO;
