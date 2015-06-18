@@ -106,6 +106,8 @@
 	LuaContext *_sharedScriptingContext;
 	NSMutableArray *_contextsData;
 	NSPropertyListFormat _sceneFormat;
+	NSMutableArray *_toolsLibraryItems;
+	NSMutableArray *_resourcesLibraryItems;
 }
 
 @synthesize window = _window;
@@ -789,7 +791,7 @@
 	}];
 
 	_contextsData = [NSMutableArray array];
-	[_libraryArrayController setContent:nil];
+	_toolsLibraryItems = [NSMutableArray array];
 
 	for (NSURL *aURL in directoryEntries) {
 		NSNumber *isDirectory;
@@ -890,27 +892,22 @@
 					[fullDescriptionAttributedString endEditing];
 
 					/* Add the item to the library */
-					[_libraryArrayController addObject:@{@"toolName":toolName,
-														 @"label":fullDescriptionAttributedString,
-														 @"image":iconImage,
-														 @"showLabel":@(!_libraryModeButton.state),
-														 @"contextData":@(_contextsData.count - 1)}.mutableCopy];
+					[_toolsLibraryItems addObject:@{@"toolName":toolName,
+													@"label":fullDescriptionAttributedString,
+													@"image":iconImage,
+													@"showLabel":@(!_libraryModeButton.state),
+													@"contextData":@(_contextsData.count - 1)}.mutableCopy];
 				}
 			}
 		}
 	}
 
+	[_libraryArrayController setContent:_toolsLibraryItems];
 	[_libraryArrayController setSelectionIndex:0];
 }
 
 - (void)populateResourcesLibrary {
-	NSString *bundlePath = [_sceneBundle bundlePath];
-	if (_sceneBundle && [_sceneBundlePath isEqualToString:bundlePath]) {
-		/* Return leaving the resource library untouched if the scene has the same bundle */
-		return;
-	}
-
-	/* Clear the context of the resource library */
+	/* Init the context of the resource library */
 	_contextsData = [NSMutableArray array];
 	[_contextsData addObject:@{@"script": LUA_STRING
 							   (
@@ -921,112 +918,117 @@
 								end
 								)}.mutableCopy];
 
-	/* Clear the resource library */
-	[_libraryArrayController setContent:nil];
+	NSString *bundlePath = [_sceneBundle bundlePath];
 
-	if (!_sceneBundle) {
-		/* Return without populating the resource library if the scene has no bundle */
-		return;
-	}
+	/* Check whether the loaded scene's bundle is the same */
+	if (!_sceneBundlePath || ![_sceneBundlePath isEqualToString:bundlePath]) {
 
-	_sceneBundlePath = bundlePath;
+		/* Clear the resource library */
+		_resourcesLibraryItems = [NSMutableArray array];
 
-	/* Get a list with all the files in the scene bundle */
-	NSString *resourcePath = [_sceneBundle resourcePath];
-	NSURL *resourceURL = [[NSURL alloc] initFileURLWithPath:resourcePath];
-	NSArray *keys = [NSArray arrayWithObject:NSURLIsDirectoryKey];
-	NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager]
-										 enumeratorAtURL:resourceURL
-										 includingPropertiesForKeys:keys
-										 options:0
-										 errorHandler:^(NSURL *url, NSError *error) {
-											 [NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
-											 return NO;
-										 }];
+		if (_sceneBundle) {
+			/* Store the scene bundle path */
+			_sceneBundlePath = bundlePath;
 
-	/* Traverse all the files in the retrieved list */
-	NSMutableArray *loadedFiles = [NSMutableArray array];
-	for (NSURL *url in enumerator) {
-		NSError *error;
-		NSNumber *isDirectory = nil;
-		if ([url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:&error] && ![isDirectory boolValue]) {
-			NSString *fullPath = [url path];
-			NSString *filename = [fullPath lastPathComponent];
+			/* Get a list with all the files in the scene bundle */
+			NSString *resourcePath = [_sceneBundle resourcePath];
+			NSURL *resourceURL = [[NSURL alloc] initFileURLWithPath:resourcePath];
+			NSArray *keys = [NSArray arrayWithObject:NSURLIsDirectoryKey];
+			NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager]
+												 enumeratorAtURL:resourceURL
+												 includingPropertiesForKeys:keys
+												 options:0
+												 errorHandler:^(NSURL *url, NSError *error) {
+													 [NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
+													 return NO;
+												 }];
 
-			/* Check whether the file is an image */
-			CFStringRef fileExtension = (__bridge CFStringRef)[filename pathExtension];
-			CFStringRef fileUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension, NULL);
-			BOOL isImage = UTTypeConformsTo(fileUTI, kUTTypeImage);
-			CFRelease(fileUTI);
+			/* Traverse all the files in the retrieved list */
+			NSMutableArray *loadedFiles = [NSMutableArray array];
+			for (NSURL *url in enumerator) {
+				NSError *error;
+				NSNumber *isDirectory = nil;
+				if ([url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:&error] && ![isDirectory boolValue]) {
+					NSString *fullPath = [url path];
+					NSString *filename = [fullPath lastPathComponent];
 
-			if (!isImage)
-				continue;
+					/* Check whether the file is an image */
+					CFStringRef fileExtension = (__bridge CFStringRef)[filename pathExtension];
+					CFStringRef fileUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension, NULL);
+					BOOL isImage = UTTypeConformsTo(fileUTI, kUTTypeImage);
+					CFRelease(fileUTI);
 
-			/* Check whether the image was already added with a different idiom */
-			NSRange range = [filename rangeOfString:@"~[^~\\.]*\\." options:NSRegularExpressionSearch];
-			if (range.location != NSNotFound)
-				filename = [filename stringByReplacingCharactersInRange:range withString:@"."];
-			if ([loadedFiles indexOfObject:filename] != NSNotFound)
-				continue;
-			[loadedFiles addObject:filename];
+					if (!isImage)
+						continue;
 
-			/* Retrieve an image reference from the image path */
-			CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)[NSURL fileURLWithPath:fullPath], NULL);
+					/* Check whether the image was already added with a different idiom */
+					NSRange range = [filename rangeOfString:@"~[^~\\.]*\\." options:NSRegularExpressionSearch];
+					if (range.location != NSNotFound)
+						filename = [filename stringByReplacingCharactersInRange:range withString:@"."];
+					if ([loadedFiles indexOfObject:filename] != NSNotFound)
+						continue;
+					[loadedFiles addObject:filename];
 
-			if (imageSource) {
+					/* Retrieve an image reference from the image path */
+					CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)[NSURL fileURLWithPath:fullPath], NULL);
 
-				/* Get the image properties */
-				NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-										 [NSNumber numberWithBool:NO], (NSString *)kCGImageSourceShouldCache,
-										 nil];
-				CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, (CFDictionaryRef)options);
+					if (imageSource) {
 
-				if (imageProperties) {
+						/* Get the image properties */
+						NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+												 [NSNumber numberWithBool:NO], (NSString *)kCGImageSourceShouldCache,
+												 nil];
+						CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, (CFDictionaryRef)options);
 
-					/* Generate the image thumbnail */
-					NSNumber *width = (NSNumber *)CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelWidth);
-					NSNumber *height = (NSNumber *)CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelHeight);
-					CFRelease(imageProperties);
+						if (imageProperties) {
 
-					NSSize size = NSMakeSize([width floatValue], [height floatValue]);
-					CGFloat scale = MIN(1.0, 48.0 / MAX(size.width, size.height));
-					size.width *= scale;
-					size.height *= scale;
+							/* Generate the image thumbnail */
+							NSNumber *width = (NSNumber *)CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelWidth);
+							NSNumber *height = (NSNumber *)CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelHeight);
+							CFRelease(imageProperties);
 
-					CGImageRef imageRef =  CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
+							NSSize size = NSMakeSize([width floatValue], [height floatValue]);
+							CGFloat scale = MIN(1.0, 48.0 / MAX(size.width, size.height));
+							size.width *= scale;
+							size.height *= scale;
 
-					NSImage *imageThumbnail = [[NSImage alloc] initWithCGImage:imageRef size:size];
+							CGImageRef imageRef =  CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
 
-					CFRelease(imageRef);
+							NSImage *imageThumbnail = [[NSImage alloc] initWithCGImage:imageRef size:size];
 
-					if (imageThumbnail) {
+							CFRelease(imageRef);
 
-						NSRange nameRange = NSMakeRange(0, filename.length);
-						NSMutableAttributedString *filenameAttributedString = [[NSMutableAttributedString alloc] initWithString:filename];
-						[filenameAttributedString beginEditing];
-						[filenameAttributedString addAttribute:NSFontAttributeName
-														 value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
-														 range:nameRange];
-						[filenameAttributedString endEditing];
+							if (imageThumbnail) {
 
-						/* Add the item to the library */
-						[_libraryArrayController addObject:@{@"toolName":filename,
-															 @"label":filenameAttributedString,
-															 @"image":imageThumbnail,
-															 @"showLabel":@(!_libraryModeButton.state),
-															 @"contextData":@(0)}.mutableCopy];
+								NSRange nameRange = NSMakeRange(0, filename.length);
+								NSMutableAttributedString *filenameAttributedString = [[NSMutableAttributedString alloc] initWithString:filename];
+								[filenameAttributedString beginEditing];
+								[filenameAttributedString addAttribute:NSFontAttributeName
+																 value:[NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]]
+																 range:nameRange];
+								[filenameAttributedString endEditing];
+
+								/* Add the item to the library */
+								[_resourcesLibraryItems addObject:@{@"toolName":filename,
+																	@"label":filenameAttributedString,
+																	@"image":imageThumbnail,
+																	@"showLabel":@(!_libraryModeButton.state),
+																	@"contextData":@(0)}.mutableCopy];
+							}
+						}
+
+						CFRelease(imageSource);
 					}
 				}
-
-				CFRelease(imageSource);
+				else if (error) {
+					[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
+					break;
+				}
 			}
-		}
-		else if (error) {
-			[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
-			break;
 		}
 	}
 
+	[_libraryArrayController setContent:_resourcesLibraryItems];
 	[_libraryArrayController setSelectionIndex:0];
 }
 
