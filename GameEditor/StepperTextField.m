@@ -146,9 +146,7 @@ draggingMult = _sensitivity;
 		_sensitivity = 1.0;
 
 		/* Change the cell's class to TextFieldCell */
-		NSTextField *oldCell = self.cell;
-
-		NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:[NSKeyedArchiver archivedDataWithRootObject:oldCell]];
+		NSKeyedUnarchiver *arch = [[NSKeyedUnarchiver alloc] initForReadingWithData:[NSKeyedArchiver archivedDataWithRootObject:self.cell]];
 		[arch setClass:[MarginTextFieldCell class] forClassName:@"NSTextFieldCell"];
 		MarginTextFieldCell *cell = [arch decodeObjectForKey:NSKeyedArchiveRootObjectKey];
 		[arch finishDecoding];
