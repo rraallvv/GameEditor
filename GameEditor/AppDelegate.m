@@ -1158,15 +1158,19 @@
 
 	NSString *bundlePath = filename;
 	NSBundle *bundle = nil;
-	while (!bundle && [[NSFileManager defaultManager] fileExistsAtPath:bundlePath]) {
+	while (![bundlePath isEqualToString:@"/"] && [[NSFileManager defaultManager] fileExistsAtPath:bundlePath]) {
 		bundle = [NSBundle bundleWithPath:bundlePath];
+		if ([bundle infoDictionary]) {
+			break;
+		} else {
+			bundle = nil;
+		}
 		bundlePath = [bundlePath stringByDeletingLastPathComponent];
 	}
 
-	if (![bundle bundleIdentifier])
-		bundle = nil;
-
-	// TODO: Swizzle for methods to load resources from a custom bundle
+	if (bundle) {
+		//TODO: Sizzle the methods to load resurces from a custom bundle
+	}
 
 	NSError *error;
 	SKScene *scene = [self unarchiveFromFile:filename error:&error];

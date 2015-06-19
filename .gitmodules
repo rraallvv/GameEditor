@@ -1,3 +1,6 @@
 [submodule "ObjC-Lua"]
 	path = ObjC-Lua
 	url = https://github.com/rraallvv/ObjC-Lua
+[submodule "GameEditor/NSBundle-ProxyBundle"]
+	path = GameEditor/NSBundle-ProxyBundle
+	url = https://github.com/rraallvv/NSBundle-ProxyBundle

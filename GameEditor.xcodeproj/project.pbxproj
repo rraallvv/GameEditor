@@ -26,6 +26,7 @@
 		E4ABDB671AB3933900AAE82E /* GameEditorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB661AB3933900AAE82E /* GameEditorTests.m */; };
 		E4ABDB761AB47BB700AAE82E /* AttributeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB711AB3BCA700AAE82E /* AttributeNode.m */; };
 		E4BB58AE1ABB510A0021A467 /* EditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BB58AD1ABB510A0021A467 /* EditorView.m */; };
+		E4BFABB81B33ACDB000A51EB /* NSBundle+ProxyBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BFABB41B33ACDB000A51EB /* NSBundle+ProxyBundle.m */; };
 		E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */; };
 		E4E6DA3B1AE9987500F4CE6F /* LibraryView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E6DA3A1AE9987500F4CE6F /* LibraryView.m */; };
 		E4E935F81B08AE88007A48C4 /* libobjc2lua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E935F21B08ABAF007A48C4 /* libobjc2lua.a */; };
@@ -131,6 +132,8 @@
 		E4B594891B140D5000D45A33 /* PlugIns */ = {isa = PBXFileReference; lastKnownFileType = folder; path = PlugIns; sourceTree = "<group>"; };
 		E4BB58AC1ABB510A0021A467 /* EditorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorView.h; sourceTree = "<group>"; };
 		E4BB58AD1ABB510A0021A467 /* EditorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorView.m; sourceTree = "<group>"; };
+		E4BFABB31B33ACDB000A51EB /* NSBundle+ProxyBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+ProxyBundle.h"; sourceTree = "<group>"; };
+		E4BFABB41B33ACDB000A51EB /* NSBundle+ProxyBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+ProxyBundle.m"; sourceTree = "<group>"; };
 		E4BFF4AE1AB78E24002DADD3 /* StepperTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StepperTextField.h; sourceTree = "<group>"; };
 		E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StepperTextField.m; sourceTree = "<group>"; };
 		E4E6DA391AE9987500F4CE6F /* LibraryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryView.h; sourceTree = "<group>"; };
@@ -165,6 +168,7 @@
 				E4308E431B230A75003F3241 /* CoreUI.h */,
 				E401BDB81B21DC2600280F27 /* ControlsAutosave.h */,
 				E401BDB91B21DC2600280F27 /* ControlsAutosave.m */,
+				E4BFABB01B33ACDB000A51EB /* NSBundle-ProxyBundle */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -268,6 +272,15 @@
 				E4BB58AD1ABB510A0021A467 /* EditorView.m */,
 			);
 			name = Editor;
+			sourceTree = "<group>";
+		};
+		E4BFABB01B33ACDB000A51EB /* NSBundle-ProxyBundle */ = {
+			isa = PBXGroup;
+			children = (
+				E4BFABB31B33ACDB000A51EB /* NSBundle+ProxyBundle.h */,
+				E4BFABB41B33ACDB000A51EB /* NSBundle+ProxyBundle.m */,
+			);
+			path = "NSBundle-ProxyBundle";
 			sourceTree = "<group>";
 		};
 		E4C24C091B1884B9003D6E60 /* Resources */ = {
@@ -523,6 +536,7 @@
 				E40813951AC42FFF00F54824 /* ColorWell.m in Sources */,
 				E4ABDB511AB3933900AAE82E /* main.m in Sources */,
 				E401BDBA1B21DC2600280F27 /* ControlsAutosave.m in Sources */,
+				E4BFABB81B33ACDB000A51EB /* NSBundle+ProxyBundle.m in Sources */,
 				E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */,
 				E4F3B6A71ACD7EC4001482D2 /* NavigationNode.m in Sources */,
 				E4ABDB761AB47BB700AAE82E /* AttributeNode.m in Sources */,
