@@ -26,11 +26,10 @@
 #import "AppDelegate.h"
 #import "AttributesView.h"
 #import "LibraryView.h"
-
 #import <SceneKit/SceneKit.h>
-
 #import "LuaContext.h"
 #import "LuaExport.h"
+#import "NSBundle+ProxyBundle.h"
 
 #pragma mark Main Window
 
@@ -1170,6 +1169,7 @@
 
 	if (bundle) {
 		//TODO: Sizzle the methods to load resurces from a custom bundle
+		[NSBundle bpr_setMainBundleSubstitutionBundle:bundle];
 	}
 
 	NSError *error;
