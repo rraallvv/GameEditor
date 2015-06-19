@@ -1156,6 +1156,18 @@
 		return YES;
 	}
 
+	NSString *bundlePath = filename;
+	NSBundle *bundle = nil;
+	while (!bundle && [[NSFileManager defaultManager] fileExistsAtPath:bundlePath]) {
+		bundle = [NSBundle bundleWithPath:bundlePath];
+		bundlePath = [bundlePath stringByDeletingLastPathComponent];
+	}
+
+	if (![bundle bundleIdentifier])
+		bundle = nil;
+
+	// TODO: Swizzle for methods to load resources from a custom bundle
+
 	NSError *error;
 	SKScene *scene = [self unarchiveFromFile:filename error:&error];
 
@@ -1164,19 +1176,13 @@
 		return NO;
 	}
 
+	_currentFilename = filename;
+	_sceneBundle = bundle;
+
 	[self useScene:scene];
 
 	/* Add the file to the 'Open Recent' file menu */
-	[self addRecentDocument:filename];
-
-	_currentFilename = filename;
-	_sceneBundle = nil;
-
-	NSString *bundlePath = filename;
-	while (!_sceneBundle && [[NSFileManager defaultManager] fileExistsAtPath:bundlePath]) {
-		_sceneBundle = [NSBundle bundleWithPath:bundlePath];
-		bundlePath = [bundlePath stringByDeletingLastPathComponent];
-	}
+	[self addRecentDocument:_currentFilename];
 
 	if (_libraryTabButtons.selectedColumn) {
 		[self populateResourcesLibrary];
