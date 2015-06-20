@@ -1167,16 +1167,14 @@
 		bundlePath = [bundlePath stringByDeletingLastPathComponent];
 	}
 
-	if (bundle) {
-		//TODO: Sizzle the methods to load resurces from a custom bundle
-		[NSBundle bpr_setMainBundleSubstitutionBundle:bundle];
-	}
+	[NSBundle bpr_setMainBundleSubstitutionBundle:bundle];
 
 	NSError *error;
 	SKScene *scene = [self unarchiveFromFile:filename error:&error];
 
 	if (error) {
 		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
+		[NSBundle bpr_setMainBundleSubstitutionBundle:_sceneBundle];
 		return NO;
 	}
 
