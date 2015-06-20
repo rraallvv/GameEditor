@@ -357,7 +357,7 @@
 							NSString *description = [value description];
 							NSRange range = [description  rangeOfString:@"(?<=\').*(?=\')" options:NSRegularExpressionSearch];
 							if (range.location != NSNotFound) {
-								return [description substringWithRange:range];
+								return [[description substringWithRange:range] stringByDeletingPathExtension];
 							}
 							return @"";
 						}

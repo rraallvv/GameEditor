@@ -985,6 +985,7 @@
 					NSRange range = [filename rangeOfString:@"~[^~\\.]*\\." options:NSRegularExpressionSearch];
 					if (range.location != NSNotFound)
 						filename = [filename stringByReplacingCharactersInRange:range withString:@"."];
+					filename = [filename stringByDeletingPathExtension];
 					if ([loadedFiles indexOfObject:filename] != NSNotFound)
 						continue;
 					[loadedFiles addObject:filename];
