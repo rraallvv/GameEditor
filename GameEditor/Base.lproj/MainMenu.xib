@@ -839,8 +839,8 @@
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     <connections>
-                                                                        <binding destination="ybe-5J-ot9" name="content" keyPath="arrangedObjects" id="e78-Tr-YFL"/>
-                                                                        <binding destination="ybe-5J-ot9" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="e78-Tr-YFL" id="QWb-A4-jfY"/>
+                                                                        <binding destination="TU8-ns-SGh" name="content" keyPath="arrangedObjects" id="seg-KE-eD9"/>
+                                                                        <binding destination="TU8-ns-SGh" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="seg-KE-eD9" id="J30-ck-9dX"/>
                                                                         <outlet property="itemPrototype" destination="vBT-rm-Cna" id="bF3-9h-dtf"/>
                                                                     </connections>
                                                                 </collectionView>
@@ -993,14 +993,16 @@
                 <outlet property="_attributesView" destination="zW2-BO-taF" id="19t-eI-oFU"/>
                 <outlet property="_attributesViewNoSelectionLabel" destination="RUK-6O-o0H" id="w5p-gT-IgJ"/>
                 <outlet property="_editorView" destination="suo-YO-fqM" id="D5W-Hu-pTw"/>
-                <outlet property="_libraryArrayController" destination="ybe-5J-ot9" id="iwT-3F-n1L"/>
-                <outlet property="_libraryCollectionView" destination="53q-Pc-ZVo" id="99Y-Vf-Sy2"/>
                 <outlet property="_libraryModeButton" destination="oSp-qF-DyS" id="d9q-Aa-t2d"/>
                 <outlet property="_libraryTabButtons" destination="pf4-VP-sjQ" id="1XR-iH-5BW"/>
                 <outlet property="_navigatorTreeController" destination="FfK-Wg-7Xj" id="bBG-5I-i7L"/>
                 <outlet property="_navigatorView" destination="Y4L-tX-zfk" id="Gju-ZL-6rD"/>
                 <outlet property="_navigatorViewNoSceneLabel" destination="qmx-Pn-rtd" id="kre-0u-5u3"/>
+                <outlet property="_resourcesLibraryArrayController" destination="TU8-ns-SGh" id="Ghv-on-PjH"/>
+                <outlet property="_resourcesLibraryCollectionView" destination="UQ2-nI-Fzq" id="1dG-BK-Eew"/>
                 <outlet property="_saveSceneView" destination="y7f-F6-SiA" id="GjD-PC-v0V"/>
+                <outlet property="_toolsLibraryArrayController" destination="ybe-5J-ot9" id="vxZ-n3-2fC"/>
+                <outlet property="_toolsLibraryCollectionView" destination="53q-Pc-ZVo" id="NLB-6d-dci"/>
                 <outlet property="_useXMLFormatButton" destination="dgr-lQ-gvM" id="9CG-ih-ueQ"/>
                 <outlet property="skView" destination="BAm-0B-vb9" id="MCo-T6-F5E"/>
                 <outlet property="window" destination="371" id="532"/>
@@ -1008,7 +1010,8 @@
         </customObject>
         <treeController childrenKeyPath="children" leafKeyPath="isLeaf" id="IEK-xe-ugr" userLabel="Attributes Tree Controller"/>
         <treeController childrenKeyPath="children" leafKeyPath="isLeaf" id="FfK-Wg-7Xj" userLabel="Navigator Tree Controller" customClass="NavigationTreeController"/>
-        <arrayController id="ybe-5J-ot9" userLabel="Library Array Controller"/>
+        <arrayController id="ybe-5J-ot9" userLabel="Tools Library Array Controller"/>
+        <arrayController id="TU8-ns-SGh" userLabel="Resources Library Array Controller"/>
         <collectionViewItem id="vBT-rm-Cna">
             <connections>
                 <outlet property="view" destination="9Nu-LJ-3Af" id="PvT-kj-tt6"/>

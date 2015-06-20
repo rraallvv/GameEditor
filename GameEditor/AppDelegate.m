@@ -85,10 +85,12 @@
 	IBOutlet EditorView *_editorView;
 	IBOutlet AttributesView *_attributesView;
 	IBOutlet NavigatorView *_navigatorView;
-	IBOutlet LibraryView *_libraryCollectionView;
+	IBOutlet LibraryView *_toolsLibraryCollectionView;
+	IBOutlet LibraryView *_resourcesLibraryCollectionView;
 	IBOutlet NSTreeController *_attributesTreeController;
 	IBOutlet NSTreeController *_navigatorTreeController;
-	IBOutlet NSArrayController *_libraryArrayController;
+	IBOutlet NSArrayController *_toolsLibraryArrayController;
+	IBOutlet NSArrayController *_resourcesLibraryArrayController;
 	IBOutlet NSButton *_libraryModeButton;
 	IBOutlet NSMatrix *_libraryTabButtons;
 	IBOutlet NSTextField *_attributesViewNoSelectionLabel;
@@ -134,7 +136,8 @@
 
 	/* Enable Drag & Drop */
 	[_navigatorView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
-	[_libraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
+	[_toolsLibraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
+	[_resourcesLibraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
 	[_editorView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
 
 	/* Populate the 'Open Recent' file menu from the User default settings */
@@ -144,10 +147,10 @@
 	}
 
 	/* Setup the library */
-	_libraryCollectionView.delegate = self;
+	_toolsLibraryCollectionView.delegate = self;
 	_toolsSelectedLibraryItem = NSNotFound;
 	_resourcesSelectedLibraryItem = NSNotFound;
-	_libraryCollectionView.mode = _libraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
+	_resourcesLibraryCollectionView.mode = _libraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
 	if (_libraryTabButtons.selectedColumn) {
 		[self populateResourcesLibrary];
 	} else {
@@ -773,7 +776,8 @@
 #pragma mark Library
 
 - (IBAction)libraryDidChangeMode:(NSButton *)sender {
-	_libraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
+	_toolsLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
+	_resourcesLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
 - (void)populateToolsLibrary {
@@ -906,11 +910,11 @@
 		}
 	}
 
-	[_libraryArrayController setContent:_toolsLibraryItems];
+	[_toolsLibraryArrayController setContent:_toolsLibraryItems];
 
 	if (_toolsSelectedLibraryItem == NSNotFound)
 		_toolsSelectedLibraryItem = 0;
-	[_libraryArrayController setSelectionIndex:_toolsSelectedLibraryItem];
+	[_toolsLibraryArrayController setSelectionIndex:_toolsSelectedLibraryItem];
 }
 
 - (void)populateResourcesLibrary {
@@ -1037,11 +1041,11 @@
 		}
 	}
 
-	[_libraryArrayController setContent:_resourcesLibraryItems];
+	[_resourcesLibraryArrayController setContent:_resourcesLibraryItems];
 
 	if (_resourcesSelectedLibraryItem == NSNotFound)
 		_resourcesSelectedLibraryItem = 0;
-	[_libraryArrayController setSelectionIndex:_resourcesSelectedLibraryItem];
+	[_resourcesLibraryArrayController setSelectionIndex:_resourcesSelectedLibraryItem];
 }
 
 - (IBAction)libraryDidSwitchTab:(NSMatrix *)buttons {
@@ -1079,7 +1083,12 @@
 	}
 
 	/* Get the library item */
-	NSMutableDictionary *libraryItem = [[_libraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
+	NSMutableDictionary *libraryItem;
+	if (_libraryTabButtons.selectedColumn) {
+		libraryItem = [[_resourcesLibraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
+	} else {
+		libraryItem = [[_toolsLibraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
+	}
 
 	/* Retrieve a valid context from the cache for the item */
 	NSNumber *itemIndex = [libraryItem objectForKey:@"contextData"];
