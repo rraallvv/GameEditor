@@ -554,17 +554,21 @@
 				} else if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
 					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyType]];
 
-				} else if (propertyClass == [SKTexture class]
-//						   || propertyClass == [SKShader class]
-//						   || propertyClass == [SKPhysicsBody class]
-//						   || propertyClass == [SKPhysicsWorld class]
-						   ) {
+				} else if (propertyClass == [SKTexture class]) {
 					AttributeNode *attribute = [AttributeNode attributeWithName:propertyName
 																		   node:node
 																		   type:propertyType
 																	  formatter:nil
 															   valueTransformer:[TextureTransformer transformer]];
 					[attributesArray addObject:attribute];
+
+				} else if (propertyClass == [SKShader class]
+						   || propertyClass == [SKPhysicsBody class]
+						   || propertyClass == [SKPhysicsWorld class]) {
+					[attributesArray addObject:@{@"name": propertyName,
+												 @"isLeaf": @NO,
+												 @"isEditable": @NO,
+												 @"children":[self attributesForClass:propertyClass node:[node valueForKey:propertyName]]}];
 
 				} else if ([propertyName rangeOfString:@"rotation" options:NSCaseInsensitiveSearch].location != NSNotFound) {
 					[attributesArray addObject:[AttributeNode  attributeForRotationAngleWithName:propertyName node:node]];
