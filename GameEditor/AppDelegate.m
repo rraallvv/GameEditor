@@ -98,6 +98,7 @@
 	IBOutlet NSTextField *_navigatorViewNoSceneLabel;
 	IBOutlet NSView *_saveSceneView;
 	IBOutlet NSButton *_useXMLFormatButton;
+	IBOutlet NSTabView *_libraryTabView;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
 	NSBundle *_sceneBundle;
@@ -1051,11 +1052,7 @@
 }
 
 - (IBAction)libraryDidSwitchTab:(NSMatrix *)buttons {
-	if (buttons.selectedColumn) {
-		//[self populateResourcesLibrary];
-	} else {
-		//[self populateToolsLibrary];
-	}
+	[_libraryTabView selectTabViewItemAtIndex:buttons.selectedColumn];
 }
 
 - (void)libraryView:(LibraryView *)libraryView didSelectItemAtIndex:(NSInteger)index {
