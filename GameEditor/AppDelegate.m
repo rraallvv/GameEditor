@@ -45,18 +45,35 @@
 
 		case 2:
 			if ([self respondsToSelector:@selector(size)]) {
-				self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[(id)self size]];
+				CGSize size = [(id)self size];
+				if ([self respondsToSelector:@selector(anchorPoint)]) {
+					CGPoint anchorPoint = [(id)self anchorPoint];
+					CGPoint center = CGPointMake(size.width * (0.5 - anchorPoint.x), size.height * (0.5 - anchorPoint.y));
+					self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:size center:center];
+				} else {
+					self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[(id)self size]];
+				}
 			} else {
 				self.physicsBody = nil;
 			}
+			self.physicsBody.dynamic = NO;
 			break;
 
 		case 3:
 			if ([self respondsToSelector:@selector(size)]) {
-				self.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:[(id)self size].width / 2];
+				CGSize size = [(id)self size];
+				CGFloat radius = [(id)self size].width / 2;
+				if ([self respondsToSelector:@selector(anchorPoint)]) {
+					CGPoint anchorPoint = [(id)self anchorPoint];
+					CGPoint center = CGPointMake(size.width * (0.5 - anchorPoint.x), size.height * (0.5 - anchorPoint.y));
+					self.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:radius center:center];
+				} else {
+					self.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:radius];
+				}
 			} else {
 				self.physicsBody = nil;
 			}
+			self.physicsBody.dynamic = NO;
 			break;
 
 		case 4:
@@ -65,6 +82,7 @@
 			} else {
 				self.physicsBody = nil;
 			}
+			self.physicsBody.dynamic = NO;
 			break;
 
 		case 5:
