@@ -532,6 +532,34 @@
             </connections>
             <point key="canvasLocation" x="436" y="612"/>
         </tableCellView>
+        <tableCellView identifier="@&quot;SKTexture&quot;" id="faw-Lb-7vi" userLabel="texture" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="CKw-P7-Q0Y">
+                    <rect key="frame" x="0.0" y="1" width="172" height="19"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Texture" id="66t-mn-XJr">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="faw-Lb-7vi" name="editable" keyPath="objectValue.isEditable" id="Zdh-W7-tVO"/>
+                        <binding destination="faw-Lb-7vi" name="value" keyPath="objectValue.value" id="OJ7-AP-D3g"/>
+                    </connections>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="CKw-P7-Q0Y" firstAttribute="leading" secondItem="faw-Lb-7vi" secondAttribute="leading" id="Jhq-DL-Fxg"/>
+                <constraint firstItem="CKw-P7-Q0Y" firstAttribute="top" secondItem="faw-Lb-7vi" secondAttribute="top" id="eh3-j6-zdx"/>
+                <constraint firstAttribute="trailing" secondItem="CKw-P7-Q0Y" secondAttribute="trailing" id="pR1-hF-Uad"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="OUX-gj-gKS"/>
+                <outlet property="textField" destination="CKw-P7-Q0Y" id="DYQ-4b-xMN"/>
+            </connections>
+            <point key="canvasLocation" x="726" y="647"/>
+        </tableCellView>
     </objects>
     <resources>
         <image name="AltDecreaseStepper" width="11" height="13"/>
