@@ -801,135 +801,218 @@
                                                             <userDefinedRuntimeAttribute type="boolean" keyPath="draggable" value="YES"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </customView>
-                                                    <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0kB-Zw-fjX">
-                                                        <rect key="frame" x="0.0" y="25" width="130" height="150"/>
-                                                        <clipView key="contentView" id="dys-lA-lM4">
-                                                            <rect key="frame" x="0.0" y="0.0" width="130" height="150"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <collectionView selectable="YES" id="53q-Pc-ZVo" customClass="LibraryView">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="130" height="150"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                    <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <connections>
-                                                                        <binding destination="ybe-5J-ot9" name="content" keyPath="arrangedObjects" id="H3h-I0-rUf"/>
-                                                                        <binding destination="ybe-5J-ot9" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="H3h-I0-rUf" id="wDL-UO-kHL"/>
-                                                                        <outlet property="itemPrototype" destination="vBT-rm-Cna" id="ODh-Ln-Ewn"/>
-                                                                    </connections>
-                                                                </collectionView>
-                                                            </subviews>
-                                                        </clipView>
-                                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="d9H-JJ-8JK">
-                                                            <rect key="frame" x="1" y="144" width="233" height="15"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
-                                                        </scroller>
-                                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="WH5-rM-EA1">
-                                                            <rect key="frame" x="234" y="1" width="15" height="143"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
-                                                        </scroller>
-                                                    </scrollView>
-                                                    <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Ig-sw-uWy">
-                                                        <rect key="frame" x="130" y="25" width="130" height="150"/>
-                                                        <clipView key="contentView" id="kAg-MZ-rxM">
-                                                            <rect key="frame" x="0.0" y="0.0" width="130" height="150"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <collectionView selectable="YES" id="UQ2-nI-Fzq" customClass="LibraryView">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="130" height="150"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                    <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <connections>
-                                                                        <binding destination="TU8-ns-SGh" name="content" keyPath="arrangedObjects" id="seg-KE-eD9"/>
-                                                                        <binding destination="TU8-ns-SGh" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="seg-KE-eD9" id="J30-ck-9dX"/>
-                                                                        <outlet property="itemPrototype" destination="vBT-rm-Cna" id="bF3-9h-dtf"/>
-                                                                    </connections>
-                                                                </collectionView>
-                                                            </subviews>
-                                                        </clipView>
-                                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="Rcr-g4-rTv">
-                                                            <rect key="frame" x="-8" y="-15" width="0.0" height="15"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
-                                                        </scroller>
-                                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="6H4-oR-T5i">
-                                                            <rect key="frame" x="-15" y="-8" width="15" height="0.0"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
-                                                        </scroller>
-                                                    </scrollView>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0Wb-R6-rZ4">
-                                                        <rect key="frame" x="81" y="90" width="99" height="21"/>
-                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No Matches" id="EGS-pQ-khQ">
-                                                            <font key="font" metaFont="system" size="17"/>
-                                                            <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                        <connections>
-                                                            <binding destination="ybe-5J-ot9" name="hidden" keyPath="arrangedObjects.@count" id="C5T-C9-nXx"/>
-                                                        </connections>
-                                                    </textField>
-                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="NjT-RW-5T2" customClass="LibraryPanelView">
-                                                        <rect key="frame" x="0.0" y="0.0" width="260" height="25"/>
+                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="SI2-Dg-Mz0">
+                                                        <rect key="frame" x="0.0" y="0.0" width="130" height="175"/>
                                                         <subviews>
-                                                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oSp-qF-DyS" customClass="Button">
-                                                                <rect key="frame" x="5" y="4" width="19" height="17"/>
-                                                                <buttonCell key="cell" type="recessed" bezelStyle="recessed" image="LibraryListMode" imagePosition="only" alignment="center" alternateImage="LibraryIconsMode" controlSize="small" inset="2" id="g5q-68-Omu">
-                                                                    <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
-                                                                    <font key="font" metaFont="systemBold" size="12"/>
-                                                                </buttonCell>
+                                                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0kB-Zw-fjX">
+                                                                <rect key="frame" x="0.0" y="25" width="130" height="150"/>
+                                                                <clipView key="contentView" id="dys-lA-lM4">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="130" height="150"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <subviews>
+                                                                        <collectionView selectable="YES" id="53q-Pc-ZVo" customClass="LibraryView">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="130" height="150"/>
+                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                            <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                            <connections>
+                                                                                <binding destination="ybe-5J-ot9" name="content" keyPath="arrangedObjects" id="H3h-I0-rUf"/>
+                                                                                <binding destination="ybe-5J-ot9" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="H3h-I0-rUf" id="wDL-UO-kHL"/>
+                                                                                <outlet property="itemPrototype" destination="vBT-rm-Cna" id="ODh-Ln-Ewn"/>
+                                                                            </connections>
+                                                                        </collectionView>
+                                                                    </subviews>
+                                                                </clipView>
+                                                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="d9H-JJ-8JK">
+                                                                    <rect key="frame" x="1" y="144" width="233" height="15"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                </scroller>
+                                                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="WH5-rM-EA1">
+                                                                    <rect key="frame" x="234" y="1" width="15" height="143"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                </scroller>
+                                                            </scrollView>
+                                                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="NjT-RW-5T2" customClass="LibraryPanelView">
+                                                                <rect key="frame" x="0.0" y="0.0" width="130" height="25"/>
+                                                                <subviews>
+                                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oSp-qF-DyS" customClass="Button">
+                                                                        <rect key="frame" x="5" y="4" width="19" height="17"/>
+                                                                        <buttonCell key="cell" type="recessed" bezelStyle="recessed" image="LibraryListMode" imagePosition="only" alignment="center" alternateImage="LibraryIconsMode" controlSize="small" inset="2" id="g5q-68-Omu">
+                                                                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                                                            <font key="font" metaFont="systemBold" size="12"/>
+                                                                        </buttonCell>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Library Mode"/>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                        <connections>
+                                                                            <action selector="libraryDidChangeMode:" target="494" id="2TN-4r-SZv"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                    <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JOl-ek-8VA">
+                                                                        <rect key="frame" x="28" y="3" width="99" height="19"/>
+                                                                        <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" bezelStyle="round" id="eab-SF-2Gw">
+                                                                            <font key="font" metaFont="smallSystem"/>
+                                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                            <connections>
+                                                                                <binding destination="ybe-5J-ot9" name="predicate" keyPath="filterPredicate" id="uhr-Km-gsr">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSPredicateFormat">label.string contains[c] $value</string>
+                                                                                    </dictionary>
+                                                                                </binding>
+                                                                            </connections>
+                                                                        </searchFieldCell>
+                                                                    </searchField>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstItem="JOl-ek-8VA" firstAttribute="top" secondItem="NjT-RW-5T2" secondAttribute="top" constant="3" id="0eQ-FZ-Ugz"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="JOl-ek-8VA" secondAttribute="bottom" constant="3" id="4ZO-32-XdQ"/>
+                                                                    <constraint firstItem="oSp-qF-DyS" firstAttribute="leading" secondItem="NjT-RW-5T2" secondAttribute="leading" constant="5" id="IZM-py-hLe"/>
+                                                                    <constraint firstItem="oSp-qF-DyS" firstAttribute="centerY" secondItem="JOl-ek-8VA" secondAttribute="centerY" id="JP3-xS-N1w"/>
+                                                                    <constraint firstItem="JOl-ek-8VA" firstAttribute="leading" secondItem="oSp-qF-DyS" secondAttribute="trailing" constant="4" id="KuC-MG-dub"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="JOl-ek-8VA" secondAttribute="trailing" constant="3" id="RGq-ZQ-1CY"/>
+                                                                </constraints>
                                                                 <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Library Mode"/>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="topBorder" value="YES"/>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="bottomBorder" value="NO"/>
                                                                 </userDefinedRuntimeAttributes>
+                                                            </customView>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0Wb-R6-rZ4">
+                                                                <rect key="frame" x="16" y="90" width="99" height="21"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No Matches" id="EGS-pQ-khQ">
+                                                                    <font key="font" metaFont="system" size="17"/>
+                                                                    <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
                                                                 <connections>
-                                                                    <action selector="libraryDidChangeMode:" target="494" id="2TN-4r-SZv"/>
+                                                                    <binding destination="ybe-5J-ot9" name="hidden" keyPath="arrangedObjects.@count" id="C5T-C9-nXx"/>
                                                                 </connections>
-                                                            </button>
-                                                            <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JOl-ek-8VA">
-                                                                <rect key="frame" x="28" y="3" width="229" height="19"/>
-                                                                <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" bezelStyle="round" id="eab-SF-2Gw">
-                                                                    <font key="font" metaFont="smallSystem"/>
-                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    <connections>
-                                                                        <binding destination="ybe-5J-ot9" name="predicate" keyPath="filterPredicate" id="uhr-Km-gsr">
-                                                                            <dictionary key="options">
-                                                                                <string key="NSPredicateFormat">label.string contains[c] $value</string>
-                                                                            </dictionary>
-                                                                        </binding>
-                                                                    </connections>
-                                                                </searchFieldCell>
-                                                            </searchField>
+                                                            </textField>
                                                         </subviews>
                                                         <constraints>
-                                                            <constraint firstItem="JOl-ek-8VA" firstAttribute="top" secondItem="NjT-RW-5T2" secondAttribute="top" constant="3" id="0eQ-FZ-Ugz"/>
-                                                            <constraint firstAttribute="bottom" secondItem="JOl-ek-8VA" secondAttribute="bottom" constant="3" id="4ZO-32-XdQ"/>
-                                                            <constraint firstItem="oSp-qF-DyS" firstAttribute="leading" secondItem="NjT-RW-5T2" secondAttribute="leading" constant="5" id="IZM-py-hLe"/>
-                                                            <constraint firstItem="oSp-qF-DyS" firstAttribute="centerY" secondItem="JOl-ek-8VA" secondAttribute="centerY" id="JP3-xS-N1w"/>
-                                                            <constraint firstItem="JOl-ek-8VA" firstAttribute="leading" secondItem="oSp-qF-DyS" secondAttribute="trailing" constant="4" id="KuC-MG-dub"/>
-                                                            <constraint firstAttribute="trailing" secondItem="JOl-ek-8VA" secondAttribute="trailing" constant="3" id="RGq-ZQ-1CY"/>
+                                                            <constraint firstItem="0kB-Zw-fjX" firstAttribute="leading" secondItem="SI2-Dg-Mz0" secondAttribute="leading" id="5Im-65-oCB"/>
+                                                            <constraint firstItem="0Wb-R6-rZ4" firstAttribute="centerX" secondItem="0kB-Zw-fjX" secondAttribute="centerX" id="8MS-f1-GB7"/>
+                                                            <constraint firstItem="0Wb-R6-rZ4" firstAttribute="centerY" secondItem="0kB-Zw-fjX" secondAttribute="centerY" id="CMc-2C-TDu"/>
+                                                            <constraint firstItem="NjT-RW-5T2" firstAttribute="leading" secondItem="SI2-Dg-Mz0" secondAttribute="leading" id="KSu-Y0-wzb"/>
+                                                            <constraint firstItem="0kB-Zw-fjX" firstAttribute="top" secondItem="SI2-Dg-Mz0" secondAttribute="top" id="Xrt-z8-Kfw"/>
+                                                            <constraint firstAttribute="trailing" secondItem="0kB-Zw-fjX" secondAttribute="trailing" id="ZWL-P0-sdl"/>
+                                                            <constraint firstAttribute="trailing" secondItem="NjT-RW-5T2" secondAttribute="trailing" id="hEL-Zd-6LG"/>
+                                                            <constraint firstAttribute="bottom" secondItem="NjT-RW-5T2" secondAttribute="bottom" id="ul7-9y-feL"/>
+                                                            <constraint firstItem="NjT-RW-5T2" firstAttribute="top" secondItem="0kB-Zw-fjX" secondAttribute="bottom" id="vzg-Po-7HY"/>
                                                         </constraints>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="topBorder" value="YES"/>
-                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="bottomBorder" value="NO"/>
-                                                        </userDefinedRuntimeAttributes>
+                                                    </customView>
+                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="IgM-w6-CeD">
+                                                        <rect key="frame" x="130" y="0.0" width="130" height="175"/>
+                                                        <subviews>
+                                                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Ig-sw-uWy">
+                                                                <rect key="frame" x="0.0" y="25" width="130" height="150"/>
+                                                                <clipView key="contentView" id="kAg-MZ-rxM">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="130" height="150"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <subviews>
+                                                                        <collectionView selectable="YES" id="UQ2-nI-Fzq" customClass="LibraryView">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="130" height="150"/>
+                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                            <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                            <connections>
+                                                                                <binding destination="TU8-ns-SGh" name="content" keyPath="arrangedObjects" id="seg-KE-eD9"/>
+                                                                                <binding destination="TU8-ns-SGh" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="seg-KE-eD9" id="J30-ck-9dX"/>
+                                                                                <outlet property="itemPrototype" destination="vBT-rm-Cna" id="bF3-9h-dtf"/>
+                                                                            </connections>
+                                                                        </collectionView>
+                                                                    </subviews>
+                                                                </clipView>
+                                                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="Rcr-g4-rTv">
+                                                                    <rect key="frame" x="-8" y="-15" width="0.0" height="15"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                </scroller>
+                                                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="6H4-oR-T5i">
+                                                                    <rect key="frame" x="-15" y="-8" width="15" height="0.0"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                </scroller>
+                                                            </scrollView>
+                                                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="60b-Ya-PkH" customClass="LibraryPanelView">
+                                                                <rect key="frame" x="0.0" y="0.0" width="130" height="25"/>
+                                                                <subviews>
+                                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7sB-cr-Smr" customClass="Button">
+                                                                        <rect key="frame" x="5" y="4" width="19" height="17"/>
+                                                                        <buttonCell key="cell" type="recessed" bezelStyle="recessed" image="LibraryListMode" imagePosition="only" alignment="center" alternateImage="LibraryIconsMode" controlSize="small" inset="2" id="Ord-Rd-XQv">
+                                                                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                                                            <font key="font" metaFont="systemBold" size="12"/>
+                                                                        </buttonCell>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Library Mode"/>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                        <connections>
+                                                                            <action selector="libraryDidChangeMode:" target="494" id="Dv8-BG-kMS"/>
+                                                                        </connections>
+                                                                    </button>
+                                                                    <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AYy-Zf-7I5">
+                                                                        <rect key="frame" x="28" y="3" width="99" height="19"/>
+                                                                        <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" bezelStyle="round" id="pwG-IM-led">
+                                                                            <font key="font" metaFont="smallSystem"/>
+                                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                            <connections>
+                                                                                <binding destination="TU8-ns-SGh" name="predicate" keyPath="filterPredicate" id="FHM-eZ-INP">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSPredicateFormat">label.string contains[c] $value</string>
+                                                                                    </dictionary>
+                                                                                </binding>
+                                                                            </connections>
+                                                                        </searchFieldCell>
+                                                                    </searchField>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint firstItem="AYy-Zf-7I5" firstAttribute="leading" secondItem="7sB-cr-Smr" secondAttribute="trailing" constant="4" id="6fX-HB-HFP"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="AYy-Zf-7I5" secondAttribute="trailing" constant="3" id="AEu-ra-maj"/>
+                                                                    <constraint firstItem="AYy-Zf-7I5" firstAttribute="top" secondItem="60b-Ya-PkH" secondAttribute="top" constant="3" id="DsA-u9-LHk"/>
+                                                                    <constraint firstItem="7sB-cr-Smr" firstAttribute="centerY" secondItem="AYy-Zf-7I5" secondAttribute="centerY" id="GmK-gc-5gV"/>
+                                                                    <constraint firstItem="7sB-cr-Smr" firstAttribute="leading" secondItem="60b-Ya-PkH" secondAttribute="leading" constant="5" id="fHl-Ea-tQI"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="AYy-Zf-7I5" secondAttribute="bottom" constant="3" id="lco-Kw-gwu"/>
+                                                                </constraints>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="topBorder" value="YES"/>
+                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="bottomBorder" value="NO"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </customView>
+                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lj2-Mi-Qg7">
+                                                                <rect key="frame" x="16" y="90" width="99" height="21"/>
+                                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No Matches" id="xe3-M2-CzE">
+                                                                    <font key="font" metaFont="system" size="17"/>
+                                                                    <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <connections>
+                                                                    <binding destination="TU8-ns-SGh" name="hidden" keyPath="arrangedObjects.@count" id="nvT-Db-Fm5"/>
+                                                                </connections>
+                                                            </textField>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="trailing" secondItem="60b-Ya-PkH" secondAttribute="trailing" id="0bF-Mh-bf1"/>
+                                                            <constraint firstItem="lj2-Mi-Qg7" firstAttribute="centerX" secondItem="2Ig-sw-uWy" secondAttribute="centerX" id="4lo-Qh-REs"/>
+                                                            <constraint firstItem="2Ig-sw-uWy" firstAttribute="top" secondItem="IgM-w6-CeD" secondAttribute="top" id="E3l-wc-hcW"/>
+                                                            <constraint firstItem="2Ig-sw-uWy" firstAttribute="leading" secondItem="IgM-w6-CeD" secondAttribute="leading" id="J2z-gt-8gm"/>
+                                                            <constraint firstAttribute="trailing" secondItem="2Ig-sw-uWy" secondAttribute="trailing" id="Jep-dt-7Ui"/>
+                                                            <constraint firstAttribute="bottom" secondItem="60b-Ya-PkH" secondAttribute="bottom" id="NHE-zM-JMM"/>
+                                                            <constraint firstItem="60b-Ya-PkH" firstAttribute="leading" secondItem="IgM-w6-CeD" secondAttribute="leading" id="hP0-3L-f7T"/>
+                                                            <constraint firstItem="lj2-Mi-Qg7" firstAttribute="centerY" secondItem="2Ig-sw-uWy" secondAttribute="centerY" id="siy-Wb-Zph"/>
+                                                            <constraint firstItem="60b-Ya-PkH" firstAttribute="top" secondItem="2Ig-sw-uWy" secondAttribute="bottom" id="zfa-Wg-Dzk"/>
+                                                        </constraints>
                                                     </customView>
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="74F-PN-nRU"/>
-                                                    <constraint firstItem="0Wb-R6-rZ4" firstAttribute="centerX" secondItem="REE-3d-rnp" secondAttribute="centerX" id="74v-LJ-n9U"/>
-                                                    <constraint firstItem="0Wb-R6-rZ4" firstAttribute="centerY" secondItem="REE-3d-rnp" secondAttribute="centerY" id="Aqg-g0-0y4"/>
-                                                    <constraint firstItem="NjT-RW-5T2" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="Ptw-gr-ixA"/>
-                                                    <constraint firstItem="0kB-Zw-fjX" firstAttribute="width" secondItem="REE-3d-rnp" secondAttribute="width" multiplier="1:2" id="So2-oK-TZx"/>
-                                                    <constraint firstItem="NjT-RW-5T2" firstAttribute="top" secondItem="0kB-Zw-fjX" secondAttribute="bottom" id="YdF-IV-AgL"/>
-                                                    <constraint firstItem="0kB-Zw-fjX" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="Z71-P9-xcV"/>
+                                                    <constraint firstItem="SI2-Dg-Mz0" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="FxL-2v-wSa"/>
+                                                    <constraint firstAttribute="bottom" secondItem="SI2-Dg-Mz0" secondAttribute="bottom" id="U9p-Ev-qqD"/>
                                                     <constraint firstItem="iCW-HX-D7E" firstAttribute="top" secondItem="REE-3d-rnp" secondAttribute="top" id="aYN-e4-sq7"/>
+                                                    <constraint firstItem="SI2-Dg-Mz0" firstAttribute="width" secondItem="REE-3d-rnp" secondAttribute="width" multiplier="1:2" id="cqr-CZ-wuh"/>
+                                                    <constraint firstAttribute="bottom" secondItem="IgM-w6-CeD" secondAttribute="bottom" id="dfb-dk-VRc"/>
+                                                    <constraint firstItem="IgM-w6-CeD" firstAttribute="width" secondItem="REE-3d-rnp" secondAttribute="width" multiplier="1:2" id="fjO-cJ-OPR"/>
                                                     <constraint firstItem="iCW-HX-D7E" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="ftD-Rz-47n"/>
-                                                    <constraint firstItem="0kB-Zw-fjX" firstAttribute="top" secondItem="iCW-HX-D7E" secondAttribute="bottom" id="jsj-7P-Z7c"/>
-                                                    <constraint firstItem="2Ig-sw-uWy" firstAttribute="width" secondItem="REE-3d-rnp" secondAttribute="width" multiplier="1:2" id="kGc-Rb-s1p"/>
-                                                    <constraint firstItem="NjT-RW-5T2" firstAttribute="top" secondItem="2Ig-sw-uWy" secondAttribute="bottom" id="kYk-XC-mdD"/>
-                                                    <constraint firstAttribute="bottom" secondItem="NjT-RW-5T2" secondAttribute="bottom" id="mOO-AB-f2r"/>
-                                                    <constraint firstItem="2Ig-sw-uWy" firstAttribute="top" secondItem="iCW-HX-D7E" secondAttribute="bottom" id="tde-LM-eKq"/>
-                                                    <constraint firstAttribute="trailing" secondItem="2Ig-sw-uWy" secondAttribute="trailing" id="vss-v4-uNx"/>
-                                                    <constraint firstAttribute="trailing" secondItem="NjT-RW-5T2" secondAttribute="trailing" id="wwF-pr-GCT"/>
+                                                    <constraint firstAttribute="trailing" secondItem="IgM-w6-CeD" secondAttribute="trailing" id="kWe-bX-4dT"/>
+                                                    <constraint firstItem="IgM-w6-CeD" firstAttribute="top" secondItem="iCW-HX-D7E" secondAttribute="bottom" id="ru7-tt-DcD"/>
                                                     <constraint firstAttribute="trailing" secondItem="iCW-HX-D7E" secondAttribute="trailing" id="xjI-j3-lYe"/>
+                                                    <constraint firstItem="SI2-Dg-Mz0" firstAttribute="top" secondItem="iCW-HX-D7E" secondAttribute="bottom" id="zi5-cV-UkV"/>
                                                 </constraints>
                                             </customView>
                                         </subviews>
