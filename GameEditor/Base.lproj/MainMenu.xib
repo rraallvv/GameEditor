@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8121.17" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <deployment identifier="macosx"/>
+        <development version="6300" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8121.17"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -91,7 +93,7 @@
                             <menuItem isSeparatorItem="YES" id="kqP-6I-z2s"/>
                             <menuItem title="Close" keyEquivalent="w" id="L9v-hs-rNc">
                                 <connections>
-                                    <action selector="performClose:" target="-1" id="mwJ-LC-Gke"/>
+                                    <action selector="closeScene:" target="494" id="94E-NM-Uvr"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Save" keyEquivalent="s" id="pIW-65-tKv">
@@ -484,6 +486,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qmx-Pn-rtd">
+                                        <rect key="frame" x="55" y="290" width="81" height="21"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No Scene" id="Lxo-UY-S5f">
+                                            <font key="font" metaFont="system" size="17"/>
+                                            <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
                                     <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tr7-lo-aXw">
                                         <rect key="frame" x="3" y="3" width="184" height="19"/>
                                         <searchFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="JdK-r0-Soj">
@@ -506,7 +516,9 @@
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="190" id="G2x-pY-3It"/>
                                     <constraint firstItem="tr7-lo-aXw" firstAttribute="leading" secondItem="eJi-p6-3Ak" secondAttribute="leading" constant="3" id="GAw-N3-KfY"/>
                                     <constraint firstItem="PcI-fz-rXt" firstAttribute="leading" secondItem="eJi-p6-3Ak" secondAttribute="leading" id="GqV-rK-S6k"/>
+                                    <constraint firstAttribute="centerY" secondItem="qmx-Pn-rtd" secondAttribute="centerY" id="PoG-LW-NJ5"/>
                                     <constraint firstItem="tr7-lo-aXw" firstAttribute="top" secondItem="PcI-fz-rXt" secondAttribute="bottom" constant="3" id="aBV-vY-zET"/>
+                                    <constraint firstAttribute="centerX" secondItem="qmx-Pn-rtd" secondAttribute="centerX" id="le2-FN-sHZ"/>
                                     <constraint firstAttribute="bottom" secondItem="tr7-lo-aXw" secondAttribute="bottom" constant="3" id="rH4-Vu-XcI"/>
                                     <constraint firstItem="PcI-fz-rXt" firstAttribute="top" secondItem="eJi-p6-3Ak" secondAttribute="top" id="sPh-3p-5ah"/>
                                     <constraint firstAttribute="trailing" secondItem="PcI-fz-rXt" secondAttribute="trailing" id="xtg-OW-bCn"/>
@@ -713,7 +725,7 @@
                                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </clipView>
                                                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="ixu-WY-daf">
-                                                            <rect key="frame" x="1" y="118.48321825265884" width="237" height="15"/>
+                                                            <rect key="frame" x="1" y="118" width="237" height="15"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                         <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="IRe-Lz-fiY">
@@ -721,8 +733,18 @@
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                     </scrollView>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RUK-6O-o0H">
+                                                        <rect key="frame" x="78" y="189" width="105" height="21"/>
+                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No Selection" id="8Ej-7n-p15">
+                                                            <font key="font" metaFont="system" size="17"/>
+                                                            <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
                                                 </subviews>
                                                 <constraints>
+                                                    <constraint firstAttribute="centerY" secondItem="RUK-6O-o0H" secondAttribute="centerY" id="739-5z-ZhD"/>
+                                                    <constraint firstAttribute="centerX" secondItem="RUK-6O-o0H" secondAttribute="centerX" id="7TU-W9-jtb"/>
                                                     <constraint firstAttribute="bottom" secondItem="WEo-lF-8ul" secondAttribute="bottom" id="FlY-xB-mab"/>
                                                     <constraint firstItem="WEo-lF-8ul" firstAttribute="leading" secondItem="wfL-qM-DFG" secondAttribute="leading" id="ayk-qh-mKB"/>
                                                     <constraint firstItem="WEo-lF-8ul" firstAttribute="top" secondItem="wfL-qM-DFG" secondAttribute="top" id="eyL-ey-1Vh"/>
@@ -805,6 +827,17 @@
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                     </scrollView>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0Wb-R6-rZ4">
+                                                        <rect key="frame" x="81" y="90" width="99" height="21"/>
+                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No Matches" id="EGS-pQ-khQ">
+                                                            <font key="font" metaFont="system" size="17"/>
+                                                            <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="ybe-5J-ot9" name="hidden" keyPath="arrangedObjects.@count" id="C5T-C9-nXx"/>
+                                                        </connections>
+                                                    </textField>
                                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="NjT-RW-5T2" customClass="LibraryPanelView">
                                                         <rect key="frame" x="0.0" y="0.0" width="260" height="25"/>
                                                         <subviews>
@@ -853,6 +886,8 @@
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="74F-PN-nRU"/>
+                                                    <constraint firstItem="0Wb-R6-rZ4" firstAttribute="centerX" secondItem="REE-3d-rnp" secondAttribute="centerX" id="74v-LJ-n9U"/>
+                                                    <constraint firstItem="0Wb-R6-rZ4" firstAttribute="centerY" secondItem="REE-3d-rnp" secondAttribute="centerY" id="Aqg-g0-0y4"/>
                                                     <constraint firstAttribute="trailing" secondItem="0kB-Zw-fjX" secondAttribute="trailing" id="HfU-xc-AR9"/>
                                                     <constraint firstItem="NjT-RW-5T2" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="Ptw-gr-ixA"/>
                                                     <constraint firstItem="NjT-RW-5T2" firstAttribute="top" secondItem="0kB-Zw-fjX" secondAttribute="bottom" id="YdF-IV-AgL"/>
@@ -924,6 +959,7 @@
             <connections>
                 <outlet property="_attributesTreeController" destination="IEK-xe-ugr" id="TYh-UN-I2P"/>
                 <outlet property="_attributesView" destination="zW2-BO-taF" id="19t-eI-oFU"/>
+                <outlet property="_attributesViewNoSelectionLabel" destination="RUK-6O-o0H" id="w5p-gT-IgJ"/>
                 <outlet property="_editorView" destination="suo-YO-fqM" id="D5W-Hu-pTw"/>
                 <outlet property="_libraryArrayController" destination="ybe-5J-ot9" id="iwT-3F-n1L"/>
                 <outlet property="_libraryCollectionView" destination="53q-Pc-ZVo" id="99Y-Vf-Sy2"/>
@@ -931,6 +967,9 @@
                 <outlet property="_libraryTabButtons" destination="pf4-VP-sjQ" id="1XR-iH-5BW"/>
                 <outlet property="_navigatorTreeController" destination="FfK-Wg-7Xj" id="bBG-5I-i7L"/>
                 <outlet property="_navigatorView" destination="Y4L-tX-zfk" id="Gju-ZL-6rD"/>
+                <outlet property="_navigatorViewNoSceneLabel" destination="qmx-Pn-rtd" id="kre-0u-5u3"/>
+                <outlet property="_saveSceneView" destination="y7f-F6-SiA" id="GjD-PC-v0V"/>
+                <outlet property="_useXMLFormatButton" destination="dgr-lQ-gvM" id="9CG-ih-ueQ"/>
                 <outlet property="skView" destination="BAm-0B-vb9" id="MCo-T6-F5E"/>
                 <outlet property="window" destination="371" id="532"/>
             </connections>
@@ -1017,6 +1056,23 @@
             </connections>
             <point key="canvasLocation" x="488.5" y="865.5"/>
         </box>
+        <customView autoresizesSubviews="NO" id="y7f-F6-SiA" userLabel="View">
+            <rect key="frame" x="0.0" y="0.0" width="158" height="54"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dgr-lQ-gvM">
+                    <rect key="frame" x="18" y="18" width="122" height="18"/>
+                    <buttonCell key="cell" type="check" title="Use XML format" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="NXg-g5-y7W">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="didChangeUseXMLFormatButton:" target="494" id="qiM-Mh-aeV"/>
+                    </connections>
+                </button>
+            </subviews>
+            <point key="canvasLocation" x="133" y="845.5"/>
+        </customView>
     </objects>
     <resources>
         <image name="AltLibraryResourcesTab" width="17" height="17"/>

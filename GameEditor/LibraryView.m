@@ -200,7 +200,6 @@ IB_DESIGNABLE
 @end
 
 @interface LibraryItemView : NSBox
-@property (assign) NSUInteger index;
 @property (weak) LibraryView *libraryView;
 @end
 
@@ -318,7 +317,6 @@ IB_DESIGNABLE
 	NSCollectionViewItem *item = [super newItemForRepresentedObject:object];
 	LibraryItemView *itemView = (LibraryItemView *)item.view;
 	itemView.libraryView = self;
-	itemView.index = [self.content count] - 1;
 	return item;
 }
 
@@ -342,6 +340,20 @@ IB_DESIGNABLE
 	_firstResponder = NO;
 	[self setNeedsDisplay:YES];
 	return YES;
+}
+
+- (void)mouseDown:(NSEvent *)event {
+	if (_actualDelegate && [_actualDelegate respondsToSelector:@selector(libraryView:didSelectItemAtIndex:)]) {
+		CGPoint point = [self convertPoint:[event locationInWindow] fromView:nil];
+		for (NSInteger index = 0; index < self.subviews.count; ++index) {
+			LibraryItemView *libraryView = self.subviews[index];
+			if (CGRectContainsPoint(libraryView.frame, point)) {
+				[_actualDelegate libraryView:self didSelectItemAtIndex:index];
+				break;
+			}
+		}
+	}
+	[super mouseDown:event];
 }
 
 #pragma mark Drag & Drop
