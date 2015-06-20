@@ -536,27 +536,30 @@
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="CKw-P7-Q0Y">
-                    <rect key="frame" x="0.0" y="1" width="172" height="19"/>
-                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Texture" id="66t-mn-XJr">
+                <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YGO-GX-b4J">
+                    <rect key="frame" x="0.0" y="-3" width="175" height="24"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="J5z-fb-e72"/>
+                    </constraints>
+                    <comboBoxCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" numberOfVisibleItems="5" id="exv-e1-F0H">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </comboBoxCell>
                     <connections>
-                        <binding destination="faw-Lb-7vi" name="editable" keyPath="objectValue.isEditable" id="Zdh-W7-tVO"/>
-                        <binding destination="faw-Lb-7vi" name="value" keyPath="objectValue.value" id="OJ7-AP-D3g"/>
+                        <binding destination="faw-Lb-7vi" name="editable" keyPath="objectValue.isEditable" id="iRB-Zv-SnG"/>
+                        <binding destination="faw-Lb-7vi" name="value" keyPath="objectValue.value" id="jak-3y-nIf"/>
                     </connections>
-                </textField>
+                </comboBox>
             </subviews>
             <constraints>
-                <constraint firstItem="CKw-P7-Q0Y" firstAttribute="leading" secondItem="faw-Lb-7vi" secondAttribute="leading" id="Jhq-DL-Fxg"/>
-                <constraint firstItem="CKw-P7-Q0Y" firstAttribute="top" secondItem="faw-Lb-7vi" secondAttribute="top" id="eh3-j6-zdx"/>
-                <constraint firstAttribute="trailing" secondItem="CKw-P7-Q0Y" secondAttribute="trailing" id="pR1-hF-Uad"/>
+                <constraint firstItem="YGO-GX-b4J" firstAttribute="top" secondItem="faw-Lb-7vi" secondAttribute="top" id="DPH-Tn-uPA"/>
+                <constraint firstItem="YGO-GX-b4J" firstAttribute="leading" secondItem="faw-Lb-7vi" secondAttribute="leading" id="Jyr-Qk-foT"/>
+                <constraint firstAttribute="trailing" secondItem="YGO-GX-b4J" secondAttribute="trailing" id="idx-5S-dt1"/>
             </constraints>
             <connections>
                 <outlet property="_popover" destination="ch3-SY-J2e" id="OUX-gj-gKS"/>
-                <outlet property="textField" destination="CKw-P7-Q0Y" id="DYQ-4b-xMN"/>
+                <outlet property="textField" destination="YGO-GX-b4J" id="XXo-Ql-iqG"/>
             </connections>
             <point key="canvasLocation" x="726" y="647"/>
         </tableCellView>
