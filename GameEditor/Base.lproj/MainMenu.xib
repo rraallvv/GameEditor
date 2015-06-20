@@ -849,7 +849,7 @@
                                                                                                 <font key="font" metaFont="systemBold" size="12"/>
                                                                                             </buttonCell>
                                                                                             <userDefinedRuntimeAttributes>
-                                                                                                <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Library Mode"/>
+                                                                                                <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Tools Library Mode"/>
                                                                                             </userDefinedRuntimeAttributes>
                                                                                             <connections>
                                                                                                 <action selector="toolsLibraryDidChangeMode:" target="494" id="xsV-RZ-yTg"/>
@@ -962,7 +962,7 @@
                                                                                                 <font key="font" metaFont="systemBold" size="12"/>
                                                                                             </buttonCell>
                                                                                             <userDefinedRuntimeAttributes>
-                                                                                                <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Library Mode"/>
+                                                                                                <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Resources Library Mode"/>
                                                                                             </userDefinedRuntimeAttributes>
                                                                                             <connections>
                                                                                                 <action selector="resourcesLibraryDidChangeMode:" target="494" id="xf7-y7-WsG"/>

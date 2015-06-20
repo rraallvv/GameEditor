@@ -149,6 +149,7 @@
 	}
 
 	/* Setup the library */
+	[_libraryTabView selectTabViewItemAtIndex:_libraryTabButtons.selectedColumn];
 	_toolsLibraryCollectionView.delegate = self;
 	_resourcesLibraryCollectionView.delegate = self;
 	_toolsSelectedLibraryItem = NSNotFound;
