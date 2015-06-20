@@ -4,6 +4,7 @@
         <deployment identifier="macosx"/>
         <development version="6300" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8121.17"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -801,13 +802,13 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </customView>
                                                     <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0kB-Zw-fjX">
-                                                        <rect key="frame" x="0.0" y="25" width="260" height="150"/>
+                                                        <rect key="frame" x="0.0" y="25" width="130" height="150"/>
                                                         <clipView key="contentView" id="dys-lA-lM4">
-                                                            <rect key="frame" x="1" y="1" width="248" height="158"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="130" height="150"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <collectionView selectable="YES" id="53q-Pc-ZVo" customClass="LibraryView">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="248" height="158"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="130" height="150"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     <connections>
@@ -824,6 +825,33 @@
                                                         </scroller>
                                                         <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="WH5-rM-EA1">
                                                             <rect key="frame" x="234" y="1" width="15" height="143"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                        </scroller>
+                                                    </scrollView>
+                                                    <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Ig-sw-uWy">
+                                                        <rect key="frame" x="130" y="25" width="130" height="150"/>
+                                                        <clipView key="contentView" id="kAg-MZ-rxM">
+                                                            <rect key="frame" x="0.0" y="0.0" width="130" height="150"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <collectionView selectable="YES" id="UQ2-nI-Fzq" customClass="LibraryView">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="130" height="150"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    <connections>
+                                                                        <binding destination="ybe-5J-ot9" name="content" keyPath="arrangedObjects" id="e78-Tr-YFL"/>
+                                                                        <binding destination="ybe-5J-ot9" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="e78-Tr-YFL" id="QWb-A4-jfY"/>
+                                                                        <outlet property="itemPrototype" destination="vBT-rm-Cna" id="bF3-9h-dtf"/>
+                                                                    </connections>
+                                                                </collectionView>
+                                                            </subviews>
+                                                        </clipView>
+                                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="Rcr-g4-rTv">
+                                                            <rect key="frame" x="-8" y="-15" width="0.0" height="15"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                        </scroller>
+                                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="6H4-oR-T5i">
+                                                            <rect key="frame" x="-15" y="-8" width="15" height="0.0"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                     </scrollView>
@@ -888,14 +916,18 @@
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="74F-PN-nRU"/>
                                                     <constraint firstItem="0Wb-R6-rZ4" firstAttribute="centerX" secondItem="REE-3d-rnp" secondAttribute="centerX" id="74v-LJ-n9U"/>
                                                     <constraint firstItem="0Wb-R6-rZ4" firstAttribute="centerY" secondItem="REE-3d-rnp" secondAttribute="centerY" id="Aqg-g0-0y4"/>
-                                                    <constraint firstAttribute="trailing" secondItem="0kB-Zw-fjX" secondAttribute="trailing" id="HfU-xc-AR9"/>
                                                     <constraint firstItem="NjT-RW-5T2" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="Ptw-gr-ixA"/>
+                                                    <constraint firstItem="0kB-Zw-fjX" firstAttribute="width" secondItem="REE-3d-rnp" secondAttribute="width" multiplier="1:2" id="So2-oK-TZx"/>
                                                     <constraint firstItem="NjT-RW-5T2" firstAttribute="top" secondItem="0kB-Zw-fjX" secondAttribute="bottom" id="YdF-IV-AgL"/>
                                                     <constraint firstItem="0kB-Zw-fjX" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="Z71-P9-xcV"/>
                                                     <constraint firstItem="iCW-HX-D7E" firstAttribute="top" secondItem="REE-3d-rnp" secondAttribute="top" id="aYN-e4-sq7"/>
                                                     <constraint firstItem="iCW-HX-D7E" firstAttribute="leading" secondItem="REE-3d-rnp" secondAttribute="leading" id="ftD-Rz-47n"/>
                                                     <constraint firstItem="0kB-Zw-fjX" firstAttribute="top" secondItem="iCW-HX-D7E" secondAttribute="bottom" id="jsj-7P-Z7c"/>
+                                                    <constraint firstItem="2Ig-sw-uWy" firstAttribute="width" secondItem="REE-3d-rnp" secondAttribute="width" multiplier="1:2" id="kGc-Rb-s1p"/>
+                                                    <constraint firstItem="NjT-RW-5T2" firstAttribute="top" secondItem="2Ig-sw-uWy" secondAttribute="bottom" id="kYk-XC-mdD"/>
                                                     <constraint firstAttribute="bottom" secondItem="NjT-RW-5T2" secondAttribute="bottom" id="mOO-AB-f2r"/>
+                                                    <constraint firstItem="2Ig-sw-uWy" firstAttribute="top" secondItem="iCW-HX-D7E" secondAttribute="bottom" id="tde-LM-eKq"/>
+                                                    <constraint firstAttribute="trailing" secondItem="2Ig-sw-uWy" secondAttribute="trailing" id="vss-v4-uNx"/>
                                                     <constraint firstAttribute="trailing" secondItem="NjT-RW-5T2" secondAttribute="trailing" id="wwF-pr-GCT"/>
                                                     <constraint firstAttribute="trailing" secondItem="iCW-HX-D7E" secondAttribute="trailing" id="xjI-j3-lYe"/>
                                                 </constraints>
