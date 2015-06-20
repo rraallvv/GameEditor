@@ -31,6 +31,58 @@
 #import "LuaExport.h"
 #import "NSBundle+ProxyBundle.h"
 
+@interface SKNode (PhysicsBodyType)
+@property (assign) NSUInteger bodyType;
+@end
+
+@implementation SKNode (PhysicsBodyType)
+
+- (void)setBodyType:(NSUInteger)bodyType {
+	switch (bodyType) {
+		case 1:
+			self.physicsBody = nil;
+			break;
+
+		case 2:
+			if ([self respondsToSelector:@selector(size)]) {
+				self.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:[(id)self size]];
+			} else {
+				self.physicsBody = nil;
+			}
+			break;
+
+		case 3:
+			if ([self respondsToSelector:@selector(size)]) {
+				self.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:[(id)self size].width / 2];
+			} else {
+				self.physicsBody = nil;
+			}
+			break;
+
+		case 4:
+			if ([self respondsToSelector:@selector(texture)] && [self respondsToSelector:@selector(size)]) {
+				self.physicsBody = [SKPhysicsBody bodyWithTexture:(SKTexture *)[(id)self texture] alphaThreshold:0.5 size:[(id)self size]];
+			} else {
+				self.physicsBody = nil;
+			}
+			break;
+
+		case 5:
+			self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
+			break;
+
+		default:
+			break;
+	};
+}
+
+- (NSUInteger)bodyType {
+	return self.physicsBody == nil ? 1 : 0;
+}
+
+@end
+
+
 #pragma mark Main Window
 
 @interface AppDelegate ()
@@ -122,7 +174,7 @@
 
 	self.skView.showsFPS = YES;
 	self.skView.showsNodeCount = YES;
-	//self.skView.showsPhysics = YES;
+	self.skView.showsPhysics = YES;
 
 
 	/* Default scene */
@@ -543,6 +595,9 @@
 					[attributesArray addObject:attribute];
 					hasParticleColorBlendFactor = YES;
 				}
+
+			} else if ([propertyName isEqualToString:@"bodyType"]) {
+				[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:@"bodyType"]];
 
 			} else {
 

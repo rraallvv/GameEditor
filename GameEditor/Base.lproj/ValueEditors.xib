@@ -564,6 +564,53 @@
             </connections>
             <point key="canvasLocation" x="726" y="647"/>
         </tableCellView>
+        <tableCellView identifier="bodyType" id="yj4-cN-yD2" userLabel="bodyType" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="x7a-0d-IUD">
+                    <rect key="frame" x="-3" y="-2" width="178" height="23"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="EhP-Ao-tGM"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="ZFq-kA-QlT">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="sqd-aY-QHP">
+                            <items>
+                                <menuItem title="Custom" id="tbr-lY-sSP">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem isSeparatorItem="YES" id="bXJ-Gh-7H3"/>
+                                <menuItem title="None" tag="1" id="m6V-Wd-6Ig"/>
+                                <menuItem isSeparatorItem="YES" id="GJQ-Tx-5xf"/>
+                                <menuItem title="Bounding rectangle" tag="2" id="6ug-SV-IpY"/>
+                                <menuItem title="Bounding circle" tag="3" id="ViZ-8o-Fb2"/>
+                                <menuItem title="Alpha mask" tag="4" id="ccy-Wk-55E">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="Edges" tag="5" id="tEw-cs-G5O">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="yj4-cN-yD2" name="enabled" keyPath="objectValue.isEditable" id="2uu-k7-DyZ"/>
+                        <binding destination="yj4-cN-yD2" name="selectedTag" keyPath="objectValue.value" id="GW1-Np-jMB"/>
+                    </connections>
+                </popUpButton>
+            </subviews>
+            <constraints>
+                <constraint firstItem="x7a-0d-IUD" firstAttribute="top" secondItem="yj4-cN-yD2" secondAttribute="top" id="3HI-9O-qkh"/>
+                <constraint firstItem="x7a-0d-IUD" firstAttribute="leading" secondItem="yj4-cN-yD2" secondAttribute="leading" id="W2R-qK-kIa"/>
+                <constraint firstAttribute="trailing" secondItem="x7a-0d-IUD" secondAttribute="trailing" id="cKS-sr-m6u"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="DQK-wt-PaE"/>
+            </connections>
+            <point key="canvasLocation" x="436" y="699"/>
+        </tableCellView>
     </objects>
     <resources>
         <image name="AltDecreaseStepper" width="11" height="13"/>
