@@ -1067,6 +1067,10 @@
 	}
 }
 
+- (NSArray *)texturesLibrary {
+	return [_resourcesLibraryItems valueForKey:@"toolName"];
+}
+
 #pragma mark Editor Dragging Destination
 
 - (NSDragOperation)editorView:(EditorView *)editorView draggingEntered:(id)item {

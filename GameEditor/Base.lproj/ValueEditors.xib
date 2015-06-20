@@ -541,14 +541,15 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="19" id="J5z-fb-e72"/>
                     </constraints>
-                    <comboBoxCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" numberOfVisibleItems="5" id="exv-e1-F0H">
+                    <comboBoxCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" numberOfVisibleItems="5" id="exv-e1-F0H" customClass="ComboBoxCell">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </comboBoxCell>
                     <connections>
+                        <binding destination="-3" name="content" keyPath="delegate.texturesLibrary" id="III-WE-CaJ"/>
                         <binding destination="faw-Lb-7vi" name="editable" keyPath="objectValue.isEditable" id="iRB-Zv-SnG"/>
-                        <binding destination="faw-Lb-7vi" name="value" keyPath="objectValue.value" id="jak-3y-nIf"/>
+                        <binding destination="faw-Lb-7vi" name="value" keyPath="objectValue.value" previousBinding="III-WE-CaJ" id="Qub-ZW-25Z"/>
                     </connections>
                 </comboBox>
             </subviews>
