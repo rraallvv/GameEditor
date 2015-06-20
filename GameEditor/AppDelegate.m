@@ -906,7 +906,7 @@
 						[fullDescriptionAttributedString endEditing];
 
 						/* Add the item to the library */
-						[_toolsLibraryItems addObject:@{@"toolName":toolName,
+						[_toolsLibraryItems addObject:@{@"name":toolName,
 														@"label":fullDescriptionAttributedString,
 														@"image":iconImage,
 														@"showLabel":@(!_toolsLibraryModeButton.state),
@@ -1029,7 +1029,7 @@
 								[filenameAttributedString endEditing];
 
 								/* Add the item to the library */
-								[_resourcesLibraryItems addObject:@{@"toolName":filename,
+								[_resourcesLibraryItems addObject:@{@"name":filename,
 																	@"label":filenameAttributedString,
 																	@"image":imageThumbnail,
 																	@"showLabel":@(!_resourcesLibraryModeButton.state),
@@ -1068,7 +1068,7 @@
 }
 
 - (NSArray *)texturesLibrary {
-	return [_resourcesLibraryItems valueForKey:@"toolName"];
+	return [_resourcesLibraryItems valueForKey:@"name"];
 }
 
 #pragma mark Editor Dragging Destination
@@ -1143,7 +1143,7 @@
 
 	/* Create the node from the script */
 	NSValue *position = [NSValue valueWithPoint:locationInSelection];
-	NSString *toolName = [libraryItem objectForKey:@"toolName"];
+	NSString *toolName = [libraryItem objectForKey:@"name"];
 	SKNode *node = [scriptContext call:@"createNodeAtPosition" with:@[position, toolName] error:&error];
 	if (error) {
 		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
