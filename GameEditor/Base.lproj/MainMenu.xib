@@ -1066,6 +1066,17 @@
                             <real value="250"/>
                         </holdingPriorities>
                     </splitView>
+                    <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DIW-5L-C6x">
+                        <rect key="frame" x="20" y="287" width="164" height="26"/>
+                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" numberOfVisibleItems="5" id="Ljq-qm-7kb" customClass="ComboBoxCell">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </comboBoxCell>
+                        <connections>
+                            <binding destination="TU8-ns-SGh" name="content" keyPath="arrangedObjects.toolName" id="vEs-fU-5dY"/>
+                        </connections>
+                    </comboBox>
                 </subviews>
                 <constraints>
                     <constraint firstItem="zp9-ka-bca" firstAttribute="top" secondItem="372" secondAttribute="top" id="5mV-nl-6qu"/>

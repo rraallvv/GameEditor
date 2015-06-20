@@ -13,6 +13,7 @@
 		E40813951AC42FFF00F54824 /* ColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = E40813941AC42FFF00F54824 /* ColorWell.m */; };
 		E4220B2D1ACFF92B00753375 /* Particles.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2B1ACFF92B00753375 /* Particles.sks */; };
 		E4220B2E1ACFF92B00753375 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2C1ACFF92B00753375 /* spark.png */; };
+		E45B16B81B35AA97007883BF /* ComboBoxCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E45B16B71B35AA97007883BF /* ComboBoxCell.m */; };
 		E460AB931ACDC9B900859EA2 /* NavigatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E460AB921ACDC9B900859EA2 /* NavigatorView.m */; };
 		E474192F1AD84EDC00061932 /* NewGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E474192E1AD84EDC00061932 /* NewGameScene.sks */; };
 		E48286631AE7D74F00C51F8D /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = E48286621AE7D74F00C51F8D /* art.scnassets */; };
@@ -109,6 +110,8 @@
 		E40813941AC42FFF00F54824 /* ColorWell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorWell.m; sourceTree = "<group>"; };
 		E4220B2B1ACFF92B00753375 /* Particles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Particles.sks; sourceTree = "<group>"; };
 		E4220B2C1ACFF92B00753375 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
+		E45B16B61B35AA97007883BF /* ComboBoxCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComboBoxCell.h; sourceTree = "<group>"; };
+		E45B16B71B35AA97007883BF /* ComboBoxCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComboBoxCell.m; sourceTree = "<group>"; };
 		E460AB911ACDC9B900859EA2 /* NavigatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigatorView.h; sourceTree = "<group>"; };
 		E460AB921ACDC9B900859EA2 /* NavigatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigatorView.m; sourceTree = "<group>"; };
 		E474192E1AD84EDC00061932 /* NewGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = NewGameScene.sks; sourceTree = "<group>"; };
@@ -186,10 +189,12 @@
 		E41894D81AD975B200E704BB /* Controls */ = {
 			isa = PBXGroup;
 			children = (
-				E4BFF4AE1AB78E24002DADD3 /* StepperTextField.h */,
-				E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */,
 				E40813931AC42FFF00F54824 /* ColorWell.h */,
 				E40813941AC42FFF00F54824 /* ColorWell.m */,
+				E45B16B61B35AA97007883BF /* ComboBoxCell.h */,
+				E45B16B71B35AA97007883BF /* ComboBoxCell.m */,
+				E4BFF4AE1AB78E24002DADD3 /* StepperTextField.h */,
+				E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -531,6 +536,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4BB58AE1ABB510A0021A467 /* EditorView.m in Sources */,
+				E45B16B81B35AA97007883BF /* ComboBoxCell.m in Sources */,
 				E40813951AC42FFF00F54824 /* ColorWell.m in Sources */,
 				E4ABDB511AB3933900AAE82E /* main.m in Sources */,
 				E401BDBA1B21DC2600280F27 /* ControlsAutosave.m in Sources */,
