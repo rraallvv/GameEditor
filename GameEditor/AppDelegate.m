@@ -151,11 +151,7 @@
 	_toolsSelectedLibraryItem = NSNotFound;
 	_resourcesSelectedLibraryItem = NSNotFound;
 	_resourcesLibraryCollectionView.mode = _libraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
-	if (_libraryTabButtons.selectedColumn) {
-		[self populateResourcesLibrary];
-	} else {
-		[self populateToolsLibrary];
-	}
+	[self populateToolsLibrary];
 
 	/* Initialize the scripting support */
 	_sharedScriptingContext = [LuaContext new];
@@ -1050,9 +1046,9 @@
 
 - (IBAction)libraryDidSwitchTab:(NSMatrix *)buttons {
 	if (buttons.selectedColumn) {
-		[self populateResourcesLibrary];
+		//[self populateResourcesLibrary];
 	} else {
-		[self populateToolsLibrary];
+		//[self populateToolsLibrary];
 	}
 }
 
@@ -1195,11 +1191,7 @@
 	/* Add the file to the 'Open Recent' file menu */
 	[self addRecentDocument:_currentFilename];
 
-	if (_libraryTabButtons.selectedColumn) {
-		[self populateResourcesLibrary];
-	} else {
-		[self populateToolsLibrary];
-	}
+	[self populateResourcesLibrary];
 
 	return YES;
 }
