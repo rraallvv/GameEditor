@@ -91,7 +91,8 @@
 	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet NSArrayController *_toolsLibraryArrayController;
 	IBOutlet NSArrayController *_resourcesLibraryArrayController;
-	IBOutlet NSButton *_libraryModeButton;
+	IBOutlet NSButton *_toolsLibraryModeButton;
+	IBOutlet NSButton *_resourcesLibraryModeButton;
 	IBOutlet NSMatrix *_libraryTabButtons;
 	IBOutlet NSTextField *_attributesViewNoSelectionLabel;
 	IBOutlet NSTextField *_navigatorViewNoSceneLabel;
@@ -148,9 +149,11 @@
 
 	/* Setup the library */
 	_toolsLibraryCollectionView.delegate = self;
+	_resourcesLibraryCollectionView.delegate = self;
 	_toolsSelectedLibraryItem = NSNotFound;
 	_resourcesSelectedLibraryItem = NSNotFound;
-	_resourcesLibraryCollectionView.mode = _libraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
+	_toolsLibraryCollectionView.mode = _toolsLibraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
+	_resourcesLibraryCollectionView.mode = _resourcesLibraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
 	[self populateToolsLibrary];
 
 	/* Initialize the scripting support */
@@ -771,8 +774,11 @@
 
 #pragma mark Library
 
-- (IBAction)libraryDidChangeMode:(NSButton *)sender {
+- (IBAction)toolsLibraryDidChangeMode:(NSButton *)sender {
 	_toolsLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
+}
+
+- (IBAction)resourcesLibraryDidChangeMode:(NSButton *)sender {
 	_resourcesLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
@@ -898,7 +904,7 @@
 						[_toolsLibraryItems addObject:@{@"toolName":toolName,
 														@"label":fullDescriptionAttributedString,
 														@"image":iconImage,
-														@"showLabel":@(!_libraryModeButton.state),
+														@"showLabel":@(!_toolsLibraryModeButton.state),
 														@"contextData":@(_toolsLibraryContext.count - 1)}.mutableCopy];
 					}
 				}
@@ -1021,7 +1027,7 @@
 								[_resourcesLibraryItems addObject:@{@"toolName":filename,
 																	@"label":filenameAttributedString,
 																	@"image":imageThumbnail,
-																	@"showLabel":@(!_libraryModeButton.state),
+																	@"showLabel":@(!_resourcesLibraryModeButton.state),
 																	@"contextData":@(0)}.mutableCopy];
 							}
 						}

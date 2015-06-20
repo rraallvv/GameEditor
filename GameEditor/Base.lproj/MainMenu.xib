@@ -844,7 +844,7 @@
                                                                             <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Library Mode"/>
                                                                         </userDefinedRuntimeAttributes>
                                                                         <connections>
-                                                                            <action selector="libraryDidChangeMode:" target="494" id="2TN-4r-SZv"/>
+                                                                            <action selector="toolsLibraryDidChangeMode:" target="494" id="xsV-RZ-yTg"/>
                                                                         </connections>
                                                                     </button>
                                                                     <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JOl-ek-8VA">
@@ -943,7 +943,7 @@
                                                                             <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Library Mode"/>
                                                                         </userDefinedRuntimeAttributes>
                                                                         <connections>
-                                                                            <action selector="libraryDidChangeMode:" target="494" id="Dv8-BG-kMS"/>
+                                                                            <action selector="resourcesLibraryDidChangeMode:" target="494" id="xf7-y7-WsG"/>
                                                                         </connections>
                                                                     </button>
                                                                     <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AYy-Zf-7I5">
@@ -1076,16 +1076,17 @@
                 <outlet property="_attributesView" destination="zW2-BO-taF" id="19t-eI-oFU"/>
                 <outlet property="_attributesViewNoSelectionLabel" destination="RUK-6O-o0H" id="w5p-gT-IgJ"/>
                 <outlet property="_editorView" destination="suo-YO-fqM" id="D5W-Hu-pTw"/>
-                <outlet property="_libraryModeButton" destination="oSp-qF-DyS" id="d9q-Aa-t2d"/>
                 <outlet property="_libraryTabButtons" destination="pf4-VP-sjQ" id="1XR-iH-5BW"/>
                 <outlet property="_navigatorTreeController" destination="FfK-Wg-7Xj" id="bBG-5I-i7L"/>
                 <outlet property="_navigatorView" destination="Y4L-tX-zfk" id="Gju-ZL-6rD"/>
                 <outlet property="_navigatorViewNoSceneLabel" destination="qmx-Pn-rtd" id="kre-0u-5u3"/>
                 <outlet property="_resourcesLibraryArrayController" destination="TU8-ns-SGh" id="Ghv-on-PjH"/>
                 <outlet property="_resourcesLibraryCollectionView" destination="UQ2-nI-Fzq" id="1dG-BK-Eew"/>
+                <outlet property="_resourcesLibraryModeButton" destination="7sB-cr-Smr" id="6No-3P-UbK"/>
                 <outlet property="_saveSceneView" destination="y7f-F6-SiA" id="GjD-PC-v0V"/>
                 <outlet property="_toolsLibraryArrayController" destination="ybe-5J-ot9" id="vxZ-n3-2fC"/>
                 <outlet property="_toolsLibraryCollectionView" destination="53q-Pc-ZVo" id="NLB-6d-dci"/>
+                <outlet property="_toolsLibraryModeButton" destination="oSp-qF-DyS" id="IR7-RG-o1h"/>
                 <outlet property="_useXMLFormatButton" destination="dgr-lQ-gvM" id="9CG-ih-ueQ"/>
                 <outlet property="skView" destination="BAm-0B-vb9" id="MCo-T6-F5E"/>
                 <outlet property="window" destination="371" id="532"/>
