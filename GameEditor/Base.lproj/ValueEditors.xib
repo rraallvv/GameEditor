@@ -532,6 +532,38 @@
             </connections>
             <point key="canvasLocation" x="436" y="612"/>
         </tableCellView>
+        <tableCellView identifier="@&quot;SKTexture&quot;" id="faw-Lb-7vi" userLabel="texture" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YGO-GX-b4J">
+                    <rect key="frame" x="0.0" y="-3" width="175" height="24"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="J5z-fb-e72"/>
+                    </constraints>
+                    <comboBoxCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" numberOfVisibleItems="5" id="exv-e1-F0H" customClass="ComboBoxCell">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </comboBoxCell>
+                    <connections>
+                        <binding destination="-3" name="content" keyPath="delegate.texturesLibrary" id="III-WE-CaJ"/>
+                        <binding destination="faw-Lb-7vi" name="editable" keyPath="objectValue.isEditable" id="iRB-Zv-SnG"/>
+                        <binding destination="faw-Lb-7vi" name="value" keyPath="objectValue.value" previousBinding="III-WE-CaJ" id="Qub-ZW-25Z"/>
+                    </connections>
+                </comboBox>
+            </subviews>
+            <constraints>
+                <constraint firstItem="YGO-GX-b4J" firstAttribute="top" secondItem="faw-Lb-7vi" secondAttribute="top" id="DPH-Tn-uPA"/>
+                <constraint firstItem="YGO-GX-b4J" firstAttribute="leading" secondItem="faw-Lb-7vi" secondAttribute="leading" id="Jyr-Qk-foT"/>
+                <constraint firstAttribute="trailing" secondItem="YGO-GX-b4J" secondAttribute="trailing" id="idx-5S-dt1"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="OUX-gj-gKS"/>
+                <outlet property="textField" destination="YGO-GX-b4J" id="XXo-Ql-iqG"/>
+            </connections>
+            <point key="canvasLocation" x="726" y="647"/>
+        </tableCellView>
     </objects>
     <resources>
         <image name="AltDecreaseStepper" width="11" height="13"/>
