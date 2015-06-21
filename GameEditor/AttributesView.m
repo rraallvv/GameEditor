@@ -407,7 +407,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (NSRect)frameOfOutlineCellAtRow:(NSInteger)row {
-
+#if 0
 	id item = [self itemAtRow:row];
 
 	if ([item indexPath].length > 1 && [self outlineView:self isGroupItem:item]) {
@@ -415,7 +415,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 		rect.origin.x = 2;
 		return rect;
 	}
-
+#endif
 	return NSZeroRect; // Remove the disclosure triangle
 }
 
@@ -458,6 +458,10 @@ static const CGFloat kIndentationPerLevel = 0.0;
 	NSInteger row = [self rowForItem:notification.userInfo[@"NSObject"]];
 	NSView *rowView = [self rowViewAtRow:row makeIfNecessary:NO];
 	[rowView setNeedsDisplay:YES];
+}
+
+- (BOOL)outlineView:(nonnull NSOutlineView *)outlineView shouldCollapseItem:(nonnull id)item {
+	return [[[item representedObject] valueForKey:@"isCollapsible"] boolValue];
 }
 
 #pragma mark Delegate methods interception

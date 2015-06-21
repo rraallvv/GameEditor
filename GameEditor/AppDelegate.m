@@ -299,7 +299,7 @@
 
 			/* Expand all the root nodes in the attributes view */
 			for (id item in [[_attributesTreeController arrangedObjects] childNodes])
-				[_attributesView expandItem:item expandChildren:NO];
+				[_attributesView expandItem:item expandChildren:YES];
 
 			/* Ask the editor view to repaint the selection */
 			[_editorView setNeedsDisplay:YES];
@@ -327,6 +327,7 @@
 			[classesArray addObject:@{@"name": [classType description],
 									  @"isLeaf": @NO,
 									  @"isEditable": @NO,
+									  @"isCollapsible": @YES,
 									  @"children":attributesArray}];
 		}
 
