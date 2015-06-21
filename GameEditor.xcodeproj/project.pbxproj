@@ -11,6 +11,7 @@
 		E408138F1AC228F400F54824 /* AttributesView.m in Sources */ = {isa = PBXBuildFile; fileRef = E408138E1AC228F400F54824 /* AttributesView.m */; };
 		E40813921AC3C45300F54824 /* ValueEditors.xib in Resources */ = {isa = PBXBuildFile; fileRef = E40813901AC3C45300F54824 /* ValueEditors.xib */; };
 		E40813951AC42FFF00F54824 /* ColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = E40813941AC42FFF00F54824 /* ColorWell.m */; };
+		E40965ED1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m in Sources */ = {isa = PBXBuildFile; fileRef = E40965EC1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m */; };
 		E4220B2D1ACFF92B00753375 /* Particles.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2B1ACFF92B00753375 /* Particles.sks */; };
 		E4220B2E1ACFF92B00753375 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2C1ACFF92B00753375 /* spark.png */; };
 		E44764CC1B36AFA100B7355F /* SKNode+PhysicsBodyType.m in Sources */ = {isa = PBXBuildFile; fileRef = E44764CB1B36AFA100B7355F /* SKNode+PhysicsBodyType.m */; };
@@ -110,6 +111,8 @@
 		E40813911AC3C45300F54824 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ValueEditors.xib; sourceTree = "<group>"; };
 		E40813931AC42FFF00F54824 /* ColorWell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorWell.h; sourceTree = "<group>"; };
 		E40813941AC42FFF00F54824 /* ColorWell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorWell.m; sourceTree = "<group>"; };
+		E40965EB1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSOutlineView+TreeExpansion.h"; sourceTree = "<group>"; };
+		E40965EC1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOutlineView+TreeExpansion.m"; sourceTree = "<group>"; };
 		E4220B2B1ACFF92B00753375 /* Particles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Particles.sks; sourceTree = "<group>"; };
 		E4220B2C1ACFF92B00753375 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		E44764CA1B36AFA100B7355F /* SKNode+PhysicsBodyType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKNode+PhysicsBodyType.h"; sourceTree = "<group>"; };
@@ -174,6 +177,8 @@
 			children = (
 				E401BDB81B21DC2600280F27 /* ControlsAutosave.h */,
 				E401BDB91B21DC2600280F27 /* ControlsAutosave.m */,
+				E40965EB1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.h */,
+				E40965EC1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m */,
 				E44764CA1B36AFA100B7355F /* SKNode+PhysicsBodyType.h */,
 				E44764CB1B36AFA100B7355F /* SKNode+PhysicsBodyType.m */,
 				E4BFABB01B33ACDB000A51EB /* NSBundle-ProxyBundle */,
@@ -552,6 +557,7 @@
 				E44764CC1B36AFA100B7355F /* SKNode+PhysicsBodyType.m in Sources */,
 				E4BFABB81B33ACDB000A51EB /* NSBundle+ProxyBundle.m in Sources */,
 				E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */,
+				E40965ED1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m in Sources */,
 				E4F3B6A71ACD7EC4001482D2 /* NavigationNode.m in Sources */,
 				E4ABDB761AB47BB700AAE82E /* AttributeNode.m in Sources */,
 				E4E6DA3B1AE9987500F4CE6F /* LibraryView.m in Sources */,

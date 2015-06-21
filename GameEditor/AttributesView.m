@@ -460,7 +460,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 	[rowView setNeedsDisplay:YES];
 }
 
-- (BOOL)outlineView:(nonnull NSOutlineView *)outlineView shouldCollapseItem:(nonnull id)item {
+- (BOOL)outlineView:(NSOutlineView *)outlineView shouldCollapseItem:(id)item {
 	return [[[item representedObject] valueForKey:@"isCollapsible"] boolValue];
 }
 
