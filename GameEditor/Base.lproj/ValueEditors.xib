@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8121.17" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="6300" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8121.17"/>
+        <development version="6200" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
@@ -28,6 +28,7 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
+                        <binding destination="f3Z-oW-3C9" name="enabled" keyPath="objectValue.isEditable" previousBinding="KHM-lF-6wx" id="zc8-yG-VKn"/>
                         <binding destination="f3Z-oW-3C9" name="editable" keyPath="objectValue.isEditable" id="KHM-lF-6wx"/>
                         <binding destination="f3Z-oW-3C9" name="value" keyPath="objectValue.value" id="ZHb-kc-rtO"/>
                     </connections>
@@ -62,6 +63,7 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
+                        <binding destination="GbV-qK-Vp4" name="enabled" keyPath="objectValue.isEditable" previousBinding="QLg-ll-xE7" id="Ejx-ec-I8n"/>
                         <binding destination="GbV-qK-Vp4" name="editable" keyPath="objectValue.isEditable" id="QLg-ll-xE7"/>
                         <binding destination="GbV-qK-Vp4" name="value" keyPath="objectValue.value1" id="vou-Kt-aKf"/>
                     </connections>
@@ -80,6 +82,7 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
+                        <binding destination="GbV-qK-Vp4" name="enabled" keyPath="objectValue.isEditable" previousBinding="jtp-3C-nuZ" id="J2t-C2-fRO"/>
                         <binding destination="GbV-qK-Vp4" name="editable" keyPath="objectValue.isEditable" id="jtp-3C-nuZ"/>
                         <binding destination="GbV-qK-Vp4" name="value" keyPath="objectValue.value2" id="2qV-Ll-tOk"/>
                     </connections>
@@ -152,6 +155,7 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
+                        <binding destination="sdd-dW-626" name="enabled" keyPath="objectValue.isEditable" previousBinding="D53-mt-YcY" id="Jgf-DH-4Dz"/>
                         <binding destination="sdd-dW-626" name="editable" keyPath="objectValue.isEditable" id="D53-mt-YcY"/>
                         <binding destination="sdd-dW-626" name="value" keyPath="objectValue.value1" id="ZA0-TT-AME"/>
                     </connections>
@@ -170,6 +174,7 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
+                        <binding destination="sdd-dW-626" name="enabled" keyPath="objectValue.isEditable" previousBinding="irm-ha-4yo" id="b9u-5R-tyD"/>
                         <binding destination="sdd-dW-626" name="editable" keyPath="objectValue.isEditable" id="irm-ha-4yo"/>
                         <binding destination="sdd-dW-626" name="value" keyPath="objectValue.value2" id="n40-On-8jb"/>
                     </connections>
@@ -188,6 +193,7 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
+                        <binding destination="sdd-dW-626" name="enabled" keyPath="objectValue.isEditable" previousBinding="te5-jO-Vas" id="rtm-v7-Fje"/>
                         <binding destination="sdd-dW-626" name="editable" keyPath="objectValue.isEditable" id="te5-jO-Vas"/>
                         <binding destination="sdd-dW-626" name="value" keyPath="objectValue.value3" id="rX1-rw-2vX"/>
                     </connections>
@@ -266,6 +272,7 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
+                        <binding destination="dHV-ME-csG" name="enabled" keyPath="objectValue.isEditable" previousBinding="6kp-n8-BKF" id="OCO-xU-wwz"/>
                         <binding destination="dHV-ME-csG" name="editable" keyPath="objectValue.isEditable" id="6kp-n8-BKF"/>
                         <binding destination="dHV-ME-csG" name="value" keyPath="objectValue.value1" id="Ndd-Rt-e4I"/>
                     </connections>
@@ -284,6 +291,7 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
+                        <binding destination="dHV-ME-csG" name="enabled" keyPath="objectValue.isEditable" previousBinding="W9a-9d-Vf7" id="vKu-GA-PAI"/>
                         <binding destination="dHV-ME-csG" name="editable" keyPath="objectValue.isEditable" id="W9a-9d-Vf7"/>
                         <binding destination="dHV-ME-csG" name="value" keyPath="objectValue.value2" id="rHT-6Z-AUc"/>
                     </connections>
@@ -302,6 +310,7 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
+                        <binding destination="dHV-ME-csG" name="enabled" keyPath="objectValue.isEditable" previousBinding="doG-if-4IS" id="nWm-QP-B7N"/>
                         <binding destination="dHV-ME-csG" name="editable" keyPath="objectValue.isEditable" id="doG-if-4IS"/>
                         <binding destination="dHV-ME-csG" name="value" keyPath="objectValue.value3" id="Y4U-Cd-miX"/>
                     </connections>
@@ -320,6 +329,7 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
+                        <binding destination="dHV-ME-csG" name="enabled" keyPath="objectValue.isEditable" previousBinding="4PC-8p-RXe" id="kxg-81-CyO"/>
                         <binding destination="dHV-ME-csG" name="editable" keyPath="objectValue.isEditable" id="4PC-8p-RXe"/>
                         <binding destination="dHV-ME-csG" name="value" keyPath="objectValue.value4" id="2CG-zK-rS6"/>
                     </connections>
@@ -457,6 +467,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
+                        <binding destination="a61-EY-A6P" name="enabled" keyPath="objectValue.isEditable" previousBinding="hVd-Cm-55O" id="aRg-IN-qA6"/>
                         <binding destination="a61-EY-A6P" name="editable" keyPath="objectValue.isEditable" id="hVd-Cm-55O"/>
                         <binding destination="a61-EY-A6P" name="value" keyPath="objectValue.value" id="5E3-rz-qmj"/>
                     </connections>
@@ -516,6 +527,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
+                        <binding destination="AvU-FU-guj" name="enabled" keyPath="objectValue.isEditable" previousBinding="EcU-H0-w8v" id="srv-xT-va4"/>
                         <binding destination="AvU-FU-guj" name="editable" keyPath="objectValue.isEditable" id="EcU-H0-w8v"/>
                         <binding destination="AvU-FU-guj" name="value" keyPath="objectValue.value" id="RFF-Gq-e5C"/>
                     </connections>
@@ -548,6 +560,7 @@
                     </comboBoxCell>
                     <connections>
                         <binding destination="-3" name="content" keyPath="delegate.texturesLibrary" id="III-WE-CaJ"/>
+                        <binding destination="faw-Lb-7vi" name="enabled" keyPath="objectValue.isEditable" previousBinding="iRB-Zv-SnG" id="qWx-1K-po9"/>
                         <binding destination="faw-Lb-7vi" name="editable" keyPath="objectValue.isEditable" id="iRB-Zv-SnG"/>
                         <binding destination="faw-Lb-7vi" name="value" keyPath="objectValue.value" previousBinding="III-WE-CaJ" id="Qub-ZW-25Z"/>
                     </connections>
@@ -563,6 +576,57 @@
                 <outlet property="textField" destination="YGO-GX-b4J" id="XXo-Ql-iqG"/>
             </connections>
             <point key="canvasLocation" x="726" y="647"/>
+        </tableCellView>
+        <tableCellView identifier="bodyType" id="yj4-cN-yD2" userLabel="bodyType" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="x7a-0d-IUD">
+                    <rect key="frame" x="-3" y="-2" width="178" height="23"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="EhP-Ao-tGM"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="ZFq-kA-QlT">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="sqd-aY-QHP">
+                            <items>
+                                <menuItem title="Custom" id="tbr-lY-sSP">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem isSeparatorItem="YES" id="bXJ-Gh-7H3"/>
+                                <menuItem title="None" tag="1" id="m6V-Wd-6Ig"/>
+                                <menuItem isSeparatorItem="YES" id="GJQ-Tx-5xf"/>
+                                <menuItem title="Bounding rectangle" tag="2" id="6ug-SV-IpY"/>
+                                <menuItem title="Bounding circle" tag="3" id="ViZ-8o-Fb2"/>
+                                <menuItem title="Alpha mask" tag="4" id="ccy-Wk-55E">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem isSeparatorItem="YES" id="PL6-UC-fbC"/>
+                                <menuItem title="Path" tag="5" id="NdT-1Q-3qC">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="Edges" tag="6" id="tEw-cs-G5O">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="yj4-cN-yD2" name="enabled" keyPath="objectValue.isEditable" id="2uu-k7-DyZ"/>
+                        <binding destination="yj4-cN-yD2" name="selectedTag" keyPath="objectValue.value" id="GW1-Np-jMB"/>
+                    </connections>
+                </popUpButton>
+            </subviews>
+            <constraints>
+                <constraint firstItem="x7a-0d-IUD" firstAttribute="top" secondItem="yj4-cN-yD2" secondAttribute="top" id="3HI-9O-qkh"/>
+                <constraint firstItem="x7a-0d-IUD" firstAttribute="leading" secondItem="yj4-cN-yD2" secondAttribute="leading" id="W2R-qK-kIa"/>
+                <constraint firstAttribute="trailing" secondItem="x7a-0d-IUD" secondAttribute="trailing" id="cKS-sr-m6u"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="DQK-wt-PaE"/>
+            </connections>
+            <point key="canvasLocation" x="436" y="699"/>
         </tableCellView>
     </objects>
     <resources>

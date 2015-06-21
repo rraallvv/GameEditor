@@ -557,6 +557,67 @@ anchorPoint = _anchorPoint;
 	[self updateVisibleRect];
 }
 
+- (BOOL)node:(SKNode *)node containsPoint:(CGPoint)point {
+	BOOL result = NO;
+
+	CGMutablePathRef path = CGPathCreateMutable();
+
+	/* Construct the path using the transformed frame */
+	if ([node respondsToSelector:@selector(size)]) {
+		CGPoint points[5];
+		[self getFramePoints:points forNode:node];
+		CGPathAddLines(path, NULL, &points[1], 4);
+
+		/* Construct the path using a rectangle of arbitrary size centered at the node's position */
+	} else {
+		CGPoint center = [_scene convertPoint:CGPointZero fromNode:node];
+		center.x /= _viewScale;
+		center.y /= _viewScale;
+		center.x += _viewOrigin.x;
+		center.y += _viewOrigin.y;
+		CGPoint points[4] = {
+			{center.x - kRotationHandleDistance, center.y - kRotationHandleDistance},
+			{center.x + kRotationHandleDistance, center.y - kRotationHandleDistance},
+			{center.x + kRotationHandleDistance, center.y + kRotationHandleDistance},
+			{center.x - kRotationHandleDistance, center.y + kRotationHandleDistance}
+		};
+		CGPathAddLines(path, NULL, &points[0], 4);
+	}
+
+	CGPathCloseSubpath(path);
+
+	if (CGPathContainsPoint(path, NULL, point, NO)) {
+		result = YES;
+	}
+
+	CGPathRelease(path);
+
+	return result;
+}
+
+- (NSArray *)nodesContainingPoint:(CGPoint)point inNode:(SKNode *)aNode {
+	NSMutableArray *array = [NSMutableArray array];
+	for (SKNode *node in aNode.children) {
+		if ([self node:node containsPoint:point]) {
+			[array addObject:node];
+		}
+		if (node.children.count > 0) {
+			[array addObjectsFromArray:[self nodesContainingPoint:point inNode:node]];
+		}
+	}
+	return array;
+}
+
+- (void)selectNodeAtPoint:(CGPoint)point {
+	NSArray *nodes = [self nodesContainingPoint:point inNode:_scene];
+	if (nodes.count) {
+		NSUInteger index = ([nodes indexOfObject:_node] + 1) % nodes.count;
+		self.node = [nodes objectAtIndex:index];
+	} else {
+		self.node = _scene;
+	}
+}
+
 - (void)dealloc {
 	[self unbindFromSelectedNode];
 }
@@ -855,6 +916,11 @@ anchorPoint = _anchorPoint;
 				/* Find the handle at the mouse position */
 				_manipulatedHandle = [self manipulatedHandleWithPoint:locationInScene];
 				_manipulatingHandle = _manipulatedHandle != MaxHandle;
+
+				/* Pick another node if the current node does not contain the mouse position */
+				if (!_manipulatingHandle && ![self node:_node containsPoint:locationInScene]) {
+					[self selectNodeAtPoint:locationInScene];
+				}
 			}
 
 			if (_node == _scene) {
@@ -894,15 +960,7 @@ anchorPoint = _anchorPoint;
 
 	if (_scene && !_dragging) {
 		CGPoint locationInScene = [self convertPoint:theEvent.locationInWindow fromView:nil];
-
-		/* Select a node at the mouse position */
-		NSArray *nodes = [self nodesContainingPoint:locationInScene inNode:_scene];
-		if (nodes.count) {
-			NSUInteger index = ([nodes indexOfObject:_node] + 1) % nodes.count;
-			self.node = [nodes objectAtIndex:index];
-		} else {
-			self.node = _scene;
-		}
+		[self selectNodeAtPoint:locationInScene];
 	}
 
 	if (_node == _scene) {
@@ -1114,48 +1172,6 @@ anchorPoint = _anchorPoint;
 
 - (SKNode *)node {
 	return _node;
-}
-
-- (NSArray *)nodesContainingPoint:(CGPoint)point inNode:(SKNode *)aNode {
-	NSMutableArray *array = [NSMutableArray array];
-	for (SKNode *node in aNode.children) {
-
-		CGMutablePathRef path = CGPathCreateMutable();
-
-		/* Construct the path using the transformed frame */
-		if ([node respondsToSelector:@selector(size)]) {
-			CGPoint points[5];
-			[self getFramePoints:points forNode:node];
-			CGPathAddLines(path, NULL, &points[1], 4);
-
-			/* Construct the path using a rectangle of arbitrary size centered at the node's position */
-		} else {
-			CGPoint center = [_scene convertPoint:CGPointZero fromNode:node];
-			center.x /= _viewScale;
-			center.y /= _viewScale;
-			center.x += _viewOrigin.x;
-			center.y += _viewOrigin.y;
-			CGPoint points[4] = {
-				{center.x - kRotationHandleDistance, center.y - kRotationHandleDistance},
-				{center.x + kRotationHandleDistance, center.y - kRotationHandleDistance},
-				{center.x + kRotationHandleDistance, center.y + kRotationHandleDistance},
-				{center.x - kRotationHandleDistance, center.y + kRotationHandleDistance}
-			};
-			CGPathAddLines(path, NULL, &points[0], 4);
-		}
-
-		CGPathCloseSubpath(path);
-
-		if (CGPathContainsPoint(path, NULL, point, NO)) {
-			[array addObject:node];
-		}
-		if (node.children.count > 0) {
-			[array addObjectsFromArray:[self nodesContainingPoint:point inNode:node]];
-		}
-
-		CGPathRelease(path);
-	}
-	return array;
 }
 
 @end

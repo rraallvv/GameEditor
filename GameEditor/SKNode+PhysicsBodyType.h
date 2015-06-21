@@ -1,5 +1,5 @@
 /*
- * AttributesView.h
+ * SKNode+PhysicsBodyType.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,10 +23,10 @@
  * THE SOFTWARE.
  */
 
-#import <Cocoa/Cocoa.h>
-#import "AttributeNode.h"
-#import "SKNode+PhysicsBodyType.h"
-#import "NSOutlineView+TreeExpansion.h"
+#import <SpriteKit/SpriteKit.h>
 
-@interface AttributesView : NSOutlineView
+@interface SKNode (PhysicsBodyType)
+
+@property (assign) NSUInteger bodyType;
+
 @end

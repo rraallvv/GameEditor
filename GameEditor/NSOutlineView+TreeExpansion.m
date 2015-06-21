@@ -1,5 +1,5 @@
 /*
- * AttributesView.h
+ * NSOutlineView+TreeExpansion.m
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,10 +23,31 @@
  * THE SOFTWARE.
  */
 
-#import <Cocoa/Cocoa.h>
-#import "AttributeNode.h"
-#import "SKNode+PhysicsBodyType.h"
 #import "NSOutlineView+TreeExpansion.h"
 
-@interface AttributesView : NSOutlineView
+@implementation NSOutlineView (TreeExpansion)
+
+- (NSMutableArray *)expansionInfoWithNode:(NSTreeNode *)aNode {
+	NSMutableArray *expansionInfo = [NSMutableArray array];
+	[self getExpandedNodesInfo:expansionInfo forNode:aNode];
+	return expansionInfo;
+}
+
+- (void)getExpandedNodesInfo:(NSMutableArray *)array forNode:(NSTreeNode *)aNode {
+	[array addObject:[NSNumber numberWithBool:[self isItemExpanded:aNode]]];
+	for (NSTreeNode *node in aNode.childNodes) {
+		[self getExpandedNodesInfo:array forNode:node];
+	}
+}
+
+- (void)expandNode:(NSTreeNode *)aNode withInfo:(NSMutableArray *)array {
+	if ([[array firstObject] boolValue]) {
+		[self expandItem:aNode];
+	}
+	[array removeObjectAtIndex:0];
+	for (NSTreeNode *node in aNode.childNodes) {
+		[self expandNode:node withInfo:array];
+	}
+}
+
 @end

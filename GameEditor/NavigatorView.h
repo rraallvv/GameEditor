@@ -25,10 +25,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import "NavigationNode.h"
+#import "NSOutlineView+TreeExpansion.h"
 
 @interface NavigatorView : NSOutlineView
-- (NSMutableArray *)expansionInfoWithNode:(NSTreeNode *)aNode;
-- (void)expandNode:(NSTreeNode *)aNode withInfo:(NSMutableArray *)array;
 @end
 
 @protocol NavigatorViewDelegate
