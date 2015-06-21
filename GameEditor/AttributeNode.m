@@ -665,7 +665,11 @@ labels = _labels;
 		}
 	}
 
-	return [super valueForUndefinedKey:key];
+	if ([super respondsToSelector:@selector(key)]) {
+		return [super valueForUndefinedKey:key];
+	}
+
+	return nil;
 }
 
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
