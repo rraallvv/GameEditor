@@ -413,13 +413,13 @@ labels = _labels;
 		_children = children;
 
 		/* Bind the property to the 'raw' value if there isn't an accessor */
-		if (node) {
+		if (_node) {
 			if (children) {
 				[_node addObserver:self forKeyPath:_name options:0 context:NULL];
 
 			} else {
 				/* Try to get the separate values of a split value attribute */
-				_splitNames = [name componentsSeparatedByString:@","];
+				_splitNames = [_name componentsSeparatedByString:@","];
 				if (_splitNames.count > 1) {
 					_name = _splitNames[0];
 					_splitValue = YES;
@@ -427,7 +427,7 @@ labels = _labels;
 					/* Initialize and bind each value for the split value attribute */
 					for (int i=1; i<_splitNames.count; ++i) {
 						[_value addObject:[NSNull null]];
-						[self bind:[NSString stringWithFormat:@"value%d", i] toObject:node withKeyPath:_splitNames[i] options:nil];
+						[self bind:[NSString stringWithFormat:@"value%d", i] toObject:_node withKeyPath:_splitNames[i] options:nil];
 					}
 
 				} else {
@@ -437,8 +437,8 @@ labels = _labels;
 
 					_types = [NSMutableArray array];
 
-					for (NSInteger i=0; i<type.length; i++) {
-						NSString *ch = [type substringWithRange:NSMakeRange(i, 1)];
+					for (NSInteger i=0; i<_type.length; i++) {
+						NSString *ch = [_type substringWithRange:NSMakeRange(i, 1)];
 						if ([ch isEqualToString:@"{"]) {
 							level++;
 							tempArray = [NSMutableArray array];
@@ -472,7 +472,7 @@ labels = _labels;
 					}
 
 					/* Bind the struct value */
-					[self bind:@"value" toObject:node withKeyPath:_name options:nil];
+					[self bind:@"value" toObject:_node withKeyPath:_name options:nil];
 				}
 			}
 		}
