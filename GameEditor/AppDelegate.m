@@ -39,10 +39,12 @@
 
 - (void)setBodyType:(NSUInteger)bodyType {
 	switch (bodyType) {
+		/* None */
 		case 1:
 			self.physicsBody = nil;
 			break;
 
+		/* Bounding Rectangle */
 		case 2:
 			if ([self respondsToSelector:@selector(size)]) {
 				CGSize size = [(id)self size];
@@ -59,6 +61,7 @@
 			self.physicsBody.dynamic = NO;
 			break;
 
+		/* Bounding Circle */
 		case 3:
 			if ([self respondsToSelector:@selector(size)]) {
 				CGSize size = [(id)self size];
@@ -81,6 +84,7 @@
 			self.physicsBody.dynamic = NO;
 			break;
 
+		/* Alpha mask */
 		case 4:
 			if ([self respondsToSelector:@selector(texture)] && [self respondsToSelector:@selector(size)]) {
 				self.physicsBody = [SKPhysicsBody bodyWithTexture:(SKTexture *)[(id)self texture] alphaThreshold:0.5 size:[(id)self size]];
@@ -90,10 +94,20 @@
 			self.physicsBody.dynamic = NO;
 			break;
 
+		/* Edges */
 		case 5:
 			self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
 			break;
 
+		/* Path */
+		case 6:
+			if ([self respondsToSelector:@selector(path)]) {
+				self.physicsBody = [SKPhysicsBody bodyWithPolygonFromPath:[(SKShapeNode *)self path]];
+			}
+			self.physicsBody.dynamic = NO;
+			break;
+
+		/* Custom */
 		default:
 			break;
 	};

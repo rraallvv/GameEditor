@@ -573,7 +573,7 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="19" id="EhP-Ao-tGM"/>
                     </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="ZFq-kA-QlT">
+                    <popUpButtonCell key="cell" type="push" title="Path" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="6" imageScaling="proportionallyDown" inset="2" selectedItem="NdT-1Q-3qC" id="ZFq-kA-QlT">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" id="sqd-aY-QHP">
@@ -589,7 +589,11 @@
                                 <menuItem title="Alpha mask" tag="4" id="ccy-Wk-55E">
                                     <modifierMask key="keyEquivalentModifierMask"/>
                                 </menuItem>
+                                <menuItem isSeparatorItem="YES" id="PL6-UC-fbC"/>
                                 <menuItem title="Edges" tag="5" id="tEw-cs-G5O">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="Path" state="on" tag="6" id="NdT-1Q-3qC">
                                     <modifierMask key="keyEquivalentModifierMask"/>
                                 </menuItem>
                             </items>
