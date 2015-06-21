@@ -414,7 +414,10 @@ labels = _labels;
 
 		/* Bind the property to the 'raw' value if there isn't an accessor */
 		if (node) {
-			if (!children) {
+			if (children) {
+				[_node addObserver:self forKeyPath:_name options:0 context:NULL];
+
+			} else {
 				/* Try to get the separate values of a split value attribute */
 				_splitNames = [name componentsSeparatedByString:@","];
 				if (_splitNames.count > 1) {
@@ -543,7 +546,6 @@ labels = _labels;
 }
 
 - (void)setNode:(id)node {
-	printf(">>> changed %s\n", [node description].UTF8String);
 	_node = node;
 }
 
@@ -568,12 +570,16 @@ labels = _labels;
 }
 
 - (void)dealloc {
-	if (_splitValue) {
-		for (int i = 1; i <= [_value count]; ++i) {
-			[self unbind:[NSString stringWithFormat:@"value%d", i]];
-		}
+	if (_children) {
+		[_node removeObserver:self forKeyPath:_name];
 	} else {
-		[self unbind:@"value"];
+		if (_splitValue) {
+			for (int i = 1; i <= [_value count]; ++i) {
+				[self unbind:[NSString stringWithFormat:@"value%d", i]];
+			}
+		} else {
+			[self unbind:@"value"];
+		}
 	}
 }
 
@@ -663,6 +669,17 @@ labels = _labels;
 	}
 
 	return keyPaths;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if ([keyPath isEqualToString:_name]) {
+		id node = [_node valueForKey:_name];
+		for (AttributeNode *child in _children) {
+			if (child.node != _node) {
+				child.node = node;
+			}
+		}
+	}
 }
 
 @end
