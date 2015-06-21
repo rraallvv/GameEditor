@@ -89,8 +89,8 @@ toolFunctions = {
 }
 
 -- Call back function
-function createNodeAtPosition(position, toolName)
-	local createNode = toolFunctions[toolName]
+function createNodeAtPosition(position, name)
+	local createNode = toolFunctions[name]
     local node = createNode()
 	node.position = position
 	return node

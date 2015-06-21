@@ -242,6 +242,7 @@ typedef enum {
 
 @implementation EditorView {
 	CGPoint _draggedPosition;
+	BOOL _dragging;
 	CGPoint _handleOffset;
 	BOOL _manipulatingHandle;
 	ManipulatedHandle _manipulatedHandle;
@@ -310,31 +311,30 @@ anchorPoint = _anchorPoint;
 	return CGRectMake(point.x - kHandleRadius, point.y - kHandleRadius, dimension, dimension);
 }
 
-- (BOOL)shouldManipulateHandleWithPoint:(CGPoint)point {
-	_manipulatedHandle = MaxHandle;
+- (ManipulatedHandle)manipulatedHandleWithPoint:(CGPoint)point {
+	ManipulatedHandle manipulatedHandle = MaxHandle;
 	if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[AnchorPointHandle]])) {
-		_manipulatedHandle = AnchorPointHandle;
+		manipulatedHandle = AnchorPointHandle;
 	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[RotationHandle]])) {
-		_manipulatedHandle = RotationHandle;
+		manipulatedHandle = RotationHandle;
 	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[BottomLeftHandle]])) {
-		_manipulatedHandle = BottomLeftHandle;
+		manipulatedHandle = BottomLeftHandle;
 	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[BottomRightHandle]])) {
-		_manipulatedHandle = BottomRightHandle;
+		manipulatedHandle = BottomRightHandle;
 	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[TopRightHandle]])) {
-		_manipulatedHandle = TopRightHandle;
+		manipulatedHandle = TopRightHandle;
 	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[TopLeftHandle]])) {
-		_manipulatedHandle = TopLeftHandle;
+		manipulatedHandle = TopLeftHandle;
 	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[BottomMiddleHandle]])) {
-		_manipulatedHandle = BottomMiddleHandle;
+		manipulatedHandle = BottomMiddleHandle;
 	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[RightMiddleHandle]])) {
-		_manipulatedHandle = RightMiddleHandle;
+		manipulatedHandle = RightMiddleHandle;
 	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[TopMiddleHandle]])) {
-		_manipulatedHandle = TopMiddleHandle;
+		manipulatedHandle = TopMiddleHandle;
 	} else if (NSPointInRect(point, [self handleRectFromPoint:_handlePoints[LeftMiddleHandle]])) {
-		_manipulatedHandle = LeftMiddleHandle;
+		manipulatedHandle = LeftMiddleHandle;
 	}
-	_manipulatingHandle = _manipulatedHandle != MaxHandle;
-	return _manipulatingHandle;
+	return manipulatedHandle;
 }
 
 - (void)updateHandles {
@@ -843,46 +843,44 @@ anchorPoint = _anchorPoint;
 
 - (void)mouseDown:(NSEvent *)theEvent {
 	[[self window] makeFirstResponder:self];
-	if (_scene) {
-		CGPoint locationInScene = [self convertPoint:theEvent.locationInWindow fromView:nil];
-		if (!(_node && [self shouldManipulateHandleWithPoint:locationInScene])) {
-			NSArray *nodes = [self nodesContainingPoint:locationInScene inNode:_scene];
-			if (nodes.count) {
-				NSUInteger index = ([nodes indexOfObject:_node] + 1) % nodes.count;
-				self.node = [nodes objectAtIndex:index];
-			} else {
-				self.node = _scene;
-			}
-		}
-
-		if (_node == _scene) {
-			/* Get the position being dragged relative to the editor's view */
-			_draggedPosition = CGPointMake(locationInScene.x - _viewOrigin.x, locationInScene.y - _viewOrigin.y);
-
-			[[NSCursor pointingHandCursor] set];
-
-		} else {
-			/* Save the offset between the mouse pointer and the handle */
-			if (_manipulatingHandle) {
-				_handleOffset.x = locationInScene.x - _handlePoints[_manipulatedHandle].x;
-				_handleOffset.y = locationInScene.y - _handlePoints[_manipulatedHandle].y;
-			}
-
-			/* Get the position being dragged relative to the node's position */
-			CGPoint nodePositionInScene = [_scene convertPoint:CGPointZero fromNode:_node];
-			nodePositionInScene.x /= _viewScale;
-			nodePositionInScene.y /= _viewScale;
-			_draggedPosition = CGPointMake(locationInScene.x - nodePositionInScene.x, locationInScene.y - nodePositionInScene.y);
-		}
-
-		//[self updateSelectionWithLocationInScene:locationInScene];
-	}
+	_dragging = NO;
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
 	if (_scene) {
 		CGPoint locationInScene = [self convertPoint:theEvent.locationInWindow fromView:nil];
-		[self updateSelectionWithLocationInScene:locationInScene];
+
+		if (!_dragging) {
+			if (_node) {
+				/* Find the handle at the mouse position */
+				_manipulatedHandle = [self manipulatedHandleWithPoint:locationInScene];
+				_manipulatingHandle = _manipulatedHandle != MaxHandle;
+			}
+
+			if (_node == _scene) {
+				/* Get the position being dragged relative to the editor's view */
+				_draggedPosition = CGPointMake(locationInScene.x - _viewOrigin.x, locationInScene.y - _viewOrigin.y);
+
+				[[NSCursor pointingHandCursor] set];
+
+			} else {
+				/* Save the offset between the mouse pointer and the handle */
+				if (_manipulatingHandle) {
+					_handleOffset.x = locationInScene.x - _handlePoints[_manipulatedHandle].x;
+					_handleOffset.y = locationInScene.y - _handlePoints[_manipulatedHandle].y;
+				}
+
+				/* Get the position being dragged relative to the node's position */
+				CGPoint nodePositionInScene = [_scene convertPoint:CGPointZero fromNode:_node];
+				nodePositionInScene.x /= _viewScale;
+				nodePositionInScene.y /= _viewScale;
+				_draggedPosition = CGPointMake(locationInScene.x - nodePositionInScene.x, locationInScene.y - nodePositionInScene.y);
+			}
+
+			_dragging = YES;
+		} else {
+			[self updateSelectionWithLocationInScene:locationInScene];
+		}
 
 		if (_node == _scene) {
 			[[NSCursor pointingHandCursor] set];
@@ -894,9 +892,24 @@ anchorPoint = _anchorPoint;
 	_manipulatingHandle = NO;
 	_registeredUndo = NO;
 
+	if (_scene && !_dragging) {
+		CGPoint locationInScene = [self convertPoint:theEvent.locationInWindow fromView:nil];
+
+		/* Select a node at the mouse position */
+		NSArray *nodes = [self nodesContainingPoint:locationInScene inNode:_scene];
+		if (nodes.count) {
+			NSUInteger index = ([nodes indexOfObject:_node] + 1) % nodes.count;
+			self.node = [nodes objectAtIndex:index];
+		} else {
+			self.node = _scene;
+		}
+	}
+
 	if (_node == _scene) {
 		[[NSCursor arrowCursor] set];
 	}
+
+	_dragging = NO;
 }
 
 - (void)scrollWheel:(NSEvent *)theEvent {

@@ -348,6 +348,29 @@
 
 @end
 
+@implementation TextureTransformer
+
++ (void)initialize {
+	[self initializeWithTransformedValueClass:[SKTexture class]
+				  allowsReverseTransformation:YES
+						transformedValueBlock:^id(SKTexture *value){
+							NSString *description = [value description];
+							NSRange range = [description  rangeOfString:@"(?<=\').*(?=\')" options:NSRegularExpressionSearch];
+							if (range.location != NSNotFound) {
+								return [[description substringWithRange:range] stringByDeletingPathExtension];
+							}
+							return nil;
+						}
+				reverseTransformedValueBlock:^id(NSString *value){
+							if (value) {
+								return [SKTexture textureWithImageNamed:value];
+							}
+							return nil;
+						}];
+}
+
+@end
+
 #pragma mark AttributeNode
 
 @implementation AttributeNode {

@@ -85,16 +85,20 @@
 	IBOutlet EditorView *_editorView;
 	IBOutlet AttributesView *_attributesView;
 	IBOutlet NavigatorView *_navigatorView;
-	IBOutlet LibraryView *_libraryCollectionView;
+	IBOutlet LibraryView *_toolsLibraryCollectionView;
+	IBOutlet LibraryView *_resourcesLibraryCollectionView;
 	IBOutlet NSTreeController *_attributesTreeController;
 	IBOutlet NSTreeController *_navigatorTreeController;
-	IBOutlet NSArrayController *_libraryArrayController;
-	IBOutlet NSButton *_libraryModeButton;
+	IBOutlet NSArrayController *_toolsLibraryArrayController;
+	IBOutlet NSArrayController *_resourcesLibraryArrayController;
+	IBOutlet NSButton *_toolsLibraryModeButton;
+	IBOutlet NSButton *_resourcesLibraryModeButton;
 	IBOutlet NSMatrix *_libraryTabButtons;
 	IBOutlet NSTextField *_attributesViewNoSelectionLabel;
 	IBOutlet NSTextField *_navigatorViewNoSceneLabel;
 	IBOutlet NSView *_saveSceneView;
 	IBOutlet NSButton *_useXMLFormatButton;
+	IBOutlet NSTabView *_libraryTabView;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
 	NSBundle *_sceneBundle;
@@ -134,7 +138,8 @@
 
 	/* Enable Drag & Drop */
 	[_navigatorView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
-	[_libraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
+	[_toolsLibraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
+	[_resourcesLibraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
 	[_editorView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
 
 	/* Populate the 'Open Recent' file menu from the User default settings */
@@ -144,15 +149,14 @@
 	}
 
 	/* Setup the library */
-	_libraryCollectionView.delegate = self;
+	[_libraryTabView selectTabViewItemAtIndex:_libraryTabButtons.selectedColumn];
+	_toolsLibraryCollectionView.delegate = self;
+	_resourcesLibraryCollectionView.delegate = self;
 	_toolsSelectedLibraryItem = NSNotFound;
 	_resourcesSelectedLibraryItem = NSNotFound;
-	_libraryCollectionView.mode = _libraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
-	if (_libraryTabButtons.selectedColumn) {
-		[self populateResourcesLibrary];
-	} else {
-		[self populateToolsLibrary];
-	}
+	_toolsLibraryCollectionView.mode = _toolsLibraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
+	_resourcesLibraryCollectionView.mode = _resourcesLibraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
+	[self populateToolsLibrary];
 
 	/* Initialize the scripting support */
 	_sharedScriptingContext = [LuaContext new];
@@ -550,8 +554,15 @@
 				} else if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
 					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyType]];
 
-				} else if (propertyClass == [SKTexture class]
-						   || propertyClass == [SKShader class]
+				} else if (propertyClass == [SKTexture class]) {
+					AttributeNode *attribute = [AttributeNode attributeWithName:propertyName
+																		   node:node
+																		   type:propertyType
+																	  formatter:nil
+															   valueTransformer:[TextureTransformer transformer]];
+					[attributesArray addObject:attribute];
+
+				} else if (propertyClass == [SKShader class]
 						   || propertyClass == [SKPhysicsBody class]
 						   || propertyClass == [SKPhysicsWorld class]) {
 					[attributesArray addObject:@{@"name": propertyName,
@@ -772,8 +783,12 @@
 
 #pragma mark Library
 
-- (IBAction)libraryDidChangeMode:(NSButton *)sender {
-	_libraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
+- (IBAction)toolsLibraryDidChangeMode:(NSButton *)sender {
+	_toolsLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
+}
+
+- (IBAction)resourcesLibraryDidChangeMode:(NSButton *)sender {
+	_resourcesLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
 - (void)populateToolsLibrary {
@@ -895,10 +910,10 @@
 						[fullDescriptionAttributedString endEditing];
 
 						/* Add the item to the library */
-						[_toolsLibraryItems addObject:@{@"toolName":toolName,
+						[_toolsLibraryItems addObject:@{@"name":toolName,
 														@"label":fullDescriptionAttributedString,
 														@"image":iconImage,
-														@"showLabel":@(!_libraryModeButton.state),
+														@"showLabel":@(!_toolsLibraryModeButton.state),
 														@"contextData":@(_toolsLibraryContext.count - 1)}.mutableCopy];
 					}
 				}
@@ -906,11 +921,11 @@
 		}
 	}
 
-	[_libraryArrayController setContent:_toolsLibraryItems];
+	[_toolsLibraryArrayController setContent:_toolsLibraryItems];
 
 	if (_toolsSelectedLibraryItem == NSNotFound)
 		_toolsSelectedLibraryItem = 0;
-	[_libraryArrayController setSelectionIndex:_toolsSelectedLibraryItem];
+	[_toolsLibraryArrayController setSelectionIndex:_toolsSelectedLibraryItem];
 }
 
 - (void)populateResourcesLibrary {
@@ -974,6 +989,7 @@
 					NSRange range = [filename rangeOfString:@"~[^~\\.]*\\." options:NSRegularExpressionSearch];
 					if (range.location != NSNotFound)
 						filename = [filename stringByReplacingCharactersInRange:range withString:@"."];
+					filename = [filename stringByDeletingPathExtension];
 					if ([loadedFiles indexOfObject:filename] != NSNotFound)
 						continue;
 					[loadedFiles addObject:filename];
@@ -1018,10 +1034,10 @@
 								[filenameAttributedString endEditing];
 
 								/* Add the item to the library */
-								[_resourcesLibraryItems addObject:@{@"toolName":filename,
+								[_resourcesLibraryItems addObject:@{@"name":filename,
 																	@"label":filenameAttributedString,
 																	@"image":imageThumbnail,
-																	@"showLabel":@(!_libraryModeButton.state),
+																	@"showLabel":@(!_resourcesLibraryModeButton.state),
 																	@"contextData":@(0)}.mutableCopy];
 							}
 						}
@@ -1037,19 +1053,15 @@
 		}
 	}
 
-	[_libraryArrayController setContent:_resourcesLibraryItems];
+	[_resourcesLibraryArrayController setContent:_resourcesLibraryItems];
 
 	if (_resourcesSelectedLibraryItem == NSNotFound)
 		_resourcesSelectedLibraryItem = 0;
-	[_libraryArrayController setSelectionIndex:_resourcesSelectedLibraryItem];
+	[_resourcesLibraryArrayController setSelectionIndex:_resourcesSelectedLibraryItem];
 }
 
 - (IBAction)libraryDidSwitchTab:(NSMatrix *)buttons {
-	if (buttons.selectedColumn) {
-		[self populateResourcesLibrary];
-	} else {
-		[self populateToolsLibrary];
-	}
+	[_libraryTabView selectTabViewItemAtIndex:buttons.selectedColumn];
 }
 
 - (void)libraryView:(LibraryView *)libraryView didSelectItemAtIndex:(NSInteger)index {
@@ -1058,6 +1070,10 @@
 	} else {
 		_toolsSelectedLibraryItem = index;
 	}
+}
+
+- (NSArray *)texturesLibrary {
+	return [_resourcesLibraryItems valueForKey:@"name"];
 }
 
 #pragma mark Editor Dragging Destination
@@ -1079,7 +1095,12 @@
 	}
 
 	/* Get the library item */
-	NSMutableDictionary *libraryItem = [[_libraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
+	NSMutableDictionary *libraryItem;
+	if (_libraryTabButtons.selectedColumn) {
+		libraryItem = [[_resourcesLibraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
+	} else {
+		libraryItem = [[_toolsLibraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
+	}
 
 	/* Retrieve a valid context from the cache for the item */
 	NSNumber *itemIndex = [libraryItem objectForKey:@"contextData"];
@@ -1127,7 +1148,7 @@
 
 	/* Create the node from the script */
 	NSValue *position = [NSValue valueWithPoint:locationInSelection];
-	NSString *toolName = [libraryItem objectForKey:@"toolName"];
+	NSString *toolName = [libraryItem objectForKey:@"name"];
 	SKNode *node = [scriptContext call:@"createNodeAtPosition" with:@[position, toolName] error:&error];
 	if (error) {
 		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
@@ -1186,11 +1207,7 @@
 	/* Add the file to the 'Open Recent' file menu */
 	[self addRecentDocument:_currentFilename];
 
-	if (_libraryTabButtons.selectedColumn) {
-		[self populateResourcesLibrary];
-	} else {
-		[self populateToolsLibrary];
-	}
+	[self populateResourcesLibrary];
 
 	return YES;
 }
