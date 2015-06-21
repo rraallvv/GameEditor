@@ -573,10 +573,8 @@
 					/* Insert the SKNode's body type property in the first row */
 					[attributes insertObject:[AttributeNode attributeWithName:@"bodyType" node:node type:@"bodyType"] atIndex:0];
 
-					[attributesArray addObject:@{@"name": propertyName,
-												 @"isLeaf": @NO,
-												 @"isEditable": @NO,
-												 @"children":attributes}];
+					/* Add the property's attributes */
+					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node children:attributes]];
 
 				} else if (propertyClass == [SKShader class]
 						   || propertyClass == [SKPhysicsWorld class]) {
