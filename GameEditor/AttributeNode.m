@@ -413,69 +413,7 @@ labels = _labels;
 		_children = children;
 
 		/* Bind the property to the 'raw' value if there isn't an accessor */
-		if (_node) {
-			if (children) {
-				[_node addObserver:self forKeyPath:_name options:0 context:NULL];
-
-			} else {
-				/* Try to get the separate values of a split value attribute */
-				_splitNames = [_name componentsSeparatedByString:@","];
-				if (_splitNames.count > 1) {
-					_name = _splitNames[0];
-					_splitValue = YES;
-					_value = [NSMutableArray array];
-					/* Initialize and bind each value for the split value attribute */
-					for (int i=1; i<_splitNames.count; ++i) {
-						[_value addObject:[NSNull null]];
-						[self bind:[NSString stringWithFormat:@"value%d", i] toObject:_node withKeyPath:_splitNames[i] options:nil];
-					}
-
-				} else {
-					/* Try to get the endoced type fields of the struct */
-					NSMutableArray *tempArray = [NSMutableArray array];
-					NSInteger level = 0;
-
-					_types = [NSMutableArray array];
-
-					for (NSInteger i=0; i<_type.length; i++) {
-						NSString *ch = [_type substringWithRange:NSMakeRange(i, 1)];
-						if ([ch isEqualToString:@"{"]) {
-							level++;
-							tempArray = [NSMutableArray array];
-						} else if ([ch isEqualToString:@"="]) {
-							tempArray = [NSMutableArray array];
-						} else if ([ch isEqualToString:@"}"]) {
-							[_types addObjectsFromArray:tempArray];
-							tempArray = [NSMutableArray array];
-							level--;
-						} else {
-							[tempArray addObject:ch];
-						}
-					}
-
-					if (_types.count && level == 0) {
-						/* Compute the size of each field and data buffer to hold the struct fields */
-						_typeSizes = [NSMutableArray array];
-
-						for (int i = 0; i < _types.count; ++i) {
-							[_typeSizes addObject:@(_typeSize)];
-							NSUInteger size;
-							NSGetSizeAndAlignment([_types[i] UTF8String], &size, NULL);
-							_typeSize += size;
-						}
-
-						/* Allocate the data buffer to hold the struct fields */
-						_data = [NSMutableData dataWithLength:_typeSize];
-						_pdata = [_data mutableBytes];
-
-						_structValue = YES;
-					}
-
-					/* Bind the struct value */
-					[self bind:@"value" toObject:_node withKeyPath:_name options:nil];
-				}
-			}
-		}
+		[self bindValues];
 	}
 	return self;
 }
@@ -546,7 +484,9 @@ labels = _labels;
 }
 
 - (void)setNode:(id)node {
+	[self unbindValues];
 	_node = node;
+	[self bindValues];
 }
 
 - (id)node {
@@ -569,17 +509,88 @@ labels = _labels;
 	return _children == nil;
 }
 
+- (void)bindValues {
+	if (!_node)
+		return;
+
+	if (_children) {
+		[_node addObserver:self forKeyPath:_name options:0 context:NULL];
+
+	} else {
+		/* Try to get the separate values of a split value attribute */
+		_splitNames = [_name componentsSeparatedByString:@","];
+		if (_splitNames.count > 1) {
+			_name = _splitNames[0];
+			_splitValue = YES;
+			_value = [NSMutableArray array];
+			/* Initialize and bind each value for the split value attribute */
+			for (int i=1; i<_splitNames.count; ++i) {
+				[_value addObject:[NSNull null]];
+				[self bind:[NSString stringWithFormat:@"value%d", i] toObject:_node withKeyPath:_splitNames[i] options:nil];
+			}
+
+		} else {
+			/* Try to get the endoced type fields of the struct */
+			NSMutableArray *tempArray = [NSMutableArray array];
+			NSInteger level = 0;
+
+			_types = [NSMutableArray array];
+
+			for (NSInteger i=0; i<_type.length; i++) {
+				NSString *ch = [_type substringWithRange:NSMakeRange(i, 1)];
+				if ([ch isEqualToString:@"{"]) {
+					level++;
+					tempArray = [NSMutableArray array];
+				} else if ([ch isEqualToString:@"="]) {
+					tempArray = [NSMutableArray array];
+				} else if ([ch isEqualToString:@"}"]) {
+					[_types addObjectsFromArray:tempArray];
+					tempArray = [NSMutableArray array];
+					level--;
+				} else {
+					[tempArray addObject:ch];
+				}
+			}
+
+			if (_types.count && level == 0) {
+				/* Compute the size of each field and data buffer to hold the struct fields */
+				_typeSizes = [NSMutableArray array];
+
+				for (int i = 0; i < _types.count; ++i) {
+					[_typeSizes addObject:@(_typeSize)];
+					NSUInteger size;
+					NSGetSizeAndAlignment([_types[i] UTF8String], &size, NULL);
+					_typeSize += size;
+				}
+
+				/* Allocate the data buffer to hold the struct fields */
+				_data = [NSMutableData dataWithLength:_typeSize];
+				_pdata = [_data mutableBytes];
+
+				_structValue = YES;
+			}
+
+			/* Bind the struct value */
+			[self bind:@"value" toObject:_node withKeyPath:_name options:nil];
+		}
+	}
+}
+
+- (void)unbindValues {
+	if (_splitValue) {
+		for (int i = 1; i <= [_value count]; ++i) {
+			[self unbind:[NSString stringWithFormat:@"value%d", i]];
+		}
+	} else {
+		[self unbind:@"value"];
+	}
+}
+
 - (void)dealloc {
 	if (_children) {
 		[_node removeObserver:self forKeyPath:_name];
 	} else {
-		if (_splitValue) {
-			for (int i = 1; i <= [_value count]; ++i) {
-				[self unbind:[NSString stringWithFormat:@"value%d", i]];
-			}
-		} else {
-			[self unbind:@"value"];
-		}
+		[self unbindValues];
 	}
 }
 
