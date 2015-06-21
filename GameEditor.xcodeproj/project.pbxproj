@@ -13,6 +13,7 @@
 		E40813951AC42FFF00F54824 /* ColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = E40813941AC42FFF00F54824 /* ColorWell.m */; };
 		E4220B2D1ACFF92B00753375 /* Particles.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2B1ACFF92B00753375 /* Particles.sks */; };
 		E4220B2E1ACFF92B00753375 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2C1ACFF92B00753375 /* spark.png */; };
+		E44764CC1B36AFA100B7355F /* SKNode+PhysicsBodyType.m in Sources */ = {isa = PBXBuildFile; fileRef = E44764CB1B36AFA100B7355F /* SKNode+PhysicsBodyType.m */; };
 		E45B16B81B35AA97007883BF /* ComboBoxCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E45B16B71B35AA97007883BF /* ComboBoxCell.m */; };
 		E460AB931ACDC9B900859EA2 /* NavigatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E460AB921ACDC9B900859EA2 /* NavigatorView.m */; };
 		E474192F1AD84EDC00061932 /* NewGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E474192E1AD84EDC00061932 /* NewGameScene.sks */; };
@@ -111,6 +112,8 @@
 		E40813941AC42FFF00F54824 /* ColorWell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorWell.m; sourceTree = "<group>"; };
 		E4220B2B1ACFF92B00753375 /* Particles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Particles.sks; sourceTree = "<group>"; };
 		E4220B2C1ACFF92B00753375 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
+		E44764CA1B36AFA100B7355F /* SKNode+PhysicsBodyType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKNode+PhysicsBodyType.h"; sourceTree = "<group>"; };
+		E44764CB1B36AFA100B7355F /* SKNode+PhysicsBodyType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKNode+PhysicsBodyType.m"; sourceTree = "<group>"; };
 		E45B16B61B35AA97007883BF /* ComboBoxCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComboBoxCell.h; sourceTree = "<group>"; };
 		E45B16B71B35AA97007883BF /* ComboBoxCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComboBoxCell.m; sourceTree = "<group>"; };
 		E460AB911ACDC9B900859EA2 /* NavigatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigatorView.h; sourceTree = "<group>"; };
@@ -171,6 +174,8 @@
 			children = (
 				E401BDB81B21DC2600280F27 /* ControlsAutosave.h */,
 				E401BDB91B21DC2600280F27 /* ControlsAutosave.m */,
+				E44764CA1B36AFA100B7355F /* SKNode+PhysicsBodyType.h */,
+				E44764CB1B36AFA100B7355F /* SKNode+PhysicsBodyType.m */,
 				E4BFABB01B33ACDB000A51EB /* NSBundle-ProxyBundle */,
 			);
 			name = Utils;
@@ -544,6 +549,7 @@
 				E40813951AC42FFF00F54824 /* ColorWell.m in Sources */,
 				E4ABDB511AB3933900AAE82E /* main.m in Sources */,
 				E401BDBA1B21DC2600280F27 /* ControlsAutosave.m in Sources */,
+				E44764CC1B36AFA100B7355F /* SKNode+PhysicsBodyType.m in Sources */,
 				E4BFABB81B33ACDB000A51EB /* NSBundle+ProxyBundle.m in Sources */,
 				E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */,
 				E4F3B6A71ACD7EC4001482D2 /* NavigationNode.m in Sources */,
