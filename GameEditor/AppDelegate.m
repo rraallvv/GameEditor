@@ -87,7 +87,7 @@
 			/* Alpha mask */
 		case 4:
 			if ([self respondsToSelector:@selector(texture)] && [self respondsToSelector:@selector(size)]) {
-				self.physicsBody = [SKPhysicsBody bodyWithTexture:(SKTexture *)[(id)self texture] alphaThreshold:0.5 size:[(id)self size]];
+				self.physicsBody = [SKPhysicsBody bodyWithTexture:(SKTexture *)[(id)self texture] size:[(id)self size]];
 			} else {
 				self.physicsBody = nil;
 			}
