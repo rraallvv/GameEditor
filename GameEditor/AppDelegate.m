@@ -112,6 +112,7 @@
 	NSInteger _resourcesSelectedLibraryItem;
 	NSMutableArray *_toolsLibraryContext;
 	NSMutableArray *_resourcesLibraryContext;
+	NSMutableDictionary *_attributesViewExpansionInfo;
 }
 
 @synthesize window = _window;
@@ -147,6 +148,9 @@
 	for (NSString *filename in [recentDocuments reverseObjectEnumerator]) {
 		[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
 	}
+
+	/* Setup the attributes inspector */
+	_attributesViewExpansionInfo = [NSMutableDictionary dictionary];
 
 	/* Setup the library */
 	[_libraryTabView selectTabViewItemAtIndex:_libraryTabButtons.selectedColumn];
@@ -275,6 +279,14 @@
 	if (_selectedNode == node)
 		return;
 
+	/* Save attributes view position and expansion info */
+	NSScrollView *scrollView = _attributesView.enclosingScrollView;
+	for (id item in [[_attributesTreeController arrangedObjects] childNodes]) {
+		NSString *name = [[item representedObject] valueForKey:@"name"];
+		_attributesViewExpansionInfo[name] = [NSNumber numberWithBool:[_attributesView isItemExpanded:item]];
+	}
+	CGPoint scrollPosition = scrollView.documentVisibleRect.origin;
+
 	_attributesViewNoSelectionLabel.hidden = node != nil;
 
 	_selectedNode = node;
@@ -297,9 +309,17 @@
 			/* Replace the attributes table */
 			[_attributesTreeController setContent:contents];
 
-			/* Expand all the root nodes in the attributes view */
-			for (id item in [[_attributesTreeController arrangedObjects] childNodes])
+			/* Restore attributes view position and expansion info */
+			for (id item in [[_attributesTreeController arrangedObjects] childNodes]) {
+				NSString *name = [[item representedObject] valueForKey:@"name"];
+				NSNumber *expansionInfo = _attributesViewExpansionInfo[name];
 				[_attributesView expandItem:item expandChildren:YES];
+				if (expansionInfo && ![expansionInfo boolValue]) {
+					[_attributesView collapseItem:item];
+				}
+			}
+			[scrollView.contentView scrollToPoint:scrollPosition];
+			[scrollView reflectScrolledClipView:scrollView.contentView];
 
 			/* Ask the editor view to repaint the selection */
 			[_editorView setNeedsDisplay:YES];
