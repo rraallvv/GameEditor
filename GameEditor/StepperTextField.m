@@ -336,6 +336,8 @@ draggingMult = _sensitivity;
 }
 
 - (NSView *)hitTest:(NSPoint)aPoint {
+	if (!self.isEnabled)
+		return nil;
 	NSView *result = [super hitTest:aPoint];
 	if (result && ![self.cell showsSelection])
 		result = self;
