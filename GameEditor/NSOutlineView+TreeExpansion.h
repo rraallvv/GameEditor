@@ -1,5 +1,5 @@
 /*
- * AttributesView.h
+ * NSOutlineView+TreeExpansion.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,10 +23,10 @@
  * THE SOFTWARE.
  */
 
-#import <Cocoa/Cocoa.h>
-#import "AttributeNode.h"
-#import "SKNode+PhysicsBodyType.h"
-#import "NSOutlineView+TreeExpansion.h"
+#import <AppKit/AppKit.h>
 
-@interface AttributesView : NSOutlineView
+@interface NSOutlineView (TreeExpansion)
+- (NSMutableArray *)expansionInfoWithNode:(NSTreeNode *)aNode;
+- (void)expandNode:(NSTreeNode *)aNode withInfo:(NSMutableArray *)array;
 @end
+

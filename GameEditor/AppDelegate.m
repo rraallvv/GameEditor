@@ -112,6 +112,7 @@
 	NSInteger _resourcesSelectedLibraryItem;
 	NSMutableArray *_toolsLibraryContext;
 	NSMutableArray *_resourcesLibraryContext;
+	NSMutableDictionary *_attributesViewExpansionInfo;
 }
 
 @synthesize window = _window;
@@ -122,7 +123,7 @@
 
 	self.skView.showsFPS = YES;
 	self.skView.showsNodeCount = YES;
-	//self.skView.showsPhysics = YES;
+	self.skView.showsPhysics = YES;
 
 
 	/* Default scene */
@@ -147,6 +148,9 @@
 	for (NSString *filename in [recentDocuments reverseObjectEnumerator]) {
 		[[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
 	}
+
+	/* Setup the attributes inspector */
+	_attributesViewExpansionInfo = [NSMutableDictionary dictionary];
 
 	/* Setup the library */
 	[_libraryTabView selectTabViewItemAtIndex:_libraryTabButtons.selectedColumn];
@@ -275,6 +279,14 @@
 	if (_selectedNode == node)
 		return;
 
+	/* Save attributes view position and expansion info */
+	NSScrollView *scrollView = _attributesView.enclosingScrollView;
+	for (id item in [[_attributesTreeController arrangedObjects] childNodes]) {
+		NSString *name = [[item representedObject] valueForKey:@"name"];
+		_attributesViewExpansionInfo[name] = [NSNumber numberWithBool:[_attributesView isItemExpanded:item]];
+	}
+	CGPoint scrollPosition = scrollView.documentVisibleRect.origin;
+
 	_attributesViewNoSelectionLabel.hidden = node != nil;
 
 	_selectedNode = node;
@@ -297,9 +309,17 @@
 			/* Replace the attributes table */
 			[_attributesTreeController setContent:contents];
 
-			/* Expand all the root nodes in the attributes view */
-			for (id item in [[_attributesTreeController arrangedObjects] childNodes])
-				[_attributesView expandItem:item expandChildren:NO];
+			/* Restore attributes view position and expansion info */
+			for (id item in [[_attributesTreeController arrangedObjects] childNodes]) {
+				NSString *name = [[item representedObject] valueForKey:@"name"];
+				NSNumber *expansionInfo = _attributesViewExpansionInfo[name];
+				[_attributesView expandItem:item expandChildren:YES];
+				if (expansionInfo && ![expansionInfo boolValue]) {
+					[_attributesView collapseItem:item];
+				}
+			}
+			[scrollView.contentView scrollToPoint:scrollPosition];
+			[scrollView reflectScrolledClipView:scrollView.contentView];
 
 			/* Ask the editor view to repaint the selection */
 			[_editorView setNeedsDisplay:YES];
@@ -327,6 +347,7 @@
 			[classesArray addObject:@{@"name": [classType description],
 									  @"isLeaf": @NO,
 									  @"isEditable": @NO,
+									  @"isCollapsible": @YES,
 									  @"children":attributesArray}];
 		}
 
@@ -544,6 +565,9 @@
 					hasParticleColorBlendFactor = YES;
 				}
 
+			} else if ([propertyName isEqualToString:@"bodyType"]) {
+				/* Do nothing, the body type will be added with the SKPhysicsNode property */
+
 			} else {
 
 				Class propertyClass = [propertyType classType];
@@ -562,8 +586,17 @@
 															   valueTransformer:[TextureTransformer transformer]];
 					[attributesArray addObject:attribute];
 
+				} else if (propertyClass == [SKPhysicsBody class]) {
+					/* Populate the SKPhysicsBody property's attributes */
+					NSMutableArray *attributes = [self attributesForClass:propertyClass node:[node valueForKey:propertyName]];
+					
+					/* Insert the SKNode's body type property in the first row */
+					[attributes insertObject:[AttributeNode attributeWithName:@"bodyType" node:node type:@"bodyType"] atIndex:0];
+
+					/* Add the property's attributes */
+					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node children:attributes]];
+
 				} else if (propertyClass == [SKShader class]
-						   || propertyClass == [SKPhysicsBody class]
 						   || propertyClass == [SKPhysicsWorld class]) {
 					[attributesArray addObject:@{@"name": propertyName,
 												 @"isLeaf": @NO,
