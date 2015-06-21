@@ -546,7 +546,7 @@
 				}
 
 			} else if ([propertyName isEqualToString:@"bodyType"]) {
-				[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:@"bodyType"]];
+				/* Do nothing, the body type will be added with the SKPhysicsNode property */
 
 			} else {
 
@@ -566,8 +566,19 @@
 															   valueTransformer:[TextureTransformer transformer]];
 					[attributesArray addObject:attribute];
 
+				} else if (propertyClass == [SKPhysicsBody class]) {
+					/* Populate the SKPhysicsBody property's attributes */
+					NSMutableArray *attributes = [self attributesForClass:propertyClass node:[node valueForKey:propertyName]];
+					
+					/* Insert the SKNode's body type property in the first row */
+					[attributes insertObject:[AttributeNode attributeWithName:@"bodyType" node:node type:@"bodyType"] atIndex:0];
+
+					[attributesArray addObject:@{@"name": propertyName,
+												 @"isLeaf": @NO,
+												 @"isEditable": @NO,
+												 @"children":attributes}];
+
 				} else if (propertyClass == [SKShader class]
-						   || propertyClass == [SKPhysicsBody class]
 						   || propertyClass == [SKPhysicsWorld class]) {
 					[attributesArray addObject:@{@"name": propertyName,
 												 @"isLeaf": @NO,
