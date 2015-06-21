@@ -62,7 +62,12 @@
 		case 3:
 			if ([self respondsToSelector:@selector(size)]) {
 				CGSize size = [(id)self size];
-				CGFloat radius = [(id)self size].width / 2;
+
+				/* Find the a minimum radius that resembles the one shown on Xcode */
+				CGFloat minDimension = MIN(size.width, size.height);
+				CGFloat maxDimension = MAX(size.width, size.height);
+				CGFloat radius = 0.5 * MAX(minDimension, M_SQRT1_2 * maxDimension);
+
 				if ([self respondsToSelector:@selector(anchorPoint)]) {
 					CGPoint anchorPoint = [(id)self anchorPoint];
 					CGPoint center = CGPointMake(size.width * (0.5 - anchorPoint.x), size.height * (0.5 - anchorPoint.y));
