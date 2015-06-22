@@ -12,6 +12,7 @@
 		E40813921AC3C45300F54824 /* ValueEditors.xib in Resources */ = {isa = PBXBuildFile; fileRef = E40813901AC3C45300F54824 /* ValueEditors.xib */; };
 		E40813951AC42FFF00F54824 /* ColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = E40813941AC42FFF00F54824 /* ColorWell.m */; };
 		E40965ED1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m in Sources */ = {isa = PBXBuildFile; fileRef = E40965EC1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m */; };
+		E40965F81B3798D000DBEC44 /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = E40965F71B3798D000DBEC44 /* Shader.fsh */; };
 		E4220B2D1ACFF92B00753375 /* Particles.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2B1ACFF92B00753375 /* Particles.sks */; };
 		E4220B2E1ACFF92B00753375 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2C1ACFF92B00753375 /* spark.png */; };
 		E44764CC1B36AFA100B7355F /* SKNode+PhysicsBodyType.m in Sources */ = {isa = PBXBuildFile; fileRef = E44764CB1B36AFA100B7355F /* SKNode+PhysicsBodyType.m */; };
@@ -113,6 +114,7 @@
 		E40813941AC42FFF00F54824 /* ColorWell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorWell.m; sourceTree = "<group>"; };
 		E40965EB1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSOutlineView+TreeExpansion.h"; sourceTree = "<group>"; };
 		E40965EC1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOutlineView+TreeExpansion.m"; sourceTree = "<group>"; };
+		E40965F71B3798D000DBEC44 /* Shader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
 		E4220B2B1ACFF92B00753375 /* Particles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Particles.sks; sourceTree = "<group>"; };
 		E4220B2C1ACFF92B00753375 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		E44764CA1B36AFA100B7355F /* SKNode+PhysicsBodyType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKNode+PhysicsBodyType.h"; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 				E4A1779E1B327B0F005A8692 /* SpaceshipTest.png */,
 				E4220B2C1ACFF92B00753375 /* spark.png */,
 				E486C0841B35F2F900276F20 /* normal.png */,
+				E40965F71B3798D000DBEC44 /* Shader.fsh */,
 				E4B594891B140D5000D45A33 /* PlugIns */,
 				E4ABDB571AB3933900AAE82E /* Images.xcassets */,
 				E48286621AE7D74F00C51F8D /* art.scnassets */,
@@ -505,6 +508,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E40965F81B3798D000DBEC44 /* Shader.fsh in Resources */,
 				E4220B2D1ACFF92B00753375 /* Particles.sks in Resources */,
 				E4A1779F1B327B0F005A8692 /* Spaceship.png in Resources */,
 				E4ABDB561AB3933900AAE82E /* GameScene.sks in Resources */,
