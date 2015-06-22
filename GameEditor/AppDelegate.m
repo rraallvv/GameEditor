@@ -568,11 +568,11 @@
 			} else if ([propertyName isEqualToString:@"bodyType"]) {
 				/* Do nothing, the body type will be added with the SKPhysicsNode property */
 
-			} else if ([propertyName isEqualToString:@"blendMode"]) {
-				[attributesArray addObject:[AttributeNode attributeWithName:@"blendMode" node:node type:@"blendMode"]];
-
-			} else if ([propertyName isEqualToString:@"scaleMode"]) {
-				[attributesArray addObject:[AttributeNode attributeWithName:@"scaleMode" node:node type:@"scaleMode"]];
+			} else if ([propertyName isEqualToString:@"blendMode"]
+					   || [propertyName isEqualToString:@"scaleMode"]
+					   || [propertyName isEqualToString:@"lineCap"]
+					   || [propertyName isEqualToString:@"lineJoin"]) {
+				[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyName]];
 
 			} else {
 

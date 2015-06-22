@@ -43,7 +43,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="EwJ-Xd-rqh"/>
                 <outlet property="textField" destination="q6s-Ku-JU0" id="yzm-dT-NHS"/>
             </connections>
-            <point key="canvasLocation" x="237" y="207"/>
+            <point key="canvasLocation" x="156" y="157"/>
         </tableCellView>
         <tableCellView identifier="\{([^=]+=)?(ff|dd)\}" id="GbV-qK-Vp4" userLabel="2 floats" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="30"/>
@@ -125,7 +125,7 @@
             <connections>
                 <outlet property="textField" destination="jzj-QV-oE2" id="MVN-XN-UTj"/>
             </connections>
-            <point key="canvasLocation" x="237" y="385"/>
+            <point key="canvasLocation" x="156" y="335"/>
         </tableCellView>
         <viewController id="Nuf-d3-4cB" userLabel="Popover View Controller">
             <connections>
@@ -252,7 +252,7 @@
             <connections>
                 <outlet property="textField" destination="NWX-Yo-FRT" id="7dm-Tb-boG"/>
             </connections>
-            <point key="canvasLocation" x="237" y="485"/>
+            <point key="canvasLocation" x="156" y="435"/>
         </tableCellView>
         <tableCellView identifier="\{([^=]+=)?\{([^=]+=)?(ff|dd)\}\{([^=]+=)?(ff|dd)\}\}" id="dHV-ME-csG" userLabel="4 floats" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="64"/>
@@ -404,7 +404,7 @@
             <connections>
                 <outlet property="textField" destination="JUl-PQ-ZNn" id="jwk-0Z-vp2"/>
             </connections>
-            <point key="canvasLocation" x="527" y="231"/>
+            <point key="canvasLocation" x="446" y="181"/>
         </tableCellView>
         <tableCellView identifier="c" id="toe-NG-Bn9" userLabel="check">
             <rect key="frame" x="0.0" y="0.0" width="172" height="19"/>
@@ -430,7 +430,7 @@
                 <constraint firstAttribute="trailing" secondItem="YBc-RN-b4y" secondAttribute="trailing" id="WAZ-eH-0YJ"/>
                 <constraint firstItem="YBc-RN-b4y" firstAttribute="leading" secondItem="toe-NG-Bn9" secondAttribute="leading" id="WrL-bb-Q9Q"/>
             </constraints>
-            <point key="canvasLocation" x="237" y="289.5"/>
+            <point key="canvasLocation" x="156" y="239.5"/>
         </tableCellView>
         <tableCellView identifier="@&quot;NSColor&quot;" id="Nhn-ML-Yi0" userLabel="color">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -453,7 +453,7 @@
                 <constraint firstItem="7B1-9n-jPd" firstAttribute="top" secondItem="Nhn-ML-Yi0" secondAttribute="top" id="jpO-mr-ASZ"/>
                 <constraint firstItem="7B1-9n-jPd" firstAttribute="leading" secondItem="Nhn-ML-Yi0" secondAttribute="leading" id="rOd-Rc-tv7"/>
             </constraints>
-            <point key="canvasLocation" x="527" y="328"/>
+            <point key="canvasLocation" x="446" y="278"/>
         </tableCellView>
         <tableCellView identifier="[islqISLQ]" id="a61-EY-A6P" userLabel="integer" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -492,7 +492,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="zc9-lW-e7P"/>
                 <outlet property="textField" destination="tJ6-rj-LJu" id="Zlk-Bu-Yf1"/>
             </connections>
-            <point key="canvasLocation" x="527" y="410"/>
+            <point key="canvasLocation" x="446" y="360"/>
         </tableCellView>
         <customView id="dob-0O-PCo" userLabel="Error">
             <rect key="frame" x="0.0" y="0.0" width="100" height="54"/>
@@ -513,7 +513,7 @@
                 <constraint firstAttribute="bottom" secondItem="glV-MS-jQN" secondAttribute="bottom" constant="20" symbolic="YES" id="II6-d8-FXe"/>
                 <constraint firstItem="glV-MS-jQN" firstAttribute="top" secondItem="dob-0O-PCo" secondAttribute="top" constant="20" symbolic="YES" id="jsN-Nn-KA1"/>
             </constraints>
-            <point key="canvasLocation" x="527" y="502"/>
+            <point key="canvasLocation" x="446" y="452"/>
         </customView>
         <tableCellView identifier="@&quot;NSString&quot;" id="AvU-FU-guj" userLabel="string" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -542,7 +542,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="y2J-uA-XqQ"/>
                 <outlet property="textField" destination="8Dg-tM-wS7" id="w4g-3F-6fZ"/>
             </connections>
-            <point key="canvasLocation" x="237" y="569"/>
+            <point key="canvasLocation" x="156" y="519"/>
         </tableCellView>
         <tableCellView identifier="@&quot;SKTexture&quot;" id="faw-Lb-7vi" userLabel="texture" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -575,7 +575,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="OUX-gj-gKS"/>
                 <outlet property="textField" destination="YGO-GX-b4J" id="XXo-Ql-iqG"/>
             </connections>
-            <point key="canvasLocation" x="527" y="604"/>
+            <point key="canvasLocation" x="446" y="554"/>
         </tableCellView>
         <tableCellView identifier="bodyType" id="yj4-cN-yD2" userLabel="bodyType" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -626,7 +626,7 @@
             <connections>
                 <outlet property="_popover" destination="ch3-SY-J2e" id="DQK-wt-PaE"/>
             </connections>
-            <point key="canvasLocation" x="237" y="656"/>
+            <point key="canvasLocation" x="156" y="606"/>
         </tableCellView>
         <tableCellView identifier="blendMode" id="5VF-hD-7yS" userLabel="blendMode" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -675,7 +675,7 @@
             <connections>
                 <outlet property="_popover" destination="ch3-SY-J2e" id="gl6-vb-SFv"/>
             </connections>
-            <point key="canvasLocation" x="237" y="743"/>
+            <point key="canvasLocation" x="156" y="693"/>
         </tableCellView>
         <tableCellView identifier="scaleMode" id="QB0-is-Xf8" userLabel="scaleMode" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -686,7 +686,7 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="19" id="2ED-Dx-dkt"/>
                     </constraints>
-                    <popUpButtonCell key="cell" type="push" title="Resize Fill" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="3" imageScaling="proportionallyDown" inset="2" selectedItem="DMV-r5-Bqf" id="0tS-sf-fd7">
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="0tS-sf-fd7">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" id="TtO-xP-vQj">
@@ -696,7 +696,7 @@
                                 </menuItem>
                                 <menuItem title="Aspect Fill" tag="1" id="2B8-yi-9RP"/>
                                 <menuItem title="Aspect Fit" tag="2" id="bRv-1D-98h"/>
-                                <menuItem title="Resize Fill" state="on" tag="3" id="DMV-r5-Bqf"/>
+                                <menuItem title="Resize Fill" tag="3" id="DMV-r5-Bqf"/>
                             </items>
                         </menu>
                     </popUpButtonCell>
@@ -714,7 +714,79 @@
             <connections>
                 <outlet property="_popover" destination="ch3-SY-J2e" id="lVf-11-kQx"/>
             </connections>
-            <point key="canvasLocation" x="527" y="710"/>
+            <point key="canvasLocation" x="446" y="643"/>
+        </tableCellView>
+        <tableCellView identifier="lineJoin" id="ozb-nY-yNa" userLabel="lineJoin" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vbv-dQ-bzz">
+                    <rect key="frame" x="-3" y="-2" width="178" height="23"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="3nV-Jm-QHr"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="z7c-Ab-290">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="CYW-L2-wMK">
+                            <items>
+                                <menuItem title="Miter" id="mkL-Ac-dep">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="Round" tag="1" id="Raf-TV-hgh"/>
+                                <menuItem title="Bevel" tag="2" id="C6D-Lh-zsN"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="ozb-nY-yNa" name="enabled" keyPath="objectValue.isEditable" id="xqM-ld-hSx"/>
+                        <binding destination="ozb-nY-yNa" name="selectedTag" keyPath="objectValue.value" id="iS4-Oc-hOf"/>
+                    </connections>
+                </popUpButton>
+            </subviews>
+            <constraints>
+                <constraint firstItem="vbv-dQ-bzz" firstAttribute="leading" secondItem="ozb-nY-yNa" secondAttribute="leading" id="3zd-pw-EsX"/>
+                <constraint firstItem="vbv-dQ-bzz" firstAttribute="top" secondItem="ozb-nY-yNa" secondAttribute="top" id="BYk-5t-qXu"/>
+                <constraint firstAttribute="trailing" secondItem="vbv-dQ-bzz" secondAttribute="trailing" id="hfb-hw-rw5"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="Hfc-Wx-9Iw"/>
+            </connections>
+            <point key="canvasLocation" x="156" y="778"/>
+        </tableCellView>
+        <userDefaultsController representsSharedInstance="YES" id="kn1-vi-Teg"/>
+        <tableCellView identifier="lineCap" id="3py-Sl-wNM" userLabel="lineCap" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YJb-Zt-36j">
+                    <rect key="frame" x="-3" y="-2" width="178" height="23"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="m7F-6x-b9v"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="push" title="Square" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" tag="2" imageScaling="proportionallyDown" inset="2" selectedItem="fnX-Id-h5Z" id="iig-MS-meZ">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="xE2-bB-US9">
+                            <items>
+                                <menuItem title="Butt" id="ref-CF-D9h"/>
+                                <menuItem title="Round" tag="1" id="DeU-bC-UKa"/>
+                                <menuItem title="Square" tag="2" id="fnX-Id-h5Z"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="3py-Sl-wNM" name="enabled" keyPath="objectValue.isEditable" id="4OR-fN-JbL"/>
+                        <binding destination="3py-Sl-wNM" name="selectedTag" keyPath="objectValue.value" id="s8W-oL-KzE"/>
+                    </connections>
+                </popUpButton>
+            </subviews>
+            <constraints>
+                <constraint firstItem="YJb-Zt-36j" firstAttribute="leading" secondItem="3py-Sl-wNM" secondAttribute="leading" id="7di-XC-1Hf"/>
+                <constraint firstAttribute="trailing" secondItem="YJb-Zt-36j" secondAttribute="trailing" id="FbM-sn-8i7"/>
+                <constraint firstItem="YJb-Zt-36j" firstAttribute="top" secondItem="3py-Sl-wNM" secondAttribute="top" id="djs-cI-Wdv"/>
+            </constraints>
+            <point key="canvasLocation" x="446" y="731"/>
         </tableCellView>
     </objects>
     <resources>
