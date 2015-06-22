@@ -388,10 +388,9 @@
 			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
 			NSString *propertyAttributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
 
-            //BOOL editable = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
-			BOOL editable = [propertyAttributes rangeOfString:@"^[^@]*,R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
-
-			if (!editable)
+			/* Skip read-only attributes that are not class instances */
+			BOOL isReadonlyNonClass = [propertyAttributes rangeOfString:@"^[^@]*,R(,|$)" options:NSRegularExpressionSearch].location != NSNotFound;
+			if (isReadonlyNonClass)
 				continue;
 
 			NSString *propertyName = [NSString stringWithUTF8String:property_getName(properties[i])];
@@ -608,8 +607,13 @@
 					[attributesArray addObject:[AttributeNode  attributeForRotationAngleWithName:propertyName node:node]];
 
 				} else {
+					/* Skip remaining read-only attributes */
+					BOOL isReadOnly = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location != NSNotFound;
+					if (isReadOnly)
+						continue;
+
 					NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
-					editable = ![propertyType isEqualToString:@""] && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
+					BOOL editable = ![propertyType isEqualToString:@""] && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
 
 					AttributeNode *attribute;
 
