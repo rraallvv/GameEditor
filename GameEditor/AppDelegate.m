@@ -568,6 +568,9 @@
 			} else if ([propertyName isEqualToString:@"bodyType"]) {
 				/* Do nothing, the body type will be added with the SKPhysicsNode property */
 
+			} else if ([propertyName isEqualToString:@"blendMode"]) {
+				[attributesArray addObject:[AttributeNode attributeWithName:@"blendMode" node:node type:@"blendMode"]];
+
 			} else {
 
 				Class propertyClass = [propertyType classType];
