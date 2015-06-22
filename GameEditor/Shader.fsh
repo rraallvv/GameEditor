@@ -1,3 +1,7 @@
+/*
+ this is a comment
+ */
+
 void main()
 {
 	float currTime = u_time;
@@ -12,3 +16,4 @@ void main()
 
 	gl_FragColor = vec4(posColor * illu * 2., illu * 2.) * v_color_mix.a;
 }
+	

@@ -596,8 +596,27 @@
 					/* Add the property's attributes */
 					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node children:attributes]];
 
-				} else if (propertyClass == [SKShader class]
-						   || propertyClass == [SKPhysicsWorld class]) {
+				} else if (propertyClass == [SKShader class]) {
+#if 0 // TODO: Remove this snippet
+					NSString *source = [[node valueForKey:propertyName] source];
+					NSString *file = [NSString stringWithContentsOfFile:@"/Users/rhodylugo/Desktop/GameEditor/GameEditor/Shader.fsh" encoding:NSUTF8StringEncoding error:nil];
+					if (source && file) {
+						NSLog(@">>>%lu %lu", source.length, file.length);
+						NSLog(@">>>%d %d", [source substringWithRange:NSMakeRange(source.length-1, 1)].UTF8String[0], [file substringWithRange:NSMakeRange(file.length-1, 1)].UTF8String[0]);
+						for (int i=0; i<source.length && i<file.length; ++i) {
+							if (![[source substringWithRange:NSMakeRange(i, 1)] isEqualToString:[file substringWithRange:NSMakeRange(i, 1)]]) {
+								NSLog(@"");
+							}
+						}
+						NSLog(@">>>%d %lu %lu", [source isEqualToString:file], [source hash], [file hash]);
+					}
+#endif
+					[attributesArray addObject:@{@"name": propertyName,
+												 @"isLeaf": @NO,
+												 @"isEditable": @NO,
+												 @"children":[self attributesForClass:propertyClass node:[node valueForKey:propertyName]]}];
+
+				} else if (propertyClass == [SKPhysicsWorld class]) {
 					[attributesArray addObject:@{@"name": propertyName,
 												 @"isLeaf": @NO,
 												 @"isEditable": @NO,
