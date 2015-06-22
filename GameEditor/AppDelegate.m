@@ -571,6 +571,9 @@
 			} else if ([propertyName isEqualToString:@"blendMode"]) {
 				[attributesArray addObject:[AttributeNode attributeWithName:@"blendMode" node:node type:@"blendMode"]];
 
+			} else if ([propertyName isEqualToString:@"scaleMode"]) {
+				[attributesArray addObject:[AttributeNode attributeWithName:@"scaleMode" node:node type:@"scaleMode"]];
+
 			} else {
 
 				Class propertyClass = [propertyType classType];
