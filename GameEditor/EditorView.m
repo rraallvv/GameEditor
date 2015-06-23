@@ -912,15 +912,18 @@ anchorPoint = _anchorPoint;
 		CGPoint locationInScene = [self convertPoint:theEvent.locationInWindow fromView:nil];
 
 		if (!_dragging) {
-			if (_node) {
-				/* Find the handle at the mouse position */
-				_manipulatedHandle = [self manipulatedHandleWithPoint:locationInScene];
-				_manipulatingHandle = _manipulatedHandle != MaxHandle;
+			/* Ensure that there is something selected */
+			if (!_node || _node == _scene) {
+				[self selectNodeAtPoint:locationInScene];
+			}
 
-				/* Pick another node if the current node does not contain the mouse position */
-				if (!_manipulatingHandle && ![self node:_node containsPoint:locationInScene]) {
-					[self selectNodeAtPoint:locationInScene];
-				}
+			/* Find the handle at the mouse position */
+			_manipulatedHandle = [self manipulatedHandleWithPoint:locationInScene];
+			_manipulatingHandle = _manipulatedHandle != MaxHandle;
+
+			/* Pick another node if the current node does not contain the mouse position */
+			if (!_manipulatingHandle && ![self node:_node containsPoint:locationInScene]) {
+				[self selectNodeAtPoint:locationInScene];
 			}
 
 			if (_node == _scene) {
