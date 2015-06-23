@@ -142,6 +142,11 @@
 	NSTrackingArea *_trackingArea;
 }
 
+- (void)viewDidMoveToSuperview {
+	/* Force call to set frame to create the show/hide button in all collapsible rows */
+	[self setFrame:self.frame];
+}
+
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
 	[self.backgroundColor set];
 	NSRectFill(dirtyRect);
@@ -233,9 +238,10 @@
 
 	AttributesView *outlineView = (AttributesView *)[self superview];
 	NSInteger row = [outlineView rowForView:self];
-	NSUInteger indexPathLength = [[[outlineView itemAtRow:row] indexPath] length];
+	id item = [outlineView itemAtRow:row];
+	BOOL isCollapsible = [[[item representedObject] valueForKey:@"isCollapsible"] boolValue];
 
-	if (self.isGroupRowStyle && indexPathLength == 1) {
+	if (self.isGroupRowStyle && isCollapsible) {
 		if (!_hideGroupButton) {
 
 			NSBundle *bundle = [NSBundle bundleForClass:[NSApplication class]];
