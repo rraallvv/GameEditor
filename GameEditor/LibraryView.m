@@ -75,6 +75,7 @@ IB_DESIGNABLE
 @property (assign) IBInspectable BOOL topBorder;
 @property (assign) IBInspectable BOOL bottomBorder;
 @property (assign) IBInspectable BOOL draggable;
+@property (copy) IBInspectable NSColor *backgroundColor;
 @end
 
 @implementation LibraryPanelView {
@@ -87,7 +88,7 @@ IB_DESIGNABLE
 
 - (void)drawRect:(NSRect)dirtyRect {
 	NSRect rect = [self bounds];
-	[[NSColor whiteColor] set];
+	[self.backgroundColor set];
 	NSRectFill(rect);
 
 	NSBezierPath *path = [NSBezierPath bezierPath];
