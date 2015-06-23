@@ -573,8 +573,13 @@
 
 			} else if ([propertyName isEqualToString:@"scaleMode"]
 					   || [propertyName isEqualToString:@"lineCap"]
-					   || [propertyName isEqualToString:@"lineJoin"]) {
+					   || [propertyName isEqualToString:@"lineJoin"]
+					   || [propertyName isEqualToString:@"verticalAlignmentMode"]
+					   || [propertyName isEqualToString:@"horizontalAlignmentMode"]) {
 				[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyName]];
+
+			} else if ([propertyName isEqualToString:@"fontName"]) {
+				NSLog(@"%@", [node valueForKey:propertyName]);
 
 			} else {
 

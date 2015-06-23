@@ -821,6 +821,78 @@
             </connections>
             <point key="canvasLocation" x="446" y="554"/>
         </tableCellView>
+        <tableCellView identifier="verticalAlignmentMode" id="Shj-33-S9Y" userLabel="verticalAlignmentMode" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EqG-O8-dtb">
+                    <rect key="frame" x="-3" y="-2" width="178" height="23"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="fl6-n4-P5J"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="Gtg-Bg-TFR">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="dCU-Vd-37N">
+                            <items>
+                                <menuItem title="Baseline" id="LaS-DE-rvu"/>
+                                <menuItem title="Center" tag="1" id="WVA-3N-cKb"/>
+                                <menuItem title="Top" tag="2" id="jB8-Bg-UHy"/>
+                                <menuItem title="Bottom" tag="3" id="Ftx-uj-eo6"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="Shj-33-S9Y" name="enabled" keyPath="objectValue.isEditable" id="RW3-4g-fIs"/>
+                        <binding destination="Shj-33-S9Y" name="selectedTag" keyPath="objectValue.value" id="E0Y-OD-Mop"/>
+                    </connections>
+                </popUpButton>
+            </subviews>
+            <constraints>
+                <constraint firstItem="EqG-O8-dtb" firstAttribute="leading" secondItem="Shj-33-S9Y" secondAttribute="leading" id="3ih-D1-62M"/>
+                <constraint firstAttribute="trailing" secondItem="EqG-O8-dtb" secondAttribute="trailing" id="gTj-LS-J4x"/>
+                <constraint firstItem="EqG-O8-dtb" firstAttribute="top" secondItem="Shj-33-S9Y" secondAttribute="top" id="iNB-KB-rFw"/>
+            </constraints>
+            <point key="canvasLocation" x="446" y="731"/>
+        </tableCellView>
+        <tableCellView identifier="horizontalAlignmentMode" id="hK1-Wq-ikI" userLabel="horizontalAlignmentMode" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pIY-8m-5AR">
+                    <rect key="frame" x="-3" y="-2" width="178" height="23"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="IGH-y3-gqQ"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="qdi-2H-HZl">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="Bhf-W1-ymW">
+                            <items>
+                                <menuItem title="Center" id="C5E-aY-izU" userLabel="Center">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="Left" tag="1" id="6Un-8a-cbO"/>
+                                <menuItem title="Right" tag="2" id="c41-aW-Nhz"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="hK1-Wq-ikI" name="enabled" keyPath="objectValue.isEditable" id="gOm-y5-Xnb"/>
+                        <binding destination="hK1-Wq-ikI" name="selectedTag" keyPath="objectValue.value" id="8Q9-wd-uzQ"/>
+                    </connections>
+                </popUpButton>
+            </subviews>
+            <constraints>
+                <constraint firstItem="pIY-8m-5AR" firstAttribute="top" secondItem="hK1-Wq-ikI" secondAttribute="top" id="VZD-sg-ogt"/>
+                <constraint firstAttribute="trailing" secondItem="pIY-8m-5AR" secondAttribute="trailing" id="bje-vk-1NM"/>
+                <constraint firstItem="pIY-8m-5AR" firstAttribute="leading" secondItem="hK1-Wq-ikI" secondAttribute="leading" id="cqe-hF-hHG"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="WE8-kA-CG4"/>
+            </connections>
+            <point key="canvasLocation" x="446" y="808"/>
+        </tableCellView>
     </objects>
     <resources>
         <image name="AltDecreaseStepper" width="11" height="13"/>
