@@ -600,7 +600,7 @@
 
 				if ([propertyType isEqualToEncodedType:@encode(NSMutableDictionary)]) {
 					/* Add the property's name */
-					[attributesArray addObject:@{@"name": propertyName,
+					[userDictionaries addObject:@{@"name": propertyName,
 												 @"type": @"expandable",
 												 @"isLeaf": @NO,
 												 @"isEditable": @NO,
@@ -610,9 +610,6 @@
 																  @"isLeaf": @NO,
 																  @"isEditable": @NO}]
 												 }];
-
-					/* Add the property's table of values */
-					//[attributesArray addObject:];
 
 				} else if ([propertyType isEqualToEncodedType:@encode(NSString)]) {
 					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyType]];
@@ -714,6 +711,8 @@
 		}
 		free(properties);
 	}
+
+	[attributesArray addObjectsFromArray:userDictionaries];
 
 	return attributesArray;
 }
