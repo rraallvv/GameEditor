@@ -568,8 +568,10 @@
 			} else if ([propertyName isEqualToString:@"bodyType"]) {
 				/* Do nothing, the body type will be added with the SKPhysicsNode property */
 
-			} else if ([propertyName isEqualToString:@"blendMode"]
-					   || [propertyName isEqualToString:@"scaleMode"]
+			} else if ([propertyName rangeOfString:@"[bB]lendMode$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:@"blendMode"]];
+
+			} else if ([propertyName isEqualToString:@"scaleMode"]
 					   || [propertyName isEqualToString:@"lineCap"]
 					   || [propertyName isEqualToString:@"lineJoin"]) {
 				[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyName]];
