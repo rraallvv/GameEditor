@@ -764,7 +764,7 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="19" id="m7F-6x-b9v"/>
                     </constraints>
-                    <popUpButtonCell key="cell" type="push" title="Square" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" tag="2" imageScaling="proportionallyDown" inset="2" selectedItem="fnX-Id-h5Z" id="iig-MS-meZ">
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="iig-MS-meZ">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" id="xE2-bB-US9">
@@ -787,6 +787,39 @@
                 <constraint firstItem="YJb-Zt-36j" firstAttribute="top" secondItem="3py-Sl-wNM" secondAttribute="top" id="djs-cI-Wdv"/>
             </constraints>
             <point key="canvasLocation" x="446" y="731"/>
+        </tableCellView>
+        <tableCellView identifier="@&quot;SKShader&quot;" id="QFc-dU-G1D" userLabel="shader" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0oe-fg-PVD">
+                    <rect key="frame" x="0.0" y="-3" width="175" height="24"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="e2U-64-fvr"/>
+                    </constraints>
+                    <comboBoxCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" numberOfVisibleItems="5" id="Muz-Co-3lm" customClass="ComboBoxCell">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </comboBoxCell>
+                    <connections>
+                        <binding destination="-3" name="content" keyPath="delegate.shadersLibrary" id="Csu-Ab-nRl"/>
+                        <binding destination="QFc-dU-G1D" name="editable" keyPath="objectValue.isEditable" id="DGO-Lp-teK"/>
+                        <binding destination="QFc-dU-G1D" name="enabled" keyPath="objectValue.isEditable" previousBinding="DGO-Lp-teK" id="lpy-NY-oX7"/>
+                        <binding destination="QFc-dU-G1D" name="value" keyPath="objectValue.value" previousBinding="Csu-Ab-nRl" id="W6m-YA-ab5"/>
+                    </connections>
+                </comboBox>
+            </subviews>
+            <constraints>
+                <constraint firstItem="0oe-fg-PVD" firstAttribute="top" secondItem="QFc-dU-G1D" secondAttribute="top" id="UoG-Ct-2t3"/>
+                <constraint firstAttribute="trailing" secondItem="0oe-fg-PVD" secondAttribute="trailing" id="czJ-re-hO3"/>
+                <constraint firstItem="0oe-fg-PVD" firstAttribute="leading" secondItem="QFc-dU-G1D" secondAttribute="leading" id="jGz-oo-9gn"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="WxW-ma-Nyv"/>
+                <outlet property="textField" destination="0oe-fg-PVD" id="iih-qB-f2m"/>
+            </connections>
+            <point key="canvasLocation" x="446" y="554"/>
         </tableCellView>
     </objects>
     <resources>

@@ -603,24 +603,12 @@
 					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node children:attributes]];
 
 				} else if (propertyClass == [SKShader class]) {
-#if 0 // TODO: Remove this snippet
-					NSString *source = [[node valueForKey:propertyName] source];
-					NSString *file = [NSString stringWithContentsOfFile:@"/Users/rhodylugo/Desktop/GameEditor/GameEditor/Shader.fsh" encoding:NSUTF8StringEncoding error:nil];
-					if (source && file) {
-						NSLog(@">>>%lu %lu", source.length, file.length);
-						NSLog(@">>>%d %d", [source substringWithRange:NSMakeRange(source.length-1, 1)].UTF8String[0], [file substringWithRange:NSMakeRange(file.length-1, 1)].UTF8String[0]);
-						for (int i=0; i<source.length && i<file.length; ++i) {
-							if (![[source substringWithRange:NSMakeRange(i, 1)] isEqualToString:[file substringWithRange:NSMakeRange(i, 1)]]) {
-								NSLog(@"");
-							}
-						}
-						NSLog(@">>>%d %lu %lu", [source isEqualToString:file], [source hash], [file hash]);
-					}
-#endif
-					[attributesArray addObject:@{@"name": propertyName,
-												 @"isLeaf": @NO,
-												 @"isEditable": @NO,
-												 @"children":[self attributesForClass:propertyClass node:[node valueForKey:propertyName]]}];
+					AttributeNode *attribute = [AttributeNode attributeWithName:propertyName
+																		   node:node
+																		   type:propertyType
+																	  formatter:nil
+															   valueTransformer:[ShaderTransformer transformer]];
+					[attributesArray addObject:attribute];
 
 				} else if (propertyClass == [SKPhysicsWorld class]) {
 					[attributesArray addObject:@{@"name": propertyName,
@@ -1137,6 +1125,14 @@
 
 - (NSArray *)texturesLibrary {
 	return [_resourcesLibraryItems valueForKey:@"name"];
+}
+
+- (NSArray *)shadersLibrary {
+	NSMutableArray *result = [NSMutableArray array];
+	for (NSString *path in [[NSBundle mainBundle] pathsForResourcesOfType:@"fsh"]) {
+		[result addObject:[path lastPathComponent]];
+	}
+	return result;
 }
 
 #pragma mark Editor Dragging Destination

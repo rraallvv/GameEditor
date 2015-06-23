@@ -26,6 +26,23 @@
 #import "AttributeNode.h"
 #import <objc/runtime.h>
 
+#pragma mark NSBundle
+
+@implementation NSBundle (ResourcesPath)
+
+- (NSArray *) pathsForResourcesOfType:(NSString *)ext {
+	NSMutableArray *result = [NSMutableArray array];
+	NSString *mainbundleResourcesPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/"];
+	for (NSString *path in [[NSBundle mainBundle] pathsForResourcesOfType:@"fsh" inDirectory:nil]) {
+		if (![path hasPrefix:mainbundleResourcesPath]) {
+			[result addObject:path];
+		}
+	}
+	return result;
+}
+
+@end
+
 #pragma mark NSNumber
 
 @implementation NSNumber (CreatingFromArbitraryTypes)
@@ -367,6 +384,36 @@
 							}
 							return nil;
 						}];
+}
+
+@end
+
+@implementation ShaderTransformer
+
++ (void)initialize {
+	[self initializeWithTransformedValueClass:[SKShader class]
+				  allowsReverseTransformation:YES
+						transformedValueBlock:^id(SKShader *value){
+							for (NSString *path in [[NSBundle mainBundle] pathsForResourcesOfType:@"fsh"]) {
+								NSString *source = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+								if ([[value source] hash] == [source hash]) {
+									return path.lastPathComponent;
+								}
+							}
+							return nil;
+						}
+				 reverseTransformedValueBlock:^id(NSString *value){
+					 if (value) {
+						 for (NSString *path in [[NSBundle mainBundle] pathsForResourcesOfType:@"fsh"]) {
+							 if ([[path lastPathComponent] isEqualToString:value]) {
+								 NSString *source = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+								 return [SKShader shaderWithSource:source];
+							 }
+						 }
+						 return nil;
+					 }
+					 return nil;
+				 }];
 }
 
 @end
