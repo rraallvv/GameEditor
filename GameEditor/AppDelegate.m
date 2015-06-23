@@ -597,6 +597,7 @@
 												 @"type": @"expandable",
 												 @"isLeaf": @NO,
 												 @"isEditable": @NO,
+												 @"isCollapsible": @YES,
 												 @"children": @[@{@"name": propertyName,
 																  @"type": propertyType,
 																  @"isLeaf": @NO,
