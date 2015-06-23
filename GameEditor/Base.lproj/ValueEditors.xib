@@ -404,7 +404,7 @@
             <connections>
                 <outlet property="textField" destination="JUl-PQ-ZNn" id="jwk-0Z-vp2"/>
             </connections>
-            <point key="canvasLocation" x="445" y="168"/>
+            <point key="canvasLocation" x="442" y="168"/>
         </tableCellView>
         <tableCellView identifier="c" id="toe-NG-Bn9" userLabel="check">
             <rect key="frame" x="0.0" y="0.0" width="172" height="19"/>
@@ -453,7 +453,7 @@
                 <constraint firstItem="7B1-9n-jPd" firstAttribute="top" secondItem="Nhn-ML-Yi0" secondAttribute="top" id="jpO-mr-ASZ"/>
                 <constraint firstItem="7B1-9n-jPd" firstAttribute="leading" secondItem="Nhn-ML-Yi0" secondAttribute="leading" id="rOd-Rc-tv7"/>
             </constraints>
-            <point key="canvasLocation" x="445" y="262"/>
+            <point key="canvasLocation" x="442" y="262"/>
         </tableCellView>
         <tableCellView identifier="[islqISLQ]" id="a61-EY-A6P" userLabel="integer" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -492,7 +492,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="zc9-lW-e7P"/>
                 <outlet property="textField" destination="tJ6-rj-LJu" id="Zlk-Bu-Yf1"/>
             </connections>
-            <point key="canvasLocation" x="445" y="335"/>
+            <point key="canvasLocation" x="442" y="335"/>
         </tableCellView>
         <customView id="dob-0O-PCo" userLabel="Error">
             <rect key="frame" x="0.0" y="0.0" width="100" height="54"/>
@@ -513,7 +513,7 @@
                 <constraint firstAttribute="bottom" secondItem="glV-MS-jQN" secondAttribute="bottom" constant="20" symbolic="YES" id="II6-d8-FXe"/>
                 <constraint firstItem="glV-MS-jQN" firstAttribute="top" secondItem="dob-0O-PCo" secondAttribute="top" constant="20" symbolic="YES" id="jsN-Nn-KA1"/>
             </constraints>
-            <point key="canvasLocation" x="445" y="427"/>
+            <point key="canvasLocation" x="442" y="427"/>
         </customView>
         <tableCellView identifier="@&quot;NSString&quot;" id="AvU-FU-guj" userLabel="string" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -714,7 +714,7 @@
             <connections>
                 <outlet property="_popover" destination="ch3-SY-J2e" id="lVf-11-kQx"/>
             </connections>
-            <point key="canvasLocation" x="445" y="587"/>
+            <point key="canvasLocation" x="442" y="587"/>
         </tableCellView>
         <tableCellView identifier="lineJoin" id="ozb-nY-yNa" userLabel="lineJoin" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -786,7 +786,7 @@
                 <constraint firstAttribute="trailing" secondItem="YJb-Zt-36j" secondAttribute="trailing" id="FbM-sn-8i7"/>
                 <constraint firstItem="YJb-Zt-36j" firstAttribute="top" secondItem="3py-Sl-wNM" secondAttribute="top" id="djs-cI-Wdv"/>
             </constraints>
-            <point key="canvasLocation" x="445" y="723"/>
+            <point key="canvasLocation" x="442" y="723"/>
         </tableCellView>
         <tableCellView identifier="@&quot;SKShader&quot;" id="QFc-dU-G1D" userLabel="shader" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -819,7 +819,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="WxW-ma-Nyv"/>
                 <outlet property="textField" destination="0oe-fg-PVD" id="iih-qB-f2m"/>
             </connections>
-            <point key="canvasLocation" x="445" y="515"/>
+            <point key="canvasLocation" x="442" y="515"/>
         </tableCellView>
         <tableCellView identifier="verticalAlignmentMode" id="Shj-33-S9Y" userLabel="verticalAlignmentMode" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -891,7 +891,7 @@
             <connections>
                 <outlet property="_popover" destination="ch3-SY-J2e" id="WE8-kA-CG4"/>
             </connections>
-            <point key="canvasLocation" x="445" y="655"/>
+            <point key="canvasLocation" x="442" y="655"/>
         </tableCellView>
         <customObject id="7zt-RG-IFl" customClass="NSFontManager"/>
         <tableCellView identifier="fontName" id="Bgf-oe-RxG" userLabel="fontName" customClass="TableCellView">
@@ -925,7 +925,22 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="1LI-Gy-3BA"/>
                 <outlet property="textField" destination="mDf-Ad-VpK" id="r8W-K5-zqz"/>
             </connections>
-            <point key="canvasLocation" x="445" y="794"/>
+            <point key="canvasLocation" x="442" y="794"/>
+        </tableCellView>
+        <tableCellView identifier="@&quot;NSMutableDictionary&quot;" id="pGv-Ji-A5t">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="97"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Ww-cm-9DL">
+                    <rect key="frame" x="16" y="34" width="141" height="28"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Test Test Test" id="TTz-Ma-NAO">
+                        <font key="font" metaFont="system" size="23"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <point key="canvasLocation" x="728" y="184.5"/>
         </tableCellView>
     </objects>
     <resources>
