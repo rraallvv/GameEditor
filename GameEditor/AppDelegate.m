@@ -391,6 +391,8 @@
 	BOOL hasParticleColorBlue = NO;
 	BOOL hasParticleColorAlpha = NO;
 
+	NSMutableArray *userDictionaries = [NSMutableArray array];
+
 	if (count) {
 		for (unsigned int i = 0; i < count; i++) {
 			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
@@ -402,6 +404,11 @@
 				continue;
 
 			NSString *propertyName = [NSString stringWithUTF8String:property_getName(properties[i])];
+
+			BOOL isPrivateProperty = [propertyName rangeOfString:@"^_" options:NSRegularExpressionSearch].location != NSNotFound;
+			if (isPrivateProperty)
+				continue;
+
 			NSString *propertyType = [[propertyAttributes componentsSeparatedByString:@","] firstObject];
 
 			if ([node isKindOfClass:[SKScene class]]
