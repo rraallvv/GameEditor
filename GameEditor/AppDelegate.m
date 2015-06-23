@@ -285,7 +285,9 @@
 		NSString *name = [[item representedObject] valueForKey:@"name"];
 		_attributesViewExpansionInfo[name] = [NSNumber numberWithBool:[_attributesView isItemExpanded:item]];
 	}
-	CGPoint scrollPosition = scrollView.documentVisibleRect.origin;
+
+	/* Save the scroll position*/
+	CGFloat scrollPosition = scrollView.documentVisibleRect.origin.y;
 
 	_attributesViewNoSelectionLabel.hidden = node != nil;
 
@@ -318,7 +320,12 @@
 					[_attributesView collapseItem:item];
 				}
 			}
-			[scrollView.contentView scrollToPoint:scrollPosition];
+
+			/* Restore the scroll position  */
+			CGFloat scrollContentHeight = [(NSView *)scrollView.documentView frame].size.height;
+			CGFloat scrollHeight = scrollView.documentVisibleRect.size.height;
+			scrollPosition = MAX(0, MIN(scrollPosition, scrollContentHeight - scrollHeight));
+			[scrollView.contentView scrollToPoint:CGPointMake(0, scrollPosition)];
 			[scrollView reflectScrolledClipView:scrollView.contentView];
 
 			/* Ask the editor view to repaint the selection */
