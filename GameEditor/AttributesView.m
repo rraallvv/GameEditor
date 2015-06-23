@@ -206,7 +206,7 @@
 			[groupNodeSeparatorColor set];
 
 			/* Separator between two non-root group node */
-			if (indexPathLength == nextIndexPathLength) {
+			if (nextIndexPathLength <= indexPathLength) {
 				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
 			}
 		}
