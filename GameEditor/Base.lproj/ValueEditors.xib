@@ -894,6 +894,39 @@
             <point key="canvasLocation" x="445" y="655"/>
         </tableCellView>
         <customObject id="7zt-RG-IFl" customClass="NSFontManager"/>
+        <tableCellView identifier="fontName" id="Bgf-oe-RxG" userLabel="fontName" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="mDf-Ad-VpK">
+                    <rect key="frame" x="0.0" y="1" width="161" height="19"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" placeholderString="Font Name" id="u7I-gE-Q7a">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="Bgf-oe-RxG" name="value" keyPath="objectValue.value" id="tvw-zH-A3Q"/>
+                    </connections>
+                </textField>
+                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Dg5-ke-gKw">
+                    <rect key="frame" x="159" y="-1" width="15" height="22"/>
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-9.2233720368547758e+18" maxValue="9.2233720368547758e+18" id="ZJX-L2-UAd"/>
+                </stepper>
+            </subviews>
+            <constraints>
+                <constraint firstItem="Dg5-ke-gKw" firstAttribute="centerY" secondItem="mDf-Ad-VpK" secondAttribute="centerY" id="F9U-3E-pQD"/>
+                <constraint firstItem="Dg5-ke-gKw" firstAttribute="leading" secondItem="mDf-Ad-VpK" secondAttribute="trailing" id="FWq-DQ-XNe"/>
+                <constraint firstItem="mDf-Ad-VpK" firstAttribute="top" secondItem="Bgf-oe-RxG" secondAttribute="top" id="tyn-Ho-1nu"/>
+                <constraint firstItem="mDf-Ad-VpK" firstAttribute="leading" secondItem="Bgf-oe-RxG" secondAttribute="leading" id="w8i-WR-RCV"/>
+                <constraint firstAttribute="trailing" secondItem="Dg5-ke-gKw" secondAttribute="trailing" id="zeL-uR-ljs"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="1LI-Gy-3BA"/>
+                <outlet property="textField" destination="mDf-Ad-VpK" id="r8W-K5-zqz"/>
+            </connections>
+            <point key="canvasLocation" x="445" y="794"/>
+        </tableCellView>
     </objects>
     <resources>
         <image name="AltDecreaseStepper" width="11" height="13"/>

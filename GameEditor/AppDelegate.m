@@ -575,11 +575,9 @@
 					   || [propertyName isEqualToString:@"lineCap"]
 					   || [propertyName isEqualToString:@"lineJoin"]
 					   || [propertyName isEqualToString:@"verticalAlignmentMode"]
-					   || [propertyName isEqualToString:@"horizontalAlignmentMode"]) {
+					   || [propertyName isEqualToString:@"horizontalAlignmentMode"]
+					   || [propertyName isEqualToString:@"fontName"]) {
 				[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyName]];
-
-			} else if ([propertyName isEqualToString:@"fontName"]) {
-				NSLog(@"%@", [node valueForKey:propertyName]);
 
 			} else {
 
