@@ -469,8 +469,8 @@ labels = _labels;
 	return [self initWithAttributeWithName:name node:node type:type formatter:formatter valueTransformer:valueTransformer children:nil];
 }
 
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node children:(NSMutableArray *)children {
-	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:nil formatter:nil valueTransformer:nil children:children];
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type children:(NSMutableArray *)children {
+	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:type formatter:nil valueTransformer:nil children:children];
 }
 
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer {

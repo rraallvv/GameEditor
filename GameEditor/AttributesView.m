@@ -425,16 +425,12 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
+	NSString *type = [[item representedObject] valueForKey:@"type"];
 	if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
-		if ([item indexPath].length == 1) {
-			return [outlineView makeViewWithIdentifier:@"class" owner:self];
-		} else {
-			return [outlineView makeViewWithIdentifier:@"expandable" owner:self];
-		}
+		return [outlineView makeViewWithIdentifier:type owner:self];
 	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
 		return [outlineView makeViewWithIdentifier:@"attribute" owner:self];
 	} else {
-		NSString *type = [[item representedObject] valueForKey:@"type"];
 		for (NSString *identifier in _editorIdentifiers) {
 			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
 				return [outlineView makeViewWithIdentifier:identifier owner:self];

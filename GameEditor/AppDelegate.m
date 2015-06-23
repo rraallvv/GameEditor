@@ -352,6 +352,7 @@
 
 		if (attributesArray.count > 0) {
 			[classesArray addObject:@{@"name": [classType description],
+									  @"type": @"class",
 									  @"isLeaf": @NO,
 									  @"isEditable": @NO,
 									  @"isCollapsible": @YES,
@@ -590,7 +591,22 @@
 
 				Class propertyClass = [propertyType classType];
 
-				if ([propertyType isEqualToEncodedType:@encode(NSString)]) {
+				if ([propertyType isEqualToEncodedType:@encode(NSMutableDictionary)]) {
+					/* Add the property's name */
+					[attributesArray addObject:@{@"name": propertyName,
+												 @"type": @"expandable",
+												 @"isLeaf": @NO,
+												 @"isEditable": @NO,
+												 @"children": @[@{@"name": propertyName,
+																  @"type": propertyType,
+																  @"isLeaf": @NO,
+																  @"isEditable": @NO}]
+												 }];
+
+					/* Add the property's table of values */
+					//[attributesArray addObject:];
+
+				} else if ([propertyType isEqualToEncodedType:@encode(NSString)]) {
 					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyType]];
 
 				} else if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
@@ -612,7 +628,7 @@
 					[attributes insertObject:[AttributeNode attributeWithName:@"bodyType" node:node type:@"bodyType"] atIndex:0];
 
 					/* Add the property's attributes */
-					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node children:attributes]];
+					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:@"expandable" children:attributes]];
 
 				} else if (propertyClass == [SKShader class]) {
 					AttributeNode *attribute = [AttributeNode attributeWithName:propertyName
@@ -624,6 +640,7 @@
 
 				} else if (propertyClass == [SKPhysicsWorld class]) {
 					[attributesArray addObject:@{@"name": propertyName,
+												 @"type": @"expandable",
 												 @"isLeaf": @NO,
 												 @"isEditable": @NO,
 												 @"children":[self attributesForClass:propertyClass node:[node valueForKey:propertyName]]}];

@@ -77,7 +77,7 @@
 @end
 
 @interface AttributeNode : NSObject
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node children:(NSMutableArray *)children;
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type children:(NSMutableArray *)children;
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer;
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type;
 + (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode *)node;
