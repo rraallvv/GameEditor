@@ -94,8 +94,6 @@
 	IBOutlet NSButton *_toolsLibraryModeButton;
 	IBOutlet NSButton *_resourcesLibraryModeButton;
 	IBOutlet NSMatrix *_libraryTabButtons;
-	IBOutlet NSTextField *_attributesViewNoSelectionLabel;
-	IBOutlet NSTextField *_navigatorViewNoSceneLabel;
 	IBOutlet NSView *_saveSceneView;
 	IBOutlet NSButton *_useXMLFormatButton;
 	IBOutlet NSTabView *_libraryTabView;
@@ -288,8 +286,6 @@
 
 	/* Save the scroll position*/
 	CGFloat scrollPosition = scrollView.documentVisibleRect.origin.y;
-
-	_attributesViewNoSelectionLabel.hidden = node != nil;
 
 	_selectedNode = node;
 
@@ -1364,13 +1360,9 @@
 }
 
 - (void)useScene:(SKScene *)scene {
-	_navigatorViewNoSceneLabel.hidden = scene != nil;
-
 	_toolsLibraryItems = nil;
 
 	if (!scene) {
-		_attributesViewNoSelectionLabel.hidden = NO;
-
 		[_attributesTreeController setContent:nil];
 		[_navigatorTreeController setContent:nil];
 		_editorView.scene = nil;

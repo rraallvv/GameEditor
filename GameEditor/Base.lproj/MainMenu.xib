@@ -493,6 +493,9 @@
                                             <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
+                                        <connections>
+                                            <binding destination="FfK-Wg-7Xj" name="hidden" keyPath="arrangedObjects.childNodes.@count" id="SXy-WN-LTf"/>
+                                        </connections>
                                     </textField>
                                     <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tr7-lo-aXw">
                                         <rect key="frame" x="3" y="3" width="184" height="19"/>
@@ -740,6 +743,9 @@
                                                             <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="IEK-xe-ugr" name="hidden" keyPath="arrangedObjects.childNodes.@count" id="TdM-dV-owW"/>
+                                                        </connections>
                                                     </textField>
                                                 </subviews>
                                                 <constraints>
@@ -1103,13 +1109,11 @@
             <connections>
                 <outlet property="_attributesTreeController" destination="IEK-xe-ugr" id="TYh-UN-I2P"/>
                 <outlet property="_attributesView" destination="zW2-BO-taF" id="19t-eI-oFU"/>
-                <outlet property="_attributesViewNoSelectionLabel" destination="RUK-6O-o0H" id="w5p-gT-IgJ"/>
                 <outlet property="_editorView" destination="suo-YO-fqM" id="D5W-Hu-pTw"/>
                 <outlet property="_libraryTabButtons" destination="pf4-VP-sjQ" id="1XR-iH-5BW"/>
                 <outlet property="_libraryTabView" destination="1QZ-GI-Dny" id="9k6-mK-qER"/>
                 <outlet property="_navigatorTreeController" destination="FfK-Wg-7Xj" id="bBG-5I-i7L"/>
                 <outlet property="_navigatorView" destination="Y4L-tX-zfk" id="Gju-ZL-6rD"/>
-                <outlet property="_navigatorViewNoSceneLabel" destination="qmx-Pn-rtd" id="kre-0u-5u3"/>
                 <outlet property="_resourcesLibraryArrayController" destination="TU8-ns-SGh" id="Ghv-on-PjH"/>
                 <outlet property="_resourcesLibraryCollectionView" destination="UQ2-nI-Fzq" id="1dG-BK-Eew"/>
                 <outlet property="_resourcesLibraryModeButton" destination="7sB-cr-Smr" id="6No-3P-UbK"/>
