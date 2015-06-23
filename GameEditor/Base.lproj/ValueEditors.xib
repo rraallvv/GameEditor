@@ -931,15 +931,36 @@
             <rect key="frame" x="0.0" y="0.0" width="172" height="97"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Ww-cm-9DL">
-                    <rect key="frame" x="16" y="34" width="141" height="28"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Test Test Test" id="TTz-Ma-NAO">
-                        <font key="font" metaFont="system" size="23"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
+                <box autoresizesSubviews="NO" borderType="line" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="9EN-Jh-QBV">
+                    <rect key="frame" x="-3" y="-1" width="178" height="100"/>
+                    <view key="contentView">
+                        <rect key="frame" x="1" y="1" width="176" height="98"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3Ww-cm-9DL">
+                                <rect key="frame" x="9" y="39" width="157" height="28"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Table of Values" id="TTz-Ma-NAO">
+                                    <font key="font" metaFont="system" size="23"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <constraints>
+                        <constraint firstAttribute="centerX" secondItem="3Ww-cm-9DL" secondAttribute="centerX" constant="0.5" id="BsY-Se-qyD"/>
+                        <constraint firstAttribute="centerY" secondItem="3Ww-cm-9DL" secondAttribute="centerY" constant="2.5" id="Lel-gu-QX3"/>
+                    </constraints>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </box>
             </subviews>
+            <constraints>
+                <constraint firstItem="9EN-Jh-QBV" firstAttribute="leading" secondItem="pGv-Ji-A5t" secondAttribute="leading" id="9zW-Us-dMd"/>
+                <constraint firstAttribute="bottom" secondItem="9EN-Jh-QBV" secondAttribute="bottom" constant="3" id="ja2-ev-CBm"/>
+                <constraint firstItem="9EN-Jh-QBV" firstAttribute="top" secondItem="pGv-Ji-A5t" secondAttribute="top" id="vkj-Zg-gcP"/>
+                <constraint firstAttribute="trailing" secondItem="9EN-Jh-QBV" secondAttribute="trailing" id="yrk-ZZ-UXu"/>
+            </constraints>
             <point key="canvasLocation" x="728" y="184.5"/>
         </tableCellView>
     </objects>
