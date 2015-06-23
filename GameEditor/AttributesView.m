@@ -183,7 +183,6 @@
 
 	CGPoint marginBottomLeft = NSMakePoint(bottomLeft.x + separatorMargin,  bottomLeft.y);
 
-	/* Only draw the separator for the root nodes */
 	if (self.isGroupRowStyle) {
 
 		if (indexPathLength == 1) {
@@ -207,6 +206,12 @@
 				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
 			}
 
+		} else if (row == [outlineView numberOfRows] - 1) {
+			[rootNodeSeparatorColor set];
+
+			/* Separator at the bottom of the last group */
+			[NSBezierPath strokeLineFromPoint:bottomLeft toPoint:bottomRight];
+
 		} else {
 			[groupNodeSeparatorColor set];
 
@@ -217,18 +222,27 @@
 		}
 
 	} else {
-		[groupNodeSeparatorColor set];
+		if (row == [outlineView numberOfRows] - 1) {
+			[rootNodeSeparatorColor set];
 
-		/* Separator at the bottom of a leaf node followed by a non-root group node */
-		if (nextIndexPathLength > 1
-			&& nextItemIsGroup) {
-			[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
-		}
+			/* Separator at the bottom of the last leaf node */
+			[NSBezierPath strokeLineFromPoint:bottomLeft toPoint:bottomRight];
 
-		/* Separator at the bottom of a leaf node followed by a leaf node */
-		if (nextIndexPathLength < indexPathLength
-			&& !nextItemIsGroup) {
-			[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
+		} else {
+
+			[groupNodeSeparatorColor set];
+
+			/* Separator at the bottom of a leaf node followed by a non-root group node */
+			if (nextIndexPathLength > 1
+				&& nextItemIsGroup) {
+				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
+			}
+
+			/* Separator at the bottom of a leaf node followed by a leaf node */
+			if (nextIndexPathLength < indexPathLength
+				&& !nextItemIsGroup) {
+				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
+			}
 		}
 	}
 }
