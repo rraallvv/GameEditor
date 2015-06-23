@@ -656,7 +656,12 @@ labels = _labels;
 	_value = value;
 
 	/* Update the bound object's property value */
-	[_node setValue:_value forKeyPath:_name];
+	@try {
+		[_node setValue:_value forKeyPath:_name];
+	}
+	@catch (NSException *exception) {
+		NSLog(@"Couldn't change property '%@' in %@", _name, _node);
+	}
 }
 
 - (id)value {
