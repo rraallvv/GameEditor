@@ -314,8 +314,18 @@
 														@"children": @[@{@"name": @"userData",
 																		 @"type": @"@\"NSMutableDictionary\"",
 																		 @"isLeaf": @NO,
-																		 @"isEditable": @NO}]
-														}].mutableCopy;
+																		 @"isEditable": @NO,
+																		 @"content":@[@{@"keyPath": @"one",
+																						@"type": @0,
+																						@"value": @YES}.mutableCopy,
+																					  @{@"keyPath": @"two",
+																						@"type": @2,
+																						@"value": @"Text"}.mutableCopy
+																					  ].mutableCopy
+																		 }.mutableCopy
+																	   ].mutableCopy
+														}.mutableCopy
+													  ].mutableCopy;
 
 		/* Look up for the row to be selected */
 		NSInteger row = [_navigatorView rowForItem:[self navigationNodeOfObject:node inNodes:[[_navigatorTreeController arrangedObjects] childNodes]]];
