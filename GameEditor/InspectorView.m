@@ -28,12 +28,23 @@
 
 #pragma mark TableCellView
 
+IB_DESIGNABLE
 @interface TableCellView : NSTableCellView
+@property (copy) IBInspectable NSColor *backgroundColor;
 @end
 
 @implementation TableCellView {
 	NSMutableArray *_textFields;
 	IBOutlet NSPopover *_popover;
+}
+
+- (void)drawRect:(NSRect)dirtyRect {
+	if (self.backgroundColor) {
+		[self.backgroundColor set];
+		NSRectFill(dirtyRect);
+	} else {
+		[super drawRect:dirtyRect];
+	}
 }
 
 - (void)setObjectValue:(id)objectValue {
