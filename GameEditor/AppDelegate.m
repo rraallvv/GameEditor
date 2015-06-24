@@ -114,8 +114,7 @@
 	NSInteger _mediaSelectedLibraryItem;
 	NSMutableArray *_objectLibraryContext;
 	NSMutableArray *_mediaLibraryContext;
-	NSMutableDictionary *_nodeInspectorViewExpansionInfo;
-	NSMutableDictionary *_identityInspectorViewExpansionInfo;
+	NSMutableDictionary *_inspectorViewExpansionInfo;
 }
 
 @synthesize window = _window;
@@ -154,7 +153,7 @@
 
 	/* Setup the attributes inspector */
 	[_inspectorTabView selectTabViewItemAtIndex:_inspectorTabButtons.selectedColumn];
-	_nodeInspectorViewExpansionInfo = [NSMutableDictionary dictionary];
+	_inspectorViewExpansionInfo = [NSMutableDictionary dictionary];
 
 	/* Setup the library */
 	[_libraryTabView selectTabViewItemAtIndex:_libraryTabButtons.selectedColumn];
@@ -284,14 +283,18 @@
 		return;
 
 	/* Save attributes view position and expansion info */
-	NSScrollView *scrollView = _nodeInspectorView.enclosingScrollView;
 	for (id item in [[_nodeInspectorTreeController arrangedObjects] childNodes]) {
 		NSString *name = [[item representedObject] valueForKey:@"name"];
-		_nodeInspectorViewExpansionInfo[name] = [NSNumber numberWithBool:[_nodeInspectorView isItemExpanded:item]];
+		_inspectorViewExpansionInfo[name] = [NSNumber numberWithBool:[_nodeInspectorView isItemExpanded:item]];
+	}
+	for (id item in [[_identityInspectorTreeController arrangedObjects] childNodes]) {
+		NSString *name = [[item representedObject] valueForKey:@"name"];
+		_inspectorViewExpansionInfo[name] = [NSNumber numberWithBool:[_identityInspectorView isItemExpanded:item]];
 	}
 
 	/* Save the scroll position*/
-	CGFloat scrollPosition = scrollView.documentVisibleRect.origin.y;
+	NSScrollView *nodeScrollView = _nodeInspectorView.enclosingScrollView;
+	CGFloat nodeScrollPosition = nodeScrollView.documentVisibleRect.origin.y;
 
 	_selectedNode = node;
 
@@ -327,19 +330,27 @@
 			/* Restore attributes view position and expansion info */
 			for (id item in [[_nodeInspectorTreeController arrangedObjects] childNodes]) {
 				NSString *name = [[item representedObject] valueForKey:@"name"];
-				NSNumber *expansionInfo = _nodeInspectorViewExpansionInfo[name];
+				NSNumber *expansionInfo = _inspectorViewExpansionInfo[name];
 				[_nodeInspectorView expandItem:item expandChildren:YES];
 				if (expansionInfo && ![expansionInfo boolValue]) {
 					[_nodeInspectorView collapseItem:item];
 				}
 			}
+			for (id item in [[_identityInspectorTreeController arrangedObjects] childNodes]) {
+				NSString *name = [[item representedObject] valueForKey:@"name"];
+				NSNumber *expansionInfo = _inspectorViewExpansionInfo[name];
+				[_identityInspectorView expandItem:item expandChildren:YES];
+				if (expansionInfo && ![expansionInfo boolValue]) {
+					[_identityInspectorView collapseItem:item];
+				}
+			}
 
 			/* Restore the scroll position  */
-			CGFloat scrollContentHeight = [(NSView *)scrollView.documentView frame].size.height;
-			CGFloat scrollHeight = scrollView.documentVisibleRect.size.height;
-			scrollPosition = MAX(0, MIN(scrollPosition, scrollContentHeight - scrollHeight));
-			[scrollView.contentView scrollToPoint:CGPointMake(0, scrollPosition)];
-			[scrollView reflectScrolledClipView:scrollView.contentView];
+			CGFloat nodeScrollContentHeight = [(NSView *)nodeScrollView.documentView frame].size.height;
+			CGFloat nodeScrollHeight = nodeScrollView.documentVisibleRect.size.height;
+			nodeScrollPosition = MAX(0, MIN(nodeScrollPosition, nodeScrollContentHeight - nodeScrollHeight));
+			[nodeScrollView.contentView scrollToPoint:CGPointMake(0, nodeScrollPosition)];
+			[nodeScrollView reflectScrolledClipView:nodeScrollView.contentView];
 
 			/* Ask the editor view to repaint the selection */
 			[_editorView setNeedsDisplay:YES];
