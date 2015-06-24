@@ -302,7 +302,17 @@
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 #endif
 		/* Build the tree of attributes in the background thread */
-		NSMutableArray *contents = [self attributesForAllClassesWithNode:node];
+		NSMutableArray *nodeInspectorContents = [self attributesForAllClassesWithNode:node];
+		NSMutableArray *identityInspectorContents = @[@{@"name": @"userData",
+														@"type": @"expandable",
+														@"isLeaf": @NO,
+														@"isEditable": @NO,
+														@"isCollapsible": @YES,
+														@"children": @[@{@"name": @"userData",
+																		 @"type": @"@\"NSMutableDictionary\"",
+																		 @"isLeaf": @NO,
+																		 @"isEditable": @NO}]
+														}].mutableCopy;
 
 		/* Look up for the row to be selected */
 		NSInteger row = [_navigatorView rowForItem:[self navigationNodeOfObject:node inNodes:[[_navigatorTreeController arrangedObjects] childNodes]]];
@@ -311,7 +321,8 @@
 		dispatch_async(dispatch_get_main_queue(), ^{
 #endif
 			/* Replace the attributes table */
-			[_nodeInspectorTreeController setContent:contents];
+			[_nodeInspectorTreeController setContent:nodeInspectorContents];
+			[_identityInspectorTreeController setContent:identityInspectorContents];
 
 			/* Restore attributes view position and expansion info */
 			for (id item in [[_nodeInspectorTreeController arrangedObjects] childNodes]) {
@@ -392,8 +403,6 @@
 	BOOL hasParticleColorGreen = NO;
 	BOOL hasParticleColorBlue = NO;
 	BOOL hasParticleColorAlpha = NO;
-
-	NSMutableArray *userDictionaries = [NSMutableArray array];
 
 	if (count) {
 		for (unsigned int i = 0; i < count; i++) {
@@ -601,17 +610,7 @@
 				Class propertyClass = [propertyType classType];
 
 				if ([propertyType isEqualToEncodedType:@encode(NSMutableDictionary)]) {
-					/* Add the property's name */
-					[userDictionaries addObject:@{@"name": propertyName,
-												 @"type": @"expandable",
-												 @"isLeaf": @NO,
-												 @"isEditable": @NO,
-												 @"isCollapsible": @YES,
-												 @"children": @[@{@"name": propertyName,
-																  @"type": propertyType,
-																  @"isLeaf": @NO,
-																  @"isEditable": @NO}]
-												 }];
+					/* Do nothing, this will be added to the Identity inspector */
 
 				} else if ([propertyType isEqualToEncodedType:@encode(NSString)]) {
 					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyType]];
@@ -713,8 +712,6 @@
 		}
 		free(properties);
 	}
-
-	[attributesArray addObjectsFromArray:userDictionaries];
 
 	return attributesArray;
 }
@@ -1374,6 +1371,7 @@
 
 	if (!scene) {
 		[_nodeInspectorTreeController setContent:nil];
+		[_identityInspectorTreeController setContent:nil];
 		[_navigatorTreeController setContent:nil];
 		_editorView.scene = nil;
 		_editorView.needsDisplay = YES;

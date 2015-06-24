@@ -927,7 +927,7 @@
             </connections>
             <point key="canvasLocation" x="442" y="794"/>
         </tableCellView>
-        <tableCellView identifier="@&quot;NSMutableDictionary&quot;" id="pGv-Ji-A5t">
+        <tableCellView identifier="@&quot;NSMutableDictionary&quot;" id="pGv-Ji-A5t" userLabel="userData">
             <rect key="frame" x="0.0" y="0.0" width="172" height="97"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
