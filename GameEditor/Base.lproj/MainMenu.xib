@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
+        <deployment identifier="macosx"/>
         <development version="6200" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
     </dependencies>
@@ -866,13 +867,13 @@
                                                                 </buttonCell>
                                                                 <cells>
                                                                     <column>
-                                                                        <buttonCell type="recessed" bezelStyle="recessed" image="LibraryToolsTab" imagePosition="only" alignment="center" alternateImage="AltLibraryToolsTab" state="on" tag="1" inset="2" id="Qc1-Ls-fhJ">
+                                                                        <buttonCell type="recessed" bezelStyle="recessed" image="ObjectLibrary" imagePosition="only" alignment="center" alternateImage="AltObjectLibrary" state="on" tag="1" inset="2" id="Qc1-Ls-fhJ">
                                                                             <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                                                                             <font key="font" metaFont="systemBold" size="12"/>
                                                                         </buttonCell>
                                                                     </column>
                                                                     <column>
-                                                                        <buttonCell type="square" bezelStyle="shadowlessSquare" image="LibraryResourcesTab" imagePosition="overlaps" alternateImage="AltLibraryResourcesTab" controlSize="small" inset="2" id="deX-sk-fSf">
+                                                                        <buttonCell type="square" bezelStyle="shadowlessSquare" image="MediaLibrary" imagePosition="overlaps" alternateImage="AltMediaLibrary" controlSize="small" inset="2" id="deX-sk-fSf">
                                                                             <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                                                                             <font key="font" metaFont="smallSystem"/>
                                                                         </buttonCell>
@@ -1331,15 +1332,15 @@
     </objects>
     <resources>
         <image name="AltIdentityInspector" width="17" height="17"/>
-        <image name="AltLibraryResourcesTab" width="17" height="17"/>
-        <image name="AltLibraryToolsTab" width="17" height="17"/>
+        <image name="AltMediaLibrary" width="17" height="17"/>
         <image name="AltNodeInspector" width="17" height="17"/>
+        <image name="AltObjectLibrary" width="17" height="17"/>
         <image name="IdentityInspector" width="17" height="17"/>
         <image name="LibraryIconsMode" width="19" height="19"/>
         <image name="LibraryListMode" width="19" height="19"/>
-        <image name="LibraryResourcesTab" width="17" height="17"/>
-        <image name="LibraryToolsTab" width="17" height="17"/>
+        <image name="MediaLibrary" width="17" height="17"/>
         <image name="NSActionTemplate" width="14" height="14"/>
         <image name="NodeInspector" width="17" height="17"/>
+        <image name="ObjectLibrary" width="17" height="17"/>
     </resources>
 </document>
