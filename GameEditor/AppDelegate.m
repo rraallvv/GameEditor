@@ -84,10 +84,12 @@
 @implementation AppDelegate {
 	IBOutlet EditorView *_editorView;
 	IBOutlet InspectorView *_nodeInspectorView;
+	IBOutlet InspectorView *_identityInspectorView;
 	IBOutlet NavigatorView *_navigatorView;
 	IBOutlet LibraryView *_objectLibraryCollectionView;
 	IBOutlet LibraryView *_mediaLibraryCollectionView;
 	IBOutlet NSTreeController *_nodeInspectorTreeController;
+	IBOutlet NSTreeController *_identityInspectorTreeController;
 	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet NSArrayController *_objectLibraryArrayController;
 	IBOutlet NSArrayController *_mediaLibraryArrayController;
@@ -113,6 +115,7 @@
 	NSMutableArray *_objectLibraryContext;
 	NSMutableArray *_mediaLibraryContext;
 	NSMutableDictionary *_nodeInspectorViewExpansionInfo;
+	NSMutableDictionary *_identityInspectorViewExpansionInfo;
 }
 
 @synthesize window = _window;
