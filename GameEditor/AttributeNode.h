@@ -27,6 +27,10 @@
 #import <objc/runtime.h>
 #import <SpriteKit/SpriteKit.h>
 
+@interface NSBundle (ResourcesPath)
+- (NSArray *) pathsForResourcesOfType:(NSString *)ext;
+@end
+
 @interface NSString (Types)
 - (NSString *)extractClassName;
 - (Class)classType;
@@ -69,8 +73,11 @@
 @interface TextureTransformer : NSValueTransformer
 @end
 
+@interface ShaderTransformer : NSValueTransformer
+@end
+
 @interface AttributeNode : NSObject
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node children:(NSMutableArray *)children;
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type children:(NSMutableArray *)children;
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer;
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type;
 + (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode *)node;

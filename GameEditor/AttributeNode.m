@@ -26,6 +26,23 @@
 #import "AttributeNode.h"
 #import <objc/runtime.h>
 
+#pragma mark NSBundle
+
+@implementation NSBundle (ResourcesPath)
+
+- (NSArray *) pathsForResourcesOfType:(NSString *)ext {
+	NSMutableArray *result = [NSMutableArray array];
+	NSString *mainbundleResourcesPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/"];
+	for (NSString *path in [[NSBundle mainBundle] pathsForResourcesOfType:@"fsh" inDirectory:nil]) {
+		if (![path hasPrefix:mainbundleResourcesPath]) {
+			[result addObject:path];
+		}
+	}
+	return result;
+}
+
+@end
+
 #pragma mark NSNumber
 
 @implementation NSNumber (CreatingFromArbitraryTypes)
@@ -371,6 +388,36 @@
 
 @end
 
+@implementation ShaderTransformer
+
++ (void)initialize {
+	[self initializeWithTransformedValueClass:[SKShader class]
+				  allowsReverseTransformation:YES
+						transformedValueBlock:^id(SKShader *value){
+							for (NSString *path in [[NSBundle mainBundle] pathsForResourcesOfType:@"fsh"]) {
+								NSString *source = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+								if ([[value source] hash] == [source hash]) {
+									return path.lastPathComponent;
+								}
+							}
+							return nil;
+						}
+				 reverseTransformedValueBlock:^id(NSString *value){
+					 if (value) {
+						 for (NSString *path in [[NSBundle mainBundle] pathsForResourcesOfType:@"fsh"]) {
+							 if ([[path lastPathComponent] isEqualToString:value]) {
+								 NSString *source = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+								 return [SKShader shaderWithSource:source];
+							 }
+						 }
+						 return nil;
+					 }
+					 return nil;
+				 }];
+}
+
+@end
+
 #pragma mark AttributeNode
 
 @implementation AttributeNode {
@@ -422,8 +469,8 @@ labels = _labels;
 	return [self initWithAttributeWithName:name node:node type:type formatter:formatter valueTransformer:valueTransformer children:nil];
 }
 
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node children:(NSMutableArray *)children {
-	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:nil formatter:nil valueTransformer:nil children:children];
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type children:(NSMutableArray *)children {
+	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:type formatter:nil valueTransformer:nil children:children];
 }
 
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer {
@@ -609,7 +656,12 @@ labels = _labels;
 	_value = value;
 
 	/* Update the bound object's property value */
-	[_node setValue:_value forKeyPath:_name];
+	@try {
+		[_node setValue:_value forKeyPath:_name];
+	}
+	@catch (NSException *exception) {
+		NSLog(@"Couldn't change property '%@' in %@", _name, _node);
+	}
 }
 
 - (id)value {

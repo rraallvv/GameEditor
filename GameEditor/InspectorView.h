@@ -1,5 +1,5 @@
 /*
- * AttributesView.h
+ * InspectorView.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -28,5 +28,5 @@
 #import "SKNode+PhysicsBodyType.h"
 #import "NSOutlineView+TreeExpansion.h"
 
-@interface AttributesView : NSOutlineView
+@interface InspectorView : NSOutlineView
 @end
