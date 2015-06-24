@@ -953,7 +953,7 @@
                                                                                                 <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Tools Library Mode"/>
                                                                                             </userDefinedRuntimeAttributes>
                                                                                             <connections>
-                                                                                                <action selector="toolsLibraryDidChangeMode:" target="494" id="xsV-RZ-yTg"/>
+                                                                                                <action selector="objectLibraryDidChangeMode:" target="494" id="xsV-RZ-yTg"/>
                                                                                             </connections>
                                                                                         </button>
                                                                                         <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JOl-ek-8VA">
@@ -1069,7 +1069,7 @@
                                                                                                 <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Resources Library Mode"/>
                                                                                             </userDefinedRuntimeAttributes>
                                                                                             <connections>
-                                                                                                <action selector="resourcesLibraryDidChangeMode:" target="494" id="xf7-y7-WsG"/>
+                                                                                                <action selector="mediaLibraryDidChangeMode:" target="494" id="xf7-y7-WsG"/>
                                                                                             </connections>
                                                                                         </button>
                                                                                         <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AYy-Zf-7I5">

@@ -150,6 +150,7 @@
 	}
 
 	/* Setup the attributes inspector */
+	[_inspectorTabView selectTabViewItemAtIndex:_inspectorTabButtons.selectedColumn];
 	_attributesViewExpansionInfo = [NSMutableDictionary dictionary];
 
 	/* Setup the library */
@@ -160,7 +161,7 @@
 	_mediaSelectedLibraryItem = NSNotFound;
 	_objectLibraryCollectionView.mode = _objectLibraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
 	_mediaLibraryCollectionView.mode = _mediaLibraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
-	[self populateToolsLibrary];
+	[self populateObjectLibrary];
 
 	/* Initialize the scripting support */
 	_sharedScriptingContext = [LuaContext new];
@@ -849,7 +850,7 @@
 	[self useScene:nil];
 	_currentFilename = nil;
 	_sceneBundle = nil;
-	[self populateResourcesLibrary];
+	[self populateMediaLibrary];
 }
 
 - (void)addRecentDocument:(NSString *)filename {
@@ -872,15 +873,15 @@
 
 #pragma mark Library
 
-- (IBAction)toolsLibraryDidChangeMode:(NSButton *)sender {
+- (IBAction)objectLibraryDidChangeMode:(NSButton *)sender {
 	_objectLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
-- (IBAction)resourcesLibraryDidChangeMode:(NSButton *)sender {
+- (IBAction)mediaLibraryDidChangeMode:(NSButton *)sender {
 	_mediaLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
-- (void)populateToolsLibrary {
+- (void)populateObjectLibrary {
 	if (!_objectLibraryItems) {
 		_objectLibraryItems = [NSMutableArray array];
 		_objectLibraryContext = [NSMutableArray array];
@@ -966,11 +967,11 @@
 					/* Populate the library items with the loaded data */
 					for (int i=0; i<names.count; ++i) {
 						name = names[i];
-						NSString *toolName = [name stringByReplacingOccurrencesOfString:@" " withString:@""];
+						NSString *objectName = [name stringByReplacingOccurrencesOfString:@" " withString:@""];
 						NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(.*\\)"
 																							   options:NSRegularExpressionCaseInsensitive
 																								 error:nil];
-						toolName = [regex stringByReplacingMatchesInString:toolName options:0 range:NSMakeRange(0, [toolName length]) withTemplate:@""];
+						objectName = [regex stringByReplacingMatchesInString:objectName options:0 range:NSMakeRange(0, [objectName length]) withTemplate:@""];
 
 						if (i < descriptions.count) {
 							description = descriptions[i];
@@ -999,7 +1000,7 @@
 						[fullDescriptionAttributedString endEditing];
 
 						/* Add the item to the library */
-						[_objectLibraryItems addObject:@{@"name":toolName,
+						[_objectLibraryItems addObject:@{@"name":objectName,
 														@"label":fullDescriptionAttributedString,
 														@"image":iconImage,
 														@"showLabel":@(!_objectLibraryModeButton.state),
@@ -1017,13 +1018,13 @@
 	[_objectLibraryArrayController setSelectionIndex:_objectSelectedLibraryItem];
 }
 
-- (void)populateResourcesLibrary {
+- (void)populateMediaLibrary {
 	NSString *bundlePath = [_sceneBundle bundlePath];
 
 	/* Check whether the loaded scene's bundle is the same */
 	if (!_sceneBundlePath || ![_sceneBundlePath isEqualToString:bundlePath]) {
 
-		/* Init the context of the resource library */
+		/* Init the context of the media library */
 		if (!_mediaLibraryContext) {
 			_mediaLibraryContext = [NSMutableArray array];
 			[_mediaLibraryContext addObject:@{@"script": LUA_STRING
@@ -1036,7 +1037,7 @@
 												   )}.mutableCopy];
 		}
 
-		/* Clear the resource library */
+		/* Clear the media library */
 		_mediaLibraryItems = [NSMutableArray array];
 
 		if (_sceneBundle) {
@@ -1044,11 +1045,11 @@
 			_sceneBundlePath = bundlePath;
 
 			/* Get a list with all the files in the scene bundle */
-			NSString *resourcePath = [_sceneBundle resourcePath];
-			NSURL *resourceURL = [[NSURL alloc] initFileURLWithPath:resourcePath];
+			NSString *mediaPath = [_sceneBundle resourcePath];
+			NSURL *mediaURL = [[NSURL alloc] initFileURLWithPath:mediaPath];
 			NSArray *keys = [NSArray arrayWithObject:NSURLIsDirectoryKey];
 			NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager]
-												 enumeratorAtURL:resourceURL
+												 enumeratorAtURL:mediaURL
 												 includingPropertiesForKeys:keys
 												 options:0
 												 errorHandler:^(NSURL *url, NSError *error) {
@@ -1245,8 +1246,8 @@
 
 	/* Create the node from the script */
 	NSValue *position = [NSValue valueWithPoint:locationInSelection];
-	NSString *toolName = [libraryItem objectForKey:@"name"];
-	SKNode *node = [scriptContext call:@"createNodeAtPosition" with:@[position, toolName] error:&error];
+	NSString *objectName = [libraryItem objectForKey:@"name"];
+	SKNode *node = [scriptContext call:@"createNodeAtPosition" with:@[position, objectName] error:&error];
 	if (error) {
 		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
 		return NO;
@@ -1304,7 +1305,7 @@
 	/* Add the file to the 'Open Recent' file menu */
 	[self addRecentDocument:_currentFilename];
 
-	[self populateResourcesLibrary];
+	[self populateMediaLibrary];
 
 	return YES;
 }
