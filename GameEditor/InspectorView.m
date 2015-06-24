@@ -128,12 +128,12 @@
 
 @end
 
-#pragma mark AttributesTableRowView
+#pragma mark InspectorTableRowView
 
-@interface AttributesTableRowView : NSTableRowView
+@interface InspectorTableRowView : NSTableRowView
 @end
 
-@implementation AttributesTableRowView {
+@implementation InspectorTableRowView {
 	NSAttributedString *_showAttributedString;
 	NSAttributedString *_hideAttributedString;
 	NSAttributedString *_showAlternateAttributedString;
@@ -411,7 +411,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (NSTableRowView *)outlineView:(NSOutlineView *)outlineView rowViewForItem:(id)item {
-	return [[AttributesTableRowView alloc] init];
+	return [[InspectorTableRowView alloc] init];
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
