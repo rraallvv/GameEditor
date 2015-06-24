@@ -317,8 +317,11 @@
 																		 @"isEditable": @NO,
 																		 @"content":@[@{@"keyPath": @"one",
 																						@"type": @0,
-																						@"value": @YES}.mutableCopy,
+																						@"value": @NO}.mutableCopy,
 																					  @{@"keyPath": @"two",
+																						@"type": @1,
+																						@"value": @123}.mutableCopy,
+																					  @{@"keyPath": @"three",
 																						@"type": @2,
 																						@"value": @"Text"}.mutableCopy
 																					  ].mutableCopy
