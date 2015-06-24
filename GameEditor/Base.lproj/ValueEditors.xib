@@ -963,6 +963,120 @@
             </constraints>
             <point key="canvasLocation" x="728" y="184.5"/>
         </tableCellView>
+        <tableCellView identifier="class" id="xvS-hY-Bup" userLabel="class">
+            <rect key="frame" x="0.0" y="0.0" width="78" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="DV1-4P-XVd">
+                    <rect key="frame" x="3" y="3" width="77" height="14"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Class" id="d8G-pr-wp7">
+                        <font key="font" metaFont="smallSystemBold"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="xvS-hY-Bup" name="value" keyPath="objectValue.name" id="kPU-jU-jcS"/>
+                    </connections>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="top" secondItem="DV1-4P-XVd" secondAttribute="bottom" constant="-17" id="CLb-tA-9x3"/>
+                <constraint firstItem="DV1-4P-XVd" firstAttribute="leading" secondItem="xvS-hY-Bup" secondAttribute="leading" constant="5" id="QCw-mp-T7O"/>
+                <constraint firstAttribute="trailing" secondItem="DV1-4P-XVd" secondAttribute="trailing" id="vvA-ho-lyO"/>
+            </constraints>
+            <connections>
+                <outlet property="textField" destination="DV1-4P-XVd" id="Lmp-xq-7B3"/>
+            </connections>
+            <point key="canvasLocation" x="728" y="295"/>
+        </tableCellView>
+        <tableCellView identifier="expandable" id="O7j-xp-Rmq" userLabel="expandable">
+            <rect key="frame" x="0.0" y="0.0" width="78" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="9Xf-FJ-Mf8">
+                    <rect key="frame" x="18" y="3" width="56" height="14"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="expandable" id="zMP-LX-YdA">
+                        <font key="font" metaFont="smallSystemBold"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="O7j-xp-Rmq" name="toolTip" keyPath="objectValue.description" id="9yI-s0-ftE"/>
+                        <binding destination="O7j-xp-Rmq" name="value" keyPath="objectValue.name" id="iyy-vn-G1B">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">AttributeNameTransformer</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="top" secondItem="9Xf-FJ-Mf8" secondAttribute="bottom" constant="-17" id="7rc-ZD-uhm"/>
+                <constraint firstAttribute="trailing" secondItem="9Xf-FJ-Mf8" secondAttribute="trailing" constant="6" id="Tea-GE-CXI"/>
+                <constraint firstItem="9Xf-FJ-Mf8" firstAttribute="leading" secondItem="O7j-xp-Rmq" secondAttribute="leading" constant="20" id="l3U-zM-Xb2"/>
+            </constraints>
+            <connections>
+                <outlet property="textField" destination="9Xf-FJ-Mf8" id="yLQ-Ep-NDf"/>
+            </connections>
+            <point key="canvasLocation" x="728" y="366"/>
+        </tableCellView>
+        <tableCellView identifier="attribute" id="d3V-LK-lO4" userLabel="attribute">
+            <rect key="frame" x="0.0" y="0.0" width="78" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="HPf-A2-Zin" userLabel="attribute">
+                    <rect key="frame" x="4" y="3" width="70" height="14"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="attribute" id="Wb7-GY-et5">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="d3V-LK-lO4" name="toolTip" keyPath="objectValue.description" id="TJm-H2-CSS"/>
+                        <binding destination="d3V-LK-lO4" name="value" keyPath="objectValue.name" id="q4X-cw-952">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">AttributeNameTransformer</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="top" secondItem="HPf-A2-Zin" secondAttribute="bottom" constant="-17" id="3D1-Su-xIS"/>
+                <constraint firstItem="HPf-A2-Zin" firstAttribute="leading" secondItem="d3V-LK-lO4" secondAttribute="leading" constant="6" id="Ava-Mu-A9M"/>
+                <constraint firstAttribute="trailing" secondItem="HPf-A2-Zin" secondAttribute="trailing" constant="6" id="V3h-wx-bI8"/>
+            </constraints>
+            <connections>
+                <outlet property="textField" destination="HPf-A2-Zin" id="jdG-ds-nME"/>
+            </connections>
+            <point key="canvasLocation" x="728" y="435"/>
+        </tableCellView>
+        <tableCellView identifier="generic attribute" id="l9F-Xo-eWU" userLabel="generic attribute">
+            <rect key="frame" x="0.0" y="0.0" width="176" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="DQx-vs-fpZ">
+                    <rect key="frame" x="-2" y="3" width="180" height="14"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="value" id="Jsr-d5-w13">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="l9F-Xo-eWU" name="value" keyPath="objectValue.value" id="vat-iL-tDr"/>
+                    </connections>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="DQx-vs-fpZ" secondAttribute="trailing" id="3Qk-MC-Wg0"/>
+                <constraint firstItem="DQx-vs-fpZ" firstAttribute="leading" secondItem="l9F-Xo-eWU" secondAttribute="leading" id="DbR-2y-qWH"/>
+                <constraint firstAttribute="top" secondItem="DQx-vs-fpZ" secondAttribute="bottom" constant="-17" id="ldh-5g-AtM"/>
+            </constraints>
+            <connections>
+                <outlet property="textField" destination="DQx-vs-fpZ" id="2nA-bM-zKK"/>
+            </connections>
+            <point key="canvasLocation" x="728" y="507"/>
+        </tableCellView>
     </objects>
     <resources>
         <image name="AltDecreaseStepper" width="11" height="13"/>
