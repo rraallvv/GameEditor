@@ -83,11 +83,11 @@
 
 @implementation AppDelegate {
 	IBOutlet EditorView *_editorView;
-	IBOutlet InspectorView *_attributesView;
+	IBOutlet InspectorView *_nodeInspectorView;
 	IBOutlet NavigatorView *_navigatorView;
 	IBOutlet LibraryView *_objectLibraryCollectionView;
 	IBOutlet LibraryView *_mediaLibraryCollectionView;
-	IBOutlet NSTreeController *_attributesTreeController;
+	IBOutlet NSTreeController *_nodeInspectorTreeController;
 	IBOutlet NSTreeController *_navigatorTreeController;
 	IBOutlet NSArrayController *_objectLibraryArrayController;
 	IBOutlet NSArrayController *_mediaLibraryArrayController;
@@ -112,7 +112,7 @@
 	NSInteger _mediaSelectedLibraryItem;
 	NSMutableArray *_objectLibraryContext;
 	NSMutableArray *_mediaLibraryContext;
-	NSMutableDictionary *_attributesViewExpansionInfo;
+	NSMutableDictionary *_nodeInspectorViewExpansionInfo;
 }
 
 @synthesize window = _window;
@@ -151,7 +151,7 @@
 
 	/* Setup the attributes inspector */
 	[_inspectorTabView selectTabViewItemAtIndex:_inspectorTabButtons.selectedColumn];
-	_attributesViewExpansionInfo = [NSMutableDictionary dictionary];
+	_nodeInspectorViewExpansionInfo = [NSMutableDictionary dictionary];
 
 	/* Setup the library */
 	[_libraryTabView selectTabViewItemAtIndex:_libraryTabButtons.selectedColumn];
@@ -281,10 +281,10 @@
 		return;
 
 	/* Save attributes view position and expansion info */
-	NSScrollView *scrollView = _attributesView.enclosingScrollView;
-	for (id item in [[_attributesTreeController arrangedObjects] childNodes]) {
+	NSScrollView *scrollView = _nodeInspectorView.enclosingScrollView;
+	for (id item in [[_nodeInspectorTreeController arrangedObjects] childNodes]) {
 		NSString *name = [[item representedObject] valueForKey:@"name"];
-		_attributesViewExpansionInfo[name] = [NSNumber numberWithBool:[_attributesView isItemExpanded:item]];
+		_nodeInspectorViewExpansionInfo[name] = [NSNumber numberWithBool:[_nodeInspectorView isItemExpanded:item]];
 	}
 
 	/* Save the scroll position*/
@@ -308,15 +308,15 @@
 		dispatch_async(dispatch_get_main_queue(), ^{
 #endif
 			/* Replace the attributes table */
-			[_attributesTreeController setContent:contents];
+			[_nodeInspectorTreeController setContent:contents];
 
 			/* Restore attributes view position and expansion info */
-			for (id item in [[_attributesTreeController arrangedObjects] childNodes]) {
+			for (id item in [[_nodeInspectorTreeController arrangedObjects] childNodes]) {
 				NSString *name = [[item representedObject] valueForKey:@"name"];
-				NSNumber *expansionInfo = _attributesViewExpansionInfo[name];
-				[_attributesView expandItem:item expandChildren:YES];
+				NSNumber *expansionInfo = _nodeInspectorViewExpansionInfo[name];
+				[_nodeInspectorView expandItem:item expandChildren:YES];
 				if (expansionInfo && ![expansionInfo boolValue]) {
-					[_attributesView collapseItem:item];
+					[_nodeInspectorView collapseItem:item];
 				}
 			}
 
@@ -1370,7 +1370,7 @@
 	_objectLibraryItems = nil;
 
 	if (!scene) {
-		[_attributesTreeController setContent:nil];
+		[_nodeInspectorTreeController setContent:nil];
 		[_navigatorTreeController setContent:nil];
 		_editorView.scene = nil;
 		_editorView.needsDisplay = YES;

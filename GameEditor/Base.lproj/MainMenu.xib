@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <deployment identifier="macosx"/>
         <development version="6200" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
     </dependencies>
@@ -1208,8 +1207,6 @@
         </window>
         <customObject id="494" customClass="AppDelegate">
             <connections>
-                <outlet property="_attributesTreeController" destination="IEK-xe-ugr" id="TYh-UN-I2P"/>
-                <outlet property="_attributesView" destination="zW2-BO-taF" id="19t-eI-oFU"/>
                 <outlet property="_editorView" destination="suo-YO-fqM" id="D5W-Hu-pTw"/>
                 <outlet property="_inspectorTabButtons" destination="Nh3-4f-yFG" id="n2L-pz-H4m"/>
                 <outlet property="_inspectorTabView" destination="U3y-5k-T8w" id="vx5-Ba-1kW"/>
@@ -1220,6 +1217,8 @@
                 <outlet property="_mediaLibraryModeButton" destination="7sB-cr-Smr" id="6No-3P-UbK"/>
                 <outlet property="_navigatorTreeController" destination="FfK-Wg-7Xj" id="bBG-5I-i7L"/>
                 <outlet property="_navigatorView" destination="Y4L-tX-zfk" id="Gju-ZL-6rD"/>
+                <outlet property="_nodeInspectorTreeController" destination="IEK-xe-ugr" id="TYh-UN-I2P"/>
+                <outlet property="_nodeInspectorView" destination="zW2-BO-taF" id="19t-eI-oFU"/>
                 <outlet property="_objectLibraryArrayController" destination="ybe-5J-ot9" id="vxZ-n3-2fC"/>
                 <outlet property="_objectLibraryCollectionView" destination="53q-Pc-ZVo" id="NLB-6d-dci"/>
                 <outlet property="_objectLibraryModeButton" destination="oSp-qF-DyS" id="IR7-RG-o1h"/>
