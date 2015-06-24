@@ -610,12 +610,35 @@
                                                             </userDefinedRuntimeAttribute>
                                                         </userDefinedRuntimeAttributes>
                                                     </customView>
-                                                    <tabView drawsBackground="NO" allowsTruncatedLabels="NO" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="U3y-5k-T8w">
+                                                    <tabView drawsBackground="NO" allowsTruncatedLabels="NO" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="U3y-5k-T8w" userLabel="Inspector Tabs">
                                                         <rect key="frame" x="0.0" y="0.0" width="260" height="374"/>
                                                         <font key="font" metaFont="system"/>
                                                         <tabViewItems>
-                                                            <tabViewItem label="Tab" identifier="1" id="PSb-lR-whE">
+                                                            <tabViewItem label="Tab" identifier="1" id="PSb-lR-whE" userLabel="Identity Inspector">
                                                                 <view key="view" id="xkv-uy-7fa">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="260" height="374"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <subviews>
+                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RUK-6O-o0H">
+                                                                            <rect key="frame" x="78" y="177" width="105" height="21"/>
+                                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No Selection" id="8Ej-7n-p15">
+                                                                                <font key="font" metaFont="system" size="17"/>
+                                                                                <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                            </textFieldCell>
+                                                                            <connections>
+                                                                                <binding destination="IEK-xe-ugr" name="hidden" keyPath="arrangedObjects.childNodes.@count" id="2Xv-Jx-McN"/>
+                                                                            </connections>
+                                                                        </textField>
+                                                                    </subviews>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="centerX" secondItem="RUK-6O-o0H" secondAttribute="centerX" id="ZR1-KI-6WI"/>
+                                                                        <constraint firstAttribute="centerY" secondItem="RUK-6O-o0H" secondAttribute="centerY" id="qN3-rf-3v3"/>
+                                                                    </constraints>
+                                                                </view>
+                                                            </tabViewItem>
+                                                            <tabViewItem label="View" identifier="2" id="o3i-Ai-MNi" userLabel="Node Inspector">
+                                                                <view key="view" id="lrk-FU-6DL">
                                                                     <rect key="frame" x="0.0" y="0.0" width="260" height="374"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
@@ -791,33 +814,6 @@
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                             </scroller>
                                                                         </scrollView>
-                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RUK-6O-o0H">
-                                                                            <rect key="frame" x="78" y="177" width="105" height="21"/>
-                                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No Selection" id="8Ej-7n-p15">
-                                                                                <font key="font" metaFont="system" size="17"/>
-                                                                                <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                            </textFieldCell>
-                                                                            <connections>
-                                                                                <binding destination="IEK-xe-ugr" name="hidden" keyPath="arrangedObjects.childNodes.@count" id="2Xv-Jx-McN"/>
-                                                                            </connections>
-                                                                        </textField>
-                                                                    </subviews>
-                                                                    <constraints>
-                                                                        <constraint firstItem="WEo-lF-8ul" firstAttribute="top" secondItem="xkv-uy-7fa" secondAttribute="top" id="K1Z-LT-2hc"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="WEo-lF-8ul" secondAttribute="bottom" id="XjK-hr-rEe"/>
-                                                                        <constraint firstAttribute="centerX" secondItem="RUK-6O-o0H" secondAttribute="centerX" id="ZR1-KI-6WI"/>
-                                                                        <constraint firstAttribute="centerY" secondItem="RUK-6O-o0H" secondAttribute="centerY" id="qN3-rf-3v3"/>
-                                                                        <constraint firstItem="WEo-lF-8ul" firstAttribute="leading" secondItem="xkv-uy-7fa" secondAttribute="leading" id="qWY-F6-kdF"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="WEo-lF-8ul" secondAttribute="trailing" id="yGb-9s-som"/>
-                                                                    </constraints>
-                                                                </view>
-                                                            </tabViewItem>
-                                                            <tabViewItem label="View" identifier="2" id="o3i-Ai-MNi">
-                                                                <view key="view" id="lrk-FU-6DL">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="260" height="374"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                    <subviews>
                                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qnE-DP-EkK">
                                                                             <rect key="frame" x="78" y="177" width="105" height="21"/>
                                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No Selection" id="fnM-es-EfA">
@@ -832,7 +828,11 @@
                                                                     </subviews>
                                                                     <constraints>
                                                                         <constraint firstAttribute="centerY" secondItem="qnE-DP-EkK" secondAttribute="centerY" id="GWz-9B-sl9"/>
+                                                                        <constraint firstItem="WEo-lF-8ul" firstAttribute="leading" secondItem="lrk-FU-6DL" secondAttribute="leading" id="H2x-j5-aI8"/>
+                                                                        <constraint firstAttribute="bottom" secondItem="WEo-lF-8ul" secondAttribute="bottom" id="WQP-2w-L8v"/>
                                                                         <constraint firstAttribute="centerX" secondItem="qnE-DP-EkK" secondAttribute="centerX" id="aFy-0N-8mY"/>
+                                                                        <constraint firstItem="WEo-lF-8ul" firstAttribute="top" secondItem="lrk-FU-6DL" secondAttribute="top" id="atr-G6-LZ5"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="WEo-lF-8ul" secondAttribute="trailing" id="nwc-en-Puq"/>
                                                                     </constraints>
                                                                 </view>
                                                             </tabViewItem>
@@ -901,11 +901,11 @@
                                                             </userDefinedRuntimeAttribute>
                                                         </userDefinedRuntimeAttributes>
                                                     </customView>
-                                                    <tabView drawsBackground="NO" allowsTruncatedLabels="NO" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="1QZ-GI-Dny">
+                                                    <tabView drawsBackground="NO" allowsTruncatedLabels="NO" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="1QZ-GI-Dny" userLabel="Library Tabs">
                                                         <rect key="frame" x="0.0" y="0.0" width="260" height="175"/>
                                                         <font key="font" metaFont="system"/>
                                                         <tabViewItems>
-                                                            <tabViewItem label="Tab" identifier="1" id="Om1-5N-gCI">
+                                                            <tabViewItem label="Tab" identifier="1" id="Om1-5N-gCI" userLabel="Object Inspector">
                                                                 <view key="view" id="rhd-cI-hHF">
                                                                     <rect key="frame" x="0.0" y="0.0" width="260" height="175"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1021,7 +1021,7 @@
                                                                     </constraints>
                                                                 </view>
                                                             </tabViewItem>
-                                                            <tabViewItem label="View" identifier="2" id="Wtu-MA-FXx">
+                                                            <tabViewItem label="View" identifier="2" id="Wtu-MA-FXx" userLabel="Media Inspector">
                                                                 <view key="view" id="FMw-7y-exI">
                                                                     <rect key="frame" x="0.0" y="0.0" width="260" height="175"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1099,6 +1099,9 @@
                                                                                     <userDefinedRuntimeAttributes>
                                                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="topBorder" value="YES"/>
                                                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="bottomBorder" value="NO"/>
+                                                                                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                                                                            <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                                                        </userDefinedRuntimeAttribute>
                                                                                     </userDefinedRuntimeAttributes>
                                                                                 </customView>
                                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lj2-Mi-Qg7">
