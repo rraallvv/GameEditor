@@ -24,7 +24,7 @@
  */
 
 #import "AppDelegate.h"
-#import "AttributesView.h"
+#import "InspectorView.h"
 #import "LibraryView.h"
 #import <SceneKit/SceneKit.h>
 #import "LuaContext.h"
@@ -83,7 +83,7 @@
 
 @implementation AppDelegate {
 	IBOutlet EditorView *_editorView;
-	IBOutlet AttributesView *_attributesView;
+	IBOutlet InspectorView *_attributesView;
 	IBOutlet NavigatorView *_navigatorView;
 	IBOutlet LibraryView *_objectLibraryCollectionView;
 	IBOutlet LibraryView *_mediaLibraryCollectionView;

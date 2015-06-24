@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E401BDBA1B21DC2600280F27 /* ControlsAutosave.m in Sources */ = {isa = PBXBuildFile; fileRef = E401BDB91B21DC2600280F27 /* ControlsAutosave.m */; };
-		E408138F1AC228F400F54824 /* AttributesView.m in Sources */ = {isa = PBXBuildFile; fileRef = E408138E1AC228F400F54824 /* AttributesView.m */; };
+		E408138F1AC228F400F54824 /* InspectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E408138E1AC228F400F54824 /* InspectorView.m */; };
 		E40813921AC3C45300F54824 /* ValueEditors.xib in Resources */ = {isa = PBXBuildFile; fileRef = E40813901AC3C45300F54824 /* ValueEditors.xib */; };
 		E40813951AC42FFF00F54824 /* ColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = E40813941AC42FFF00F54824 /* ColorWell.m */; };
 		E40965ED1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m in Sources */ = {isa = PBXBuildFile; fileRef = E40965EC1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m */; };
@@ -109,8 +109,8 @@
 /* Begin PBXFileReference section */
 		E401BDB81B21DC2600280F27 /* ControlsAutosave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlsAutosave.h; sourceTree = "<group>"; };
 		E401BDB91B21DC2600280F27 /* ControlsAutosave.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControlsAutosave.m; sourceTree = "<group>"; };
-		E408138D1AC228F400F54824 /* AttributesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributesView.h; sourceTree = "<group>"; };
-		E408138E1AC228F400F54824 /* AttributesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributesView.m; sourceTree = "<group>"; };
+		E408138D1AC228F400F54824 /* InspectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InspectorView.h; sourceTree = "<group>"; };
+		E408138E1AC228F400F54824 /* InspectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InspectorView.m; sourceTree = "<group>"; };
 		E40813911AC3C45300F54824 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ValueEditors.xib; sourceTree = "<group>"; };
 		E40813931AC42FFF00F54824 /* ColorWell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorWell.h; sourceTree = "<group>"; };
 		E40813941AC42FFF00F54824 /* ColorWell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorWell.m; sourceTree = "<group>"; };
@@ -193,16 +193,16 @@
 			name = Utils;
 			sourceTree = "<group>";
 		};
-		E40813A01AC64C7600F54824 /* AttributesInspector */ = {
+		E40813A01AC64C7600F54824 /* Inspector */ = {
 			isa = PBXGroup;
 			children = (
 				E4ABDB701AB3BCA700AAE82E /* AttributeNode.h */,
 				E4ABDB711AB3BCA700AAE82E /* AttributeNode.m */,
-				E408138D1AC228F400F54824 /* AttributesView.h */,
-				E408138E1AC228F400F54824 /* AttributesView.m */,
+				E408138D1AC228F400F54824 /* InspectorView.h */,
+				E408138E1AC228F400F54824 /* InspectorView.m */,
 				E41894D81AD975B200E704BB /* Controls */,
 			);
-			name = AttributesInspector;
+			name = Inspector;
 			sourceTree = "<group>";
 		};
 		E41894D81AD975B200E704BB /* Controls */ = {
@@ -251,7 +251,7 @@
 				E4ABDB4D1AB3933900AAE82E /* AppDelegate.h */,
 				E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */,
 				E401BDC31B2287E600280F27 /* Utils */,
-				E40813A01AC64C7600F54824 /* AttributesInspector */,
+				E40813A01AC64C7600F54824 /* Inspector */,
 				E4F3B6A81ACD7ECA001482D2 /* Navigator */,
 				E4E6DA3C1AE9988100F4CE6F /* Library */,
 				E4BDDFE01B3A31DC0008FE91 /* Panel */,
@@ -583,7 +583,7 @@
 				E4F3B6A71ACD7EC4001482D2 /* NavigationNode.m in Sources */,
 				E4ABDB761AB47BB700AAE82E /* AttributeNode.m in Sources */,
 				E4E6DA3B1AE9987500F4CE6F /* LibraryView.m in Sources */,
-				E408138F1AC228F400F54824 /* AttributesView.m in Sources */,
+				E408138F1AC228F400F54824 /* InspectorView.m in Sources */,
 				E460AB931ACDC9B900859EA2 /* NavigatorView.m in Sources */,
 				E4ABDB4F1AB3933900AAE82E /* AppDelegate.m in Sources */,
 			);

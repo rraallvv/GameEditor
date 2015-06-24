@@ -1,5 +1,5 @@
 /*
- * AttributesView.m
+ * InspectorView.m
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-#import "AttributesView.h"
+#import "InspectorView.h"
 #import "StepperTextField.h"
 
 #pragma mark TableCellView
@@ -154,7 +154,7 @@
 
 - (void)drawSeparatorInRect:(NSRect)dirtyRect {
 
-	AttributesView *outlineView = (AttributesView *)[self superview];
+	InspectorView *outlineView = (InspectorView *)[self superview];
 
 	NSInteger row = [outlineView rowForView:self];
 	id item = [outlineView itemAtRow:row];
@@ -250,7 +250,7 @@
 - (void)setFrame:(NSRect)frame {
 	[super setFrame:frame];
 
-	AttributesView *outlineView = (AttributesView *)[self superview];
+	InspectorView *outlineView = (InspectorView *)[self superview];
 	NSInteger row = [outlineView rowForView:self];
 	id item = [outlineView itemAtRow:row];
 	BOOL isCollapsible = [[[item representedObject] valueForKey:@"isCollapsible"] boolValue];
@@ -308,7 +308,7 @@
 }
 
 - (void)toggleGroupVisibility {
-	AttributesView *outlineView = (AttributesView *)[self superview];
+	InspectorView *outlineView = (InspectorView *)[self superview];
 	id item = [outlineView itemAtRow:[outlineView rowForView:self]];
 	if ([outlineView isItemExpanded:item]) {
 		_hideGroupButton.attributedTitle = _showAttributedString;
@@ -344,14 +344,14 @@
 
 @end
 
-#pragma mark AttributesView
+#pragma mark InspectorView
 
 static const CGFloat kIndentationPerLevel = 0.0;
 
-@interface AttributesView () <NSOutlineViewDelegate, NSOutlineViewDataSource>
+@interface InspectorView () <NSOutlineViewDelegate, NSOutlineViewDataSource>
 @end
 
-@implementation AttributesView {
+@implementation InspectorView {
 	__weak id _actualDelegate;
 	__weak id _actualDataSource;
 	NSMutableDictionary *_prefferedSizes;
