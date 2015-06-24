@@ -32,6 +32,7 @@
 		E4ABDB761AB47BB700AAE82E /* AttributeNode.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB711AB3BCA700AAE82E /* AttributeNode.m */; };
 		E4B893F21B38DB1400C28D93 /* Shader2.fsh in Resources */ = {isa = PBXBuildFile; fileRef = E4B893F11B38DB1400C28D93 /* Shader2.fsh */; };
 		E4BB58AE1ABB510A0021A467 /* EditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BB58AD1ABB510A0021A467 /* EditorView.m */; };
+		E4BDDFD71B3A31D60008FE91 /* PanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDDFD61B3A31D60008FE91 /* PanelView.m */; };
 		E4BFABB81B33ACDB000A51EB /* NSBundle+ProxyBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BFABB41B33ACDB000A51EB /* NSBundle+ProxyBundle.m */; };
 		E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */; };
 		E4E6DA3B1AE9987500F4CE6F /* LibraryView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E6DA3A1AE9987500F4CE6F /* LibraryView.m */; };
@@ -146,6 +147,8 @@
 		E4B893F11B38DB1400C28D93 /* Shader2.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader2.fsh; sourceTree = "<group>"; };
 		E4BB58AC1ABB510A0021A467 /* EditorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorView.h; sourceTree = "<group>"; };
 		E4BB58AD1ABB510A0021A467 /* EditorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorView.m; sourceTree = "<group>"; };
+		E4BDDFD51B3A31D60008FE91 /* PanelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PanelView.h; sourceTree = "<group>"; };
+		E4BDDFD61B3A31D60008FE91 /* PanelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PanelView.m; sourceTree = "<group>"; };
 		E4BFABB31B33ACDB000A51EB /* NSBundle+ProxyBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+ProxyBundle.h"; sourceTree = "<group>"; };
 		E4BFABB41B33ACDB000A51EB /* NSBundle+ProxyBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+ProxyBundle.m"; sourceTree = "<group>"; };
 		E4BFF4AE1AB78E24002DADD3 /* StepperTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StepperTextField.h; sourceTree = "<group>"; };
@@ -251,6 +254,7 @@
 				E40813A01AC64C7600F54824 /* AttributesInspector */,
 				E4F3B6A81ACD7ECA001482D2 /* Navigator */,
 				E4E6DA3C1AE9988100F4CE6F /* Library */,
+				E4BDDFE01B3A31DC0008FE91 /* Panel */,
 				E4BDE4271B18501600721B9A /* Editor */,
 				E4C24C091B1884B9003D6E60 /* Resources */,
 				E4ABDB4B1AB3933900AAE82E /* Supporting Files */,
@@ -282,6 +286,15 @@
 				E4ABDB651AB3933900AAE82E /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E4BDDFE01B3A31DC0008FE91 /* Panel */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDDFD51B3A31D60008FE91 /* PanelView.h */,
+				E4BDDFD61B3A31D60008FE91 /* PanelView.m */,
+			);
+			name = Panel;
 			sourceTree = "<group>";
 		};
 		E4BDE4271B18501600721B9A /* Editor */ = {
@@ -558,6 +571,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4BB58AE1ABB510A0021A467 /* EditorView.m in Sources */,
+				E4BDDFD71B3A31D60008FE91 /* PanelView.m in Sources */,
 				E45B16B81B35AA97007883BF /* ComboBoxCell.m in Sources */,
 				E40813951AC42FFF00F54824 /* ColorWell.m in Sources */,
 				E4ABDB511AB3933900AAE82E /* main.m in Sources */,

@@ -85,14 +85,14 @@
 	IBOutlet EditorView *_editorView;
 	IBOutlet AttributesView *_attributesView;
 	IBOutlet NavigatorView *_navigatorView;
-	IBOutlet LibraryView *_toolsLibraryCollectionView;
-	IBOutlet LibraryView *_resourcesLibraryCollectionView;
+	IBOutlet LibraryView *_objectLibraryCollectionView;
+	IBOutlet LibraryView *_mediaLibraryCollectionView;
 	IBOutlet NSTreeController *_attributesTreeController;
 	IBOutlet NSTreeController *_navigatorTreeController;
-	IBOutlet NSArrayController *_toolsLibraryArrayController;
-	IBOutlet NSArrayController *_resourcesLibraryArrayController;
-	IBOutlet NSButton *_toolsLibraryModeButton;
-	IBOutlet NSButton *_resourcesLibraryModeButton;
+	IBOutlet NSArrayController *_objectLibraryArrayController;
+	IBOutlet NSArrayController *_mediaLibraryArrayController;
+	IBOutlet NSButton *_objectLibraryModeButton;
+	IBOutlet NSButton *_mediaLibraryModeButton;
 	IBOutlet NSMatrix *_libraryTabButtons;
 	IBOutlet NSMatrix *_inspectorTabButtons;
 	IBOutlet NSView *_saveSceneView;
@@ -106,12 +106,12 @@
 	NSArray *_exportedClasses;
 	LuaContext *_sharedScriptingContext;
 	NSPropertyListFormat _sceneFormat;
-	NSMutableArray *_toolsLibraryItems;
-	NSMutableArray *_resourcesLibraryItems;
-	NSInteger _toolsSelectedLibraryItem;
-	NSInteger _resourcesSelectedLibraryItem;
-	NSMutableArray *_toolsLibraryContext;
-	NSMutableArray *_resourcesLibraryContext;
+	NSMutableArray *_objectLibraryItems;
+	NSMutableArray *_mediaLibraryItems;
+	NSInteger _objectSelectedLibraryItem;
+	NSInteger _mediaSelectedLibraryItem;
+	NSMutableArray *_objectLibraryContext;
+	NSMutableArray *_mediaLibraryContext;
 	NSMutableDictionary *_attributesViewExpansionInfo;
 }
 
@@ -139,8 +139,8 @@
 
 	/* Enable Drag & Drop */
 	[_navigatorView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
-	[_toolsLibraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
-	[_resourcesLibraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
+	[_objectLibraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
+	[_mediaLibraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
 	[_editorView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
 
 	/* Populate the 'Open Recent' file menu from the User default settings */
@@ -154,12 +154,12 @@
 
 	/* Setup the library */
 	[_libraryTabView selectTabViewItemAtIndex:_libraryTabButtons.selectedColumn];
-	_toolsLibraryCollectionView.delegate = self;
-	_resourcesLibraryCollectionView.delegate = self;
-	_toolsSelectedLibraryItem = NSNotFound;
-	_resourcesSelectedLibraryItem = NSNotFound;
-	_toolsLibraryCollectionView.mode = _toolsLibraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
-	_resourcesLibraryCollectionView.mode = _resourcesLibraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
+	_objectLibraryCollectionView.delegate = self;
+	_mediaLibraryCollectionView.delegate = self;
+	_objectSelectedLibraryItem = NSNotFound;
+	_mediaSelectedLibraryItem = NSNotFound;
+	_objectLibraryCollectionView.mode = _objectLibraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
+	_mediaLibraryCollectionView.mode = _mediaLibraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
 	[self populateToolsLibrary];
 
 	/* Initialize the scripting support */
@@ -873,17 +873,17 @@
 #pragma mark Library
 
 - (IBAction)toolsLibraryDidChangeMode:(NSButton *)sender {
-	_toolsLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
+	_objectLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
 - (IBAction)resourcesLibraryDidChangeMode:(NSButton *)sender {
-	_resourcesLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
+	_mediaLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
 - (void)populateToolsLibrary {
-	if (!_toolsLibraryItems) {
-		_toolsLibraryItems = [NSMutableArray array];
-		_toolsLibraryContext = [NSMutableArray array];
+	if (!_objectLibraryItems) {
+		_objectLibraryItems = [NSMutableArray array];
+		_objectLibraryContext = [NSMutableArray array];
 
 		NSURL *plugInsURL = [[NSBundle mainBundle] builtInPlugInsURL];
 
@@ -961,7 +961,7 @@
 						script = (id)[NSNull null];
 					}
 
-					[_toolsLibraryContext addObject:@{@"script": script}.mutableCopy];
+					[_objectLibraryContext addObject:@{@"script": script}.mutableCopy];
 
 					/* Populate the library items with the loaded data */
 					for (int i=0; i<names.count; ++i) {
@@ -999,22 +999,22 @@
 						[fullDescriptionAttributedString endEditing];
 
 						/* Add the item to the library */
-						[_toolsLibraryItems addObject:@{@"name":toolName,
+						[_objectLibraryItems addObject:@{@"name":toolName,
 														@"label":fullDescriptionAttributedString,
 														@"image":iconImage,
-														@"showLabel":@(!_toolsLibraryModeButton.state),
-														@"contextData":@(_toolsLibraryContext.count - 1)}.mutableCopy];
+														@"showLabel":@(!_objectLibraryModeButton.state),
+														@"contextData":@(_objectLibraryContext.count - 1)}.mutableCopy];
 					}
 				}
 			}
 		}
 	}
 
-	[_toolsLibraryArrayController setContent:_toolsLibraryItems];
+	[_objectLibraryArrayController setContent:_objectLibraryItems];
 
-	if (_toolsSelectedLibraryItem == NSNotFound)
-		_toolsSelectedLibraryItem = 0;
-	[_toolsLibraryArrayController setSelectionIndex:_toolsSelectedLibraryItem];
+	if (_objectSelectedLibraryItem == NSNotFound)
+		_objectSelectedLibraryItem = 0;
+	[_objectLibraryArrayController setSelectionIndex:_objectSelectedLibraryItem];
 }
 
 - (void)populateResourcesLibrary {
@@ -1024,9 +1024,9 @@
 	if (!_sceneBundlePath || ![_sceneBundlePath isEqualToString:bundlePath]) {
 
 		/* Init the context of the resource library */
-		if (!_resourcesLibraryContext) {
-			_resourcesLibraryContext = [NSMutableArray array];
-			[_resourcesLibraryContext addObject:@{@"script": LUA_STRING
+		if (!_mediaLibraryContext) {
+			_mediaLibraryContext = [NSMutableArray array];
+			[_mediaLibraryContext addObject:@{@"script": LUA_STRING
 												  (
 												   function createNodeAtPosition(position, name)
 												   local node = SKSpriteNode.spriteNodeWithImageNamed(name)
@@ -1037,7 +1037,7 @@
 		}
 
 		/* Clear the resource library */
-		_resourcesLibraryItems = [NSMutableArray array];
+		_mediaLibraryItems = [NSMutableArray array];
 
 		if (_sceneBundle) {
 			/* Store the scene bundle path */
@@ -1123,10 +1123,10 @@
 								[filenameAttributedString endEditing];
 
 								/* Add the item to the library */
-								[_resourcesLibraryItems addObject:@{@"name":filename,
+								[_mediaLibraryItems addObject:@{@"name":filename,
 																	@"label":filenameAttributedString,
 																	@"image":imageThumbnail,
-																	@"showLabel":@(!_resourcesLibraryModeButton.state),
+																	@"showLabel":@(!_mediaLibraryModeButton.state),
 																	@"contextData":@(0)}.mutableCopy];
 							}
 						}
@@ -1142,11 +1142,11 @@
 		}
 	}
 
-	[_resourcesLibraryArrayController setContent:_resourcesLibraryItems];
+	[_mediaLibraryArrayController setContent:_mediaLibraryItems];
 
-	if (_resourcesSelectedLibraryItem == NSNotFound)
-		_resourcesSelectedLibraryItem = 0;
-	[_resourcesLibraryArrayController setSelectionIndex:_resourcesSelectedLibraryItem];
+	if (_mediaSelectedLibraryItem == NSNotFound)
+		_mediaSelectedLibraryItem = 0;
+	[_mediaLibraryArrayController setSelectionIndex:_mediaSelectedLibraryItem];
 }
 
 - (IBAction)libraryDidSwitchTab:(NSMatrix *)buttons {
@@ -1155,14 +1155,14 @@
 
 - (void)libraryView:(LibraryView *)libraryView didSelectItemAtIndex:(NSInteger)index {
 	if (_libraryTabButtons.selectedColumn) {
-		_resourcesSelectedLibraryItem = index;
+		_mediaSelectedLibraryItem = index;
 	} else {
-		_toolsSelectedLibraryItem = index;
+		_objectSelectedLibraryItem = index;
 	}
 }
 
 - (NSArray *)texturesLibrary {
-	return [_resourcesLibraryItems valueForKey:@"name"];
+	return [_mediaLibraryItems valueForKey:@"name"];
 }
 
 - (NSArray *)shadersLibrary {
@@ -1194,9 +1194,9 @@
 	/* Get the library item */
 	NSMutableDictionary *libraryItem;
 	if (_libraryTabButtons.selectedColumn) {
-		libraryItem = [[_resourcesLibraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
+		libraryItem = [[_mediaLibraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
 	} else {
-		libraryItem = [[_toolsLibraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
+		libraryItem = [[_objectLibraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
 	}
 
 	/* Retrieve a valid context from the cache for the item */
@@ -1205,9 +1205,9 @@
 	NSMutableDictionary *contextData = nil;
 	if (itemIndex) {
 		if (_libraryTabButtons.selectedColumn) {
-			contextData = [_resourcesLibraryContext objectAtIndex:[itemIndex intValue]];
+			contextData = [_mediaLibraryContext objectAtIndex:[itemIndex intValue]];
 		} else {
-			contextData = [_toolsLibraryContext objectAtIndex:[itemIndex intValue]];
+			contextData = [_objectLibraryContext objectAtIndex:[itemIndex intValue]];
 		}
 		scriptContext = [contextData objectForKey:@"context"];
 	}
@@ -1366,7 +1366,7 @@
 }
 
 - (void)useScene:(SKScene *)scene {
-	_toolsLibraryItems = nil;
+	_objectLibraryItems = nil;
 
 	if (!scene) {
 		[_attributesTreeController setContent:nil];

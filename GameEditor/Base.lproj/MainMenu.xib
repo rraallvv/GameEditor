@@ -564,7 +564,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="260" height="399"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
-                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="I9N-Jo-Ccm" customClass="LibraryPanelView">
+                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="I9N-Jo-Ccm" customClass="PanelView">
                                                         <rect key="frame" x="0.0" y="374" width="260" height="25"/>
                                                         <subviews>
                                                             <matrix verticalHuggingPriority="750" fixedFrame="YES" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nh3-4f-yFG" customClass="Matrix">
@@ -853,7 +853,7 @@
                                                 <rect key="frame" x="0.0" y="400" width="260" height="200"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
-                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="iCW-HX-D7E" customClass="LibraryPanelView">
+                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="iCW-HX-D7E" customClass="PanelView">
                                                         <rect key="frame" x="0.0" y="175" width="260" height="25"/>
                                                         <subviews>
                                                             <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pf4-VP-sjQ" customClass="Matrix">
@@ -940,7 +940,7 @@
                                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                                     </scroller>
                                                                                 </scrollView>
-                                                                                <customView translatesAutoresizingMaskIntoConstraints="NO" id="NjT-RW-5T2" customClass="LibraryPanelView">
+                                                                                <customView translatesAutoresizingMaskIntoConstraints="NO" id="NjT-RW-5T2" customClass="PanelView">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="260" height="25"/>
                                                                                     <subviews>
                                                                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oSp-qF-DyS" customClass="Button">
@@ -1056,7 +1056,7 @@
                                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                                     </scroller>
                                                                                 </scrollView>
-                                                                                <customView translatesAutoresizingMaskIntoConstraints="NO" id="60b-Ya-PkH" customClass="LibraryPanelView">
+                                                                                <customView translatesAutoresizingMaskIntoConstraints="NO" id="60b-Ya-PkH" customClass="PanelView">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="260" height="25"/>
                                                                                     <subviews>
                                                                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7sB-cr-Smr" customClass="Button">
@@ -1215,15 +1215,15 @@
                 <outlet property="_inspectorTabView" destination="U3y-5k-T8w" id="vx5-Ba-1kW"/>
                 <outlet property="_libraryTabButtons" destination="pf4-VP-sjQ" id="1XR-iH-5BW"/>
                 <outlet property="_libraryTabView" destination="1QZ-GI-Dny" id="9k6-mK-qER"/>
+                <outlet property="_mediaLibraryArrayController" destination="TU8-ns-SGh" id="Ghv-on-PjH"/>
+                <outlet property="_mediaLibraryCollectionView" destination="UQ2-nI-Fzq" id="1dG-BK-Eew"/>
+                <outlet property="_mediaLibraryModeButton" destination="7sB-cr-Smr" id="6No-3P-UbK"/>
                 <outlet property="_navigatorTreeController" destination="FfK-Wg-7Xj" id="bBG-5I-i7L"/>
                 <outlet property="_navigatorView" destination="Y4L-tX-zfk" id="Gju-ZL-6rD"/>
-                <outlet property="_resourcesLibraryArrayController" destination="TU8-ns-SGh" id="Ghv-on-PjH"/>
-                <outlet property="_resourcesLibraryCollectionView" destination="UQ2-nI-Fzq" id="1dG-BK-Eew"/>
-                <outlet property="_resourcesLibraryModeButton" destination="7sB-cr-Smr" id="6No-3P-UbK"/>
+                <outlet property="_objectLibraryArrayController" destination="ybe-5J-ot9" id="vxZ-n3-2fC"/>
+                <outlet property="_objectLibraryCollectionView" destination="53q-Pc-ZVo" id="NLB-6d-dci"/>
+                <outlet property="_objectLibraryModeButton" destination="oSp-qF-DyS" id="IR7-RG-o1h"/>
                 <outlet property="_saveSceneView" destination="y7f-F6-SiA" id="GjD-PC-v0V"/>
-                <outlet property="_toolsLibraryArrayController" destination="ybe-5J-ot9" id="vxZ-n3-2fC"/>
-                <outlet property="_toolsLibraryCollectionView" destination="53q-Pc-ZVo" id="NLB-6d-dci"/>
-                <outlet property="_toolsLibraryModeButton" destination="oSp-qF-DyS" id="IR7-RG-o1h"/>
                 <outlet property="_useXMLFormatButton" destination="dgr-lQ-gvM" id="9CG-ih-ueQ"/>
                 <outlet property="skView" destination="BAm-0B-vb9" id="MCo-T6-F5E"/>
                 <outlet property="window" destination="371" id="532"/>
