@@ -1,5 +1,5 @@
 /*
- * AttributesView.m
+ * InspectorView.m
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-#import "AttributesView.h"
+#import "InspectorView.h"
 #import "StepperTextField.h"
 
 #pragma mark TableCellView
@@ -128,18 +128,23 @@
 
 @end
 
-#pragma mark AttributesTableRowView
+#pragma mark InspectorTableRowView
 
-@interface AttributesTableRowView : NSTableRowView
+@interface InspectorTableRowView : NSTableRowView
 @end
 
-@implementation AttributesTableRowView {
+@implementation InspectorTableRowView {
 	NSAttributedString *_showAttributedString;
 	NSAttributedString *_hideAttributedString;
 	NSAttributedString *_showAlternateAttributedString;
 	NSAttributedString *_hideAlternateAttributedString;
 	NSButton *_hideGroupButton;
 	NSTrackingArea *_trackingArea;
+}
+
+- (void)viewDidMoveToSuperview {
+	/* Force call to set frame to create the show/hide button in all collapsible rows */
+	[self setFrame:self.frame];
 }
 
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
@@ -149,7 +154,7 @@
 
 - (void)drawSeparatorInRect:(NSRect)dirtyRect {
 
-	AttributesView *outlineView = (AttributesView *)[self superview];
+	InspectorView *outlineView = (InspectorView *)[self superview];
 
 	NSInteger row = [outlineView rowForView:self];
 	id item = [outlineView itemAtRow:row];
@@ -178,7 +183,6 @@
 
 	CGPoint marginBottomLeft = NSMakePoint(bottomLeft.x + separatorMargin,  bottomLeft.y);
 
-	/* Only draw the separator for the root nodes */
 	if (self.isGroupRowStyle) {
 
 		if (indexPathLength == 1) {
@@ -202,28 +206,43 @@
 				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
 			}
 
+		} else if (row == [outlineView numberOfRows] - 1) {
+			[rootNodeSeparatorColor set];
+
+			/* Separator at the bottom of the last group */
+			[NSBezierPath strokeLineFromPoint:bottomLeft toPoint:bottomRight];
+
 		} else {
 			[groupNodeSeparatorColor set];
 
 			/* Separator between two non-root group node */
-			if (indexPathLength == nextIndexPathLength) {
+			if (nextIndexPathLength <= indexPathLength) {
 				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
 			}
 		}
 
 	} else {
-		[groupNodeSeparatorColor set];
+		if (row == [outlineView numberOfRows] - 1) {
+			[rootNodeSeparatorColor set];
 
-		/* Separator at the bottom of a leaf node followed by a non-root group node */
-		if (nextIndexPathLength > 1
-			&& nextItemIsGroup) {
-			[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
-		}
+			/* Separator at the bottom of the last leaf node */
+			[NSBezierPath strokeLineFromPoint:bottomLeft toPoint:bottomRight];
 
-		/* Separator at the bottom of a leaf node followed by a leaf node */
-		if (nextIndexPathLength < indexPathLength
-			&& !nextItemIsGroup) {
-			[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
+		} else {
+
+			[groupNodeSeparatorColor set];
+
+			/* Separator at the bottom of a leaf node followed by a non-root group node */
+			if (nextIndexPathLength > 1
+				&& nextItemIsGroup) {
+				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
+			}
+
+			/* Separator at the bottom of a leaf node followed by a leaf node */
+			if (nextIndexPathLength < indexPathLength
+				&& !nextItemIsGroup) {
+				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
+			}
 		}
 	}
 }
@@ -231,11 +250,12 @@
 - (void)setFrame:(NSRect)frame {
 	[super setFrame:frame];
 
-	AttributesView *outlineView = (AttributesView *)[self superview];
+	InspectorView *outlineView = (InspectorView *)[self superview];
 	NSInteger row = [outlineView rowForView:self];
-	NSUInteger indexPathLength = [[[outlineView itemAtRow:row] indexPath] length];
+	id item = [outlineView itemAtRow:row];
+	BOOL isCollapsible = [[[item representedObject] valueForKey:@"isCollapsible"] boolValue];
 
-	if (self.isGroupRowStyle && indexPathLength == 1) {
+	if (self.isGroupRowStyle && isCollapsible) {
 		if (!_hideGroupButton) {
 
 			NSBundle *bundle = [NSBundle bundleForClass:[NSApplication class]];
@@ -288,7 +308,7 @@
 }
 
 - (void)toggleGroupVisibility {
-	AttributesView *outlineView = (AttributesView *)[self superview];
+	InspectorView *outlineView = (InspectorView *)[self superview];
 	id item = [outlineView itemAtRow:[outlineView rowForView:self]];
 	if ([outlineView isItemExpanded:item]) {
 		_hideGroupButton.attributedTitle = _showAttributedString;
@@ -324,14 +344,14 @@
 
 @end
 
-#pragma mark AttributesView
+#pragma mark InspectorView
 
 static const CGFloat kIndentationPerLevel = 0.0;
 
-@interface AttributesView () <NSOutlineViewDelegate, NSOutlineViewDataSource>
+@interface InspectorView () <NSOutlineViewDelegate, NSOutlineViewDataSource>
 @end
 
-@implementation AttributesView {
+@implementation InspectorView {
 	__weak id _actualDelegate;
 	__weak id _actualDataSource;
 	NSMutableDictionary *_prefferedSizes;
@@ -391,7 +411,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (NSTableRowView *)outlineView:(NSOutlineView *)outlineView rowViewForItem:(id)item {
-	return [[AttributesTableRowView alloc] init];
+	return [[InspectorTableRowView alloc] init];
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
@@ -425,16 +445,12 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
+	NSString *type = [[item representedObject] valueForKey:@"type"];
 	if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
-		if ([item indexPath].length == 1) {
-			return [outlineView makeViewWithIdentifier:@"class" owner:self];
-		} else {
-			return [outlineView makeViewWithIdentifier:@"expandable" owner:self];
-		}
+		return [outlineView makeViewWithIdentifier:type owner:self];
 	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
 		return [outlineView makeViewWithIdentifier:@"attribute" owner:self];
 	} else {
-		NSString *type = [[item representedObject] valueForKey:@"type"];
 		for (NSString *identifier in _editorIdentifiers) {
 			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
 				return [outlineView makeViewWithIdentifier:identifier owner:self];

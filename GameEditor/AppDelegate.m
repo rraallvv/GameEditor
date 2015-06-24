@@ -24,7 +24,7 @@
  */
 
 #import "AppDelegate.h"
-#import "AttributesView.h"
+#import "InspectorView.h"
 #import "LibraryView.h"
 #import <SceneKit/SceneKit.h>
 #import "LuaContext.h"
@@ -83,22 +83,24 @@
 
 @implementation AppDelegate {
 	IBOutlet EditorView *_editorView;
-	IBOutlet AttributesView *_attributesView;
+	IBOutlet InspectorView *_nodeInspectorView;
+	IBOutlet InspectorView *_identityInspectorView;
 	IBOutlet NavigatorView *_navigatorView;
-	IBOutlet LibraryView *_toolsLibraryCollectionView;
-	IBOutlet LibraryView *_resourcesLibraryCollectionView;
-	IBOutlet NSTreeController *_attributesTreeController;
+	IBOutlet LibraryView *_objectLibraryCollectionView;
+	IBOutlet LibraryView *_mediaLibraryCollectionView;
+	IBOutlet NSTreeController *_nodeInspectorTreeController;
+	IBOutlet NSTreeController *_identityInspectorTreeController;
 	IBOutlet NSTreeController *_navigatorTreeController;
-	IBOutlet NSArrayController *_toolsLibraryArrayController;
-	IBOutlet NSArrayController *_resourcesLibraryArrayController;
-	IBOutlet NSButton *_toolsLibraryModeButton;
-	IBOutlet NSButton *_resourcesLibraryModeButton;
+	IBOutlet NSArrayController *_objectLibraryArrayController;
+	IBOutlet NSArrayController *_mediaLibraryArrayController;
+	IBOutlet NSButton *_objectLibraryModeButton;
+	IBOutlet NSButton *_mediaLibraryModeButton;
 	IBOutlet NSMatrix *_libraryTabButtons;
-	IBOutlet NSTextField *_attributesViewNoSelectionLabel;
-	IBOutlet NSTextField *_navigatorViewNoSceneLabel;
+	IBOutlet NSMatrix *_inspectorTabButtons;
 	IBOutlet NSView *_saveSceneView;
 	IBOutlet NSButton *_useXMLFormatButton;
 	IBOutlet NSTabView *_libraryTabView;
+	IBOutlet NSTabView *_inspectorTabView;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
 	NSBundle *_sceneBundle;
@@ -106,13 +108,13 @@
 	NSArray *_exportedClasses;
 	LuaContext *_sharedScriptingContext;
 	NSPropertyListFormat _sceneFormat;
-	NSMutableArray *_toolsLibraryItems;
-	NSMutableArray *_resourcesLibraryItems;
-	NSInteger _toolsSelectedLibraryItem;
-	NSInteger _resourcesSelectedLibraryItem;
-	NSMutableArray *_toolsLibraryContext;
-	NSMutableArray *_resourcesLibraryContext;
-	NSMutableDictionary *_attributesViewExpansionInfo;
+	NSMutableArray *_objectLibraryItems;
+	NSMutableArray *_mediaLibraryItems;
+	NSInteger _objectSelectedLibraryItem;
+	NSInteger _mediaSelectedLibraryItem;
+	NSMutableArray *_objectLibraryContext;
+	NSMutableArray *_mediaLibraryContext;
+	NSMutableDictionary *_inspectorViewExpansionInfo;
 }
 
 @synthesize window = _window;
@@ -139,8 +141,8 @@
 
 	/* Enable Drag & Drop */
 	[_navigatorView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
-	[_toolsLibraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
-	[_resourcesLibraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
+	[_objectLibraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
+	[_mediaLibraryCollectionView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
 	[_editorView registerForDraggedTypes:[NSArray arrayWithObject: @"public.binary"]];
 
 	/* Populate the 'Open Recent' file menu from the User default settings */
@@ -150,17 +152,18 @@
 	}
 
 	/* Setup the attributes inspector */
-	_attributesViewExpansionInfo = [NSMutableDictionary dictionary];
+	[_inspectorTabView selectTabViewItemAtIndex:_inspectorTabButtons.selectedColumn];
+	_inspectorViewExpansionInfo = [NSMutableDictionary dictionary];
 
 	/* Setup the library */
 	[_libraryTabView selectTabViewItemAtIndex:_libraryTabButtons.selectedColumn];
-	_toolsLibraryCollectionView.delegate = self;
-	_resourcesLibraryCollectionView.delegate = self;
-	_toolsSelectedLibraryItem = NSNotFound;
-	_resourcesSelectedLibraryItem = NSNotFound;
-	_toolsLibraryCollectionView.mode = _toolsLibraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
-	_resourcesLibraryCollectionView.mode = _resourcesLibraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
-	[self populateToolsLibrary];
+	_objectLibraryCollectionView.delegate = self;
+	_mediaLibraryCollectionView.delegate = self;
+	_objectSelectedLibraryItem = NSNotFound;
+	_mediaSelectedLibraryItem = NSNotFound;
+	_objectLibraryCollectionView.mode = _objectLibraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
+	_mediaLibraryCollectionView.mode = _mediaLibraryModeButton.state ? LibraryViewModeIcons : LibraryViewModeList;
+	[self populateObjectLibrary];
 
 	/* Initialize the scripting support */
 	_sharedScriptingContext = [LuaContext new];
@@ -280,14 +283,18 @@
 		return;
 
 	/* Save attributes view position and expansion info */
-	NSScrollView *scrollView = _attributesView.enclosingScrollView;
-	for (id item in [[_attributesTreeController arrangedObjects] childNodes]) {
+	for (id item in [[_nodeInspectorTreeController arrangedObjects] childNodes]) {
 		NSString *name = [[item representedObject] valueForKey:@"name"];
-		_attributesViewExpansionInfo[name] = [NSNumber numberWithBool:[_attributesView isItemExpanded:item]];
+		_inspectorViewExpansionInfo[name] = [NSNumber numberWithBool:[_nodeInspectorView isItemExpanded:item]];
 	}
-	CGPoint scrollPosition = scrollView.documentVisibleRect.origin;
+	for (id item in [[_identityInspectorTreeController arrangedObjects] childNodes]) {
+		NSString *name = [[item representedObject] valueForKey:@"name"];
+		_inspectorViewExpansionInfo[name] = [NSNumber numberWithBool:[_identityInspectorView isItemExpanded:item]];
+	}
 
-	_attributesViewNoSelectionLabel.hidden = node != nil;
+	/* Save the scroll position*/
+	NSScrollView *nodeScrollView = _nodeInspectorView.enclosingScrollView;
+	CGFloat nodeScrollPosition = nodeScrollView.documentVisibleRect.origin.y;
 
 	_selectedNode = node;
 
@@ -298,7 +305,17 @@
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 #endif
 		/* Build the tree of attributes in the background thread */
-		NSMutableArray *contents = [self attributesForAllClassesWithNode:node];
+		NSMutableArray *nodeInspectorContents = [self attributesForAllClassesWithNode:node];
+		NSMutableArray *identityInspectorContents = @[@{@"name": @"User Data",
+														@"type": @"header",
+														@"isLeaf": @NO,
+														@"isEditable": @NO,
+														@"isCollapsible": @YES,
+														@"children": @[@{@"name": @"userData",
+																		 @"type": @"@\"NSMutableDictionary\"",
+																		 @"isLeaf": @NO,
+																		 @"isEditable": @NO}]
+														}].mutableCopy;
 
 		/* Look up for the row to be selected */
 		NSInteger row = [_navigatorView rowForItem:[self navigationNodeOfObject:node inNodes:[[_navigatorTreeController arrangedObjects] childNodes]]];
@@ -307,19 +324,33 @@
 		dispatch_async(dispatch_get_main_queue(), ^{
 #endif
 			/* Replace the attributes table */
-			[_attributesTreeController setContent:contents];
+			[_nodeInspectorTreeController setContent:nodeInspectorContents];
+			[_identityInspectorTreeController setContent:identityInspectorContents];
 
 			/* Restore attributes view position and expansion info */
-			for (id item in [[_attributesTreeController arrangedObjects] childNodes]) {
+			for (id item in [[_nodeInspectorTreeController arrangedObjects] childNodes]) {
 				NSString *name = [[item representedObject] valueForKey:@"name"];
-				NSNumber *expansionInfo = _attributesViewExpansionInfo[name];
-				[_attributesView expandItem:item expandChildren:YES];
+				NSNumber *expansionInfo = _inspectorViewExpansionInfo[name];
+				[_nodeInspectorView expandItem:item expandChildren:YES];
 				if (expansionInfo && ![expansionInfo boolValue]) {
-					[_attributesView collapseItem:item];
+					[_nodeInspectorView collapseItem:item];
 				}
 			}
-			[scrollView.contentView scrollToPoint:scrollPosition];
-			[scrollView reflectScrolledClipView:scrollView.contentView];
+			for (id item in [[_identityInspectorTreeController arrangedObjects] childNodes]) {
+				NSString *name = [[item representedObject] valueForKey:@"name"];
+				NSNumber *expansionInfo = _inspectorViewExpansionInfo[name];
+				[_identityInspectorView expandItem:item expandChildren:YES];
+				if (expansionInfo && ![expansionInfo boolValue]) {
+					[_identityInspectorView collapseItem:item];
+				}
+			}
+
+			/* Restore the scroll position  */
+			CGFloat nodeScrollContentHeight = [(NSView *)nodeScrollView.documentView frame].size.height;
+			CGFloat nodeScrollHeight = nodeScrollView.documentVisibleRect.size.height;
+			nodeScrollPosition = MAX(0, MIN(nodeScrollPosition, nodeScrollContentHeight - nodeScrollHeight));
+			[nodeScrollView.contentView scrollToPoint:CGPointMake(0, nodeScrollPosition)];
+			[nodeScrollView reflectScrolledClipView:nodeScrollView.contentView];
 
 			/* Ask the editor view to repaint the selection */
 			[_editorView setNeedsDisplay:YES];
@@ -345,6 +376,7 @@
 
 		if (attributesArray.count > 0) {
 			[classesArray addObject:@{@"name": [classType description],
+									  @"type": @"header",
 									  @"isLeaf": @NO,
 									  @"isEditable": @NO,
 									  @"isCollapsible": @YES,
@@ -388,12 +420,17 @@
 			//printf("%s::%s %s\n", [classType description].UTF8String, property_getName(properties[i]), property_getAttributes(properties[i])+1);
 			NSString *propertyAttributes = [NSString stringWithUTF8String:property_getAttributes(properties[i])+1];
 
-			BOOL editable = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location == NSNotFound;
-
-			if (!editable)
+			/* Skip read-only attributes that are not class instances */
+			BOOL isReadonlyNonClass = [propertyAttributes rangeOfString:@"^[^@]*,R(,|$)" options:NSRegularExpressionSearch].location != NSNotFound;
+			if (isReadonlyNonClass)
 				continue;
 
 			NSString *propertyName = [NSString stringWithUTF8String:property_getName(properties[i])];
+
+			BOOL isPrivateProperty = [propertyName rangeOfString:@"^_" options:NSRegularExpressionSearch].location != NSNotFound;
+			if (isPrivateProperty)
+				continue;
+
 			NSString *propertyType = [[propertyAttributes componentsSeparatedByString:@","] firstObject];
 
 			if ([node isKindOfClass:[SKScene class]]
@@ -568,11 +605,25 @@
 			} else if ([propertyName isEqualToString:@"bodyType"]) {
 				/* Do nothing, the body type will be added with the SKPhysicsNode property */
 
+			} else if ([propertyName rangeOfString:@"[bB]lendMode$" options:NSRegularExpressionSearch].location != NSNotFound) {
+				[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:@"blendMode"]];
+
+			} else if ([propertyName isEqualToString:@"scaleMode"]
+					   || [propertyName isEqualToString:@"lineCap"]
+					   || [propertyName isEqualToString:@"lineJoin"]
+					   || [propertyName isEqualToString:@"verticalAlignmentMode"]
+					   || [propertyName isEqualToString:@"horizontalAlignmentMode"]
+					   || [propertyName isEqualToString:@"fontName"]) {
+				[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyName]];
+
 			} else {
 
 				Class propertyClass = [propertyType classType];
 
-				if ([propertyType isEqualToEncodedType:@encode(NSString)]) {
+				if ([propertyType isEqualToEncodedType:@encode(NSMutableDictionary)]) {
+					/* Do nothing, this will be added to the Identity inspector */
+
+				} else if ([propertyType isEqualToEncodedType:@encode(NSString)]) {
 					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:propertyType]];
 
 				} else if ([propertyType isEqualToEncodedType:@encode(NSColor)]) {
@@ -594,11 +645,19 @@
 					[attributes insertObject:[AttributeNode attributeWithName:@"bodyType" node:node type:@"bodyType"] atIndex:0];
 
 					/* Add the property's attributes */
-					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node children:attributes]];
+					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node type:@"expandable" children:attributes]];
 
-				} else if (propertyClass == [SKShader class]
-						   || propertyClass == [SKPhysicsWorld class]) {
+				} else if (propertyClass == [SKShader class]) {
+					AttributeNode *attribute = [AttributeNode attributeWithName:propertyName
+																		   node:node
+																		   type:propertyType
+																	  formatter:nil
+															   valueTransformer:[ShaderTransformer transformer]];
+					[attributesArray addObject:attribute];
+
+				} else if (propertyClass == [SKPhysicsWorld class]) {
 					[attributesArray addObject:@{@"name": propertyName,
+												 @"type": @"expandable",
 												 @"isLeaf": @NO,
 												 @"isEditable": @NO,
 												 @"children":[self attributesForClass:propertyClass node:[node valueForKey:propertyName]]}];
@@ -607,8 +666,13 @@
 					[attributesArray addObject:[AttributeNode  attributeForRotationAngleWithName:propertyName node:node]];
 
 				} else {
+					/* Skip remaining read-only attributes */
+					BOOL isReadOnly = [propertyAttributes rangeOfString:@",R(,|$)" options:NSRegularExpressionSearch].location != NSNotFound;
+					if (isReadOnly)
+						continue;
+
 					NSCharacterSet *nonEditableTypes = [NSCharacterSet characterSetWithCharactersInString:@"^?b:#@*v"];
-					editable = ![propertyType isEqualToString:@""] && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
+					BOOL editable = ![propertyType isEqualToString:@""] && [propertyType rangeOfCharacterFromSet:nonEditableTypes].location == NSNotFound;
 
 					AttributeNode *attribute;
 
@@ -661,6 +725,10 @@
 	}
 
 	return attributesArray;
+}
+
+- (IBAction)inspectorDidSwitchTab:(NSMatrix *)buttons {
+	[_inspectorTabView selectTabViewItemAtIndex:buttons.selectedColumn];
 }
 
 #pragma mark File handling
@@ -793,7 +861,7 @@
 	[self useScene:nil];
 	_currentFilename = nil;
 	_sceneBundle = nil;
-	[self populateResourcesLibrary];
+	[self populateMediaLibrary];
 }
 
 - (void)addRecentDocument:(NSString *)filename {
@@ -816,18 +884,18 @@
 
 #pragma mark Library
 
-- (IBAction)toolsLibraryDidChangeMode:(NSButton *)sender {
-	_toolsLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
+- (IBAction)objectLibraryDidChangeMode:(NSButton *)sender {
+	_objectLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
-- (IBAction)resourcesLibraryDidChangeMode:(NSButton *)sender {
-	_resourcesLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
+- (IBAction)mediaLibraryDidChangeMode:(NSButton *)sender {
+	_mediaLibraryCollectionView.mode = sender.state ? LibraryViewModeIcons : LibraryViewModeList;
 }
 
-- (void)populateToolsLibrary {
-	if (!_toolsLibraryItems) {
-		_toolsLibraryItems = [NSMutableArray array];
-		_toolsLibraryContext = [NSMutableArray array];
+- (void)populateObjectLibrary {
+	if (!_objectLibraryItems) {
+		_objectLibraryItems = [NSMutableArray array];
+		_objectLibraryContext = [NSMutableArray array];
 
 		NSURL *plugInsURL = [[NSBundle mainBundle] builtInPlugInsURL];
 
@@ -905,16 +973,16 @@
 						script = (id)[NSNull null];
 					}
 
-					[_toolsLibraryContext addObject:@{@"script": script}.mutableCopy];
+					[_objectLibraryContext addObject:@{@"script": script}.mutableCopy];
 
 					/* Populate the library items with the loaded data */
 					for (int i=0; i<names.count; ++i) {
 						name = names[i];
-						NSString *toolName = [name stringByReplacingOccurrencesOfString:@" " withString:@""];
+						NSString *objectName = [name stringByReplacingOccurrencesOfString:@" " withString:@""];
 						NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(.*\\)"
 																							   options:NSRegularExpressionCaseInsensitive
 																								 error:nil];
-						toolName = [regex stringByReplacingMatchesInString:toolName options:0 range:NSMakeRange(0, [toolName length]) withTemplate:@""];
+						objectName = [regex stringByReplacingMatchesInString:objectName options:0 range:NSMakeRange(0, [objectName length]) withTemplate:@""];
 
 						if (i < descriptions.count) {
 							description = descriptions[i];
@@ -943,34 +1011,34 @@
 						[fullDescriptionAttributedString endEditing];
 
 						/* Add the item to the library */
-						[_toolsLibraryItems addObject:@{@"name":toolName,
+						[_objectLibraryItems addObject:@{@"name":objectName,
 														@"label":fullDescriptionAttributedString,
 														@"image":iconImage,
-														@"showLabel":@(!_toolsLibraryModeButton.state),
-														@"contextData":@(_toolsLibraryContext.count - 1)}.mutableCopy];
+														@"showLabel":@(!_objectLibraryModeButton.state),
+														@"contextData":@(_objectLibraryContext.count - 1)}.mutableCopy];
 					}
 				}
 			}
 		}
 	}
 
-	[_toolsLibraryArrayController setContent:_toolsLibraryItems];
+	[_objectLibraryArrayController setContent:_objectLibraryItems];
 
-	if (_toolsSelectedLibraryItem == NSNotFound)
-		_toolsSelectedLibraryItem = 0;
-	[_toolsLibraryArrayController setSelectionIndex:_toolsSelectedLibraryItem];
+	if (_objectSelectedLibraryItem == NSNotFound)
+		_objectSelectedLibraryItem = 0;
+	[_objectLibraryArrayController setSelectionIndex:_objectSelectedLibraryItem];
 }
 
-- (void)populateResourcesLibrary {
+- (void)populateMediaLibrary {
 	NSString *bundlePath = [_sceneBundle bundlePath];
 
 	/* Check whether the loaded scene's bundle is the same */
 	if (!_sceneBundlePath || ![_sceneBundlePath isEqualToString:bundlePath]) {
 
-		/* Init the context of the resource library */
-		if (!_resourcesLibraryContext) {
-			_resourcesLibraryContext = [NSMutableArray array];
-			[_resourcesLibraryContext addObject:@{@"script": LUA_STRING
+		/* Init the context of the media library */
+		if (!_mediaLibraryContext) {
+			_mediaLibraryContext = [NSMutableArray array];
+			[_mediaLibraryContext addObject:@{@"script": LUA_STRING
 												  (
 												   function createNodeAtPosition(position, name)
 												   local node = SKSpriteNode.spriteNodeWithImageNamed(name)
@@ -980,19 +1048,19 @@
 												   )}.mutableCopy];
 		}
 
-		/* Clear the resource library */
-		_resourcesLibraryItems = [NSMutableArray array];
+		/* Clear the media library */
+		_mediaLibraryItems = [NSMutableArray array];
 
 		if (_sceneBundle) {
 			/* Store the scene bundle path */
 			_sceneBundlePath = bundlePath;
 
 			/* Get a list with all the files in the scene bundle */
-			NSString *resourcePath = [_sceneBundle resourcePath];
-			NSURL *resourceURL = [[NSURL alloc] initFileURLWithPath:resourcePath];
+			NSString *mediaPath = [_sceneBundle resourcePath];
+			NSURL *mediaURL = [[NSURL alloc] initFileURLWithPath:mediaPath];
 			NSArray *keys = [NSArray arrayWithObject:NSURLIsDirectoryKey];
 			NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager]
-												 enumeratorAtURL:resourceURL
+												 enumeratorAtURL:mediaURL
 												 includingPropertiesForKeys:keys
 												 options:0
 												 errorHandler:^(NSURL *url, NSError *error) {
@@ -1067,10 +1135,10 @@
 								[filenameAttributedString endEditing];
 
 								/* Add the item to the library */
-								[_resourcesLibraryItems addObject:@{@"name":filename,
+								[_mediaLibraryItems addObject:@{@"name":filename,
 																	@"label":filenameAttributedString,
 																	@"image":imageThumbnail,
-																	@"showLabel":@(!_resourcesLibraryModeButton.state),
+																	@"showLabel":@(!_mediaLibraryModeButton.state),
 																	@"contextData":@(0)}.mutableCopy];
 							}
 						}
@@ -1086,11 +1154,11 @@
 		}
 	}
 
-	[_resourcesLibraryArrayController setContent:_resourcesLibraryItems];
+	[_mediaLibraryArrayController setContent:_mediaLibraryItems];
 
-	if (_resourcesSelectedLibraryItem == NSNotFound)
-		_resourcesSelectedLibraryItem = 0;
-	[_resourcesLibraryArrayController setSelectionIndex:_resourcesSelectedLibraryItem];
+	if (_mediaSelectedLibraryItem == NSNotFound)
+		_mediaSelectedLibraryItem = 0;
+	[_mediaLibraryArrayController setSelectionIndex:_mediaSelectedLibraryItem];
 }
 
 - (IBAction)libraryDidSwitchTab:(NSMatrix *)buttons {
@@ -1099,14 +1167,22 @@
 
 - (void)libraryView:(LibraryView *)libraryView didSelectItemAtIndex:(NSInteger)index {
 	if (_libraryTabButtons.selectedColumn) {
-		_resourcesSelectedLibraryItem = index;
+		_mediaSelectedLibraryItem = index;
 	} else {
-		_toolsSelectedLibraryItem = index;
+		_objectSelectedLibraryItem = index;
 	}
 }
 
 - (NSArray *)texturesLibrary {
-	return [_resourcesLibraryItems valueForKey:@"name"];
+	return [_mediaLibraryItems valueForKey:@"name"];
+}
+
+- (NSArray *)shadersLibrary {
+	NSMutableArray *result = [NSMutableArray array];
+	for (NSString *path in [[NSBundle mainBundle] pathsForResourcesOfType:@"fsh"]) {
+		[result addObject:[path lastPathComponent]];
+	}
+	return result;
 }
 
 #pragma mark Editor Dragging Destination
@@ -1130,9 +1206,9 @@
 	/* Get the library item */
 	NSMutableDictionary *libraryItem;
 	if (_libraryTabButtons.selectedColumn) {
-		libraryItem = [[_resourcesLibraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
+		libraryItem = [[_mediaLibraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
 	} else {
-		libraryItem = [[_toolsLibraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
+		libraryItem = [[_objectLibraryArrayController arrangedObjects] objectAtIndex:[item intValue]];
 	}
 
 	/* Retrieve a valid context from the cache for the item */
@@ -1141,9 +1217,9 @@
 	NSMutableDictionary *contextData = nil;
 	if (itemIndex) {
 		if (_libraryTabButtons.selectedColumn) {
-			contextData = [_resourcesLibraryContext objectAtIndex:[itemIndex intValue]];
+			contextData = [_mediaLibraryContext objectAtIndex:[itemIndex intValue]];
 		} else {
-			contextData = [_toolsLibraryContext objectAtIndex:[itemIndex intValue]];
+			contextData = [_objectLibraryContext objectAtIndex:[itemIndex intValue]];
 		}
 		scriptContext = [contextData objectForKey:@"context"];
 	}
@@ -1181,8 +1257,8 @@
 
 	/* Create the node from the script */
 	NSValue *position = [NSValue valueWithPoint:locationInSelection];
-	NSString *toolName = [libraryItem objectForKey:@"name"];
-	SKNode *node = [scriptContext call:@"createNodeAtPosition" with:@[position, toolName] error:&error];
+	NSString *objectName = [libraryItem objectForKey:@"name"];
+	SKNode *node = [scriptContext call:@"createNodeAtPosition" with:@[position, objectName] error:&error];
 	if (error) {
 		[NSApp presentError:error modalForWindow:self.window delegate:nil didPresentSelector:nil contextInfo:NULL];
 		return NO;
@@ -1240,7 +1316,7 @@
 	/* Add the file to the 'Open Recent' file menu */
 	[self addRecentDocument:_currentFilename];
 
-	[self populateResourcesLibrary];
+	[self populateMediaLibrary];
 
 	return YES;
 }
@@ -1302,14 +1378,11 @@
 }
 
 - (void)useScene:(SKScene *)scene {
-	_navigatorViewNoSceneLabel.hidden = scene != nil;
-
-	_toolsLibraryItems = nil;
+	_objectLibraryItems = nil;
 
 	if (!scene) {
-		_attributesViewNoSelectionLabel.hidden = NO;
-
-		[_attributesTreeController setContent:nil];
+		[_nodeInspectorTreeController setContent:nil];
+		[_identityInspectorTreeController setContent:nil];
 		[_navigatorTreeController setContent:nil];
 		_editorView.scene = nil;
 		_editorView.needsDisplay = YES;

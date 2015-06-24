@@ -28,8 +28,8 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
-                        <binding destination="f3Z-oW-3C9" name="enabled" keyPath="objectValue.isEditable" previousBinding="KHM-lF-6wx" id="zc8-yG-VKn"/>
                         <binding destination="f3Z-oW-3C9" name="editable" keyPath="objectValue.isEditable" id="KHM-lF-6wx"/>
+                        <binding destination="f3Z-oW-3C9" name="enabled" keyPath="objectValue.isEditable" previousBinding="KHM-lF-6wx" id="zc8-yG-VKn"/>
                         <binding destination="f3Z-oW-3C9" name="value" keyPath="objectValue.value" id="ZHb-kc-rtO"/>
                     </connections>
                 </textField>
@@ -43,7 +43,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="EwJ-Xd-rqh"/>
                 <outlet property="textField" destination="q6s-Ku-JU0" id="yzm-dT-NHS"/>
             </connections>
-            <point key="canvasLocation" x="436" y="250.5"/>
+            <point key="canvasLocation" x="156" y="146"/>
         </tableCellView>
         <tableCellView identifier="\{([^=]+=)?(ff|dd)\}" id="GbV-qK-Vp4" userLabel="2 floats" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="30"/>
@@ -125,7 +125,7 @@
             <connections>
                 <outlet property="textField" destination="jzj-QV-oE2" id="MVN-XN-UTj"/>
             </connections>
-            <point key="canvasLocation" x="436" y="428"/>
+            <point key="canvasLocation" x="156" y="290"/>
         </tableCellView>
         <viewController id="Nuf-d3-4cB" userLabel="Popover View Controller">
             <connections>
@@ -155,8 +155,8 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
-                        <binding destination="sdd-dW-626" name="enabled" keyPath="objectValue.isEditable" previousBinding="D53-mt-YcY" id="Jgf-DH-4Dz"/>
                         <binding destination="sdd-dW-626" name="editable" keyPath="objectValue.isEditable" id="D53-mt-YcY"/>
+                        <binding destination="sdd-dW-626" name="enabled" keyPath="objectValue.isEditable" previousBinding="D53-mt-YcY" id="Jgf-DH-4Dz"/>
                         <binding destination="sdd-dW-626" name="value" keyPath="objectValue.value1" id="ZA0-TT-AME"/>
                     </connections>
                 </textField>
@@ -252,7 +252,7 @@
             <connections>
                 <outlet property="textField" destination="NWX-Yo-FRT" id="7dm-Tb-boG"/>
             </connections>
-            <point key="canvasLocation" x="436" y="528"/>
+            <point key="canvasLocation" x="156" y="440"/>
         </tableCellView>
         <tableCellView identifier="\{([^=]+=)?\{([^=]+=)?(ff|dd)\}\{([^=]+=)?(ff|dd)\}\}" id="dHV-ME-csG" userLabel="4 floats" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="64"/>
@@ -272,8 +272,8 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
-                        <binding destination="dHV-ME-csG" name="enabled" keyPath="objectValue.isEditable" previousBinding="6kp-n8-BKF" id="OCO-xU-wwz"/>
                         <binding destination="dHV-ME-csG" name="editable" keyPath="objectValue.isEditable" id="6kp-n8-BKF"/>
+                        <binding destination="dHV-ME-csG" name="enabled" keyPath="objectValue.isEditable" previousBinding="6kp-n8-BKF" id="OCO-xU-wwz"/>
                         <binding destination="dHV-ME-csG" name="value" keyPath="objectValue.value1" id="Ndd-Rt-e4I"/>
                     </connections>
                 </textField>
@@ -291,8 +291,8 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
-                        <binding destination="dHV-ME-csG" name="enabled" keyPath="objectValue.isEditable" previousBinding="W9a-9d-Vf7" id="vKu-GA-PAI"/>
                         <binding destination="dHV-ME-csG" name="editable" keyPath="objectValue.isEditable" id="W9a-9d-Vf7"/>
+                        <binding destination="dHV-ME-csG" name="enabled" keyPath="objectValue.isEditable" previousBinding="W9a-9d-Vf7" id="vKu-GA-PAI"/>
                         <binding destination="dHV-ME-csG" name="value" keyPath="objectValue.value2" id="rHT-6Z-AUc"/>
                     </connections>
                 </textField>
@@ -310,8 +310,8 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
-                        <binding destination="dHV-ME-csG" name="enabled" keyPath="objectValue.isEditable" previousBinding="doG-if-4IS" id="nWm-QP-B7N"/>
                         <binding destination="dHV-ME-csG" name="editable" keyPath="objectValue.isEditable" id="doG-if-4IS"/>
+                        <binding destination="dHV-ME-csG" name="enabled" keyPath="objectValue.isEditable" previousBinding="doG-if-4IS" id="nWm-QP-B7N"/>
                         <binding destination="dHV-ME-csG" name="value" keyPath="objectValue.value3" id="Y4U-Cd-miX"/>
                     </connections>
                 </textField>
@@ -329,8 +329,8 @@
                         <userDefinedRuntimeAttribute type="image" keyPath="alternateDec" value="AltDecreaseStepper"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
-                        <binding destination="dHV-ME-csG" name="enabled" keyPath="objectValue.isEditable" previousBinding="4PC-8p-RXe" id="kxg-81-CyO"/>
                         <binding destination="dHV-ME-csG" name="editable" keyPath="objectValue.isEditable" id="4PC-8p-RXe"/>
+                        <binding destination="dHV-ME-csG" name="enabled" keyPath="objectValue.isEditable" previousBinding="4PC-8p-RXe" id="kxg-81-CyO"/>
                         <binding destination="dHV-ME-csG" name="value" keyPath="objectValue.value4" id="2CG-zK-rS6"/>
                     </connections>
                 </textField>
@@ -404,7 +404,7 @@
             <connections>
                 <outlet property="textField" destination="JUl-PQ-ZNn" id="jwk-0Z-vp2"/>
             </connections>
-            <point key="canvasLocation" x="726" y="274"/>
+            <point key="canvasLocation" x="442" y="168"/>
         </tableCellView>
         <tableCellView identifier="c" id="toe-NG-Bn9" userLabel="check">
             <rect key="frame" x="0.0" y="0.0" width="172" height="19"/>
@@ -430,7 +430,7 @@
                 <constraint firstAttribute="trailing" secondItem="YBc-RN-b4y" secondAttribute="trailing" id="WAZ-eH-0YJ"/>
                 <constraint firstItem="YBc-RN-b4y" firstAttribute="leading" secondItem="toe-NG-Bn9" secondAttribute="leading" id="WrL-bb-Q9Q"/>
             </constraints>
-            <point key="canvasLocation" x="436" y="332.5"/>
+            <point key="canvasLocation" x="156" y="217.5"/>
         </tableCellView>
         <tableCellView identifier="@&quot;NSColor&quot;" id="Nhn-ML-Yi0" userLabel="color">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -453,7 +453,7 @@
                 <constraint firstItem="7B1-9n-jPd" firstAttribute="top" secondItem="Nhn-ML-Yi0" secondAttribute="top" id="jpO-mr-ASZ"/>
                 <constraint firstItem="7B1-9n-jPd" firstAttribute="leading" secondItem="Nhn-ML-Yi0" secondAttribute="leading" id="rOd-Rc-tv7"/>
             </constraints>
-            <point key="canvasLocation" x="726" y="371.5"/>
+            <point key="canvasLocation" x="442" y="262"/>
         </tableCellView>
         <tableCellView identifier="[islqISLQ]" id="a61-EY-A6P" userLabel="integer" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -492,7 +492,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="zc9-lW-e7P"/>
                 <outlet property="textField" destination="tJ6-rj-LJu" id="Zlk-Bu-Yf1"/>
             </connections>
-            <point key="canvasLocation" x="726" y="453.5"/>
+            <point key="canvasLocation" x="442" y="335"/>
         </tableCellView>
         <customView id="dob-0O-PCo" userLabel="Error">
             <rect key="frame" x="0.0" y="0.0" width="100" height="54"/>
@@ -513,7 +513,7 @@
                 <constraint firstAttribute="bottom" secondItem="glV-MS-jQN" secondAttribute="bottom" constant="20" symbolic="YES" id="II6-d8-FXe"/>
                 <constraint firstItem="glV-MS-jQN" firstAttribute="top" secondItem="dob-0O-PCo" secondAttribute="top" constant="20" symbolic="YES" id="jsN-Nn-KA1"/>
             </constraints>
-            <point key="canvasLocation" x="726" y="545"/>
+            <point key="canvasLocation" x="442" y="427"/>
         </customView>
         <tableCellView identifier="@&quot;NSString&quot;" id="AvU-FU-guj" userLabel="string" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -527,8 +527,8 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
-                        <binding destination="AvU-FU-guj" name="enabled" keyPath="objectValue.isEditable" previousBinding="EcU-H0-w8v" id="srv-xT-va4"/>
                         <binding destination="AvU-FU-guj" name="editable" keyPath="objectValue.isEditable" id="EcU-H0-w8v"/>
+                        <binding destination="AvU-FU-guj" name="enabled" keyPath="objectValue.isEditable" previousBinding="EcU-H0-w8v" id="srv-xT-va4"/>
                         <binding destination="AvU-FU-guj" name="value" keyPath="objectValue.value" id="RFF-Gq-e5C"/>
                     </connections>
                 </textField>
@@ -542,7 +542,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="y2J-uA-XqQ"/>
                 <outlet property="textField" destination="8Dg-tM-wS7" id="w4g-3F-6fZ"/>
             </connections>
-            <point key="canvasLocation" x="436" y="612"/>
+            <point key="canvasLocation" x="156" y="514"/>
         </tableCellView>
         <tableCellView identifier="@&quot;SKTexture&quot;" id="faw-Lb-7vi" userLabel="texture" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -560,8 +560,8 @@
                     </comboBoxCell>
                     <connections>
                         <binding destination="-3" name="content" keyPath="delegate.texturesLibrary" id="III-WE-CaJ"/>
-                        <binding destination="faw-Lb-7vi" name="enabled" keyPath="objectValue.isEditable" previousBinding="iRB-Zv-SnG" id="qWx-1K-po9"/>
                         <binding destination="faw-Lb-7vi" name="editable" keyPath="objectValue.isEditable" id="iRB-Zv-SnG"/>
+                        <binding destination="faw-Lb-7vi" name="enabled" keyPath="objectValue.isEditable" previousBinding="iRB-Zv-SnG" id="qWx-1K-po9"/>
                         <binding destination="faw-Lb-7vi" name="value" keyPath="objectValue.value" previousBinding="III-WE-CaJ" id="Qub-ZW-25Z"/>
                     </connections>
                 </comboBox>
@@ -575,7 +575,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="OUX-gj-gKS"/>
                 <outlet property="textField" destination="YGO-GX-b4J" id="XXo-Ql-iqG"/>
             </connections>
-            <point key="canvasLocation" x="726" y="647"/>
+            <point key="canvasLocation" x="156" y="788"/>
         </tableCellView>
         <tableCellView identifier="bodyType" id="yj4-cN-yD2" userLabel="bodyType" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -626,7 +626,456 @@
             <connections>
                 <outlet property="_popover" destination="ch3-SY-J2e" id="DQK-wt-PaE"/>
             </connections>
-            <point key="canvasLocation" x="436" y="699"/>
+            <point key="canvasLocation" x="156" y="582"/>
+        </tableCellView>
+        <tableCellView identifier="blendMode" id="5VF-hD-7yS" userLabel="blendMode" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="r02-fz-t3R">
+                    <rect key="frame" x="-3" y="-2" width="178" height="23"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="aUq-IR-hl8"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="HD8-J5-i1A">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="AOI-h5-g7c">
+                            <items>
+                                <menuItem title="Alpha" id="xcR-ye-htR">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem isSeparatorItem="YES" id="cE1-ip-vDS"/>
+                                <menuItem title="Add" tag="1" id="ICX-2L-NHt"/>
+                                <menuItem title="Subtract" tag="2" id="QsU-Zc-aMy"/>
+                                <menuItem title="Multiply" tag="3" id="2qy-Vm-Hww"/>
+                                <menuItem title="MultyplyX2" tag="4" id="7CT-zw-U05">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="Screen" tag="5" id="yFQ-iz-Kit">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="Replace" tag="6" id="hhM-Lq-4TA">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="5VF-hD-7yS" name="enabled" keyPath="objectValue.isEditable" id="F6G-TR-EMS"/>
+                        <binding destination="5VF-hD-7yS" name="selectedTag" keyPath="objectValue.value" id="wS9-gN-epy"/>
+                    </connections>
+                </popUpButton>
+            </subviews>
+            <constraints>
+                <constraint firstItem="r02-fz-t3R" firstAttribute="leading" secondItem="5VF-hD-7yS" secondAttribute="leading" id="FtY-Gf-C2Y"/>
+                <constraint firstItem="r02-fz-t3R" firstAttribute="top" secondItem="5VF-hD-7yS" secondAttribute="top" id="V9w-MU-MaN"/>
+                <constraint firstAttribute="trailing" secondItem="r02-fz-t3R" secondAttribute="trailing" id="sb9-DR-Ii8"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="gl6-vb-SFv"/>
+            </connections>
+            <point key="canvasLocation" x="156" y="650"/>
+        </tableCellView>
+        <tableCellView identifier="scaleMode" id="QB0-is-Xf8" userLabel="scaleMode" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4i2-xO-ISO">
+                    <rect key="frame" x="-3" y="-2" width="178" height="23"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="2ED-Dx-dkt"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="0tS-sf-fd7">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="TtO-xP-vQj">
+                            <items>
+                                <menuItem title="Fill" id="UTy-p1-3JT">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="Aspect Fill" tag="1" id="2B8-yi-9RP"/>
+                                <menuItem title="Aspect Fit" tag="2" id="bRv-1D-98h"/>
+                                <menuItem title="Resize Fill" tag="3" id="DMV-r5-Bqf"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="QB0-is-Xf8" name="enabled" keyPath="objectValue.isEditable" id="OpQ-6U-wje"/>
+                        <binding destination="QB0-is-Xf8" name="selectedTag" keyPath="objectValue.value" id="68y-QF-3Ar"/>
+                    </connections>
+                </popUpButton>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="4i2-xO-ISO" secondAttribute="trailing" id="Su2-qW-tMT"/>
+                <constraint firstItem="4i2-xO-ISO" firstAttribute="leading" secondItem="QB0-is-Xf8" secondAttribute="leading" id="UWD-ee-lv7"/>
+                <constraint firstItem="4i2-xO-ISO" firstAttribute="top" secondItem="QB0-is-Xf8" secondAttribute="top" id="Uh3-uy-i3E"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="lVf-11-kQx"/>
+            </connections>
+            <point key="canvasLocation" x="442" y="587"/>
+        </tableCellView>
+        <tableCellView identifier="lineJoin" id="ozb-nY-yNa" userLabel="lineJoin" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vbv-dQ-bzz">
+                    <rect key="frame" x="-3" y="-2" width="178" height="23"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="3nV-Jm-QHr"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="z7c-Ab-290">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="CYW-L2-wMK">
+                            <items>
+                                <menuItem title="Miter" id="mkL-Ac-dep">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="Round" tag="1" id="Raf-TV-hgh"/>
+                                <menuItem title="Bevel" tag="2" id="C6D-Lh-zsN"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="ozb-nY-yNa" name="enabled" keyPath="objectValue.isEditable" id="xqM-ld-hSx"/>
+                        <binding destination="ozb-nY-yNa" name="selectedTag" keyPath="objectValue.value" id="iS4-Oc-hOf"/>
+                    </connections>
+                </popUpButton>
+            </subviews>
+            <constraints>
+                <constraint firstItem="vbv-dQ-bzz" firstAttribute="leading" secondItem="ozb-nY-yNa" secondAttribute="leading" id="3zd-pw-EsX"/>
+                <constraint firstItem="vbv-dQ-bzz" firstAttribute="top" secondItem="ozb-nY-yNa" secondAttribute="top" id="BYk-5t-qXu"/>
+                <constraint firstAttribute="trailing" secondItem="vbv-dQ-bzz" secondAttribute="trailing" id="hfb-hw-rw5"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="Hfc-Wx-9Iw"/>
+            </connections>
+            <point key="canvasLocation" x="156" y="718"/>
+        </tableCellView>
+        <userDefaultsController representsSharedInstance="YES" id="kn1-vi-Teg"/>
+        <tableCellView identifier="lineCap" id="3py-Sl-wNM" userLabel="lineCap" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YJb-Zt-36j">
+                    <rect key="frame" x="-3" y="-2" width="178" height="23"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="m7F-6x-b9v"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="iig-MS-meZ">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="xE2-bB-US9">
+                            <items>
+                                <menuItem title="Butt" id="ref-CF-D9h"/>
+                                <menuItem title="Round" tag="1" id="DeU-bC-UKa"/>
+                                <menuItem title="Square" tag="2" id="fnX-Id-h5Z"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="3py-Sl-wNM" name="enabled" keyPath="objectValue.isEditable" id="4OR-fN-JbL"/>
+                        <binding destination="3py-Sl-wNM" name="selectedTag" keyPath="objectValue.value" id="s8W-oL-KzE"/>
+                    </connections>
+                </popUpButton>
+            </subviews>
+            <constraints>
+                <constraint firstItem="YJb-Zt-36j" firstAttribute="leading" secondItem="3py-Sl-wNM" secondAttribute="leading" id="7di-XC-1Hf"/>
+                <constraint firstAttribute="trailing" secondItem="YJb-Zt-36j" secondAttribute="trailing" id="FbM-sn-8i7"/>
+                <constraint firstItem="YJb-Zt-36j" firstAttribute="top" secondItem="3py-Sl-wNM" secondAttribute="top" id="djs-cI-Wdv"/>
+            </constraints>
+            <point key="canvasLocation" x="442" y="723"/>
+        </tableCellView>
+        <tableCellView identifier="@&quot;SKShader&quot;" id="QFc-dU-G1D" userLabel="shader" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0oe-fg-PVD">
+                    <rect key="frame" x="0.0" y="-3" width="175" height="24"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="e2U-64-fvr"/>
+                    </constraints>
+                    <comboBoxCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" numberOfVisibleItems="5" id="Muz-Co-3lm" customClass="ComboBoxCell">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </comboBoxCell>
+                    <connections>
+                        <binding destination="-3" name="content" keyPath="delegate.shadersLibrary" id="Csu-Ab-nRl"/>
+                        <binding destination="QFc-dU-G1D" name="editable" keyPath="objectValue.isEditable" id="DGO-Lp-teK"/>
+                        <binding destination="QFc-dU-G1D" name="enabled" keyPath="objectValue.isEditable" previousBinding="DGO-Lp-teK" id="lpy-NY-oX7"/>
+                        <binding destination="QFc-dU-G1D" name="value" keyPath="objectValue.value" previousBinding="Csu-Ab-nRl" id="W6m-YA-ab5"/>
+                    </connections>
+                </comboBox>
+            </subviews>
+            <constraints>
+                <constraint firstItem="0oe-fg-PVD" firstAttribute="top" secondItem="QFc-dU-G1D" secondAttribute="top" id="UoG-Ct-2t3"/>
+                <constraint firstAttribute="trailing" secondItem="0oe-fg-PVD" secondAttribute="trailing" id="czJ-re-hO3"/>
+                <constraint firstItem="0oe-fg-PVD" firstAttribute="leading" secondItem="QFc-dU-G1D" secondAttribute="leading" id="jGz-oo-9gn"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="WxW-ma-Nyv"/>
+                <outlet property="textField" destination="0oe-fg-PVD" id="iih-qB-f2m"/>
+            </connections>
+            <point key="canvasLocation" x="442" y="515"/>
+        </tableCellView>
+        <tableCellView identifier="verticalAlignmentMode" id="Shj-33-S9Y" userLabel="verticalAlignmentMode" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EqG-O8-dtb">
+                    <rect key="frame" x="-3" y="-2" width="178" height="23"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="fl6-n4-P5J"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="Gtg-Bg-TFR">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="dCU-Vd-37N">
+                            <items>
+                                <menuItem title="Baseline" id="LaS-DE-rvu"/>
+                                <menuItem title="Center" tag="1" id="WVA-3N-cKb"/>
+                                <menuItem title="Top" tag="2" id="jB8-Bg-UHy"/>
+                                <menuItem title="Bottom" tag="3" id="Ftx-uj-eo6"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="Shj-33-S9Y" name="enabled" keyPath="objectValue.isEditable" id="RW3-4g-fIs"/>
+                        <binding destination="Shj-33-S9Y" name="selectedTag" keyPath="objectValue.value" id="E0Y-OD-Mop"/>
+                    </connections>
+                </popUpButton>
+            </subviews>
+            <constraints>
+                <constraint firstItem="EqG-O8-dtb" firstAttribute="leading" secondItem="Shj-33-S9Y" secondAttribute="leading" id="3ih-D1-62M"/>
+                <constraint firstAttribute="trailing" secondItem="EqG-O8-dtb" secondAttribute="trailing" id="gTj-LS-J4x"/>
+                <constraint firstItem="EqG-O8-dtb" firstAttribute="top" secondItem="Shj-33-S9Y" secondAttribute="top" id="iNB-KB-rFw"/>
+            </constraints>
+            <point key="canvasLocation" x="156" y="366"/>
+        </tableCellView>
+        <tableCellView identifier="horizontalAlignmentMode" id="hK1-Wq-ikI" userLabel="horizontalAlignmentMode" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pIY-8m-5AR">
+                    <rect key="frame" x="-3" y="-2" width="178" height="23"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="19" id="IGH-y3-gqQ"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="qdi-2H-HZl">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="Bhf-W1-ymW">
+                            <items>
+                                <menuItem title="Center" id="C5E-aY-izU" userLabel="Center">
+                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                </menuItem>
+                                <menuItem title="Left" tag="1" id="6Un-8a-cbO"/>
+                                <menuItem title="Right" tag="2" id="c41-aW-Nhz"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="hK1-Wq-ikI" name="enabled" keyPath="objectValue.isEditable" id="gOm-y5-Xnb"/>
+                        <binding destination="hK1-Wq-ikI" name="selectedTag" keyPath="objectValue.value" id="8Q9-wd-uzQ"/>
+                    </connections>
+                </popUpButton>
+            </subviews>
+            <constraints>
+                <constraint firstItem="pIY-8m-5AR" firstAttribute="top" secondItem="hK1-Wq-ikI" secondAttribute="top" id="VZD-sg-ogt"/>
+                <constraint firstAttribute="trailing" secondItem="pIY-8m-5AR" secondAttribute="trailing" id="bje-vk-1NM"/>
+                <constraint firstItem="pIY-8m-5AR" firstAttribute="leading" secondItem="hK1-Wq-ikI" secondAttribute="leading" id="cqe-hF-hHG"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="WE8-kA-CG4"/>
+            </connections>
+            <point key="canvasLocation" x="442" y="655"/>
+        </tableCellView>
+        <customObject id="7zt-RG-IFl" customClass="NSFontManager"/>
+        <tableCellView identifier="fontName" id="Bgf-oe-RxG" userLabel="fontName" customClass="TableCellView">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="mDf-Ad-VpK">
+                    <rect key="frame" x="0.0" y="1" width="161" height="19"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" placeholderString="Font Name" id="u7I-gE-Q7a">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="Bgf-oe-RxG" name="value" keyPath="objectValue.value" id="tvw-zH-A3Q"/>
+                    </connections>
+                </textField>
+                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Dg5-ke-gKw">
+                    <rect key="frame" x="159" y="-1" width="15" height="22"/>
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="-9.2233720368547758e+18" maxValue="9.2233720368547758e+18" id="ZJX-L2-UAd"/>
+                </stepper>
+            </subviews>
+            <constraints>
+                <constraint firstItem="Dg5-ke-gKw" firstAttribute="centerY" secondItem="mDf-Ad-VpK" secondAttribute="centerY" id="F9U-3E-pQD"/>
+                <constraint firstItem="Dg5-ke-gKw" firstAttribute="leading" secondItem="mDf-Ad-VpK" secondAttribute="trailing" id="FWq-DQ-XNe"/>
+                <constraint firstItem="mDf-Ad-VpK" firstAttribute="top" secondItem="Bgf-oe-RxG" secondAttribute="top" id="tyn-Ho-1nu"/>
+                <constraint firstItem="mDf-Ad-VpK" firstAttribute="leading" secondItem="Bgf-oe-RxG" secondAttribute="leading" id="w8i-WR-RCV"/>
+                <constraint firstAttribute="trailing" secondItem="Dg5-ke-gKw" secondAttribute="trailing" id="zeL-uR-ljs"/>
+            </constraints>
+            <connections>
+                <outlet property="_popover" destination="ch3-SY-J2e" id="1LI-Gy-3BA"/>
+                <outlet property="textField" destination="mDf-Ad-VpK" id="r8W-K5-zqz"/>
+            </connections>
+            <point key="canvasLocation" x="442" y="794"/>
+        </tableCellView>
+        <tableCellView identifier="@&quot;NSMutableDictionary&quot;" id="pGv-Ji-A5t" userLabel="userData">
+            <rect key="frame" x="0.0" y="0.0" width="172" height="97"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <box autoresizesSubviews="NO" borderType="line" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="9EN-Jh-QBV">
+                    <rect key="frame" x="-3" y="-1" width="178" height="100"/>
+                    <view key="contentView">
+                        <rect key="frame" x="1" y="1" width="176" height="98"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3Ww-cm-9DL">
+                                <rect key="frame" x="9" y="39" width="157" height="28"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Table of Values" id="TTz-Ma-NAO">
+                                    <font key="font" metaFont="system" size="23"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <constraints>
+                        <constraint firstAttribute="centerX" secondItem="3Ww-cm-9DL" secondAttribute="centerX" constant="0.5" id="BsY-Se-qyD"/>
+                        <constraint firstAttribute="centerY" secondItem="3Ww-cm-9DL" secondAttribute="centerY" constant="2.5" id="Lel-gu-QX3"/>
+                    </constraints>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </box>
+            </subviews>
+            <constraints>
+                <constraint firstItem="9EN-Jh-QBV" firstAttribute="leading" secondItem="pGv-Ji-A5t" secondAttribute="leading" id="9zW-Us-dMd"/>
+                <constraint firstAttribute="bottom" secondItem="9EN-Jh-QBV" secondAttribute="bottom" constant="3" id="ja2-ev-CBm"/>
+                <constraint firstItem="9EN-Jh-QBV" firstAttribute="top" secondItem="pGv-Ji-A5t" secondAttribute="top" id="vkj-Zg-gcP"/>
+                <constraint firstAttribute="trailing" secondItem="9EN-Jh-QBV" secondAttribute="trailing" id="yrk-ZZ-UXu"/>
+            </constraints>
+            <point key="canvasLocation" x="728" y="184.5"/>
+        </tableCellView>
+        <tableCellView identifier="header" id="xvS-hY-Bup" userLabel="header">
+            <rect key="frame" x="0.0" y="0.0" width="78" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="DV1-4P-XVd" userLabel="Header">
+                    <rect key="frame" x="3" y="3" width="77" height="14"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Header" id="d8G-pr-wp7" userLabel="Header">
+                        <font key="font" metaFont="smallSystemBold"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="xvS-hY-Bup" name="value" keyPath="objectValue.name" id="kPU-jU-jcS"/>
+                    </connections>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="top" secondItem="DV1-4P-XVd" secondAttribute="bottom" constant="-17" id="CLb-tA-9x3"/>
+                <constraint firstItem="DV1-4P-XVd" firstAttribute="leading" secondItem="xvS-hY-Bup" secondAttribute="leading" constant="5" id="QCw-mp-T7O"/>
+                <constraint firstAttribute="trailing" secondItem="DV1-4P-XVd" secondAttribute="trailing" id="vvA-ho-lyO"/>
+            </constraints>
+            <connections>
+                <outlet property="textField" destination="DV1-4P-XVd" id="Lmp-xq-7B3"/>
+            </connections>
+            <point key="canvasLocation" x="728" y="295"/>
+        </tableCellView>
+        <tableCellView identifier="expandable" id="O7j-xp-Rmq" userLabel="expandable">
+            <rect key="frame" x="0.0" y="0.0" width="78" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="9Xf-FJ-Mf8">
+                    <rect key="frame" x="18" y="3" width="56" height="14"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="expandable" id="zMP-LX-YdA">
+                        <font key="font" metaFont="smallSystemBold"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="O7j-xp-Rmq" name="toolTip" keyPath="objectValue.description" id="9yI-s0-ftE"/>
+                        <binding destination="O7j-xp-Rmq" name="value" keyPath="objectValue.name" id="iyy-vn-G1B">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">AttributeNameTransformer</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="top" secondItem="9Xf-FJ-Mf8" secondAttribute="bottom" constant="-17" id="7rc-ZD-uhm"/>
+                <constraint firstAttribute="trailing" secondItem="9Xf-FJ-Mf8" secondAttribute="trailing" constant="6" id="Tea-GE-CXI"/>
+                <constraint firstItem="9Xf-FJ-Mf8" firstAttribute="leading" secondItem="O7j-xp-Rmq" secondAttribute="leading" constant="20" id="l3U-zM-Xb2"/>
+            </constraints>
+            <connections>
+                <outlet property="textField" destination="9Xf-FJ-Mf8" id="yLQ-Ep-NDf"/>
+            </connections>
+            <point key="canvasLocation" x="728" y="366"/>
+        </tableCellView>
+        <tableCellView identifier="attribute" id="d3V-LK-lO4" userLabel="attribute">
+            <rect key="frame" x="0.0" y="0.0" width="78" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="HPf-A2-Zin" userLabel="attribute">
+                    <rect key="frame" x="4" y="3" width="70" height="14"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="right" title="attribute" id="Wb7-GY-et5">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="d3V-LK-lO4" name="toolTip" keyPath="objectValue.description" id="TJm-H2-CSS"/>
+                        <binding destination="d3V-LK-lO4" name="value" keyPath="objectValue.name" id="q4X-cw-952">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">AttributeNameTransformer</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="top" secondItem="HPf-A2-Zin" secondAttribute="bottom" constant="-17" id="3D1-Su-xIS"/>
+                <constraint firstItem="HPf-A2-Zin" firstAttribute="leading" secondItem="d3V-LK-lO4" secondAttribute="leading" constant="6" id="Ava-Mu-A9M"/>
+                <constraint firstAttribute="trailing" secondItem="HPf-A2-Zin" secondAttribute="trailing" constant="6" id="V3h-wx-bI8"/>
+            </constraints>
+            <connections>
+                <outlet property="textField" destination="HPf-A2-Zin" id="jdG-ds-nME"/>
+            </connections>
+            <point key="canvasLocation" x="728" y="435"/>
+        </tableCellView>
+        <tableCellView identifier="generic attribute" id="l9F-Xo-eWU" userLabel="generic attribute">
+            <rect key="frame" x="0.0" y="0.0" width="176" height="20"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="DQx-vs-fpZ">
+                    <rect key="frame" x="-2" y="3" width="180" height="14"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="value" id="Jsr-d5-w13">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="l9F-Xo-eWU" name="value" keyPath="objectValue.value" id="vat-iL-tDr"/>
+                    </connections>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="DQx-vs-fpZ" secondAttribute="trailing" id="3Qk-MC-Wg0"/>
+                <constraint firstItem="DQx-vs-fpZ" firstAttribute="leading" secondItem="l9F-Xo-eWU" secondAttribute="leading" id="DbR-2y-qWH"/>
+                <constraint firstAttribute="top" secondItem="DQx-vs-fpZ" secondAttribute="bottom" constant="-17" id="ldh-5g-AtM"/>
+            </constraints>
+            <connections>
+                <outlet property="textField" destination="DQx-vs-fpZ" id="2nA-bM-zKK"/>
+            </connections>
+            <point key="canvasLocation" x="728" y="507"/>
         </tableCellView>
     </objects>
     <resources>
