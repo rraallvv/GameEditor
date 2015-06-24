@@ -306,8 +306,8 @@
 #endif
 		/* Build the tree of attributes in the background thread */
 		NSMutableArray *nodeInspectorContents = [self attributesForAllClassesWithNode:node];
-		NSMutableArray *identityInspectorContents = @[@{@"name": @"userData",
-														@"type": @"expandable",
+		NSMutableArray *identityInspectorContents = @[@{@"name": @"User Data",
+														@"type": @"header",
 														@"isLeaf": @NO,
 														@"isEditable": @NO,
 														@"isCollapsible": @YES,
@@ -376,7 +376,7 @@
 
 		if (attributesArray.count > 0) {
 			[classesArray addObject:@{@"name": [classType description],
-									  @"type": @"class",
+									  @"type": @"header",
 									  @"isLeaf": @NO,
 									  @"isEditable": @NO,
 									  @"isCollapsible": @YES,
