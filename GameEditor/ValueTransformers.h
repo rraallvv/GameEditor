@@ -62,5 +62,26 @@ reverseTransformedValueBlock:(id (^)(id value))reverseTransformedValueBlock;
 @interface ShaderTransformer : NSValueTransformer
 @end
 
-@interface ColorTransformer : NSValueTransformer
+@interface NumberValidationTransformer : NSValueTransformer
+@end
+
+@interface StringValidationTransformer : NSValueTransformer
+@end
+
+@interface PointValidationTransformer : NSValueTransformer
+@end
+
+@interface SizeValidationTransformer : NSValueTransformer
+@end
+
+@interface RectValidationTransformer : NSValueTransformer
+@end
+
+@interface RangeValidationTransformer : NSValueTransformer
+@end
+
+@interface ColorValidationTransformer : NSValueTransformer
+@end
+
+@interface ImageValidationTransformer : NSValueTransformer
 @end

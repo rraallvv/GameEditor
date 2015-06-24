@@ -179,6 +179,14 @@
 	return results;
 }
 
+- (NSString *)stringByReplacingOccurrencesOfRegularExpresion:(NSString *)expresion withString:(NSString *)replacement {
+	NSRange range = [self rangeOfString:expresion options:NSRegularExpressionSearch];
+	if (range.location != NSNotFound) {
+		return [self stringByReplacingCharactersInRange:range withString:replacement];
+	}
+	return self;
+}
+
 @end
 
 @implementation NSString (AttributeName)
@@ -419,7 +427,133 @@
 
 @end
 
-@implementation ColorTransformer
+@implementation NumberValidationTransformer
+
++ (void)initialize {
+	[self initializeWithTransformedValueClass:[NSNumber class]
+				  allowsReverseTransformation:YES
+						transformedValueBlock:^id(id value){
+							if ([value isKindOfClass:[NSNumber class]]) {
+								return value;
+							}
+							return @0;
+						}
+				 reverseTransformedValueBlock:^id(id value){
+					 if ([value isKindOfClass:[NSNumber class]]) {
+						 return value;
+					 }
+					 return @0;
+				 }];
+}
+
+@end
+
+@implementation StringValidationTransformer
+
++ (void)initialize {
+	[self initializeWithTransformedValueClass:[NSString class]
+				  allowsReverseTransformation:YES
+						transformedValueBlock:^id(id value){
+							if ([value isKindOfClass:[NSString class]]) {
+								return value;
+							}
+							return @"";
+						}
+				 reverseTransformedValueBlock:^id(id value){
+					 if ([value isKindOfClass:[NSString class]]) {
+						 return value;
+					 }
+					 return @"";
+				 }];
+}
+
+@end
+
+@implementation PointValidationTransformer
+
++ (void)initialize {
+	[self initializeWithTransformedValueClass:[NSValue class]
+				  allowsReverseTransformation:YES
+						transformedValueBlock:^id(id value){
+							if ([value isKindOfClass:[NSValue class]] && strcmp([value objCType], @encode(CGPoint)) == 0) {
+								return NSStringFromPoint([value pointValue]);
+							}
+							return @"{0, 0}";
+						}
+				 reverseTransformedValueBlock:^id(id value){
+					 if ([value isKindOfClass:[NSValue class]] && strcmp([value objCType], @encode(CGPoint)) == 0) {
+						 return value;
+					 }
+					 return [NSValue valueWithPoint:CGPointZero];
+				 }];
+}
+
+@end
+
+@implementation SizeValidationTransformer
+
++ (void)initialize {
+	[self initializeWithTransformedValueClass:[NSValue class]
+				  allowsReverseTransformation:YES
+						transformedValueBlock:^id(id value){
+							if ([value isKindOfClass:[NSValue class]] && strcmp([value objCType], @encode(CGSize)) == 0) {
+								return NSStringFromSize([value sizeValue]);
+							}
+							return @"{0, 0}";
+						}
+				 reverseTransformedValueBlock:^id(id value){
+					 if ([value isKindOfClass:[NSValue class]] && strcmp([value objCType], @encode(CGSize)) == 0) {
+						 return value;
+					 }
+					 return [NSValue valueWithSize:CGSizeZero];
+				 }];
+}
+
+@end
+
+@implementation RectValidationTransformer
+
++ (void)initialize {
+	[self initializeWithTransformedValueClass:[NSValue class]
+				  allowsReverseTransformation:YES
+						transformedValueBlock:^id(id value){
+							if ([value isKindOfClass:[NSValue class]] && strcmp([value objCType], @encode(CGRect)) == 0) {
+								return NSStringFromRect([value rectValue]);
+							}
+							return @"{0, 0, 0, 0}";
+						}
+				 reverseTransformedValueBlock:^id(id value){
+					 if ([value isKindOfClass:[NSValue class]] && strcmp([value objCType], @encode(CGRect)) == 0) {
+						 return value;
+					 }
+					 return [NSValue valueWithRect:CGRectZero];
+				 }];
+}
+
+@end
+
+@implementation RangeValidationTransformer
+
++ (void)initialize {
+	[self initializeWithTransformedValueClass:[NSValue class]
+				  allowsReverseTransformation:YES
+						transformedValueBlock:^id(id value){
+							if ([value isKindOfClass:[NSValue class]] && strcmp([value objCType], @encode(NSRange)) == 0) {
+								return NSStringFromRange([value rangeValue]);
+							}
+							return @"{0, 0}";
+						}
+				 reverseTransformedValueBlock:^id(id value){
+					 if ([value isKindOfClass:[NSValue class]] && strcmp([value objCType], @encode(NSRange)) == 0) {
+						 return value;
+					 }
+					 return [NSValue valueWithRange:NSMakeRange(0, 0)];
+				 }];
+}
+
+@end
+
+@implementation ColorValidationTransformer
 
 + (void)initialize {
 	[self initializeWithTransformedValueClass:[NSColor class]
@@ -428,11 +562,32 @@
 							if ([value isKindOfClass:[NSColor class]]) {
 								return value;
 							}
-							return nil;
+							return [NSColor blueColor];
 						}
 				 reverseTransformedValueBlock:^id(id value){
 					 if ([value isKindOfClass:[NSColor class]]) {
 						 return value;
+					 }
+					 return [NSColor blueColor];
+				 }];
+}
+
+@end
+
+@implementation ImageValidationTransformer
+
++ (void)initialize {
+	[self initializeWithTransformedValueClass:[NSImage class]
+				  allowsReverseTransformation:YES
+						transformedValueBlock:^id(id value){
+							if ([value isKindOfClass:[NSImage class]]) {
+								return value;
+							}
+							return @"";
+						}
+				 reverseTransformedValueBlock:^id(id value){
+					 if ([value isKindOfClass:[NSImage class]]) {
+						 return [NSImage imageNamed:value];
 					 }
 					 return nil;
 				 }];

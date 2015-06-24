@@ -938,7 +938,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="Fff-k5-gKu" viewBased="YES" id="9M9-I0-tB9" customClass="UserDataTableView">
-                                <rect key="frame" x="0.0" y="0.0" width="284" height="19"/>
+                                <rect key="frame" x="0.0" y="0.0" width="284" height="0.0"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -969,7 +969,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <binding destination="gxS-Jd-8SC" name="value" keyPath="objectValue.keyPath" id="7Fx-Qw-hf5"/>
+                                                            <binding destination="gxS-Jd-8SC" name="value" keyPath="objectValue.keyPath" id="Eve-dr-UQ6"/>
                                                         </connections>
                                                     </textField>
                                                 </subviews>
@@ -1092,7 +1092,11 @@
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                             </buttonCell>
                                                                             <connections>
-                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="7Az-lH-4df"/>
+                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="ViD-IE-Np2">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSValueTransformerName">NumberValidationTransformer</string>
+                                                                                    </dictionary>
+                                                                                </binding>
                                                                             </connections>
                                                                         </button>
                                                                     </subviews>
@@ -1114,13 +1118,12 @@
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
-                                                                            <userDefinedRuntimeAttributes>
-                                                                                <userDefinedRuntimeAttribute type="number" keyPath="keyPath">
-                                                                                    <integer key="value" value="0"/>
-                                                                                </userDefinedRuntimeAttribute>
-                                                                            </userDefinedRuntimeAttributes>
                                                                             <connections>
-                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="vAT-Xg-m7V"/>
+                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="mXk-xk-gd9">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSValueTransformerName">NumberValidationTransformer</string>
+                                                                                    </dictionary>
+                                                                                </binding>
                                                                             </connections>
                                                                         </textField>
                                                                     </subviews>
@@ -1144,7 +1147,11 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="5nK-4A-oah"/>
+                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="xzL-jX-E88">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSValueTransformerName">StringValidationTransformer</string>
+                                                                                    </dictionary>
+                                                                                </binding>
                                                                             </connections>
                                                                         </textField>
                                                                     </subviews>
@@ -1168,7 +1175,11 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="5uU-II-RMj"/>
+                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="Qim-tE-xrI">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSValueTransformerName">StringValidationTransformer</string>
+                                                                                    </dictionary>
+                                                                                </binding>
                                                                             </connections>
                                                                         </textField>
                                                                     </subviews>
@@ -1192,7 +1203,11 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="chO-C5-VuU"/>
+                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="c8C-Ak-FQl">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSValueTransformerName">PointValidationTransformer</string>
+                                                                                    </dictionary>
+                                                                                </binding>
                                                                             </connections>
                                                                         </textField>
                                                                     </subviews>
@@ -1216,7 +1231,11 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="RQy-mp-d3G"/>
+                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="sHZ-Ft-QSL">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSValueTransformerName">SizeValidationTransformer</string>
+                                                                                    </dictionary>
+                                                                                </binding>
                                                                             </connections>
                                                                         </textField>
                                                                     </subviews>
@@ -1240,7 +1259,11 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="1ew-7K-Ear"/>
+                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="hkf-Ig-NnY">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSValueTransformerName">RectValidationTransformer</string>
+                                                                                    </dictionary>
+                                                                                </binding>
                                                                             </connections>
                                                                         </textField>
                                                                     </subviews>
@@ -1264,7 +1287,11 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="iAR-2d-FTA"/>
+                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="OD0-Mr-nCS">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSValueTransformerName">RangeValidationTransformer</string>
+                                                                                    </dictionary>
+                                                                                </binding>
                                                                             </connections>
                                                                         </textField>
                                                                     </subviews>
@@ -1284,9 +1311,9 @@
                                                                             <rect key="frame" x="0.0" y="0.0" width="101" height="17"/>
                                                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                             <connections>
-                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="oTJ-8g-nSl">
+                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="9ac-mZ-RNj">
                                                                                     <dictionary key="options">
-                                                                                        <string key="NSValueTransformerName">ColorTransformer</string>
+                                                                                        <string key="NSValueTransformerName">ColorValidationTransformer</string>
                                                                                     </dictionary>
                                                                                 </binding>
                                                                             </connections>
@@ -1313,7 +1340,11 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="zA9-p5-f8t"/>
+                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="I2o-b1-c3T">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSValueTransformerName">ImageValidationTransformer</string>
+                                                                                    </dictionary>
+                                                                                </binding>
                                                                             </connections>
                                                                         </textField>
                                                                     </subviews>
