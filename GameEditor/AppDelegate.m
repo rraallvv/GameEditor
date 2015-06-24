@@ -94,9 +94,11 @@
 	IBOutlet NSButton *_toolsLibraryModeButton;
 	IBOutlet NSButton *_resourcesLibraryModeButton;
 	IBOutlet NSMatrix *_libraryTabButtons;
+	IBOutlet NSMatrix *_inspectorTabButtons;
 	IBOutlet NSView *_saveSceneView;
 	IBOutlet NSButton *_useXMLFormatButton;
 	IBOutlet NSTabView *_libraryTabView;
+	IBOutlet NSTabView *_inspectorTabView;
 	SKNode *_selectedNode;
 	NSString *_currentFilename;
 	NSBundle *_sceneBundle;
@@ -711,6 +713,10 @@
 	[attributesArray addObjectsFromArray:userDictionaries];
 
 	return attributesArray;
+}
+
+- (IBAction)inspectorDidSwitchTab:(NSMatrix *)buttons {
+	[_inspectorTabView selectTabViewItemAtIndex:buttons.selectedColumn];
 }
 
 #pragma mark File handling

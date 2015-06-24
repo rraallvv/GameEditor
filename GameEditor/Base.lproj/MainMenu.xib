@@ -566,6 +566,38 @@
                                                 <subviews>
                                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="I9N-Jo-Ccm" customClass="LibraryPanelView">
                                                         <rect key="frame" x="0.0" y="374" width="260" height="25"/>
+                                                        <subviews>
+                                                            <matrix verticalHuggingPriority="750" fixedFrame="YES" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nh3-4f-yFG" customClass="Matrix">
+                                                                <rect key="frame" x="105" y="3" width="49" height="19"/>
+                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                <size key="cellSize" width="18" height="19"/>
+                                                                <size key="intercellSpacing" width="13" height="0.0"/>
+                                                                <buttonCell key="prototype" type="square" title="Radio" bezelStyle="shadowlessSquare" imagePosition="only" controlSize="small" borderStyle="border" inset="2" id="Z2o-L4-IfM">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                </buttonCell>
+                                                                <cells>
+                                                                    <column>
+                                                                        <buttonCell type="recessed" bezelStyle="recessed" image="IdentityInspector" imagePosition="only" alignment="center" alternateImage="AltIdentityInspector" state="on" tag="1" inset="2" id="SXK-r6-tYz">
+                                                                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                                                            <font key="font" metaFont="systemBold" size="12"/>
+                                                                        </buttonCell>
+                                                                    </column>
+                                                                    <column>
+                                                                        <buttonCell type="square" bezelStyle="shadowlessSquare" image="NodeInspector" imagePosition="overlaps" alternateImage="AltNodeInspector" controlSize="small" inset="2" id="Oim-4E-DO4">
+                                                                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                                                            <font key="font" metaFont="smallSystem"/>
+                                                                        </buttonCell>
+                                                                    </column>
+                                                                </cells>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Inspector Tabs"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="inspectorDidSwitchTab:" target="494" id="vf8-xl-fj6"/>
+                                                                </connections>
+                                                            </matrix>
+                                                        </subviews>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="25" id="mUt-Kd-4z0"/>
                                                         </constraints>
@@ -1176,6 +1208,8 @@
                 <outlet property="_attributesTreeController" destination="IEK-xe-ugr" id="TYh-UN-I2P"/>
                 <outlet property="_attributesView" destination="zW2-BO-taF" id="19t-eI-oFU"/>
                 <outlet property="_editorView" destination="suo-YO-fqM" id="D5W-Hu-pTw"/>
+                <outlet property="_inspectorTabButtons" destination="Nh3-4f-yFG" id="n2L-pz-H4m"/>
+                <outlet property="_inspectorTabView" destination="U3y-5k-T8w" id="vx5-Ba-1kW"/>
                 <outlet property="_libraryTabButtons" destination="pf4-VP-sjQ" id="1XR-iH-5BW"/>
                 <outlet property="_libraryTabView" destination="1QZ-GI-Dny" id="9k6-mK-qER"/>
                 <outlet property="_navigatorTreeController" destination="FfK-Wg-7Xj" id="bBG-5I-i7L"/>
@@ -1294,12 +1328,16 @@
         </customView>
     </objects>
     <resources>
+        <image name="AltIdentityInspector" width="17" height="17"/>
         <image name="AltLibraryResourcesTab" width="17" height="17"/>
         <image name="AltLibraryToolsTab" width="17" height="17"/>
+        <image name="AltNodeInspector" width="17" height="17"/>
+        <image name="IdentityInspector" width="17" height="17"/>
         <image name="LibraryIconsMode" width="19" height="19"/>
         <image name="LibraryListMode" width="19" height="19"/>
         <image name="LibraryResourcesTab" width="17" height="17"/>
         <image name="LibraryToolsTab" width="17" height="17"/>
         <image name="NSActionTemplate" width="14" height="14"/>
+        <image name="NodeInspector" width="17" height="17"/>
     </resources>
 </document>
