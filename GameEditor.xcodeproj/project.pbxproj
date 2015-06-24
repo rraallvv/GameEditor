@@ -21,6 +21,8 @@
 		E474192F1AD84EDC00061932 /* NewGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E474192E1AD84EDC00061932 /* NewGameScene.sks */; };
 		E48286631AE7D74F00C51F8D /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = E48286621AE7D74F00C51F8D /* art.scnassets */; };
 		E486C0851B35F2F900276F20 /* normal.png in Resources */ = {isa = PBXBuildFile; fileRef = E486C0841B35F2F900276F20 /* normal.png */; };
+		E4977F921B3B273B007E60AF /* UserDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4977F911B3B273B007E60AF /* UserDataView.m */; };
+		E4977F9D1B3B282A007E60AF /* ValueTransformers.m in Sources */ = {isa = PBXBuildFile; fileRef = E4977F9C1B3B282A007E60AF /* ValueTransformers.m */; };
 		E4A1779F1B327B0F005A8692 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A1779D1B327B0F005A8692 /* Spaceship.png */; };
 		E4A177A01B327B0F005A8692 /* SpaceshipTest.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A1779E1B327B0F005A8692 /* SpaceshipTest.png */; };
 		E4ABDB4F1AB3933900AAE82E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */; };
@@ -128,6 +130,10 @@
 		E474192E1AD84EDC00061932 /* NewGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = NewGameScene.sks; sourceTree = "<group>"; };
 		E48286621AE7D74F00C51F8D /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		E486C0841B35F2F900276F20 /* normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = normal.png; sourceTree = "<group>"; };
+		E4977F901B3B273B007E60AF /* UserDataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataView.h; sourceTree = "<group>"; };
+		E4977F911B3B273B007E60AF /* UserDataView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataView.m; sourceTree = "<group>"; };
+		E4977F9B1B3B282A007E60AF /* ValueTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueTransformers.h; sourceTree = "<group>"; };
+		E4977F9C1B3B282A007E60AF /* ValueTransformers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValueTransformers.m; sourceTree = "<group>"; };
 		E4A1779D1B327B0F005A8692 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
 		E4A1779E1B327B0F005A8692 /* SpaceshipTest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SpaceshipTest.png; sourceTree = "<group>"; };
 		E4ABDB481AB3933900AAE82E /* GameEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -200,6 +206,10 @@
 				E4ABDB711AB3BCA700AAE82E /* AttributeNode.m */,
 				E408138D1AC228F400F54824 /* InspectorView.h */,
 				E408138E1AC228F400F54824 /* InspectorView.m */,
+				E4977F901B3B273B007E60AF /* UserDataView.h */,
+				E4977F911B3B273B007E60AF /* UserDataView.m */,
+				E4977F9B1B3B282A007E60AF /* ValueTransformers.h */,
+				E4977F9C1B3B282A007E60AF /* ValueTransformers.m */,
 				E41894D81AD975B200E704BB /* Controls */,
 			);
 			name = Inspector;
@@ -575,12 +585,14 @@
 				E45B16B81B35AA97007883BF /* ComboBoxCell.m in Sources */,
 				E40813951AC42FFF00F54824 /* ColorWell.m in Sources */,
 				E4ABDB511AB3933900AAE82E /* main.m in Sources */,
+				E4977F9D1B3B282A007E60AF /* ValueTransformers.m in Sources */,
 				E401BDBA1B21DC2600280F27 /* ControlsAutosave.m in Sources */,
 				E44764CC1B36AFA100B7355F /* SKNode+PhysicsBodyType.m in Sources */,
 				E4BFABB81B33ACDB000A51EB /* NSBundle+ProxyBundle.m in Sources */,
 				E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */,
 				E40965ED1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m in Sources */,
 				E4F3B6A71ACD7EC4001482D2 /* NavigationNode.m in Sources */,
+				E4977F921B3B273B007E60AF /* UserDataView.m in Sources */,
 				E4ABDB761AB47BB700AAE82E /* AttributeNode.m in Sources */,
 				E4E6DA3B1AE9987500F4CE6F /* LibraryView.m in Sources */,
 				E408138F1AC228F400F54824 /* InspectorView.m in Sources */,

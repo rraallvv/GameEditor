@@ -29,6 +29,7 @@
 #import <SceneKit/SceneKit.h>
 #import "LuaContext.h"
 #import "LuaExport.h"
+#import "ValueTransformers.h"
 #import "NSBundle+ProxyBundle.h"
 
 #pragma mark Main Window

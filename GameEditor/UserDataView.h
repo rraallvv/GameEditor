@@ -1,5 +1,5 @@
 /*
- * InspectorView.h
+ * UserDataView.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -24,10 +24,8 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#import "AttributeNode.h"
-#import "SKNode+PhysicsBodyType.h"
-#import "NSOutlineView+TreeExpansion.h"
 
-@interface InspectorView : NSOutlineView
+@interface UserDataTableView : NSTableView <NSTableViewDelegate, NSTableViewDataSource>
 
 @end
+
