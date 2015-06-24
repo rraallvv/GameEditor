@@ -905,7 +905,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="260" height="175"/>
                                                         <font key="font" metaFont="system"/>
                                                         <tabViewItems>
-                                                            <tabViewItem label="Tab" identifier="1" id="Om1-5N-gCI" userLabel="Object Inspector">
+                                                            <tabViewItem label="Tab" identifier="1" id="Om1-5N-gCI" userLabel="Object Library">
                                                                 <view key="view" id="rhd-cI-hHF">
                                                                     <rect key="frame" x="0.0" y="0.0" width="260" height="175"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -950,7 +950,7 @@
                                                                                                 <font key="font" metaFont="systemBold" size="12"/>
                                                                                             </buttonCell>
                                                                                             <userDefinedRuntimeAttributes>
-                                                                                                <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Tools Library Mode"/>
+                                                                                                <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Object Library Mode"/>
                                                                                             </userDefinedRuntimeAttributes>
                                                                                             <connections>
                                                                                                 <action selector="objectLibraryDidChangeMode:" target="494" id="xsV-RZ-yTg"/>
@@ -1021,7 +1021,7 @@
                                                                     </constraints>
                                                                 </view>
                                                             </tabViewItem>
-                                                            <tabViewItem label="View" identifier="2" id="Wtu-MA-FXx" userLabel="Media Inspector">
+                                                            <tabViewItem label="View" identifier="2" id="Wtu-MA-FXx" userLabel="Media Library">
                                                                 <view key="view" id="FMw-7y-exI">
                                                                     <rect key="frame" x="0.0" y="0.0" width="260" height="175"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1066,7 +1066,7 @@
                                                                                                 <font key="font" metaFont="systemBold" size="12"/>
                                                                                             </buttonCell>
                                                                                             <userDefinedRuntimeAttributes>
-                                                                                                <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Resources Library Mode"/>
+                                                                                                <userDefinedRuntimeAttribute type="string" keyPath="autosaveName" value="Media Library Mode"/>
                                                                                             </userDefinedRuntimeAttributes>
                                                                                             <connections>
                                                                                                 <action selector="mediaLibraryDidChangeMode:" target="494" id="xf7-y7-WsG"/>
@@ -1229,10 +1229,10 @@
                 <outlet property="window" destination="371" id="532"/>
             </connections>
         </customObject>
-        <treeController childrenKeyPath="children" leafKeyPath="isLeaf" id="IEK-xe-ugr" userLabel="Attributes Tree Controller"/>
+        <treeController childrenKeyPath="children" leafKeyPath="isLeaf" id="IEK-xe-ugr" userLabel="Node Inspector Tree Controller"/>
         <treeController childrenKeyPath="children" leafKeyPath="isLeaf" id="FfK-Wg-7Xj" userLabel="Navigator Tree Controller" customClass="NavigationTreeController"/>
-        <arrayController id="ybe-5J-ot9" userLabel="Tools Library Array Controller"/>
-        <arrayController id="TU8-ns-SGh" userLabel="Resources Library Array Controller"/>
+        <arrayController id="ybe-5J-ot9" userLabel="Object Library Array Controller"/>
+        <arrayController id="TU8-ns-SGh" userLabel="Media Library Array Controller"/>
         <collectionViewItem id="vBT-rm-Cna">
             <connections>
                 <outlet property="view" destination="9Nu-LJ-3Af" id="PvT-kj-tt6"/>
