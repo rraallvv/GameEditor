@@ -46,4 +46,16 @@
     return nil;
 }
 
+- (void)setConstraintConstant:(CGFloat)constant forAttribute:(NSLayoutAttribute)attribute {
+	NSLayoutConstraint *constraint = [self constraintForAttribute:attribute];
+	if (constant != constraint.constant)
+		return;
+	[constraint setConstant:constant];
+}
+
+- (CGFloat)constraintConstantForAttribute:(NSLayoutAttribute)attribute {
+	NSLayoutConstraint *constraint = [self constraintForAttribute:attribute];
+	return constraint.constant;
+}
+
 @end

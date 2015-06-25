@@ -28,6 +28,6 @@
 #import <Cocoa/Cocoa.h>
 
 @interface NSView (LayoutConstraint)
-- (NSLayoutConstraint *)constraintForAttribute:(NSLayoutAttribute)attribute;
-- (NSArray *)constaintsForAttribute:(NSLayoutAttribute)attribute;
+- (void)setConstraintConstant:(CGFloat)constant forAttribute:(NSLayoutAttribute)attribute;
+- (CGFloat)constraintConstantForAttribute:(NSLayoutAttribute)attribute;
 @end

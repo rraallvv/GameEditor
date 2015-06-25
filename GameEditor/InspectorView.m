@@ -317,13 +317,6 @@ IB_DESIGNABLE
 	}
 }
 
-- (void)setConstraintConstant:(CGFloat)constant forAttribute:(NSLayoutAttribute)attribute {
-	NSLayoutConstraint *constraint = [self constraintForAttribute:attribute];
-	if (constant != constraint.constant)
-		return;
-	[constraint setConstant:constant];
-}
-
 - (void)toggleGroupVisibility {
 	InspectorView *outlineView = (InspectorView *)[self superview];
 	id item = [outlineView itemAtRow:[outlineView rowForView:self]];

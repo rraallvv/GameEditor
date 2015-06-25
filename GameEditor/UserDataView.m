@@ -41,23 +41,13 @@
 	__weak NSScrollView *_scrollView;
 }
 
-- (void)setConstraintConstant:(CGFloat)constant forAttribute:(NSLayoutAttribute)attribute {
-	NSLayoutConstraint *constraint = [_scrollView constraintForAttribute:attribute];
-	if (constant != constraint.constant)
-		return;
-	[constraint setConstant:constant];
-}
-
 - (void)didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
 	const CGFloat theHeight = [self numberOfRows] * 19.0 + self.headerView.frame.size.height + 16;//9.0;
 
 	_scrollView = self.enclosingScrollView;
-	NSLayoutConstraint *constraint = [_scrollView constraintForAttribute:NSLayoutAttributeHeight];
-	_minimumHeight = constraint.constant;
-	//[self setConstraintConstant:theHeight forAttribute:NSLayoutAttributeHeight];
+	_minimumHeight = [_scrollView constraintConstantForAttribute:NSLayoutAttributeHeight];
 
 	InspectorTableRowView *tableRowView = (InspectorTableRowView *)_scrollView.superview.superview;
-	//[tableRowView setConstraintConstant:theHeight forAttribute:NSLayoutAttributeHeight];
 	CGRect frame = tableRowView.frame;
 	frame.size.height = theHeight;
 	tableRowView.frame = frame;
@@ -70,7 +60,6 @@
 	for (NSInteger i=[tableView rowForView:tableRowView] + 1; i<[tableView numberOfRows]; ++i) {
 		InspectorTableRowView *nextRowView = (InspectorTableRowView *)[tableView rowViewAtRow:i makeIfNecessary:NO];
 		CGFloat newTop = NSMaxY(prevRowView.frame);
-		NSLog(@"%@", [nextRowView constraints]);
 		[nextRowView setConstraintConstant:newTop forAttribute:NSLayoutAttributeTop];
 		frame = nextRowView.frame;
 		frame.origin.y = newTop;
