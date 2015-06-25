@@ -41,12 +41,11 @@
 	__weak NSScrollView *_scrollView;
 }
 
-- (void)setConstraintConstantHeight:(CGFloat)tableHeight {
-	NSLayoutConstraint *constraint = [_scrollView constraintForAttribute:NSLayoutAttributeHeight];
-	NSLog(@"%f", constraint.constant);
-	if (tableHeight == constraint.constant)
+- (void)setConstraintConstant:(CGFloat)constant forAttribute:(NSLayoutAttribute)attribute {
+	NSLayoutConstraint *constraint = [_scrollView constraintForAttribute:attribute];
+	if (constant != constraint.constant)
 		return;
-	[constraint setConstant:tableHeight];
+	[constraint setConstant:constant];
 }
 
 - (void)didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
@@ -55,21 +54,26 @@
 	_scrollView = self.enclosingScrollView;
 	NSLayoutConstraint *constraint = [_scrollView constraintForAttribute:NSLayoutAttributeHeight];
 	_minimumHeight = constraint.constant;
-	[self setConstraintConstantHeight:theHeight];
+	//[self setConstraintConstant:theHeight forAttribute:NSLayoutAttributeHeight];
 
 	InspectorTableRowView *tableRowView = (InspectorTableRowView *)_scrollView.superview.superview;
-	constraint = [tableRowView constraintForAttribute:NSLayoutAttributeHeight];
-	[tableRowView setConstraintConstantHeight:theHeight];
+	//[tableRowView setConstraintConstant:theHeight forAttribute:NSLayoutAttributeHeight];
 	CGRect frame = tableRowView.frame;
 	frame.size.height = theHeight;
 	tableRowView.frame = frame;
 
 	InspectorView *tableView = (InspectorView *)tableRowView.superview;
+
+	[tableView setHeight:theHeight forItem:[tableView itemAtRow:[tableView rowForView:tableRowView]]];
+
 	InspectorTableRowView *prevRowView = tableRowView;
 	for (NSInteger i=[tableView rowForView:tableRowView] + 1; i<[tableView numberOfRows]; ++i) {
 		InspectorTableRowView *nextRowView = (InspectorTableRowView *)[tableView rowViewAtRow:i makeIfNecessary:NO];
+		CGFloat newTop = NSMaxY(prevRowView.frame);
+		NSLog(@"%@", [nextRowView constraints]);
+		[nextRowView setConstraintConstant:newTop forAttribute:NSLayoutAttributeTop];
 		frame = nextRowView.frame;
-		frame.origin.y = NSMaxY(prevRowView.frame);
+		frame.origin.y = newTop;
 		nextRowView.frame = frame;
 		prevRowView = nextRowView;
 	}

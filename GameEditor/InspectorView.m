@@ -26,6 +26,7 @@
 #import "InspectorView.h"
 #import "StepperTextField.h"
 #import "NSView+LayoutConstraint.h"
+#import "NSMapTable+Subscripting.h"
 
 #pragma mark TableCellView
 
@@ -316,12 +317,11 @@ IB_DESIGNABLE
 	}
 }
 
-- (void)setConstraintConstantHeight:(CGFloat)tableHeight {
-	NSLayoutConstraint *constraint = [self constraintForAttribute:NSLayoutAttributeHeight];
-	NSLog(@"%f", constraint.constant);
-	if (tableHeight == constraint.constant)
+- (void)setConstraintConstant:(CGFloat)constant forAttribute:(NSLayoutAttribute)attribute {
+	NSLayoutConstraint *constraint = [self constraintForAttribute:attribute];
+	if (constant != constraint.constant)
 		return;
-	[constraint setConstant:tableHeight];
+	[constraint setConstant:constant];
 }
 
 - (void)toggleGroupVisibility {
@@ -373,6 +373,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 	__weak id _actualDataSource;
 	NSMutableDictionary *_prefferedSizes;
 	NSMutableArray *_editorIdentifiers;
+	NSMapTable *_itemHeights;
 }
 
 - (id)initWithCoder:(NSCoder *)coder {
@@ -431,12 +432,36 @@ static const CGFloat kIndentationPerLevel = 0.0;
 	return [[InspectorTableRowView alloc] init];
 }
 
+- (void)setHeight:(CGFloat)height forItem:(id)item {
+	NSLog(@"%f", height);
+	if (!_itemHeights) {
+		_itemHeights = [NSMapTable mapTableWithKeyOptions:NSMapTableObjectPointerPersonality
+											 valueOptions:NSMapTableStrongMemory];
+	}
+	_itemHeights[item] = [NSNumber numberWithFloat:height];
+}
+
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
+	if (!_itemHeights) {
+		_itemHeights = [NSMapTable mapTableWithKeyOptions:NSMapTableObjectPointerPersonality
+											 valueOptions:NSMapTableStrongMemory];
+	}
+
+	NSNumber *itemHeightValue = _itemHeights[item];
+	if (itemHeightValue) {
+		return [itemHeightValue floatValue];
+	}
+
 	NSString *type = [[item representedObject] valueForKey:@"type"];
+	if ([type isEqualToString:@"@\"NSMutableDictionary\""]) {
+		NSLog(@"%@", type);
+	}
 	if (type) {
 		for (NSString *identifier in _editorIdentifiers) {
 			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
-				return [_prefferedSizes[identifier] sizeValue].height;
+				CGFloat height = [_prefferedSizes[identifier] sizeValue].height;
+				_itemHeights[item] = [NSNumber numberWithFloat:height];
+				return height;
 			}
 		}
 	}

@@ -29,9 +29,9 @@
 #import "NSOutlineView+TreeExpansion.h"
 
 @interface InspectorTableRowView : NSTableRowView
-- (void)setConstraintConstantHeight:(CGFloat)tableHeight;
+- (void)setConstraintConstant:(CGFloat)constant forAttribute:(NSLayoutAttribute)attribute;
 @end
 
 @interface InspectorView : NSOutlineView
-
+- (void)setHeight:(CGFloat)height forItem:(id)item;
 @end
