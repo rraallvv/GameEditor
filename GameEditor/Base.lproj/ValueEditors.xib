@@ -928,11 +928,11 @@
             <point key="canvasLocation" x="442" y="794"/>
         </tableCellView>
         <tableCellView identifier="@&quot;NSMutableDictionary&quot;" id="pGv-Ji-A5t" userLabel="userData" customClass="TableCellView">
-            <rect key="frame" x="0.0" y="0.0" width="284" height="97"/>
+            <rect key="frame" x="0.0" y="0.0" width="284" height="85"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0zv-gw-fpv">
-                    <rect key="frame" x="0.0" y="16" width="284" height="81"/>
+                    <rect key="frame" x="0.0" y="16" width="284" height="69"/>
                     <clipView key="contentView" id="V3N-Y2-AAv">
                         <rect key="frame" x="1" y="17" width="238" height="117"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1383,6 +1383,9 @@
                         </subviews>
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="69" id="Co4-MV-JH8"/>
+                    </constraints>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="COj-Za-awC">
                         <rect key="frame" x="1" y="32" width="46" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1397,7 +1400,7 @@
                     </tableHeaderView>
                 </scrollView>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="x8u-Dq-Tet">
-                    <rect key="frame" x="0.0" y="0.0" width="16" height="16"/>
+                    <rect key="frame" x="2" y="0.0" width="16" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="16" id="8D9-rQ-Fl3"/>
                         <constraint firstAttribute="height" constant="16" id="9Ds-Cy-iji"/>
@@ -1408,7 +1411,7 @@
                     </buttonCell>
                 </button>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="2NA-cf-M6m">
-                    <rect key="frame" x="16" y="0.0" width="16" height="16"/>
+                    <rect key="frame" x="22" y="0.0" width="16" height="16"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="16" id="Afx-wF-7oH"/>
                         <constraint firstAttribute="width" constant="16" id="yP0-sj-55P"/>
@@ -1423,10 +1426,10 @@
                 <constraint firstAttribute="bottom" secondItem="2NA-cf-M6m" secondAttribute="bottom" id="9Xu-Jd-T4C"/>
                 <constraint firstItem="0zv-gw-fpv" firstAttribute="leading" secondItem="pGv-Ji-A5t" secondAttribute="leading" id="9Ze-l6-4fl"/>
                 <constraint firstAttribute="trailing" secondItem="0zv-gw-fpv" secondAttribute="trailing" id="BeS-9O-PMf"/>
-                <constraint firstItem="2NA-cf-M6m" firstAttribute="leading" secondItem="x8u-Dq-Tet" secondAttribute="trailing" id="QH3-nA-kek"/>
+                <constraint firstItem="2NA-cf-M6m" firstAttribute="leading" secondItem="x8u-Dq-Tet" secondAttribute="trailing" constant="4" id="QH3-nA-kek"/>
                 <constraint firstItem="0zv-gw-fpv" firstAttribute="top" secondItem="pGv-Ji-A5t" secondAttribute="top" id="Wcm-b5-wPO"/>
                 <constraint firstAttribute="bottom" secondItem="x8u-Dq-Tet" secondAttribute="bottom" id="hvc-E3-Ydr"/>
-                <constraint firstItem="x8u-Dq-Tet" firstAttribute="leading" secondItem="pGv-Ji-A5t" secondAttribute="leading" id="jhM-MQ-nEg"/>
+                <constraint firstItem="x8u-Dq-Tet" firstAttribute="leading" secondItem="pGv-Ji-A5t" secondAttribute="leading" constant="2" id="jhM-MQ-nEg"/>
                 <constraint firstItem="x8u-Dq-Tet" firstAttribute="top" secondItem="0zv-gw-fpv" secondAttribute="bottom" id="xIj-7H-n8V"/>
             </constraints>
             <userDefinedRuntimeAttributes>
@@ -1434,7 +1437,7 @@
                     <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
-            <point key="canvasLocation" x="784" y="184.5"/>
+            <point key="canvasLocation" x="784" y="178.5"/>
         </tableCellView>
         <tableCellView identifier="header" id="xvS-hY-Bup" userLabel="header">
             <rect key="frame" x="0.0" y="0.0" width="78" height="20"/>
@@ -1460,7 +1463,7 @@
             <connections>
                 <outlet property="textField" destination="DV1-4P-XVd" id="Lmp-xq-7B3"/>
             </connections>
-            <point key="canvasLocation" x="784" y="296"/>
+            <point key="canvasLocation" x="784" y="284"/>
         </tableCellView>
         <tableCellView identifier="expandable" id="O7j-xp-Rmq" userLabel="expandable">
             <rect key="frame" x="0.0" y="0.0" width="78" height="20"/>
@@ -1491,7 +1494,7 @@
             <connections>
                 <outlet property="textField" destination="9Xf-FJ-Mf8" id="yLQ-Ep-NDf"/>
             </connections>
-            <point key="canvasLocation" x="784" y="367"/>
+            <point key="canvasLocation" x="784" y="355"/>
         </tableCellView>
         <tableCellView identifier="attribute" id="d3V-LK-lO4" userLabel="attribute">
             <rect key="frame" x="0.0" y="0.0" width="78" height="20"/>
@@ -1522,7 +1525,7 @@
             <connections>
                 <outlet property="textField" destination="HPf-A2-Zin" id="jdG-ds-nME"/>
             </connections>
-            <point key="canvasLocation" x="784" y="436"/>
+            <point key="canvasLocation" x="784" y="424"/>
         </tableCellView>
         <tableCellView identifier="generic attribute" id="l9F-Xo-eWU" userLabel="generic attribute">
             <rect key="frame" x="0.0" y="0.0" width="176" height="20"/>
@@ -1548,7 +1551,7 @@
             <connections>
                 <outlet property="textField" destination="DQx-vs-fpZ" id="2nA-bM-zKK"/>
             </connections>
-            <point key="canvasLocation" x="784" y="508"/>
+            <point key="canvasLocation" x="784" y="496"/>
         </tableCellView>
     </objects>
     <resources>

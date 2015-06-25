@@ -347,7 +347,11 @@
 																					  ].mutableCopy
 																		 }.mutableCopy
 																	   ].mutableCopy
-														}.mutableCopy
+														}.mutableCopy,
+													  @{@"name": @"Header",
+														@"type": @"header",
+														@"isLeaf": @NO,
+														@"isEditable": @NO}
 													  ].mutableCopy;
 
 		/* Look up for the row to be selected */
