@@ -380,6 +380,8 @@ static const CGFloat kIndentationPerLevel = 0.0;
 
 		_editorIdentifiers = [NSMutableArray array];
 		_prefferedSizes = [NSMutableDictionary dictionary];
+		_itemHeights = [NSMapTable mapTableWithKeyOptions:NSMapTableObjectPointerPersonality
+											 valueOptions:NSMapTableStrongMemory];
 
 		for (id object in objects) {
 			if ([object isKindOfClass:[NSTableCellView class]]) {
@@ -426,20 +428,10 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (void)setHeight:(CGFloat)height forItem:(id)item {
-	NSLog(@"%f", height);
-	if (!_itemHeights) {
-		_itemHeights = [NSMapTable mapTableWithKeyOptions:NSMapTableObjectPointerPersonality
-											 valueOptions:NSMapTableStrongMemory];
-	}
 	_itemHeights[item] = [NSNumber numberWithFloat:height];
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	if (!_itemHeights) {
-		_itemHeights = [NSMapTable mapTableWithKeyOptions:NSMapTableObjectPointerPersonality
-											 valueOptions:NSMapTableStrongMemory];
-	}
-
 	NSNumber *itemHeightValue = _itemHeights[item];
 	if (itemHeightValue) {
 		return [itemHeightValue floatValue];
