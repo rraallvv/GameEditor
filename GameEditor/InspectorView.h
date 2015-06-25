@@ -28,6 +28,10 @@
 #import "SKNode+PhysicsBodyType.h"
 #import "NSOutlineView+TreeExpansion.h"
 
+@interface InspectorTableRowView : NSTableRowView
+- (void)setConstraintConstantHeight:(CGFloat)tableHeight;
+@end
+
 @interface InspectorView : NSOutlineView
 
 @end

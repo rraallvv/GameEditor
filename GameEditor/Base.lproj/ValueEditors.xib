@@ -931,8 +931,8 @@
             <rect key="frame" x="0.0" y="0.0" width="284" height="85"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0zv-gw-fpv">
-                    <rect key="frame" x="0.0" y="16" width="284" height="69"/>
+                <scrollView verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0zv-gw-fpv">
+                    <rect key="frame" x="0.0" y="0.0" width="284" height="85"/>
                     <clipView key="contentView" id="V3N-Y2-AAv">
                         <rect key="frame" x="1" y="17" width="238" height="117"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1384,7 +1384,7 @@
                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
                     <constraints>
-                        <constraint firstAttribute="height" constant="69" id="Co4-MV-JH8"/>
+                        <constraint firstAttribute="height" constant="85" id="TDL-W2-UGf"/>
                     </constraints>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="COj-Za-awC">
                         <rect key="frame" x="1" y="32" width="46" height="15"/>
@@ -1400,10 +1400,10 @@
                     </tableHeaderView>
                 </scrollView>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="x8u-Dq-Tet">
-                    <rect key="frame" x="2" y="0.0" width="16" height="16"/>
+                    <rect key="frame" x="2" y="2" width="16" height="16"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="16" id="8D9-rQ-Fl3"/>
-                        <constraint firstAttribute="height" constant="16" id="9Ds-Cy-iji"/>
+                        <constraint firstAttribute="width" constant="16" id="5Hh-6a-ucW"/>
+                        <constraint firstAttribute="height" constant="16" id="6PL-3g-kpi"/>
                     </constraints>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="VjK-me-K7z">
                         <behavior key="behavior" lightByContents="YES"/>
@@ -1411,11 +1411,7 @@
                     </buttonCell>
                 </button>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="2NA-cf-M6m">
-                    <rect key="frame" x="22" y="0.0" width="16" height="16"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="16" id="Afx-wF-7oH"/>
-                        <constraint firstAttribute="width" constant="16" id="yP0-sj-55P"/>
-                    </constraints>
+                    <rect key="frame" x="22" y="2" width="16" height="16"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="IVl-Vm-l9v">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -1423,14 +1419,15 @@
                 </button>
             </subviews>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="2NA-cf-M6m" secondAttribute="bottom" id="9Xu-Jd-T4C"/>
-                <constraint firstItem="0zv-gw-fpv" firstAttribute="leading" secondItem="pGv-Ji-A5t" secondAttribute="leading" id="9Ze-l6-4fl"/>
-                <constraint firstAttribute="trailing" secondItem="0zv-gw-fpv" secondAttribute="trailing" id="BeS-9O-PMf"/>
-                <constraint firstItem="2NA-cf-M6m" firstAttribute="leading" secondItem="x8u-Dq-Tet" secondAttribute="trailing" constant="4" id="QH3-nA-kek"/>
-                <constraint firstItem="0zv-gw-fpv" firstAttribute="top" secondItem="pGv-Ji-A5t" secondAttribute="top" id="Wcm-b5-wPO"/>
-                <constraint firstAttribute="bottom" secondItem="x8u-Dq-Tet" secondAttribute="bottom" id="hvc-E3-Ydr"/>
-                <constraint firstItem="x8u-Dq-Tet" firstAttribute="leading" secondItem="pGv-Ji-A5t" secondAttribute="leading" constant="2" id="jhM-MQ-nEg"/>
-                <constraint firstItem="x8u-Dq-Tet" firstAttribute="top" secondItem="0zv-gw-fpv" secondAttribute="bottom" id="xIj-7H-n8V"/>
+                <constraint firstItem="0zv-gw-fpv" firstAttribute="leading" secondItem="pGv-Ji-A5t" secondAttribute="leading" id="4gb-do-oyK"/>
+                <constraint firstAttribute="trailing" secondItem="0zv-gw-fpv" secondAttribute="trailing" id="D8d-ga-1aR"/>
+                <constraint firstItem="2NA-cf-M6m" firstAttribute="leading" secondItem="x8u-Dq-Tet" secondAttribute="trailing" constant="4" id="Dxs-oW-jox"/>
+                <constraint firstItem="x8u-Dq-Tet" firstAttribute="leading" secondItem="0zv-gw-fpv" secondAttribute="leading" constant="2" id="MT0-V7-Tg8"/>
+                <constraint firstItem="2NA-cf-M6m" firstAttribute="height" secondItem="x8u-Dq-Tet" secondAttribute="height" id="klB-5W-klz"/>
+                <constraint firstItem="0zv-gw-fpv" firstAttribute="bottom" secondItem="x8u-Dq-Tet" secondAttribute="bottom" constant="2" id="nMg-Yb-NK9"/>
+                <constraint firstItem="0zv-gw-fpv" firstAttribute="top" secondItem="pGv-Ji-A5t" secondAttribute="top" id="ti3-GC-LQr"/>
+                <constraint firstItem="2NA-cf-M6m" firstAttribute="width" secondItem="x8u-Dq-Tet" secondAttribute="width" id="uZM-NK-5GF"/>
+                <constraint firstItem="2NA-cf-M6m" firstAttribute="centerY" secondItem="x8u-Dq-Tet" secondAttribute="centerY" id="ueh-qV-n0u"/>
             </constraints>
             <userDefinedRuntimeAttributes>
                 <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">

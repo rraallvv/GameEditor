@@ -307,7 +307,19 @@
 #endif
 		/* Build the tree of attributes in the background thread */
 		NSMutableArray *nodeInspectorContents = [self attributesForAllClassesWithNode:node];
-		NSMutableArray *identityInspectorContents = @[@{@"name": @"User Data",
+		NSMutableArray *identityInspectorContents = @[@{@"name": @"Header",
+														@"type": @"header",
+														@"isLeaf": @NO,
+														@"isEditable": @NO,
+														@"isCollapsible": @YES,
+														@"children": @[@{@"name": @"Attrinute",
+																		 @"type": @"generic attribute",
+																		 @"isLeaf": @YES,
+																		 @"isEditable": @NO
+																		 }.mutableCopy
+																	   ].mutableCopy
+														}.mutableCopy,
+													  @{@"name": @"User Data",
 														@"type": @"header",
 														@"isLeaf": @NO,
 														@"isEditable": @NO,
@@ -352,6 +364,7 @@
 														@"type": @"header",
 														@"isLeaf": @NO,
 														@"isEditable": @NO,
+														@"isCollapsible": @YES,
 														@"children": @[@{@"name": @"Attrinute",
 																		 @"type": @"generic attribute",
 																		 @"isLeaf": @YES,
@@ -363,6 +376,7 @@
 														@"type": @"header",
 														@"isLeaf": @NO,
 														@"isEditable": @NO,
+														@"isCollapsible": @YES,
 														@"children": @[@{@"name": @"Attrinute",
 																		 @"type": @"generic attribute",
 																		 @"isLeaf": @YES,

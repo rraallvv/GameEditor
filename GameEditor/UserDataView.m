@@ -24,6 +24,8 @@
  */
 
 #import "UserDataView.h"
+#import "InspectorView.h"
+#import "NSView+LayoutConstraint.h"
 
 #pragma mark UserDataTableView
 
@@ -35,6 +37,42 @@
 	__weak id _actualDelegate;
 	__weak id _actualDataSource;
 	NSInteger _previousSelectionRow;
+	CGFloat _minimumHeight;
+	__weak NSScrollView *_scrollView;
+}
+
+- (void)setConstraintConstantHeight:(CGFloat)tableHeight {
+	NSLayoutConstraint *constraint = [_scrollView constraintForAttribute:NSLayoutAttributeHeight];
+	NSLog(@"%f", constraint.constant);
+	if (tableHeight == constraint.constant)
+		return;
+	[constraint setConstant:tableHeight];
+}
+
+- (void)didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+	const CGFloat theHeight = [self numberOfRows] * 19.0 + self.headerView.frame.size.height + 16;//9.0;
+
+	_scrollView = self.enclosingScrollView;
+	NSLayoutConstraint *constraint = [_scrollView constraintForAttribute:NSLayoutAttributeHeight];
+	_minimumHeight = constraint.constant;
+	[self setConstraintConstantHeight:theHeight];
+
+	InspectorTableRowView *tableRowView = (InspectorTableRowView *)_scrollView.superview.superview;
+	constraint = [tableRowView constraintForAttribute:NSLayoutAttributeHeight];
+	[tableRowView setConstraintConstantHeight:theHeight];
+	CGRect frame = tableRowView.frame;
+	frame.size.height = theHeight;
+	tableRowView.frame = frame;
+
+	InspectorView *tableView = (InspectorView *)tableRowView.superview;
+	InspectorTableRowView *prevRowView = tableRowView;
+	for (NSInteger i=[tableView rowForView:tableRowView] + 1; i<[tableView numberOfRows]; ++i) {
+		InspectorTableRowView *nextRowView = (InspectorTableRowView *)[tableView rowViewAtRow:i makeIfNecessary:NO];
+		frame = nextRowView.frame;
+		frame.origin.y = NSMaxY(prevRowView.frame);
+		nextRowView.frame = frame;
+		prevRowView = nextRowView;
+	}
 }
 
 - (void)setBackgroundStyle:(NSBackgroundStyle)backgroundStyle row:(NSInteger)row {

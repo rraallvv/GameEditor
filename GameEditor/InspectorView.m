@@ -25,6 +25,7 @@
 
 #import "InspectorView.h"
 #import "StepperTextField.h"
+#import "NSView+LayoutConstraint.h"
 
 #pragma mark TableCellView
 
@@ -140,9 +141,6 @@ IB_DESIGNABLE
 @end
 
 #pragma mark InspectorTableRowView
-
-@interface InspectorTableRowView : NSTableRowView
-@end
 
 @implementation InspectorTableRowView {
 	NSAttributedString *_showAttributedString;
@@ -316,6 +314,14 @@ IB_DESIGNABLE
 		}
 		 */
 	}
+}
+
+- (void)setConstraintConstantHeight:(CGFloat)tableHeight {
+	NSLayoutConstraint *constraint = [self constraintForAttribute:NSLayoutAttributeHeight];
+	NSLog(@"%f", constraint.constant);
+	if (tableHeight == constraint.constant)
+		return;
+	[constraint setConstant:tableHeight];
 }
 
 - (void)toggleGroupVisibility {
