@@ -37,15 +37,15 @@
 	__weak id _actualDelegate;
 	__weak id _actualDataSource;
 	NSInteger _previousSelectionRow;
-	CGFloat _minimumHeight;
 	__weak NSScrollView *_scrollView;
+}
+
+- (void)awakeFromNib {
+	_scrollView = self.enclosingScrollView;
 }
 
 - (void)didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
 	const CGFloat theHeight = [self numberOfRows] * 19.0 + self.headerView.frame.size.height + 16;//9.0;
-
-	_scrollView = self.enclosingScrollView;
-	_minimumHeight = [_scrollView constraintConstantForAttribute:NSLayoutAttributeHeight];
 
 	InspectorTableRowView *tableRowView = (InspectorTableRowView *)_scrollView.superview.superview;
 	CGRect frame = tableRowView.frame;
