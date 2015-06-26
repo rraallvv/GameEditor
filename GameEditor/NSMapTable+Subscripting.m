@@ -1,5 +1,5 @@
 /*
- * NSOutlineView+TreeExpansion.h
+ * NSMapTable+Subscripting.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.

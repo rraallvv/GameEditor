@@ -754,7 +754,6 @@
             </connections>
             <point key="canvasLocation" x="156" y="718"/>
         </tableCellView>
-        <userDefaultsController representsSharedInstance="YES" id="kn1-vi-Teg"/>
         <tableCellView identifier="lineCap" id="3py-Sl-wNM" userLabel="lineCap" customClass="TableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

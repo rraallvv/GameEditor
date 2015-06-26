@@ -57,7 +57,13 @@
 	[tableRowView setConstraintConstant:theHeight - 2 forAttribute:NSLayoutAttributeHeight];
 	[inspectorView setHeight:theHeight - 2 forItem:[inspectorView itemAtRow:[inspectorView rowForView:tableRowView]]];
 
-	[inspectorView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[inspectorView rowForView:tableRowView]]];
+	if (row == self.numberOfRows - 1) {
+		/* Update the user data table's height when adding the last row */
+		[NSAnimationContext beginGrouping];
+		[[NSAnimationContext currentContext] setDuration:0];
+		[inspectorView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[inspectorView rowForView:tableRowView]]];
+		[NSAnimationContext endGrouping];
+	}
 
 	InspectorTableRowView *prevRowView = tableRowView;
 	for (NSInteger i=[inspectorView rowForView:tableRowView] + 1; i<inspectorView.numberOfRows; ++i) {
