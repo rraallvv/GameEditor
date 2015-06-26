@@ -412,8 +412,8 @@
 																		 @"isLeaf": @NO,
 																		 @"isEditable": @NO,
 																		 @"content":
-#	if 0 // Use a raw dictionary
-																		 @{@"A boolean": @YES,
+#	if 1 // Use a raw dictionary
+																		 [[NSDictionaryController alloc] initWithContent:@{@"A boolean": @YES,
 																		   @"A number": @123,
 																		   @"A string": @"The string",
 																		   @"A point": [NSValue valueWithPoint:CGPointMake(1, 2)],
@@ -422,7 +422,7 @@
 																		   @"A range": [NSValue valueWithRange:NSMakeRange(0, 1)],
 																		   @"A color": [NSColor redColor],
 																		   @"An image": [NSImage imageNamed:NSImageNameInfo]
-																		   }.mutableCopy
+																		   }.mutableCopy]
 #	else
 																		 @[@{@"keyPath": @"A boolean",
 																			 @"value": @YES}.mutableCopy,

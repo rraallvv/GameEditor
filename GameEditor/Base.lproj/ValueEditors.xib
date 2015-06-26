@@ -968,7 +968,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <binding destination="gxS-Jd-8SC" name="value" keyPath="objectValue.keyPath" id="Eve-dr-UQ6"/>
+                                                            <binding destination="gxS-Jd-8SC" name="value" keyPath="objectValue.key" id="t6c-Hk-8FK"/>
                                                         </connections>
                                                     </textField>
                                                 </subviews>
@@ -1384,7 +1384,7 @@
                                     </tableColumn>
                                 </tableColumns>
                                 <connections>
-                                    <binding destination="pGv-Ji-A5t" name="content" keyPath="objectValue.content" id="ptv-HE-gtN"/>
+                                    <binding destination="pGv-Ji-A5t" name="content" keyPath="objectValue.content.arrangedObjects" id="VqM-ce-jmg"/>
                                 </connections>
                             </tableView>
                         </subviews>
