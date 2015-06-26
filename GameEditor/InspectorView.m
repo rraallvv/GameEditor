@@ -431,6 +431,13 @@ static const CGFloat kIndentationPerLevel = 0.0;
 	_itemHeights[item] = [NSNumber numberWithFloat:height];
 }
 
+- (void)setTop:(CGFloat)top forItem:(id)item {
+	NSTableRowView *rowView = [self rowViewAtRow:[self rowForItem:item] makeIfNecessary:NO];
+	CGRect viewFrame = rowView.frame;
+	viewFrame.origin.y = top;
+	rowView.frame = viewFrame;
+}
+
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
 	NSNumber *itemHeightValue = _itemHeights[item];
 	if (itemHeightValue) {
@@ -441,6 +448,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 	if ([type isEqualToString:@"@\"NSMutableDictionary\""]) {
 		NSLog(@"%@", type);
 	}
+
 	if (type) {
 		for (NSString *identifier in _editorIdentifiers) {
 			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {

@@ -33,4 +33,5 @@
 
 @interface InspectorView : NSOutlineView
 - (void)setHeight:(CGFloat)height forItem:(id)item;
+- (void)setTop:(CGFloat)top forItem:(id)item;
 @end
