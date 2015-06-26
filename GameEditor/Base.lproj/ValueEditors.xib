@@ -1008,7 +1008,7 @@
                                                 <subviews>
                                                     <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="SjQ-YJ-yVo">
                                                         <rect key="frame" x="0.0" y="0.0" width="66" height="18"/>
-                                                        <popUpButtonCell key="cell" type="bevel" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" imageScaling="proportionallyDown" inset="2" id="9Qx-TV-hYJ">
+                                                        <popUpButtonCell key="cell" type="bevel" title="Localized String" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" tag="3" imageScaling="proportionallyDown" inset="2" selectedItem="aFU-5b-ARO" id="9Qx-TV-hYJ">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <menu key="menu" id="ZKw-3z-nJB">
@@ -1016,7 +1016,7 @@
                                                                     <menuItem title="Boolean" id="WN5-3m-WF0" userLabel="Boolean"/>
                                                                     <menuItem title="Number" tag="1" id="YhE-cX-V4x"/>
                                                                     <menuItem title="String" tag="2" id="TU3-go-d8f"/>
-                                                                    <menuItem title="Localized String" tag="3" id="aFU-5b-ARO">
+                                                                    <menuItem title="Localized String" state="on" tag="3" hidden="YES" enabled="NO" id="aFU-5b-ARO">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
                                                                     <menuItem title="Point" tag="4" id="0rW-TN-boT">
@@ -1044,7 +1044,11 @@
                                                             </menu>
                                                         </popUpButtonCell>
                                                         <connections>
-                                                            <binding destination="piR-sf-gg5" name="selectedTag" keyPath="objectValue.type" id="3fW-rk-Nxf"/>
+                                                            <binding destination="piR-sf-gg5" name="selectedTag" keyPath="objectValue.value" id="3IU-YM-QE2">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">UserDataTypeTransformer</string>
+                                                                </dictionary>
+                                                            </binding>
                                                         </connections>
                                                     </popUpButton>
                                                 </subviews>
@@ -1362,7 +1366,11 @@
                                                             </tabViewItem>
                                                         </tabViewItems>
                                                         <connections>
-                                                            <binding destination="5a0-VJ-GML" name="selectedIndex" keyPath="objectValue.type" id="Lca-jy-UzN"/>
+                                                            <binding destination="5a0-VJ-GML" name="selectedIndex" keyPath="objectValue.value" id="dSv-4L-FKK">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">UserDataTypeTransformer</string>
+                                                                </dictionary>
+                                                            </binding>
                                                         </connections>
                                                     </tabView>
                                                 </subviews>

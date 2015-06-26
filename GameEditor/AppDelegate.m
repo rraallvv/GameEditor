@@ -329,35 +329,39 @@
 																		 @"type": @"@\"NSMutableDictionary\"",
 																		 @"isLeaf": @NO,
 																		 @"isEditable": @NO,
-																		 @"content":@[@{@"keyPath": @"A boolean",
-																						@"type": @0,
-																						@"value": @YES}.mutableCopy,
-																					  @{@"keyPath": @"A number",
-																						@"type": @1,
-																						@"value": @123}.mutableCopy,
-																					  @{@"keyPath": @"A string",
-																						@"type": @2,
-																						@"value": @"The string"}.mutableCopy,
-
-																					  @{@"keyPath": @"A point",
-																						@"type": @4,
-																						@"value": [NSValue valueWithPoint:CGPointMake(1, 2)]}.mutableCopy,
-																					  @{@"keyPath": @"A size",
-																						@"type": @5,
-																						@"value": [NSValue valueWithSize:CGSizeMake(2, 3)]}.mutableCopy,
-																					  @{@"keyPath": @"A rectangle",
-																						@"type": @6,
-																						@"value": [NSValue valueWithRect:CGRectMake(1, 2, 3, 4)]}.mutableCopy,
-																					  @{@"keyPath": @"A range",
-																						@"type": @7,
-																						@"value": [NSValue valueWithRange:NSMakeRange(0, 1)]}.mutableCopy,
-																					  @{@"keyPath": @"A color",
-																						@"type": @8,
-																						@"value": [NSColor redColor]}.mutableCopy,
-																					  @{@"keyPath": @"An image",
-																						@"type": @9,
-																						@"value": [NSImage imageNamed:NSImageNameInfo]}.mutableCopy
-																					  ].mutableCopy
+																		 @"content":
+#	if 0 // Use a raw dictionary
+																		 @{@"A boolean": @YES,
+																		   @"A number": @123,
+																		   @"A string": @"The string",
+																		   @"A point": [NSValue valueWithPoint:CGPointMake(1, 2)],
+																		   @"A size": [NSValue valueWithSize:CGSizeMake(2, 3)],
+																		   @"A rectangle": [NSValue valueWithRect:CGRectMake(1, 2, 3, 4)],
+																		   @"A range": [NSValue valueWithRange:NSMakeRange(0, 1)],
+																		   @"A color": [NSColor redColor],
+																		   @"An image": [NSImage imageNamed:NSImageNameInfo]
+																		   }.mutableCopy
+#	else
+																		 @[@{@"keyPath": @"A boolean",
+																			 @"value": @YES}.mutableCopy,
+																		   @{@"keyPath": @"A number",
+																			 @"value": @123}.mutableCopy,
+																		   @{@"keyPath": @"A string",
+																			 @"value": @"The string"}.mutableCopy,
+																		   @{@"keyPath": @"A point",
+																			 @"value": [NSValue valueWithPoint:CGPointMake(1, 2)]}.mutableCopy,
+																		   @{@"keyPath": @"A size",
+																			 @"value": [NSValue valueWithSize:CGSizeMake(2, 3)]}.mutableCopy,
+																		   @{@"keyPath": @"A rectangle",
+																			 @"value": [NSValue valueWithRect:CGRectMake(1, 2, 3, 4)]}.mutableCopy,
+																		   @{@"keyPath": @"A range",
+																			 @"value": [NSValue valueWithRange:NSMakeRange(0, 1)]}.mutableCopy,
+																		   @{@"keyPath": @"A color",
+																			 @"value": [NSColor redColor]}.mutableCopy,
+																		   @{@"keyPath": @"An image",
+																			 @"value": [NSImage imageNamed:NSImageNameInfo]}.mutableCopy
+																		   ].mutableCopy
+#	endif
 																		 }.mutableCopy
 																	   ].mutableCopy
 														}.mutableCopy,

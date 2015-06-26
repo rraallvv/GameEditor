@@ -85,3 +85,7 @@ reverseTransformedValueBlock:(id (^)(id value))reverseTransformedValueBlock;
 
 @interface ImageValidationTransformer : NSValueTransformer
 @end
+
+@interface UserDataTypeTransformer : NSValueTransformer
+@end
+
