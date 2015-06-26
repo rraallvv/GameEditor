@@ -1,5 +1,5 @@
 /*
- * InspectorView.h
+ * InspectorTableView.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -28,10 +28,15 @@
 #import "SKNode+PhysicsBodyType.h"
 #import "NSOutlineView+TreeExpansion.h"
 
+IB_DESIGNABLE
+@interface InspectorTableCellView : NSTableCellView
+@property (copy) IBInspectable NSColor *backgroundColor;
+@end
+
 @interface InspectorTableRowView : NSTableRowView
 @end
 
-@interface InspectorView : NSOutlineView
+@interface InspectorTableView : NSOutlineView
 - (void)setHeight:(CGFloat)height forItem:(id)item;
 - (void)setTop:(CGFloat)top forItem:(id)item;
 @end

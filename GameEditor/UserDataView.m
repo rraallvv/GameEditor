@@ -24,8 +24,28 @@
  */
 
 #import "UserDataView.h"
-#import "InspectorView.h"
+#import "InspectorTableView.h"
 #import "NSView+LayoutConstraint.h"
+
+#pragma mark UserDataTableCellView
+
+@interface UserDataTableCellView : InspectorTableCellView
+@property (weak) IBOutlet UserDataTableView *userDataTable;
+@property (weak) IBOutlet NSButton *addValue;
+@property (weak) IBOutlet NSButton *removeValue;
+@end
+
+@implementation UserDataTableCellView
+
+- (IBAction)didClickAddValueButton:(NSButton *)sender {
+	NSLog(@">>>Add Value");
+}
+
+- (IBAction)didClickRemoveValueButton:(NSButton *)sender {
+	NSLog(@">>>Remove Value");
+}
+
+@end
 
 #pragma mark UserDataTableView
 
@@ -52,7 +72,7 @@
 	frame.size.height = theHeight;
 	tableRowView.frame = frame;
 
-	InspectorView *inspectorView = (InspectorView *)tableRowView.superview;
+	InspectorTableView *inspectorView = (InspectorTableView *)tableRowView.superview;
 
 	[tableRowView setConstraintConstant:theHeight - 2 forAttribute:NSLayoutAttributeHeight];
 	[inspectorView setHeight:theHeight - 2 forItem:[inspectorView itemAtRow:[inspectorView rowForView:tableRowView]]];

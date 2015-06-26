@@ -1,5 +1,5 @@
 /*
- * InspectorView.m
+ * InspectorTableView.m
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,19 +23,14 @@
  * THE SOFTWARE.
  */
 
-#import "InspectorView.h"
+#import "InspectorTableView.h"
 #import "StepperTextField.h"
 #import "NSView+LayoutConstraint.h"
 #import "NSMapTable+Subscripting.h"
 
-#pragma mark TableCellView
+#pragma mark InspectorTableCellView
 
-IB_DESIGNABLE
-@interface TableCellView : NSTableCellView
-@property (copy) IBInspectable NSColor *backgroundColor;
-@end
-
-@implementation TableCellView {
+@implementation InspectorTableCellView {
 	NSMutableArray *_textFields;
 	IBOutlet NSPopover *_popover;
 }
@@ -164,7 +159,7 @@ IB_DESIGNABLE
 
 - (void)drawSeparatorInRect:(NSRect)dirtyRect {
 
-	InspectorView *outlineView = (InspectorView *)[self superview];
+	InspectorTableView *outlineView = (InspectorTableView *)[self superview];
 
 	NSInteger row = [outlineView rowForView:self];
 	id item = [outlineView itemAtRow:row];
@@ -260,7 +255,7 @@ IB_DESIGNABLE
 - (void)setFrame:(NSRect)frame {
 	[super setFrame:frame];
 
-	InspectorView *outlineView = (InspectorView *)[self superview];
+	InspectorTableView *outlineView = (InspectorTableView *)[self superview];
 	NSInteger row = [outlineView rowForView:self];
 	id item = [outlineView itemAtRow:row];
 	BOOL isCollapsible = [[[item representedObject] valueForKey:@"isCollapsible"] boolValue];
@@ -318,7 +313,7 @@ IB_DESIGNABLE
 }
 
 - (void)toggleGroupVisibility {
-	InspectorView *outlineView = (InspectorView *)[self superview];
+	InspectorTableView *outlineView = (InspectorTableView *)[self superview];
 	id item = [outlineView itemAtRow:[outlineView rowForView:self]];
 	if ([outlineView isItemExpanded:item]) {
 		_hideGroupButton.attributedTitle = _showAttributedString;
@@ -354,14 +349,14 @@ IB_DESIGNABLE
 
 @end
 
-#pragma mark InspectorView
+#pragma mark InspectorTableView
 
 static const CGFloat kIndentationPerLevel = 0.0;
 
-@interface InspectorView () <NSOutlineViewDelegate, NSOutlineViewDataSource>
+@interface InspectorTableView () <NSOutlineViewDelegate, NSOutlineViewDataSource>
 @end
 
-@implementation InspectorView {
+@implementation InspectorTableView {
 	__weak id _actualDelegate;
 	__weak id _actualDataSource;
 	NSMutableDictionary *_prefferedSizes;

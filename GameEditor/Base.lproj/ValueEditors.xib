@@ -10,7 +10,7 @@
         <customObject id="-2" userLabel="File's Owner"/>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <tableCellView identifier="[fd]" id="f3Z-oW-3C9" userLabel="float" customClass="TableCellView">
+        <tableCellView identifier="[fd]" id="f3Z-oW-3C9" userLabel="float" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -45,7 +45,7 @@
             </connections>
             <point key="canvasLocation" x="156" y="146"/>
         </tableCellView>
-        <tableCellView identifier="\{([^=]+=)?(ff|dd)\}" id="GbV-qK-Vp4" userLabel="2 floats" customClass="TableCellView">
+        <tableCellView identifier="\{([^=]+=)?(ff|dd)\}" id="GbV-qK-Vp4" userLabel="2 floats" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="30"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -137,7 +137,7 @@
                 <outlet property="contentViewController" destination="Nuf-d3-4cB" id="dDf-N7-ObG"/>
             </connections>
         </popover>
-        <tableCellView identifier="\{([^=]+=)?(fff|ddd)\}" id="sdd-dW-626" userLabel="3 floats" customClass="TableCellView">
+        <tableCellView identifier="\{([^=]+=)?(fff|ddd)\}" id="sdd-dW-626" userLabel="3 floats" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="30"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -254,7 +254,7 @@
             </connections>
             <point key="canvasLocation" x="156" y="440"/>
         </tableCellView>
-        <tableCellView identifier="\{([^=]+=)?\{([^=]+=)?(ff|dd)\}\{([^=]+=)?(ff|dd)\}\}" id="dHV-ME-csG" userLabel="4 floats" customClass="TableCellView">
+        <tableCellView identifier="\{([^=]+=)?\{([^=]+=)?(ff|dd)\}\{([^=]+=)?(ff|dd)\}\}" id="dHV-ME-csG" userLabel="4 floats" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="64"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -455,7 +455,7 @@
             </constraints>
             <point key="canvasLocation" x="442" y="262"/>
         </tableCellView>
-        <tableCellView identifier="[islqISLQ]" id="a61-EY-A6P" userLabel="integer" customClass="TableCellView">
+        <tableCellView identifier="[islqISLQ]" id="a61-EY-A6P" userLabel="integer" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -515,7 +515,7 @@
             </constraints>
             <point key="canvasLocation" x="442" y="427"/>
         </customView>
-        <tableCellView identifier="@&quot;NSString&quot;" id="AvU-FU-guj" userLabel="string" customClass="TableCellView">
+        <tableCellView identifier="@&quot;NSString&quot;" id="AvU-FU-guj" userLabel="string" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -544,7 +544,7 @@
             </connections>
             <point key="canvasLocation" x="156" y="514"/>
         </tableCellView>
-        <tableCellView identifier="@&quot;SKTexture&quot;" id="faw-Lb-7vi" userLabel="texture" customClass="TableCellView">
+        <tableCellView identifier="@&quot;SKTexture&quot;" id="faw-Lb-7vi" userLabel="texture" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -577,7 +577,7 @@
             </connections>
             <point key="canvasLocation" x="156" y="788"/>
         </tableCellView>
-        <tableCellView identifier="bodyType" id="yj4-cN-yD2" userLabel="bodyType" customClass="TableCellView">
+        <tableCellView identifier="bodyType" id="yj4-cN-yD2" userLabel="bodyType" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -628,7 +628,7 @@
             </connections>
             <point key="canvasLocation" x="156" y="582"/>
         </tableCellView>
-        <tableCellView identifier="blendMode" id="5VF-hD-7yS" userLabel="blendMode" customClass="TableCellView">
+        <tableCellView identifier="blendMode" id="5VF-hD-7yS" userLabel="blendMode" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -677,7 +677,7 @@
             </connections>
             <point key="canvasLocation" x="156" y="650"/>
         </tableCellView>
-        <tableCellView identifier="scaleMode" id="QB0-is-Xf8" userLabel="scaleMode" customClass="TableCellView">
+        <tableCellView identifier="scaleMode" id="QB0-is-Xf8" userLabel="scaleMode" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -716,7 +716,7 @@
             </connections>
             <point key="canvasLocation" x="442" y="587"/>
         </tableCellView>
-        <tableCellView identifier="lineJoin" id="ozb-nY-yNa" userLabel="lineJoin" customClass="TableCellView">
+        <tableCellView identifier="lineJoin" id="ozb-nY-yNa" userLabel="lineJoin" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -754,7 +754,7 @@
             </connections>
             <point key="canvasLocation" x="156" y="718"/>
         </tableCellView>
-        <tableCellView identifier="lineCap" id="3py-Sl-wNM" userLabel="lineCap" customClass="TableCellView">
+        <tableCellView identifier="lineCap" id="3py-Sl-wNM" userLabel="lineCap" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -787,7 +787,7 @@
             </constraints>
             <point key="canvasLocation" x="442" y="723"/>
         </tableCellView>
-        <tableCellView identifier="@&quot;SKShader&quot;" id="QFc-dU-G1D" userLabel="shader" customClass="TableCellView">
+        <tableCellView identifier="@&quot;SKShader&quot;" id="QFc-dU-G1D" userLabel="shader" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -820,7 +820,7 @@
             </connections>
             <point key="canvasLocation" x="442" y="515"/>
         </tableCellView>
-        <tableCellView identifier="verticalAlignmentMode" id="Shj-33-S9Y" userLabel="verticalAlignmentMode" customClass="TableCellView">
+        <tableCellView identifier="verticalAlignmentMode" id="Shj-33-S9Y" userLabel="verticalAlignmentMode" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -854,7 +854,7 @@
             </constraints>
             <point key="canvasLocation" x="156" y="366"/>
         </tableCellView>
-        <tableCellView identifier="horizontalAlignmentMode" id="hK1-Wq-ikI" userLabel="horizontalAlignmentMode" customClass="TableCellView">
+        <tableCellView identifier="horizontalAlignmentMode" id="hK1-Wq-ikI" userLabel="horizontalAlignmentMode" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -893,7 +893,7 @@
             <point key="canvasLocation" x="442" y="655"/>
         </tableCellView>
         <customObject id="7zt-RG-IFl" customClass="NSFontManager"/>
-        <tableCellView identifier="fontName" id="Bgf-oe-RxG" userLabel="fontName" customClass="TableCellView">
+        <tableCellView identifier="fontName" id="Bgf-oe-RxG" userLabel="fontName" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -926,7 +926,7 @@
             </connections>
             <point key="canvasLocation" x="442" y="794"/>
         </tableCellView>
-        <tableCellView identifier="@&quot;NSMutableDictionary&quot;" id="pGv-Ji-A5t" userLabel="userData" customClass="TableCellView">
+        <tableCellView identifier="@&quot;NSMutableDictionary&quot;" id="pGv-Ji-A5t" userLabel="userData" customClass="UserDataTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="284" height="85"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -1006,7 +1006,7 @@
                                                 <rect key="frame" x="106" y="1" width="114" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <popUpButton misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SjQ-YJ-yVo">
+                                                    <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="SjQ-YJ-yVo">
                                                         <rect key="frame" x="0.0" y="0.0" width="66" height="18"/>
                                                         <popUpButtonCell key="cell" type="bevel" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" imageScaling="proportionallyDown" inset="2" id="9Qx-TV-hYJ">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1413,6 +1413,9 @@
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="didClickAddValueButton:" target="pGv-Ji-A5t" id="DAx-Sg-bgL"/>
+                    </connections>
                 </button>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="2NA-cf-M6m">
                     <rect key="frame" x="22" y="2" width="16" height="16"/>
@@ -1420,6 +1423,9 @@
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="didClickRemoveValueButton:" target="pGv-Ji-A5t" id="gMj-Qa-7OF"/>
+                    </connections>
                 </button>
             </subviews>
             <constraints>
@@ -1439,6 +1445,11 @@
                     <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="addValue" destination="x8u-Dq-Tet" id="mIt-GH-Ov6"/>
+                <outlet property="removeValue" destination="2NA-cf-M6m" id="Z4Z-Tm-lxL"/>
+                <outlet property="userDataTable" destination="9M9-I0-tB9" id="TBe-oe-neE"/>
+            </connections>
             <point key="canvasLocation" x="784" y="178.5"/>
         </tableCellView>
         <tableCellView identifier="header" id="xvS-hY-Bup" userLabel="header">
