@@ -930,7 +930,7 @@
             <rect key="frame" x="0.0" y="0.0" width="284" height="85"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <scrollView verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" borderType="none" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0zv-gw-fpv">
+                <scrollView verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" borderType="none" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0zv-gw-fpv">
                     <rect key="frame" x="0.0" y="0.0" width="284" height="85"/>
                     <clipView key="contentView" id="V3N-Y2-AAv">
                         <rect key="frame" x="1" y="17" width="238" height="117"/>
@@ -1003,12 +1003,12 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="piR-sf-gg5">
-                                                <rect key="frame" x="106" y="1" width="72" height="17"/>
+                                                <rect key="frame" x="106" y="1" width="114" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="SjQ-YJ-yVo">
+                                                    <popUpButton misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SjQ-YJ-yVo">
                                                         <rect key="frame" x="0.0" y="0.0" width="66" height="18"/>
-                                                        <popUpButtonCell key="cell" type="bevel" title="Localized String" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" tag="3" imageScaling="proportionallyDown" inset="2" selectedItem="aFU-5b-ARO" id="9Qx-TV-hYJ">
+                                                        <popUpButtonCell key="cell" type="bevel" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" imageScaling="proportionallyDown" inset="2" id="9Qx-TV-hYJ">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <menu key="menu" id="ZKw-3z-nJB">
