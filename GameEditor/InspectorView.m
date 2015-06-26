@@ -305,7 +305,7 @@ IB_DESIGNABLE
 		}
 		[_hideGroupButton sizeToFit];
 		NSSize size = _hideGroupButton.frame.size;
-		_hideGroupButton.frame = NSMakeRect(NSMaxX(frame) - size.width, frame.size.height - size.height - 1, size.width, size.height);
+		_hideGroupButton.frame = NSMakeRect(NSMaxX(frame) - size.width, frame.size.height - size.height, size.width, size.height - 2);
 		/*
 		for (NSControl *control in self.subviews) {
 			if ([control isKindOfClass:[NSTableCellView class]]) {
