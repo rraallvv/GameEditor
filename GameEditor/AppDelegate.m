@@ -319,6 +319,7 @@
 																		 }.mutableCopy
 																	   ].mutableCopy
 														}.mutableCopy,
+#if 1 // Dummy user data table
 													  @{@"name": @"User Data",
 														@"type": @"header",
 														@"isLeaf": @NO,
@@ -360,6 +361,7 @@
 																		 }.mutableCopy
 																	   ].mutableCopy
 														}.mutableCopy,
+#endif
 													  @{@"name": @"Header",
 														@"type": @"header",
 														@"isLeaf": @NO,

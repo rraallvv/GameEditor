@@ -45,7 +45,7 @@
 }
 
 - (void)didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
-	const CGFloat theHeight = [self numberOfRows] * 19.0 + self.headerView.frame.size.height + 16;//9.0;
+	const CGFloat theHeight = self.numberOfRows * 19.0 + self.headerView.frame.size.height + 16;//9.0;
 
 	InspectorTableRowView *tableRowView = (InspectorTableRowView *)_scrollView.superview.superview;
 	CGRect frame = tableRowView.frame;
@@ -59,20 +59,10 @@
 
 	[inspectorView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[inspectorView rowForView:tableRowView]]];
 
-	NSMutableArray *tops = [NSMutableArray array];
-
 	InspectorTableRowView *prevRowView = tableRowView;
-	for (NSInteger i=[inspectorView rowForView:tableRowView] + 1; i<[inspectorView numberOfRows]; ++i) {
+	for (NSInteger i=[inspectorView rowForView:tableRowView] + 1; i<inspectorView.numberOfRows; ++i) {
 		InspectorTableRowView *nextRowView = (InspectorTableRowView *)[inspectorView rowViewAtRow:i makeIfNecessary:NO];
 		CGFloat newTop = NSMaxY(prevRowView.frame);
-		[tops addObject:@(newTop)];
-		prevRowView = nextRowView;
-	}
-
-	prevRowView = tableRowView;
-	for (NSInteger i=[inspectorView rowForView:tableRowView] + 1; i<[inspectorView numberOfRows]; ++i) {
-		InspectorTableRowView *nextRowView = (InspectorTableRowView *)[inspectorView rowViewAtRow:i makeIfNecessary:NO];
-		CGFloat newTop = [tops[i - ([inspectorView rowForView:tableRowView] + 1)] floatValue];
 		[nextRowView setConstraintConstant:newTop forAttribute:NSLayoutAttributeTop];
 		[inspectorView setTop:newTop forItem:[inspectorView itemAtRow:[inspectorView rowForView:nextRowView]]];
 		prevRowView = nextRowView;
