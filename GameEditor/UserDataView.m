@@ -57,6 +57,8 @@
 	[tableRowView setConstraintConstant:theHeight - 2 forAttribute:NSLayoutAttributeHeight];
 	[inspectorView setHeight:theHeight - 2 forItem:[inspectorView itemAtRow:[inspectorView rowForView:tableRowView]]];
 
+	[inspectorView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[inspectorView rowForView:tableRowView]]];
+
 	NSMutableArray *tops = [NSMutableArray array];
 
 	InspectorTableRowView *prevRowView = tableRowView;
