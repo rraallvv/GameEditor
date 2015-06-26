@@ -32,6 +32,88 @@
 #import "ValueTransformers.h"
 #import "NSBundle+ProxyBundle.h"
 
+@interface UserDataKeyDictionary : NSMutableDictionary {
+	NSMutableDictionary *_backingStore;
+}
+
+@end
+
+@implementation UserDataKeyDictionary
+
+- (NSUInteger)count {
+	return _backingStore.count;
+}
+
+-(id)objectForKey:(id)aKey {
+	return _backingStore[aKey];
+}
+
+-(NSEnumerator *)keyEnumerator {
+	return [_backingStore keyEnumerator];
+}
+
+- (instancetype)init {
+	if (self = [super init]) {
+		_backingStore = [NSMutableDictionary dictionary];
+	}
+	return self;
+}
+
+-(void)setObject:(id)anObject forKey:(id<NSCopying>)aKey {
+	_backingStore[aKey] = anObject;
+}
+
+-(void)removeObjectForKey:(id)aKey {
+	[_backingStore removeObjectForKey:aKey];
+}
+
+@end
+
+@interface UserDataArray : NSMutableArray {
+	NSMutableArray *_backingStore;
+}
+
+@end
+
+@implementation UserDataArray
+
+- (id) init {
+	if (self == [super init]) {
+		_backingStore = [NSMutableArray array];
+	}
+	return self;
+}
+
+-(NSUInteger)count {
+	return [_backingStore count];
+}
+
+-(id)objectAtIndex:(NSUInteger)index {
+	return [_backingStore objectAtIndex:index];
+}
+
+-(void)insertObject:(id)anObject atIndex:(NSUInteger)index {
+	[_backingStore insertObject:anObject atIndex:index];
+}
+
+-(void)removeObjectAtIndex:(NSUInteger)index {
+	[_backingStore removeObjectAtIndex:index];
+}
+
+-(void)addObject:(id)anObject {
+	[_backingStore addObject:anObject];
+}
+
+-(void)removeLastObject {
+	[_backingStore removeLastObject];
+}
+
+-(void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject {
+	[_backingStore replaceObjectAtIndex:index withObject:anObject];
+}
+
+@end
+
 #pragma mark Main Window
 
 @interface AppDelegate ()
