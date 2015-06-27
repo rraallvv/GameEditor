@@ -27,6 +27,50 @@
 #import "InspectorTableView.h"
 #import "NSView+LayoutConstraint.h"
 
+#pragma mark UserDataDictionary
+
+@implementation UserDataDictionary {
+	__weak SKNode *_node;
+}
+
+- (NSUInteger)count {
+	return _node.userData.count;
+}
+
+-(id)objectForKey:(id)aKey {
+	return _node.userData[aKey];
+}
+
+-(NSEnumerator *)keyEnumerator {
+	return [_node.userData keyEnumerator];
+}
+
+- (instancetype)initWithNode:(SKNode *)node {
+	if (self = [super init]) {
+		_node = node;
+		if (_node.userData.count == 0) {
+			_node.userData = nil;
+		}
+	}
+	return self;
+}
+
+-(void)setObject:(id)anObject forKey:(id<NSCopying>)aKey {
+	if (!_node.userData) {
+		_node.userData = [NSMutableDictionary dictionary];
+	}
+	_node.userData[aKey] = anObject;
+}
+
+-(void)removeObjectForKey:(id)aKey {
+	[_node.userData removeObjectForKey:aKey];
+	if (_node.userData.count == 0) {
+		_node.userData = nil;
+	}
+}
+
+@end
+
 #pragma mark UserDataTableCellView
 
 @interface UserDataTableCellView : InspectorTableCellView

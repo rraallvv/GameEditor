@@ -25,6 +25,14 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class SKNode;
+
+@interface UserDataDictionary : NSMutableDictionary
+
+- (instancetype)initWithNode:(SKNode *)node;
+
+@end
+
 @interface UserDataTableView : NSTableView <NSTableViewDelegate, NSTableViewDataSource>
 
 @end

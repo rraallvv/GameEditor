@@ -29,90 +29,9 @@
 #import <SceneKit/SceneKit.h>
 #import "LuaContext.h"
 #import "LuaExport.h"
+#import "UserDataView.h"
 #import "ValueTransformers.h"
 #import "NSBundle+ProxyBundle.h"
-
-@interface UserDataDictionary : NSMutableDictionary {
-	NSMutableDictionary *_backingStore;
-}
-
-@end
-
-@implementation UserDataDictionary
-
-- (NSUInteger)count {
-	return _backingStore.count;
-}
-
--(id)objectForKey:(id)aKey {
-	return _backingStore[aKey];
-}
-
--(NSEnumerator *)keyEnumerator {
-	return [_backingStore keyEnumerator];
-}
-
-- (instancetype)initWithCapacity:(NSUInteger)numItems {
-	if (self = [super init]) {
-		_backingStore = [[NSMutableDictionary alloc] initWithCapacity:numItems];
-	}
-	return self;
-}
-
--(void)setObject:(id)anObject forKey:(id<NSCopying>)aKey {
-	_backingStore[aKey] = anObject;
-}
-
--(void)removeObjectForKey:(id)aKey {
-	[_backingStore removeObjectForKey:aKey];
-}
-
-@end
-
-@interface UserDataArray : NSMutableArray {
-	NSMutableArray *_backingStore;
-}
-
-@end
-
-@implementation UserDataArray
-
-- (id) init {
-	if (self == [super init]) {
-		_backingStore = [NSMutableArray array];
-	}
-	return self;
-}
-
--(NSUInteger)count {
-	return [_backingStore count];
-}
-
--(id)objectAtIndex:(NSUInteger)index {
-	return [_backingStore objectAtIndex:index];
-}
-
--(void)insertObject:(id)anObject atIndex:(NSUInteger)index {
-	[_backingStore insertObject:anObject atIndex:index];
-}
-
--(void)removeObjectAtIndex:(NSUInteger)index {
-	[_backingStore removeObjectAtIndex:index];
-}
-
--(void)addObject:(id)anObject {
-	[_backingStore addObject:anObject];
-}
-
--(void)removeLastObject {
-	[_backingStore removeLastObject];
-}
-
--(void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject {
-	[_backingStore replaceObjectAtIndex:index withObject:anObject];
-}
-
-@end
 
 #pragma mark Main Window
 
@@ -412,38 +331,7 @@
 																		 @"isLeaf": @NO,
 																		 @"isEditable": @NO,
 																		 @"content":
-#	if 1 // Use a raw dictionary
-																		 [[NSDictionaryController alloc] initWithContent:@{@"A boolean": @YES,
-																		   @"A number": @123,
-																		   @"A string": @"The string",
-																		   @"A point": [NSValue valueWithPoint:CGPointMake(1, 2)],
-																		   @"A size": [NSValue valueWithSize:CGSizeMake(2, 3)],
-																		   @"A rectangle": [NSValue valueWithRect:CGRectMake(1, 2, 3, 4)],
-																		   @"A range": [NSValue valueWithRange:NSMakeRange(0, 1)],
-																		   @"A color": [NSColor redColor],
-																		   @"An image": [NSImage imageNamed:NSImageNameInfo]
-																		   }.mutableCopy]
-#	else
-																		 @[@{@"keyPath": @"A boolean",
-																			 @"value": @YES}.mutableCopy,
-																		   @{@"keyPath": @"A number",
-																			 @"value": @123}.mutableCopy,
-																		   @{@"keyPath": @"A string",
-																			 @"value": @"The string"}.mutableCopy,
-																		   @{@"keyPath": @"A point",
-																			 @"value": [NSValue valueWithPoint:CGPointMake(1, 2)]}.mutableCopy,
-																		   @{@"keyPath": @"A size",
-																			 @"value": [NSValue valueWithSize:CGSizeMake(2, 3)]}.mutableCopy,
-																		   @{@"keyPath": @"A rectangle",
-																			 @"value": [NSValue valueWithRect:CGRectMake(1, 2, 3, 4)]}.mutableCopy,
-																		   @{@"keyPath": @"A range",
-																			 @"value": [NSValue valueWithRange:NSMakeRange(0, 1)]}.mutableCopy,
-																		   @{@"keyPath": @"A color",
-																			 @"value": [NSColor redColor]}.mutableCopy,
-																		   @{@"keyPath": @"An image",
-																			 @"value": [NSImage imageNamed:NSImageNameInfo]}.mutableCopy
-																		   ].mutableCopy
-#	endif
+																		 [[NSDictionaryController alloc] initWithContent:[[UserDataDictionary alloc] initWithNode:_selectedNode]]
 																		 }.mutableCopy
 																	   ].mutableCopy
 														}.mutableCopy,
