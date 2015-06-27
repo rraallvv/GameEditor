@@ -32,13 +32,13 @@
 #import "ValueTransformers.h"
 #import "NSBundle+ProxyBundle.h"
 
-@interface UserDataKeyDictionary : NSMutableDictionary {
+@interface UserDataDictionary : NSMutableDictionary {
 	NSMutableDictionary *_backingStore;
 }
 
 @end
 
-@implementation UserDataKeyDictionary
+@implementation UserDataDictionary
 
 - (NSUInteger)count {
 	return _backingStore.count;
@@ -52,9 +52,9 @@
 	return [_backingStore keyEnumerator];
 }
 
-- (instancetype)init {
+- (instancetype)initWithCapacity:(NSUInteger)numItems {
 	if (self = [super init]) {
-		_backingStore = [NSMutableDictionary dictionary];
+		_backingStore = [[NSMutableDictionary alloc] initWithCapacity:numItems];
 	}
 	return self;
 }

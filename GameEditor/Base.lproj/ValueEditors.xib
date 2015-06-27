@@ -1419,7 +1419,7 @@
                 </button>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="2NA-cf-M6m">
                     <rect key="frame" x="22" y="2" width="16" height="16"/>
-                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" state="on" imageScaling="proportionallyDown" inset="2" id="IVl-Vm-l9v">
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" enabled="NO" state="on" imageScaling="proportionallyDown" inset="2" id="IVl-Vm-l9v">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>

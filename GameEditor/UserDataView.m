@@ -37,6 +37,14 @@
 
 @implementation UserDataTableCellView
 
+- (void)awakeFromNib {
+	/* Register for receiving notifications when the user data table change its selection */
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(selectionDidChange:)
+												 name:NSTableViewSelectionDidChangeNotification
+											   object:self.userDataTable];
+}
+
 - (IBAction)didClickAddValueButton:(NSButton *)sender {
 	NSDictionaryController *dictionaryController = [self.objectValue valueForKey:NSContentBinding];
 	NSInteger selectedRow = [self.userDataTable selectedRow];
@@ -61,6 +69,20 @@
 	if (selectedRow != -1) {
 		[dictionaryController removeObjectAtArrangedObjectIndex:selectedRow];
 	}
+
+	/* -[selectionDidChange:] is not called when a value is removed, so the button it's disabled here */
+	self.removeValue.enabled = NO;
+}
+
+- (void)selectionDidChange:(NSNotification*)note {
+	/* Disable the remove value button if there is no selection */
+	self.removeValue.enabled = self.userDataTable.selectedRow != -1;
+}
+
+- (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self
+													name:NSTableViewSelectionDidChangeNotification
+												  object:self.userDataTable];
 }
 
 @end
