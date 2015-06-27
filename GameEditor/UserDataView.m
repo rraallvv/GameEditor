@@ -96,7 +96,6 @@
 @implementation UserDataTableView {
 	__weak id _actualDelegate;
 	__weak id _actualDataSource;
-	NSInteger _previousSelectionRow;
 	__weak NSScrollView *_scrollView;
 }
 
@@ -105,17 +104,21 @@
 }
 
 - (void)didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
-	const CGFloat theHeight = self.numberOfRows * 19.0 + self.headerView.frame.size.height + 16;//9.0;
-
 	InspectorTableRowView *tableRowView = (InspectorTableRowView *)_scrollView.superview.superview;
+
+	const CGFloat newHeight = [self heightForRows:self.numberOfRows];
+
+	if (newHeight < [self heightForRows:4])
+		return;
+
 	CGRect frame = tableRowView.frame;
-	frame.size.height = theHeight;
+	frame.size.height = newHeight;
 	tableRowView.frame = frame;
 
 	InspectorTableView *inspectorView = (InspectorTableView *)tableRowView.superview;
 
-	[tableRowView setConstraintConstant:theHeight - 2 forAttribute:NSLayoutAttributeHeight];
-	[inspectorView setHeight:theHeight - 2 forItem:[inspectorView itemAtRow:[inspectorView rowForView:tableRowView]]];
+	[tableRowView setConstraintConstant:newHeight - 2 forAttribute:NSLayoutAttributeHeight];
+	[inspectorView setHeight:newHeight - 2 forItem:[inspectorView itemAtRow:[inspectorView rowForView:tableRowView]]];
 
 	if (row == self.numberOfRows - 1) {
 		/* Update the user data table's height when adding the last row */
@@ -135,6 +138,10 @@
 	}
 }
 
+- (CGFloat)heightForRows:(NSInteger)rows {
+	return rows * 19.0 + self.headerView.frame.size.height + 16;
+}
+
 - (void)setBackgroundStyle:(NSBackgroundStyle)backgroundStyle row:(NSInteger)row {
 	NSTableCellView *tableCellView = [self viewAtColumn:2 row:row makeIfNecessary:NO];
 	NSTabView *tabView = tableCellView.subviews.firstObject;
@@ -149,9 +156,9 @@
 }
 
 - (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row {
-	[self setBackgroundStyle:NSBackgroundStyleDark row:row];
-	[self setBackgroundStyle:NSBackgroundStyleLight row:_previousSelectionRow];
-	_previousSelectionRow = row;
+	for (int i = 0; i < self.numberOfRows; ++i) {
+		[self setBackgroundStyle: i == self.selectedRow ? NSBackgroundStyleDark : NSBackgroundStyleLight row:row];
+	}
 	return YES;
 }
 
