@@ -62,6 +62,9 @@ reverseTransformedValueBlock:(id (^)(id value))reverseTransformedValueBlock;
 @interface ShaderTransformer : NSValueTransformer
 @end
 
+@interface BooleanValidationTransformer : NSValueTransformer
+@end
+
 @interface NumberValidationTransformer : NSValueTransformer
 @end
 

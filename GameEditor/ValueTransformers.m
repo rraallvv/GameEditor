@@ -441,6 +441,27 @@ typedef enum UserDataType {
 
 @end
 
+@implementation BooleanValidationTransformer
+
++ (void)initialize {
+	[self initializeWithTransformedValueClass:[NSNumber class]
+				  allowsReverseTransformation:YES
+						transformedValueBlock:^id(id value){
+							if ([value isKindOfClass:[NSNumber class]] && strcmp([value objCType], @encode(BOOL)) == 0) {
+								return value;
+							}
+							return @NO;
+						}
+				 reverseTransformedValueBlock:^id(id value){
+							if ([value isKindOfClass:[NSNumber class]] && strcmp([value objCType], @encode(BOOL)) == 0) {
+								return value;
+							}
+							return @NO;
+						}];
+}
+
+@end
+
 @implementation NumberValidationTransformer
 
 + (void)initialize {
@@ -453,11 +474,16 @@ typedef enum UserDataType {
 							return @0;
 						}
 				 reverseTransformedValueBlock:^id(id value){
-					 if ([value isKindOfClass:[NSNumber class]]) {
-						 return value;
-					 }
-					 return @0;
-				 }];
+							if ([value isKindOfClass:[NSString class]]) {
+								NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+								formatter.numberStyle = NSNumberFormatterDecimalStyle;
+								NSNumber *result = [formatter numberFromString:value];
+								if (result) {
+									return result;
+								}
+							}
+							return @0;
+						}];
 }
 
 @end
@@ -474,11 +500,11 @@ typedef enum UserDataType {
 							return @"";
 						}
 				 reverseTransformedValueBlock:^id(id value){
-					 if ([value isKindOfClass:[NSString class]]) {
-						 return value;
-					 }
-					 return @"";
-				 }];
+							if ([value isKindOfClass:[NSString class]]) {
+								return value;
+							}
+							return @"";
+						}];
 }
 
 @end
@@ -495,11 +521,11 @@ typedef enum UserDataType {
 							return @"{0, 0}";
 						}
 				 reverseTransformedValueBlock:^id(id value){
-					 if ([value isKindOfClass:[NSValue class]] && strcmp([value objCType], @encode(CGPoint)) == 0) {
-						 return value;
-					 }
-					 return [NSValue valueWithPoint:CGPointZero];
-				 }];
+							if ([value isKindOfClass:[NSString class]]) {
+								return [NSValue valueWithPoint:NSPointFromString(value)];
+							}
+							return [NSValue valueWithPoint:CGPointZero];
+						}];
 }
 
 @end
@@ -516,11 +542,11 @@ typedef enum UserDataType {
 							return @"{0, 0}";
 						}
 				 reverseTransformedValueBlock:^id(id value){
-					 if ([value isKindOfClass:[NSValue class]] && strcmp([value objCType], @encode(CGSize)) == 0) {
-						 return value;
-					 }
-					 return [NSValue valueWithSize:CGSizeZero];
-				 }];
+							if ([value isKindOfClass:[NSString class]]) {
+								return [NSValue valueWithSize:NSSizeFromString(value)];
+							}
+							return [NSValue valueWithSize:CGSizeZero];
+						}];
 }
 
 @end
@@ -537,11 +563,11 @@ typedef enum UserDataType {
 							return @"{0, 0, 0, 0}";
 						}
 				 reverseTransformedValueBlock:^id(id value){
-					 if ([value isKindOfClass:[NSValue class]] && strcmp([value objCType], @encode(CGRect)) == 0) {
-						 return value;
-					 }
-					 return [NSValue valueWithRect:CGRectZero];
-				 }];
+							if ([value isKindOfClass:[NSString class]]) {
+								return [NSValue valueWithRect:NSRectFromString(value)];
+							}
+							return [NSValue valueWithRect:CGRectZero];
+						}];
 }
 
 @end
@@ -558,11 +584,11 @@ typedef enum UserDataType {
 							return @"{0, 0}";
 						}
 				 reverseTransformedValueBlock:^id(id value){
-					 if ([value isKindOfClass:[NSValue class]] && strcmp([value objCType], @encode(NSRange)) == 0) {
-						 return value;
-					 }
-					 return [NSValue valueWithRange:NSMakeRange(0, 0)];
-				 }];
+							if ([value isKindOfClass:[NSString class]]) {
+								return [NSValue valueWithRange:NSRangeFromString(value)];
+							}
+							return [NSValue valueWithRange:NSMakeRange(0, 0)];
+						}];
 }
 
 @end
@@ -579,11 +605,11 @@ typedef enum UserDataType {
 							return [NSColor blueColor];
 						}
 				 reverseTransformedValueBlock:^id(id value){
-					 if ([value isKindOfClass:[NSColor class]]) {
-						 return value;
-					 }
-					 return [NSColor blueColor];
-				 }];
+							if ([value isKindOfClass:[NSColor class]]) {
+								return value;
+							}
+							return [NSColor blueColor];
+						}];
 }
 
 @end
@@ -600,11 +626,11 @@ typedef enum UserDataType {
 							return @"";
 						}
 				 reverseTransformedValueBlock:^id(id value){
-					 if ([value isKindOfClass:[NSImage class]]) {
-						 return [NSImage imageNamed:value];
-					 }
-					 return nil;
-				 }];
+							if ([value isKindOfClass:[NSString class]]) {
+								return [NSImage imageNamed:value];
+							}
+							return nil;
+						}];
 }
 
 @end
@@ -686,7 +712,7 @@ typedef enum UserDataType {
 							 break;
 
 						 case UserDataTypeImage:
-							 result = [NSImage imageNamed:NSImageNameInfo];
+							 result = nil;
 							 break;
 
 						 case UserDataTypeNil:

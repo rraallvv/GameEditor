@@ -1101,9 +1101,9 @@
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                             </buttonCell>
                                                                             <connections>
-                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="ViD-IE-Np2">
+                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="Q1o-KN-21S">
                                                                                     <dictionary key="options">
-                                                                                        <string key="NSValueTransformerName">NumberValidationTransformer</string>
+                                                                                        <string key="NSValueTransformerName">BooleanValidationTransformer</string>
                                                                                     </dictionary>
                                                                                 </binding>
                                                                             </connections>
