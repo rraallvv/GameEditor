@@ -468,7 +468,7 @@ typedef enum UserDataType {
 	[self initializeWithTransformedValueClass:[NSNumber class]
 				  allowsReverseTransformation:YES
 						transformedValueBlock:^id(id value){
-							if ([value isKindOfClass:[NSNumber class]]) {
+							if ([value isKindOfClass:[NSNumber class]] && strcmp([value objCType], @encode(BOOL)) != 0) {
 								return value;
 							}
 							return @0;
