@@ -186,7 +186,7 @@
 	return rows * (self.rowHeight + 3.0) + self.headerView.frame.size.height + 16;
 }
 
-- (void)setBackgroundStyle:(NSBackgroundStyle)backgroundStyle row:(NSInteger)row {
+- (void)setBackgroundStyle:(NSBackgroundStyle)backgroundStyle atRow:(NSInteger)row {
 	NSTableCellView *tableCellView = [self viewAtColumn:2 row:row makeIfNecessary:NO];
 	NSTabView *tabView = tableCellView.subviews.firstObject;
 	for (NSTabViewItem *item in [tabView tabViewItems]) {
@@ -199,11 +199,10 @@
 	}
 }
 
-- (BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row {
-	for (int i = 0; i < self.numberOfRows; ++i) {
-		[self setBackgroundStyle: i == self.selectedRow ? NSBackgroundStyleDark : NSBackgroundStyleLight row:row];
+- (void)tableViewSelectionIsChanging:(NSNotification *)notification {
+	for (int row = 0; row < self.numberOfRows; ++row) {
+		[self setBackgroundStyle: row == self.selectedRow ? NSBackgroundStyleDark : NSBackgroundStyleLight atRow:row];
 	}
-	return YES;
 }
 
 #pragma mark Delegate methods interception
