@@ -43,7 +43,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="EwJ-Xd-rqh"/>
                 <outlet property="textField" destination="q6s-Ku-JU0" id="yzm-dT-NHS"/>
             </connections>
-            <point key="canvasLocation" x="156" y="146"/>
+            <point key="canvasLocation" x="189" y="166"/>
         </tableCellView>
         <tableCellView identifier="\{([^=]+=)?(ff|dd)\}" id="GbV-qK-Vp4" userLabel="2 floats" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="30"/>
@@ -125,7 +125,7 @@
             <connections>
                 <outlet property="textField" destination="jzj-QV-oE2" id="MVN-XN-UTj"/>
             </connections>
-            <point key="canvasLocation" x="156" y="283"/>
+            <point key="canvasLocation" x="189" y="303"/>
         </tableCellView>
         <viewController id="Nuf-d3-4cB" userLabel="Popover View Controller">
             <connections>
@@ -252,7 +252,7 @@
             <connections>
                 <outlet property="textField" destination="NWX-Yo-FRT" id="7dm-Tb-boG"/>
             </connections>
-            <point key="canvasLocation" x="156" y="430"/>
+            <point key="canvasLocation" x="189" y="450"/>
         </tableCellView>
         <tableCellView identifier="\{([^=]+=)?\{([^=]+=)?(ff|dd)\}\{([^=]+=)?(ff|dd)\}\}" id="dHV-ME-csG" userLabel="4 floats" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="64"/>
@@ -404,7 +404,7 @@
             <connections>
                 <outlet property="textField" destination="JUl-PQ-ZNn" id="jwk-0Z-vp2"/>
             </connections>
-            <point key="canvasLocation" x="443.5" y="168"/>
+            <point key="canvasLocation" x="409" y="188"/>
         </tableCellView>
         <tableCellView identifier="c" id="toe-NG-Bn9" userLabel="check">
             <rect key="frame" x="0.0" y="0.0" width="172" height="19"/>
@@ -430,7 +430,7 @@
                 <constraint firstAttribute="trailing" secondItem="YBc-RN-b4y" secondAttribute="trailing" id="WAZ-eH-0YJ"/>
                 <constraint firstItem="YBc-RN-b4y" firstAttribute="leading" secondItem="toe-NG-Bn9" secondAttribute="leading" id="WrL-bb-Q9Q"/>
             </constraints>
-            <point key="canvasLocation" x="156" y="210.5"/>
+            <point key="canvasLocation" x="189" y="230.5"/>
         </tableCellView>
         <tableCellView identifier="@&quot;NSColor&quot;" id="Nhn-ML-Yi0" userLabel="color">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -453,7 +453,7 @@
                 <constraint firstItem="7B1-9n-jPd" firstAttribute="top" secondItem="Nhn-ML-Yi0" secondAttribute="top" id="jpO-mr-ASZ"/>
                 <constraint firstItem="7B1-9n-jPd" firstAttribute="leading" secondItem="Nhn-ML-Yi0" secondAttribute="leading" id="rOd-Rc-tv7"/>
             </constraints>
-            <point key="canvasLocation" x="443" y="259"/>
+            <point key="canvasLocation" x="409" y="279"/>
         </tableCellView>
         <tableCellView identifier="[islqISLQ]" id="a61-EY-A6P" userLabel="integer" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -492,7 +492,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="zc9-lW-e7P"/>
                 <outlet property="textField" destination="tJ6-rj-LJu" id="Zlk-Bu-Yf1"/>
             </connections>
-            <point key="canvasLocation" x="443" y="328"/>
+            <point key="canvasLocation" x="409" y="348"/>
         </tableCellView>
         <customView id="dob-0O-PCo" userLabel="Error">
             <rect key="frame" x="0.0" y="0.0" width="100" height="54"/>
@@ -513,7 +513,7 @@
                 <constraint firstAttribute="bottom" secondItem="glV-MS-jQN" secondAttribute="bottom" constant="20" symbolic="YES" id="II6-d8-FXe"/>
                 <constraint firstItem="glV-MS-jQN" firstAttribute="top" secondItem="dob-0O-PCo" secondAttribute="top" constant="20" symbolic="YES" id="jsN-Nn-KA1"/>
             </constraints>
-            <point key="canvasLocation" x="443" y="416"/>
+            <point key="canvasLocation" x="409" y="436"/>
         </customView>
         <tableCellView identifier="@&quot;NSString&quot;" id="AvU-FU-guj" userLabel="string" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -542,7 +542,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="y2J-uA-XqQ"/>
                 <outlet property="textField" destination="8Dg-tM-wS7" id="w4g-3F-6fZ"/>
             </connections>
-            <point key="canvasLocation" x="156" y="504"/>
+            <point key="canvasLocation" x="189" y="524"/>
         </tableCellView>
         <tableCellView identifier="@&quot;SKTexture&quot;" id="faw-Lb-7vi" userLabel="texture" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -575,7 +575,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="OUX-gj-gKS"/>
                 <outlet property="textField" destination="YGO-GX-b4J" id="XXo-Ql-iqG"/>
             </connections>
-            <point key="canvasLocation" x="156" y="778"/>
+            <point key="canvasLocation" x="634" y="166"/>
         </tableCellView>
         <tableCellView identifier="bodyType" id="yj4-cN-yD2" userLabel="bodyType" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -626,7 +626,7 @@
             <connections>
                 <outlet property="_popover" destination="ch3-SY-J2e" id="DQK-wt-PaE"/>
             </connections>
-            <point key="canvasLocation" x="156" y="572"/>
+            <point key="canvasLocation" x="189" y="592"/>
         </tableCellView>
         <tableCellView identifier="blendMode" id="5VF-hD-7yS" userLabel="blendMode" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -675,7 +675,7 @@
             <connections>
                 <outlet property="_popover" destination="ch3-SY-J2e" id="gl6-vb-SFv"/>
             </connections>
-            <point key="canvasLocation" x="156" y="640"/>
+            <point key="canvasLocation" x="189" y="660"/>
         </tableCellView>
         <tableCellView identifier="scaleMode" id="QB0-is-Xf8" userLabel="scaleMode" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -714,7 +714,7 @@
             <connections>
                 <outlet property="_popover" destination="ch3-SY-J2e" id="lVf-11-kQx"/>
             </connections>
-            <point key="canvasLocation" x="443" y="572"/>
+            <point key="canvasLocation" x="409" y="592"/>
         </tableCellView>
         <tableCellView identifier="lineJoin" id="ozb-nY-yNa" userLabel="lineJoin" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -752,7 +752,7 @@
             <connections>
                 <outlet property="_popover" destination="ch3-SY-J2e" id="Hfc-Wx-9Iw"/>
             </connections>
-            <point key="canvasLocation" x="156" y="708"/>
+            <point key="canvasLocation" x="189" y="728"/>
         </tableCellView>
         <tableCellView identifier="lineCap" id="3py-Sl-wNM" userLabel="lineCap" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -785,7 +785,7 @@
                 <constraint firstAttribute="trailing" secondItem="YJb-Zt-36j" secondAttribute="trailing" id="FbM-sn-8i7"/>
                 <constraint firstItem="YJb-Zt-36j" firstAttribute="top" secondItem="3py-Sl-wNM" secondAttribute="top" id="djs-cI-Wdv"/>
             </constraints>
-            <point key="canvasLocation" x="443" y="708"/>
+            <point key="canvasLocation" x="409" y="728"/>
         </tableCellView>
         <tableCellView identifier="@&quot;SKShader&quot;" id="QFc-dU-G1D" userLabel="shader" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -818,7 +818,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="WxW-ma-Nyv"/>
                 <outlet property="textField" destination="0oe-fg-PVD" id="iih-qB-f2m"/>
             </connections>
-            <point key="canvasLocation" x="443" y="500"/>
+            <point key="canvasLocation" x="409" y="520"/>
         </tableCellView>
         <tableCellView identifier="verticalAlignmentMode" id="Shj-33-S9Y" userLabel="verticalAlignmentMode" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -852,7 +852,7 @@
                 <constraint firstAttribute="trailing" secondItem="EqG-O8-dtb" secondAttribute="trailing" id="gTj-LS-J4x"/>
                 <constraint firstItem="EqG-O8-dtb" firstAttribute="top" secondItem="Shj-33-S9Y" secondAttribute="top" id="iNB-KB-rFw"/>
             </constraints>
-            <point key="canvasLocation" x="156" y="356"/>
+            <point key="canvasLocation" x="189" y="376"/>
         </tableCellView>
         <tableCellView identifier="horizontalAlignmentMode" id="hK1-Wq-ikI" userLabel="horizontalAlignmentMode" customClass="InspectorTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="172" height="20"/>
@@ -890,7 +890,7 @@
             <connections>
                 <outlet property="_popover" destination="ch3-SY-J2e" id="WE8-kA-CG4"/>
             </connections>
-            <point key="canvasLocation" x="443" y="640"/>
+            <point key="canvasLocation" x="409" y="660"/>
         </tableCellView>
         <customObject id="7zt-RG-IFl" customClass="NSFontManager"/>
         <tableCellView identifier="fontName" id="Bgf-oe-RxG" userLabel="fontName" customClass="InspectorTableCellView">
@@ -924,7 +924,7 @@
                 <outlet property="_popover" destination="ch3-SY-J2e" id="1LI-Gy-3BA"/>
                 <outlet property="textField" destination="mDf-Ad-VpK" id="r8W-K5-zqz"/>
             </connections>
-            <point key="canvasLocation" x="443" y="779"/>
+            <point key="canvasLocation" x="634" y="236"/>
         </tableCellView>
         <tableCellView identifier="@&quot;NSMutableDictionary&quot;" id="pGv-Ji-A5t" userLabel="userData" customClass="UserDataTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="284" height="85"/>
@@ -1014,7 +1014,7 @@
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="14" id="QAY-NJ-lI4"/>
                                                         </constraints>
-                                                        <popUpButtonCell key="cell" type="bevel" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" imageScaling="proportionallyDown" inset="2" id="9Qx-TV-hYJ">
+                                                        <popUpButtonCell key="cell" type="bevel" title="Nil" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" tag="10" imageScaling="proportionallyDown" inset="2" selectedItem="wtA-iF-byT" id="9Qx-TV-hYJ">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <menu key="menu" id="ZKw-3z-nJB">
@@ -1043,7 +1043,7 @@
                                                                     <menuItem title="Image" tag="9" id="CG8-Wi-rMG">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
-                                                                    <menuItem title="Nil" tag="10" id="wtA-iF-byT">
+                                                                    <menuItem title="Nil" state="on" tag="10" id="wtA-iF-byT">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
                                                                 </items>
@@ -1117,11 +1117,11 @@
                                                             </tabViewItem>
                                                             <tabViewItem label="Number" identifier="2" id="X9w-de-kKa" userLabel="(1) Number">
                                                                 <view key="view" id="jrr-Aq-CkS">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="17"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lJs-nV-AFF">
-                                                                            <rect key="frame" x="-2" y="2" width="103" height="14"/>
+                                                                            <rect key="frame" x="-2" y="0.0" width="103" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" id="XBm-KG-oxu">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1145,11 +1145,11 @@
                                                             </tabViewItem>
                                                             <tabViewItem label="String" identifier="" id="6Bb-yO-J3H" userLabel="(2) String">
                                                                 <view key="view" id="m1N-AT-7CM">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="17"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="igQ-NY-DYc">
-                                                                            <rect key="frame" x="-2" y="2" width="103" height="14"/>
+                                                                            <rect key="frame" x="-2" y="0.0" width="103" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" id="9St-eg-ZS0">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1173,11 +1173,11 @@
                                                             </tabViewItem>
                                                             <tabViewItem label="Localized String" identifier="" id="cG3-ro-QSA" userLabel="(3) Localized String">
                                                                 <view key="view" id="79w-i6-a8e">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="17"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jWv-0A-wgD">
-                                                                            <rect key="frame" x="-2" y="2" width="103" height="14"/>
+                                                                            <rect key="frame" x="-2" y="0.0" width="103" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" id="ARy-Fk-jzz">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1201,11 +1201,11 @@
                                                             </tabViewItem>
                                                             <tabViewItem label="Point" identifier="" id="TzT-Ru-BQb" userLabel="(4) Point">
                                                                 <view key="view" id="eSd-7y-8el">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="17"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZOE-em-BKz">
-                                                                            <rect key="frame" x="-2" y="2" width="103" height="14"/>
+                                                                            <rect key="frame" x="-2" y="0.0" width="103" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" id="Dld-5p-G1v">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1229,11 +1229,11 @@
                                                             </tabViewItem>
                                                             <tabViewItem label="Size" identifier="" id="yMz-OK-EML" userLabel="(5) Size">
                                                                 <view key="view" id="wOB-1G-pEo">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="17"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uQX-vz-r0N">
-                                                                            <rect key="frame" x="-2" y="2" width="103" height="14"/>
+                                                                            <rect key="frame" x="-2" y="0.0" width="103" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" id="VJm-F4-oGd">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1257,11 +1257,11 @@
                                                             </tabViewItem>
                                                             <tabViewItem label="Rect" identifier="" id="sBS-ev-iu5" userLabel="(6) Rect">
                                                                 <view key="view" id="eLW-7l-cfw">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="17"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IhT-hy-9GA">
-                                                                            <rect key="frame" x="-2" y="2" width="103" height="14"/>
+                                                                            <rect key="frame" x="-2" y="0.0" width="103" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" id="BSy-HU-HfP">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1285,11 +1285,11 @@
                                                             </tabViewItem>
                                                             <tabViewItem label="Range" identifier="" id="fWH-EW-K9X" userLabel="(7) Range">
                                                                 <view key="view" id="JC6-Zz-SOw">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="17"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mvG-6D-A3F">
-                                                                            <rect key="frame" x="-2" y="2" width="103" height="14"/>
+                                                                            <rect key="frame" x="-2" y="0.0" width="103" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" id="SbV-N9-6p0">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1313,11 +1313,11 @@
                                                             </tabViewItem>
                                                             <tabViewItem label="Color" identifier="" id="t4A-NZ-zgS" userLabel="(8) Color">
                                                                 <view key="view" id="cb3-tM-2ii">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="17"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <colorWell translatesAutoresizingMaskIntoConstraints="NO" id="qPn-Uw-Rrj" customClass="ColorWell">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="101" height="17"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="101" height="15"/>
                                                                             <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                             <connections>
                                                                                 <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="9ac-mZ-RNj">
@@ -1338,11 +1338,11 @@
                                                             </tabViewItem>
                                                             <tabViewItem label="Image" identifier="" id="riG-AZ-Sza" userLabel="(9) Image">
                                                                 <view key="view" id="Txb-SP-AAN">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="17"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kd1-4F-Rpl">
-                                                                            <rect key="frame" x="-2" y="2" width="103" height="14"/>
+                                                                            <rect key="frame" x="-2" y="0.0" width="103" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" id="6Tk-33-fAg">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1366,8 +1366,30 @@
                                                             </tabViewItem>
                                                             <tabViewItem label="Nil" identifier="" id="ZxG-YI-5kr" userLabel="(10) Nil">
                                                                 <view key="view" id="wGh-hf-iJl">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="17"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="15"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <subviews>
+                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sPI-L6-bYA">
+                                                                            <rect key="frame" x="-2" y="-3" width="103" height="17"/>
+                                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="6Dx-m0-dUQ">
+                                                                                <font key="font" metaFont="system"/>
+                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                            </textFieldCell>
+                                                                            <connections>
+                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="ZK8-Kk-lf2">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSValueTransformerName">NilValidationTransformer</string>
+                                                                                    </dictionary>
+                                                                                </binding>
+                                                                            </connections>
+                                                                        </textField>
+                                                                    </subviews>
+                                                                    <constraints>
+                                                                        <constraint firstItem="sPI-L6-bYA" firstAttribute="leading" secondItem="wGh-hf-iJl" secondAttribute="leading" id="RnG-Mq-vWY"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="sPI-L6-bYA" secondAttribute="trailing" constant="2" id="v2d-18-BBo"/>
+                                                                        <constraint firstItem="sPI-L6-bYA" firstAttribute="top" secondItem="wGh-hf-iJl" secondAttribute="top" constant="1" id="z6K-5y-8Tr"/>
+                                                                    </constraints>
                                                                 </view>
                                                             </tabViewItem>
                                                         </tabViewItems>
@@ -1451,7 +1473,7 @@
                 <outlet property="removeValue" destination="2NA-cf-M6m" id="Z4Z-Tm-lxL"/>
                 <outlet property="userDataTable" destination="9M9-I0-tB9" id="TBe-oe-neE"/>
             </connections>
-            <point key="canvasLocation" x="784" y="178.5"/>
+            <point key="canvasLocation" x="690" y="336.5"/>
         </tableCellView>
         <tableCellView identifier="header" id="xvS-hY-Bup" userLabel="header">
             <rect key="frame" x="0.0" y="0.0" width="78" height="18"/>
@@ -1477,7 +1499,7 @@
             <connections>
                 <outlet property="textField" destination="DV1-4P-XVd" id="Lmp-xq-7B3"/>
             </connections>
-            <point key="canvasLocation" x="784" y="284"/>
+            <point key="canvasLocation" x="587" y="438"/>
         </tableCellView>
         <tableCellView identifier="expandable" id="O7j-xp-Rmq" userLabel="expandable">
             <rect key="frame" x="0.0" y="0.0" width="78" height="18"/>
@@ -1508,7 +1530,7 @@
             <connections>
                 <outlet property="textField" destination="9Xf-FJ-Mf8" id="yLQ-Ep-NDf"/>
             </connections>
-            <point key="canvasLocation" x="784" y="355"/>
+            <point key="canvasLocation" x="587" y="509"/>
         </tableCellView>
         <tableCellView identifier="attribute" id="d3V-LK-lO4" userLabel="attribute">
             <rect key="frame" x="0.0" y="0.0" width="78" height="20"/>
@@ -1539,7 +1561,7 @@
             <connections>
                 <outlet property="textField" destination="HPf-A2-Zin" id="jdG-ds-nME"/>
             </connections>
-            <point key="canvasLocation" x="784" y="424"/>
+            <point key="canvasLocation" x="587" y="578"/>
         </tableCellView>
         <tableCellView identifier="generic attribute" id="l9F-Xo-eWU" userLabel="generic attribute">
             <rect key="frame" x="0.0" y="0.0" width="176" height="20"/>
@@ -1565,7 +1587,7 @@
             <connections>
                 <outlet property="textField" destination="DQx-vs-fpZ" id="2nA-bM-zKK"/>
             </connections>
-            <point key="canvasLocation" x="784" y="496"/>
+            <point key="canvasLocation" x="636" y="648"/>
         </tableCellView>
     </objects>
     <resources>

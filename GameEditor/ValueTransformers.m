@@ -623,13 +623,28 @@ typedef enum UserDataType {
 							if ([value isKindOfClass:[NSImage class]]) {
 								return value;
 							}
-							return @"";
+							return NSImageNameInfo;
 						}
 				 reverseTransformedValueBlock:^id(id value){
 							if ([value isKindOfClass:[NSString class]]) {
 								return [NSImage imageNamed:value];
 							}
-							return nil;
+							return [NSImage imageNamed:NSImageNameInfo];
+						}];
+}
+
+@end
+
+@implementation NilValidationTransformer
+
++ (void)initialize {
+	[self initializeWithTransformedValueClass:[NSImage class]
+				  allowsReverseTransformation:YES
+						transformedValueBlock:^id(id value){
+							return [NSNull null];
+						}
+				 reverseTransformedValueBlock:^id(id value){
+							return [NSNull null];
 						}];
 }
 
@@ -642,16 +657,17 @@ typedef enum UserDataType {
 				  allowsReverseTransformation:YES
 						transformedValueBlock:^id(id value){
 
-							if ([value isKindOfClass:[NSNumber class]] && strcmp([value objCType], @encode(BOOL)) != 0) {
+							if ([value isKindOfClass:[NSNumber class]]) {
+								if (strcmp([value objCType], @encode(BOOL)) == 0) {
+									return @(UserDataTypeBoolean);
+								}
 								return @(UserDataTypeNumber);
 
 							} else if ([value isKindOfClass:[NSString class]]) {
 								return @(UserDataTypeString);
 
 							} else if ([value isKindOfClass:[NSValue class]]) {
-
 								const char *type = [value objCType];
-
 								if (strcmp(type, @encode(NSPoint)) == 0) {
 									return @(UserDataTypePoint);
 
@@ -670,18 +686,18 @@ typedef enum UserDataType {
 
 							} else if ([value isKindOfClass:[NSImage class]]) {
 								return @(UserDataTypeImage);
-
-							} else if (value == nil) {
-								return @(UserDataTypeNil);
 							}
-
-							return @(UserDataTypeBoolean);
+							return @(UserDataTypeNil);
 						}
 
 				 reverseTransformedValueBlock:^id(id value){
 					 UserDataType type = [value intValue];
 					 id result = nil;
 					 switch (type) {
+						 case UserDataTypeBoolean:
+							 result = @NO;
+							 break;
+
 						 case UserDataTypeNumber:
 							 result = @0;
 							 break;
@@ -712,15 +728,11 @@ typedef enum UserDataType {
 							 break;
 
 						 case UserDataTypeImage:
-							 result = nil;
+							 result = [NSImage imageNamed:NSImageNameInfo];
 							 break;
-
-						 case UserDataTypeNil:
-							 break;
-							 result = nil;
 
 						 default:
-							 result = @YES;
+							 result = [NSNull null];
 							 break;
 					 }
 					 return result;
