@@ -1101,7 +1101,7 @@
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                             </buttonCell>
                                                                             <connections>
-                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="Q1o-KN-21S">
+                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="Gqg-tx-n7b">
                                                                                     <dictionary key="options">
                                                                                         <string key="NSValueTransformerName">BooleanValidationTransformer</string>
                                                                                     </dictionary>

@@ -441,19 +441,27 @@ typedef enum UserDataType {
 
 @end
 
+static BOOL isNumber(id value) {
+	if (strcmp([value objCType], @encode(int)) == 0
+		|| strcmp([value objCType], @encode(double)) == 0) {
+		return YES;
+	}
+	return NO;
+}
+
 @implementation BooleanValidationTransformer
 
 + (void)initialize {
 	[self initializeWithTransformedValueClass:[NSNumber class]
 				  allowsReverseTransformation:YES
 						transformedValueBlock:^id(id value){
-							if ([value isKindOfClass:[NSNumber class]] && strcmp([value objCType], @encode(BOOL)) == 0) {
+							if ([value isKindOfClass:[NSNumber class]] && !isNumber(value)) {
 								return value;
 							}
 							return @NO;
 						}
 				 reverseTransformedValueBlock:^id(id value){
-							if ([value isKindOfClass:[NSNumber class]] && strcmp([value objCType], @encode(BOOL)) == 0) {
+							if ([value isKindOfClass:[NSNumber class]] && !isNumber(value)) {
 								return value;
 							}
 							return @NO;
@@ -468,7 +476,7 @@ typedef enum UserDataType {
 	[self initializeWithTransformedValueClass:[NSNumber class]
 				  allowsReverseTransformation:YES
 						transformedValueBlock:^id(id value){
-							if ([value isKindOfClass:[NSNumber class]] && strcmp([value objCType], @encode(BOOL)) != 0) {
+							if ([value isKindOfClass:[NSNumber class]] && isNumber(value)) {
 								return value;
 							}
 							return @0;
@@ -658,10 +666,10 @@ typedef enum UserDataType {
 						transformedValueBlock:^id(id value){
 
 							if ([value isKindOfClass:[NSNumber class]]) {
-								if (strcmp([value objCType], @encode(BOOL)) == 0) {
-									return @(UserDataTypeBoolean);
+								if (isNumber(value)) {
+									return @(UserDataTypeNumber);
 								}
-								return @(UserDataTypeNumber);
+								return @(UserDataTypeBoolean);
 
 							} else if ([value isKindOfClass:[NSString class]]) {
 								return @(UserDataTypeString);
@@ -691,52 +699,53 @@ typedef enum UserDataType {
 						}
 
 				 reverseTransformedValueBlock:^id(id value){
-					 UserDataType type = [value intValue];
-					 id result = nil;
-					 switch (type) {
-						 case UserDataTypeBoolean:
-							 result = @NO;
-							 break;
 
-						 case UserDataTypeNumber:
-							 result = @0;
-							 break;
+							UserDataType type = [value intValue];
+							id result = nil;
+							switch (type) {
+								case UserDataTypeBoolean:
+									result = @NO;
+									break;
 
-						 case UserDataTypeString:
-						 case UserDataTypeLocalizedString:
-							 result = @"";
-							 break;
+								case UserDataTypeNumber:
+									result = @0;
+									break;
 
-						 case UserDataTypePoint:
-							 result = [NSValue valueWithPoint:NSZeroPoint];
-							 break;
+								case UserDataTypeString:
+								case UserDataTypeLocalizedString:
+									result = @"";
+									break;
 
-						 case UserDataTypeSize:
-							 result = [NSValue valueWithSize:NSZeroSize];
-							 break;
+								case UserDataTypePoint:
+									result = [NSValue valueWithPoint:NSZeroPoint];
+									break;
 
-						 case UserDataTypeRect:
-							 result = [NSValue valueWithRect:NSZeroRect];
-							 break;
+								case UserDataTypeSize:
+									result = [NSValue valueWithSize:NSZeroSize];
+									break;
 
-						 case UserDataTypeRange:
-							 result = [NSValue valueWithRange:NSMakeRange(0, 0)];
-							 break;
+								case UserDataTypeRect:
+									result = [NSValue valueWithRect:NSZeroRect];
+									break;
 
-						 case UserDataTypeColor:
-							 result = [NSColor blueColor];
-							 break;
+								case UserDataTypeRange:
+									result = [NSValue valueWithRange:NSMakeRange(0, 0)];
+									break;
 
-						 case UserDataTypeImage:
-							 result = [NSImage imageNamed:NSImageNameInfo];
-							 break;
+								case UserDataTypeColor:
+									result = [NSColor blueColor];
+									break;
 
-						 default:
-							 result = [NSNull null];
-							 break;
-					 }
-					 return result;
-				 }];
+								case UserDataTypeImage:
+									result = [NSImage imageNamed:NSImageNameInfo];
+									break;
+
+								default:
+									result = [NSNull null];
+									break;
+							}
+							return result;
+						}];
 }
 
 @end
