@@ -440,9 +440,6 @@ static const CGFloat kIndentationPerLevel = 0.0;
 	}
 
 	NSString *type = [[item representedObject] valueForKey:@"type"];
-	if ([type isEqualToString:@"@\"NSMutableDictionary\""]) {
-		NSLog(@"%@", type);
-	}
 
 	if (type) {
 		for (NSString *identifier in _editorIdentifiers) {

@@ -108,7 +108,7 @@
 
 	const CGFloat newHeight = [self heightForRows:self.numberOfRows];
 
-	if (newHeight < [self heightForRows:4])
+	if (newHeight < [self heightForRows:3])
 		return;
 
 	CGRect frame = tableRowView.frame;
@@ -139,7 +139,7 @@
 }
 
 - (CGFloat)heightForRows:(NSInteger)rows {
-	return rows * 19.0 + self.headerView.frame.size.height + 16;
+	return rows * (self.rowHeight + 3.0) + self.headerView.frame.size.height + 16;
 }
 
 - (void)setBackgroundStyle:(NSBackgroundStyle)backgroundStyle row:(NSInteger)row {
