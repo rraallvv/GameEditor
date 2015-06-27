@@ -38,11 +38,29 @@
 @implementation UserDataTableCellView
 
 - (IBAction)didClickAddValueButton:(NSButton *)sender {
-	NSLog(@">>>Add Value");
+	NSDictionaryController *dictionaryController = [self.objectValue valueForKey:NSContentBinding];
+	NSInteger selectedRow = [self.userDataTable selectedRow];
+	id newObject = [dictionaryController newObject];
+	if (selectedRow == -1) {
+		/* Add a new value below the last row */
+		[newObject setKey:@"key"];
+		[newObject setValue:@YES];
+		[dictionaryController addObject:newObject];
+	} else {
+		/* Add a copy of the selected value below the selected row */
+		id value = [[[dictionaryController arrangedObjects] objectAtIndex:selectedRow] valueForKey:NSValueBinding];
+		[newObject setKey:@"key"];
+		[newObject setValue:value];
+		[dictionaryController insertObject:newObject atArrangedObjectIndex:selectedRow + 1];
+	}
 }
 
 - (IBAction)didClickRemoveValueButton:(NSButton *)sender {
-	NSLog(@">>>Remove Value");
+	NSDictionaryController *dictionaryController = [self.objectValue valueForKey:NSContentBinding];
+	NSInteger selectedRow = [self.userDataTable selectedRow];
+	if (selectedRow != -1) {
+		[dictionaryController removeObjectAtArrangedObjectIndex:selectedRow];
+	}
 }
 
 @end
