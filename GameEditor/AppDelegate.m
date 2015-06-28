@@ -186,18 +186,14 @@
 
 	/* Set focus on the editor view */
 	[[self window] makeFirstResponder:_editorView];
+}
 
+- (void)applicationDidBecomeActive:(NSNotification *)notification {
 	/* Load the last edited document */
-#if LOAD_INITIAL_SCENE_AFTER_DELAY
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC >> 1), dispatch_get_main_queue(), ^{
-#endif
-		NSString *lastDocumentFilename = [[NSUserDefaults standardUserDefaults] valueForKey:@"Last edited document"];
-		if (lastDocumentFilename) {
-			[self openSceneWithFilename:lastDocumentFilename];
-		}
-#if LOAD_INITIAL_SCENE_AFTER_DELAY
-	});
-#endif
+	NSString *lastDocumentFilename = [[NSUserDefaults standardUserDefaults] valueForKey:@"Last edited document"];
+	if (lastDocumentFilename) {
+		[self openSceneWithFilename:lastDocumentFilename];
+	}
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
