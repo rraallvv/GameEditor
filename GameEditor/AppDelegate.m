@@ -51,8 +51,10 @@
 		case NSDeleteCharacter:
 		case NSBackTabCharacter:
 			/* Forward Del and Backspace to the delete action */
-			[(AppDelegate *)[NSApp delegate] delete:self];
-			return;
+			if ([self.firstResponder respondsToSelector:@selector(delete:)]) {
+				[(id)self.firstResponder delete:self];
+				return;
+			}
 	}
 
 	[super keyDown:theEvent];

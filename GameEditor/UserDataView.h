@@ -33,7 +33,7 @@
 
 @end
 
-@interface UserDataTableView : NSTableView <NSTableViewDelegate, NSTableViewDataSource>
+@interface UserDataTableView : NSTableView
 
 @end
 

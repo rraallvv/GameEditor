@@ -50,7 +50,7 @@
 	NSLayoutConstraint *constraint = [self constraintForAttribute:attribute];
 	if (constant != constraint.constant)
 		return;
-	[constraint setConstant:constant];
+	constraint.constant = constant;
 }
 
 - (CGFloat)constraintConstantForAttribute:(NSLayoutAttribute)attribute {

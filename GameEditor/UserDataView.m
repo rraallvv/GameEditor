@@ -171,7 +171,7 @@
 	[inspectorTableRowView setConstraintConstant:newHeight - 2 forAttribute:NSLayoutAttributeHeight];
 	[inspectorTableView setHeight:newHeight - 2 forItem:[inspectorTableView itemAtRow:[inspectorTableView rowForView:inspectorTableRowView]]];
 
-	/* Update the user data table's height when adding the last row */
+	/* Update the user data table's row height */
 	[NSAnimationContext beginGrouping];
 	[[NSAnimationContext currentContext] setDuration:0];
 	[inspectorTableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[inspectorTableView rowForView:inspectorTableRowView]]];
@@ -208,6 +208,24 @@
 	for (int row = 0; row < self.numberOfRows; ++row) {
 		[self setBackgroundStyle: row == self.selectedRow ? NSBackgroundStyleDark : NSBackgroundStyleLight atRow:row];
 	}
+}
+
+// TODO: Add basic editing cababilities for the values in the table
+
+- (IBAction)copy:(id)sender {
+	NSLog(@">>>copy");
+}
+
+- (IBAction)paste:(id)sender {
+	NSLog(@">>>paste");
+}
+
+- (IBAction)delete:(id)sender {
+	NSLog(@">>>delete");
+}
+
+- (IBAction)cut:(id)sender {
+	NSLog(@">>>cut");
 }
 
 #pragma mark Delegate methods interception
