@@ -931,7 +931,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <scrollView verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" borderType="none" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0zv-gw-fpv">
-                    <rect key="frame" x="0.0" y="0.0" width="284" height="86"/>
+                    <rect key="frame" x="0.0" y="16" width="284" height="70"/>
                     <clipView key="contentView" id="V3N-Y2-AAv">
                         <rect key="frame" x="1" y="17" width="238" height="117"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1462,12 +1462,17 @@
                 <constraint firstItem="2NA-cf-M6m" firstAttribute="leading" secondItem="x8u-Dq-Tet" secondAttribute="trailing" constant="4" id="Dxs-oW-jox"/>
                 <constraint firstItem="2NA-cf-M6m" firstAttribute="height" secondItem="x8u-Dq-Tet" secondAttribute="height" id="klB-5W-klz"/>
                 <constraint firstAttribute="bottom" secondItem="x8u-Dq-Tet" secondAttribute="bottom" constant="2" id="lr0-ER-kCl"/>
-                <constraint firstAttribute="bottom" secondItem="0zv-gw-fpv" secondAttribute="bottom" id="tAj-hN-wTn"/>
+                <constraint firstAttribute="bottom" secondItem="0zv-gw-fpv" secondAttribute="bottom" constant="16" id="tAj-hN-wTn"/>
                 <constraint firstItem="0zv-gw-fpv" firstAttribute="top" secondItem="pGv-Ji-A5t" secondAttribute="top" id="ti3-GC-LQr"/>
                 <constraint firstItem="2NA-cf-M6m" firstAttribute="width" secondItem="x8u-Dq-Tet" secondAttribute="width" id="uZM-NK-5GF"/>
                 <constraint firstItem="2NA-cf-M6m" firstAttribute="centerY" secondItem="x8u-Dq-Tet" secondAttribute="centerY" id="ueh-qV-n0u"/>
                 <constraint firstItem="x8u-Dq-Tet" firstAttribute="leading" secondItem="pGv-Ji-A5t" secondAttribute="leading" constant="2" id="y3o-H4-GnF"/>
             </constraints>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                    <color key="value" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="addValue" destination="x8u-Dq-Tet" id="mIt-GH-Ov6"/>
                 <outlet property="removeValue" destination="2NA-cf-M6m" id="Z4Z-Tm-lxL"/>
