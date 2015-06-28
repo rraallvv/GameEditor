@@ -109,9 +109,9 @@
 
 - (IBAction)didClickRemoveValueButton:(NSButton *)sender {
 	NSDictionaryController *dictionaryController = [self.objectValue valueForKey:NSContentBinding];
-	NSInteger selectedRow = [self.userDataTable selectedRow];
-	if (selectedRow != -1) {
-		[dictionaryController removeObjectAtArrangedObjectIndex:selectedRow];
+	NSIndexSet *selectedRows = [self.userDataTable selectedRowIndexes];
+	if (selectedRows) {
+		[dictionaryController removeObjectsAtArrangedObjectIndexes:selectedRows];
 	}
 
 	/* -[selectionDidChange:] is not called when a value is removed, so the button it's disabled here */
