@@ -149,13 +149,18 @@
 
 - (void)didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
 	[super didAddRowView:rowView forRow:row];
+	[self updateTableHeight];
+}
 
+- (void)didRemoveRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+	[super didRemoveRowView:rowView forRow:row];
+	[self updateTableHeight];
+}
+
+- (void)updateTableHeight {
 	InspectorTableRowView *tableRowView = (InspectorTableRowView *)_scrollView.superview.superview;
 
-	const CGFloat newHeight = [self heightForRows:self.numberOfRows];
-
-	if (newHeight < [self heightForRows:3])
-		return;
+	const CGFloat newHeight = MAX([self heightForRows:3], [self heightForRows:self.numberOfRows]);
 
 	CGRect frame = tableRowView.frame;
 	frame.size.height = newHeight;
@@ -166,13 +171,11 @@
 	[tableRowView setConstraintConstant:newHeight - 2 forAttribute:NSLayoutAttributeHeight];
 	[inspectorView setHeight:newHeight - 2 forItem:[inspectorView itemAtRow:[inspectorView rowForView:tableRowView]]];
 
-	if (row == self.numberOfRows - 1) {
-		/* Update the user data table's height when adding the last row */
-		[NSAnimationContext beginGrouping];
-		[[NSAnimationContext currentContext] setDuration:0];
-		[inspectorView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[inspectorView rowForView:tableRowView]]];
-		[NSAnimationContext endGrouping];
-	}
+	/* Update the user data table's height when adding the last row */
+	[NSAnimationContext beginGrouping];
+	[[NSAnimationContext currentContext] setDuration:0];
+	[inspectorView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[inspectorView rowForView:tableRowView]]];
+	[NSAnimationContext endGrouping];
 
 	InspectorTableRowView *prevRowView = tableRowView;
 	for (NSInteger i=[inspectorView rowForView:tableRowView] + 1; i<inspectorView.numberOfRows; ++i) {
@@ -185,7 +188,7 @@
 }
 
 - (CGFloat)heightForRows:(NSInteger)rows {
-	return rows * (self.rowHeight + 3.0) + self.headerView.frame.size.height + 16;
+	return rows * (self.rowHeight + 2) + self.headerView.frame.size.height + 20;
 }
 
 - (void)setBackgroundStyle:(NSBackgroundStyle)backgroundStyle atRow:(NSInteger)row {

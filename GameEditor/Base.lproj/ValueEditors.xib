@@ -927,11 +927,11 @@
             <point key="canvasLocation" x="634" y="236"/>
         </tableCellView>
         <tableCellView identifier="@&quot;NSMutableDictionary&quot;" id="pGv-Ji-A5t" userLabel="userData" customClass="UserDataTableCellView">
-            <rect key="frame" x="0.0" y="0.0" width="284" height="85"/>
+            <rect key="frame" x="0.0" y="0.0" width="284" height="86"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <scrollView verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" borderType="none" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0zv-gw-fpv">
-                    <rect key="frame" x="0.0" y="0.0" width="284" height="85"/>
+                    <rect key="frame" x="0.0" y="0.0" width="284" height="86"/>
                     <clipView key="contentView" id="V3N-Y2-AAv">
                         <rect key="frame" x="1" y="17" width="238" height="117"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
