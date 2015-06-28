@@ -158,27 +158,27 @@
 }
 
 - (void)updateTableHeight {
-	InspectorTableRowView *tableRowView = (InspectorTableRowView *)_scrollView.superview.superview;
+	InspectorTableRowView *inspectorTableRowView = (InspectorTableRowView *)_scrollView.superview.superview;
 
 	const CGFloat newHeight = MAX([self heightForRows:3], [self heightForRows:self.numberOfRows]);
 
-	CGRect frame = tableRowView.frame;
+	CGRect frame = inspectorTableRowView.frame;
 	frame.size.height = newHeight;
-	tableRowView.frame = frame;
+	inspectorTableRowView.frame = frame;
 
-	InspectorTableView *inspectorView = (InspectorTableView *)tableRowView.superview;
+	InspectorTableView *inspectorView = (InspectorTableView *)inspectorTableRowView.superview;
 
-	[tableRowView setConstraintConstant:newHeight - 2 forAttribute:NSLayoutAttributeHeight];
-	[inspectorView setHeight:newHeight - 2 forItem:[inspectorView itemAtRow:[inspectorView rowForView:tableRowView]]];
+	[inspectorTableRowView setConstraintConstant:newHeight - 2 forAttribute:NSLayoutAttributeHeight];
+	[inspectorView setHeight:newHeight - 2 forItem:[inspectorView itemAtRow:[inspectorView rowForView:inspectorTableRowView]]];
 
 	/* Update the user data table's height when adding the last row */
 	[NSAnimationContext beginGrouping];
 	[[NSAnimationContext currentContext] setDuration:0];
-	[inspectorView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[inspectorView rowForView:tableRowView]]];
+	[inspectorView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[inspectorView rowForView:inspectorTableRowView]]];
 	[NSAnimationContext endGrouping];
 
-	InspectorTableRowView *prevRowView = tableRowView;
-	for (NSInteger i=[inspectorView rowForView:tableRowView] + 1; i<inspectorView.numberOfRows; ++i) {
+	InspectorTableRowView *prevRowView = inspectorTableRowView;
+	for (NSInteger i=[inspectorView rowForView:inspectorTableRowView] + 1; i<inspectorView.numberOfRows; ++i) {
 		InspectorTableRowView *nextRowView = (InspectorTableRowView *)[inspectorView rowViewAtRow:i makeIfNecessary:NO];
 		CGFloat newTop = NSMaxY(prevRowView.frame);
 		[nextRowView setConstraintConstant:newTop forAttribute:NSLayoutAttributeTop];
