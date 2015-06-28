@@ -166,23 +166,23 @@
 	frame.size.height = newHeight;
 	inspectorTableRowView.frame = frame;
 
-	InspectorTableView *inspectorView = (InspectorTableView *)inspectorTableRowView.superview;
+	InspectorTableView *inspectorTableView = (InspectorTableView *)inspectorTableRowView.superview;
 
 	[inspectorTableRowView setConstraintConstant:newHeight - 2 forAttribute:NSLayoutAttributeHeight];
-	[inspectorView setHeight:newHeight - 2 forItem:[inspectorView itemAtRow:[inspectorView rowForView:inspectorTableRowView]]];
+	[inspectorTableView setHeight:newHeight - 2 forItem:[inspectorTableView itemAtRow:[inspectorTableView rowForView:inspectorTableRowView]]];
 
 	/* Update the user data table's height when adding the last row */
 	[NSAnimationContext beginGrouping];
 	[[NSAnimationContext currentContext] setDuration:0];
-	[inspectorView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[inspectorView rowForView:inspectorTableRowView]]];
+	[inspectorTableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[inspectorTableView rowForView:inspectorTableRowView]]];
 	[NSAnimationContext endGrouping];
 
 	InspectorTableRowView *prevRowView = inspectorTableRowView;
-	for (NSInteger i=[inspectorView rowForView:inspectorTableRowView] + 1; i<inspectorView.numberOfRows; ++i) {
-		InspectorTableRowView *nextRowView = (InspectorTableRowView *)[inspectorView rowViewAtRow:i makeIfNecessary:NO];
+	for (NSInteger i=[inspectorTableView rowForView:inspectorTableRowView] + 1; i<inspectorTableView.numberOfRows; ++i) {
+		InspectorTableRowView *nextRowView = (InspectorTableRowView *)[inspectorTableView rowViewAtRow:i makeIfNecessary:NO];
 		CGFloat newTop = NSMaxY(prevRowView.frame);
 		[nextRowView setConstraintConstant:newTop forAttribute:NSLayoutAttributeTop];
-		[inspectorView setTop:newTop forItem:[inspectorView itemAtRow:[inspectorView rowForView:nextRowView]]];
+		[inspectorTableView setTop:newTop forItem:[inspectorTableView itemAtRow:[inspectorTableView rowForView:nextRowView]]];
 		prevRowView = nextRowView;
 	}
 }
