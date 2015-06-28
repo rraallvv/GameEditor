@@ -210,6 +210,12 @@
 	}
 }
 
+- (BOOL)resignFirstResponder {
+	/* Make an empty selection */
+	[self selectRowIndexes:nil byExtendingSelection:NO];
+	return YES;
+}
+
 // TODO: Add basic editing cababilities for the values in the table
 
 - (IBAction)copy:(id)sender {
