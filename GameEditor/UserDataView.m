@@ -167,18 +167,19 @@
 	inspectorTableRowView.frame = frame;
 
 	InspectorTableView *inspectorTableView = (InspectorTableView *)inspectorTableRowView.superview;
+	NSInteger tableRow = [inspectorTableView rowForView:inspectorTableRowView];
 
 	[inspectorTableRowView setConstraintConstant:newHeight - 2 forAttribute:NSLayoutAttributeHeight];
-	[inspectorTableView setHeight:newHeight - 2 forItem:[inspectorTableView itemAtRow:[inspectorTableView rowForView:inspectorTableRowView]]];
+	[inspectorTableView setHeight:newHeight - 2 forItem:[inspectorTableView itemAtRow:tableRow]];
 
 	/* Update the user data table's row height */
 	[NSAnimationContext beginGrouping];
 	[[NSAnimationContext currentContext] setDuration:0];
-	[inspectorTableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:[inspectorTableView rowForView:inspectorTableRowView]]];
+	[inspectorTableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:tableRow]];
 	[NSAnimationContext endGrouping];
 
 	InspectorTableRowView *prevRowView = inspectorTableRowView;
-	for (NSInteger i=[inspectorTableView rowForView:inspectorTableRowView] + 1; i<inspectorTableView.numberOfRows; ++i) {
+	for (NSInteger i=tableRow + 1; i<inspectorTableView.numberOfRows; ++i) {
 		InspectorTableRowView *nextRowView = (InspectorTableRowView *)[inspectorTableView rowViewAtRow:i makeIfNecessary:NO];
 		CGFloat newTop = NSMaxY(prevRowView.frame);
 		[nextRowView setConstraintConstant:newTop forAttribute:NSLayoutAttributeTop];

@@ -1014,7 +1014,7 @@
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="14" id="QAY-NJ-lI4"/>
                                                         </constraints>
-                                                        <popUpButtonCell key="cell" type="bevel" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" tag="10" imageScaling="proportionallyDown" inset="2" selectedItem="wtA-iF-byT" id="9Qx-TV-hYJ">
+                                                        <popUpButtonCell key="cell" type="bevel" title="Nil" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" tag="10" imageScaling="proportionallyDown" inset="2" selectedItem="wtA-iF-byT" id="9Qx-TV-hYJ">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <menu key="menu" id="ZKw-3z-nJB">
@@ -1043,7 +1043,7 @@
                                                                     <menuItem title="Image" tag="9" id="CG8-Wi-rMG">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
-                                                                    <menuItem state="on" tag="10" id="wtA-iF-byT">
+                                                                    <menuItem title="Nil" tag="10" id="wtA-iF-byT">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                     </menuItem>
                                                                 </items>
