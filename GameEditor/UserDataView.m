@@ -148,6 +148,8 @@
 }
 
 - (void)didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
+	[super didAddRowView:rowView forRow:row];
+
 	InspectorTableRowView *tableRowView = (InspectorTableRowView *)_scrollView.superview.superview;
 
 	const CGFloat newHeight = [self heightForRows:self.numberOfRows];

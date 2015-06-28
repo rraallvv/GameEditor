@@ -186,6 +186,18 @@
 
 	/* Set focus on the editor view */
 	[[self window] makeFirstResponder:_editorView];
+
+	/* Load the last edited document */
+#if LOAD_INITIAL_SCENE_AFTER_DELAY
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC >> 1), dispatch_get_main_queue(), ^{
+#endif
+		NSString *lastDocumentFilename = [[NSUserDefaults standardUserDefaults] valueForKey:@"Last edited document"];
+		if (lastDocumentFilename) {
+			[self openSceneWithFilename:lastDocumentFilename];
+		}
+#if LOAD_INITIAL_SCENE_AFTER_DELAY
+	});
+#endif
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
@@ -912,6 +924,11 @@
 	_currentFilename = nil;
 	_sceneBundle = nil;
 	[self populateMediaLibrary];
+
+	/* Clear the filename of last edited document */
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults removeObjectForKey:@"Last edited document"];
+	[userDefaults synchronize];
 }
 
 - (void)addRecentDocument:(NSString *)filename {
@@ -1360,6 +1377,11 @@
 
 	_currentFilename = filename;
 	_sceneBundle = bundle;
+
+	/* Save the filename to the last edited document */
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults setValue:_currentFilename forKey:@"Last edited document"];
+	[userDefaults synchronize];
 
 	[self useScene:scene];
 
