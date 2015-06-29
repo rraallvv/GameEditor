@@ -1014,38 +1014,22 @@
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="14" id="QAY-NJ-lI4"/>
                                                         </constraints>
-                                                        <popUpButtonCell key="cell" type="bevel" title="Nil" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" tag="10" imageScaling="proportionallyDown" inset="2" selectedItem="wtA-iF-byT" id="9Qx-TV-hYJ">
+                                                        <popUpButtonCell key="cell" type="bevel" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" imageScaling="proportionallyDown" inset="2" selectedItem="ktL-Bh-srH" id="9Qx-TV-hYJ">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <menu key="menu" id="ZKw-3z-nJB">
                                                                 <items>
-                                                                    <menuItem title="Boolean" id="WN5-3m-WF0" userLabel="Boolean"/>
-                                                                    <menuItem title="Number" tag="1" id="YhE-cX-V4x"/>
-                                                                    <menuItem title="String" tag="2" id="TU3-go-d8f"/>
-                                                                    <menuItem title="Localized String" tag="3" hidden="YES" enabled="NO" id="aFU-5b-ARO">
-                                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                                    </menuItem>
-                                                                    <menuItem title="Point" tag="4" id="0rW-TN-boT">
-                                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                                    </menuItem>
-                                                                    <menuItem title="Size" tag="5" id="HMp-eI-4nz">
-                                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                                    </menuItem>
-                                                                    <menuItem title="Rect" tag="6" id="mHU-hd-yvA">
-                                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                                    </menuItem>
-                                                                    <menuItem title="Range" tag="7" id="9zh-FZ-OqU">
-                                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                                    </menuItem>
-                                                                    <menuItem title="Color" tag="8" id="i3M-au-Olq">
-                                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                                    </menuItem>
-                                                                    <menuItem title="Image" tag="9" id="CG8-Wi-rMG">
-                                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                                    </menuItem>
-                                                                    <menuItem title="Nil" tag="10" id="wtA-iF-byT">
-                                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                                    </menuItem>
+                                                                    <menuItem title="Boolean" tag="0" id="ktL-Bh-srH"/>
+                                                                    <menuItem title="Number" tag="1" id="oI6-0e-m9m"/>
+                                                                    <menuItem title="String" tag="2" id="ze6-4I-mGe"/>
+                                                                    <menuItem title="Localized String" tag="3" hidden="YES" enabled="NO" id="RRQ-6m-ila"/>
+                                                                    <menuItem title="Point" tag="4" id="FpT-QS-V3H"/>
+                                                                    <menuItem title="Size" tag="5" id="ai4-yo-lUl"/>
+                                                                    <menuItem title="Rect" tag="6" id="poj-ci-pTj"/>
+                                                                    <menuItem title="Range" tag="7" id="Syh-zD-vEN"/>
+                                                                    <menuItem title="Color" tag="8" id="znr-bG-VjG"/>
+                                                                    <menuItem title="Image" tag="9" id="5UO-cA-Jao"/>
+                                                                    <menuItem title="Nil" tag="10" id="KXB-ar-rwi"/>
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
