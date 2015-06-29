@@ -166,11 +166,7 @@
 @implementation UserDataTableView {
 	__weak id _actualDelegate;
 	__weak id _actualDataSource;
-	__weak NSScrollView *_scrollView;
-}
-
-- (void)awakeFromNib {
-	_scrollView = self.enclosingScrollView;
+	__weak InspectorTableRowView *_inspectorTableRowView;
 }
 
 - (void)didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
@@ -186,18 +182,26 @@
 }
 
 - (void)updateTableHeight {
-	InspectorTableRowView *inspectorTableRowView = (InspectorTableRowView *)_scrollView.superview.superview;
+	if (!_inspectorTableRowView && [self.enclosingScrollView.superview.superview isKindOfClass:[InspectorTableRowView class]])
+		_inspectorTableRowView = (InspectorTableRowView *)self.enclosingScrollView.superview.superview;
+
+	if (!_inspectorTableRowView)
+		return;
 
 	const CGFloat newHeight = MAX([self heightForRows:3], [self heightForRows:self.numberOfRows]);
 
-	CGRect frame = inspectorTableRowView.frame;
+	CGRect frame = _inspectorTableRowView.frame;
 	frame.size.height = newHeight;
-	inspectorTableRowView.frame = frame;
+	_inspectorTableRowView.frame = frame;
 
-	InspectorTableView *inspectorTableView = (InspectorTableView *)inspectorTableRowView.superview;
-	NSInteger tableRow = [inspectorTableView rowForView:inspectorTableRowView];
+	InspectorTableView *inspectorTableView = (InspectorTableView *)_inspectorTableRowView.superview;
 
-	[inspectorTableRowView setConstraintConstant:newHeight - 2 forAttribute:NSLayoutAttributeHeight];
+	if (!inspectorTableView)
+		return;
+
+	NSInteger tableRow = [inspectorTableView rowForView:_inspectorTableRowView];
+
+	[_inspectorTableRowView setConstraintConstant:newHeight - 2 forAttribute:NSLayoutAttributeHeight];
 	[inspectorTableView setHeight:newHeight - 2 forItem:[inspectorTableView itemAtRow:tableRow]];
 
 	/* Update the user data table's row height */
@@ -207,7 +211,7 @@
 	[NSAnimationContext endGrouping];
 
 	/* Update the position for the rows below the user data table */
-	CGFloat bottom = NSMaxY(inspectorTableRowView.frame);
+	CGFloat bottom = NSMaxY(_inspectorTableRowView.frame);
 	for (NSInteger row=tableRow + 1; row < inspectorTableView.numberOfRows; ++row) {
 		InspectorTableRowView *tableRowView = (InspectorTableRowView *)[inspectorTableView rowViewAtRow:row makeIfNecessary:NO];
 		[tableRowView setConstraintConstant:bottom forAttribute:NSLayoutAttributeTop];

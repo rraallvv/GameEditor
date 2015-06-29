@@ -415,7 +415,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (void)setHeight:(CGFloat)height forItem:(id)item {
-	_itemHeights[item] = [NSNumber numberWithFloat:height];
+	_itemHeights[[item representedObject]] = [NSNumber numberWithFloat:height];
 }
 
 - (void)setTop:(CGFloat)top forItem:(id)item {
@@ -426,7 +426,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
-	NSNumber *itemHeightValue = _itemHeights[item];
+	NSNumber *itemHeightValue = _itemHeights[[item representedObject]];
 	if (itemHeightValue) {
 		return [itemHeightValue floatValue];
 	}
@@ -437,7 +437,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 		for (NSString *identifier in _editorIdentifiers) {
 			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
 				CGFloat height = [_prefferedSizes[identifier] sizeValue].height;
-				_itemHeights[item] = [NSNumber numberWithFloat:height];
+				_itemHeights[[item representedObject]] = [NSNumber numberWithFloat:height];
 				return height;
 			}
 		}
