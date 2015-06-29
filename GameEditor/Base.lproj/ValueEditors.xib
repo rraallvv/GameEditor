@@ -1105,7 +1105,7 @@
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lJs-nV-AFF" customClass="UserDataTextField">
-                                                                            <rect key="frame" x="-2" y="-1" width="103" height="14"/>
+                                                                            <rect key="frame" x="-2" y="0.0" width="103" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" id="XBm-KG-oxu">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1133,7 +1133,7 @@
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="igQ-NY-DYc" customClass="UserDataTextField">
-                                                                            <rect key="frame" x="-2" y="-1" width="103" height="14"/>
+                                                                            <rect key="frame" x="-2" y="0.0" width="103" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" id="9St-eg-ZS0">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1161,7 +1161,7 @@
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jWv-0A-wgD" customClass="UserDataTextField">
-                                                                            <rect key="frame" x="-2" y="-1" width="103" height="14"/>
+                                                                            <rect key="frame" x="-2" y="0.0" width="103" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" id="ARy-Fk-jzz">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1189,7 +1189,7 @@
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZOE-em-BKz" customClass="UserDataTextField">
-                                                                            <rect key="frame" x="-2" y="-1" width="103" height="14"/>
+                                                                            <rect key="frame" x="-2" y="0.0" width="103" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" id="Dld-5p-G1v">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1217,7 +1217,7 @@
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uQX-vz-r0N" customClass="UserDataTextField">
-                                                                            <rect key="frame" x="-2" y="-1" width="103" height="14"/>
+                                                                            <rect key="frame" x="-2" y="0.0" width="103" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" id="VJm-F4-oGd">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1245,7 +1245,7 @@
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IhT-hy-9GA" customClass="UserDataTextField">
-                                                                            <rect key="frame" x="-2" y="-1" width="103" height="14"/>
+                                                                            <rect key="frame" x="-2" y="0.0" width="103" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" id="BSy-HU-HfP">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1269,7 +1269,7 @@
                                                             </tabViewItem>
                                                             <tabViewItem label="Range" identifier="" id="fWH-EW-K9X" userLabel="(7) Range">
                                                                 <view key="view" id="JC6-Zz-SOw">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="15"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mvG-6D-A3F" customClass="UserDataTextField">
@@ -1350,13 +1350,13 @@
                                                             </tabViewItem>
                                                             <tabViewItem label="Nil" identifier="" id="ZxG-YI-5kr" userLabel="(10) Nil">
                                                                 <view key="view" id="wGh-hf-iJl">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="15"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="101" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
-                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sPI-L6-bYA">
-                                                                            <rect key="frame" x="-2" y="-3" width="103" height="17"/>
-                                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="6Dx-m0-dUQ">
-                                                                                <font key="font" metaFont="system"/>
+                                                                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sPI-L6-bYA">
+                                                                            <rect key="frame" x="-2" y="-1" width="103" height="14"/>
+                                                                            <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="6Dx-m0-dUQ">
+                                                                                <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>

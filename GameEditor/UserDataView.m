@@ -176,11 +176,13 @@
 - (void)didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
 	[super didAddRowView:rowView forRow:row];
 	[self updateTableHeight];
+	[self updateBackgroundStyle];
 }
 
 - (void)didRemoveRowView:(NSTableRowView *)rowView forRow:(NSInteger)row {
 	[super didRemoveRowView:rowView forRow:row];
 	[self updateTableHeight];
+	[self updateBackgroundStyle];
 }
 
 - (void)updateTableHeight {
@@ -218,6 +220,12 @@
 	return rows * (self.rowHeight + 2) + self.headerView.frame.size.height + 20;
 }
 
+- (void)updateBackgroundStyle {
+	for (int row = 0; row < self.numberOfRows; ++row) {
+		[self setBackgroundStyle: row == self.selectedRow ? NSBackgroundStyleDark : NSBackgroundStyleLight atRow:row];
+	}
+}
+
 - (void)setBackgroundStyle:(NSBackgroundStyle)backgroundStyle atRow:(NSInteger)row {
 	NSTableCellView *tableCellView = [self viewAtColumn:2 row:row makeIfNecessary:NO];
 	NSTabView *tabView = tableCellView.subviews.firstObject;
@@ -232,9 +240,7 @@
 }
 
 - (void)tableViewSelectionIsChanging:(NSNotification *)notification {
-	for (int row = 0; row < self.numberOfRows; ++row) {
-		[self setBackgroundStyle: row == self.selectedRow ? NSBackgroundStyleDark : NSBackgroundStyleLight atRow:row];
-	}
+	[self updateBackgroundStyle];
 }
 
 - (BOOL)resignFirstResponder {
