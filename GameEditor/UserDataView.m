@@ -27,6 +27,32 @@
 #import "InspectorTableView.h"
 #import "NSView+LayoutConstraint.h"
 
+#pragma mark UserDataTextField
+
+@interface UserDataTextField : NSTextField
+
+@end
+
+@implementation UserDataTextField
+
+- (void)textDidEndEditing:(NSNotification *)notification {
+	NSDictionary *bindingInfo = [self infoForBinding: NSValueBinding];
+	NSDictionary *options = bindingInfo[NSOptionsKey];
+	NSValueTransformer *transformer = options[NSValueTransformerBindingOption];
+
+	if (transformer) {
+		/* Ensure the string value is valid acording to the value transformer */
+		self.stringValue = [transformer transformedValue:[transformer reverseTransformedValue:self.stringValue]];
+
+		/* Clear the selection */
+		NSText* textEditor = [self.window fieldEditor:YES forObject:self];
+		NSRange selectionRange = NSMakeRange(0, 0);
+		[textEditor setSelectedRange:selectionRange];
+	}
+}
+
+@end
+
 #pragma mark UserDataDictionary
 
 @implementation UserDataDictionary {
