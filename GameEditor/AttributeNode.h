@@ -45,37 +45,6 @@
 - (NSArray *)componentsSeparatedInWords;
 @end
 
-@interface NSNumberFormatter (CustomFormatters)
-+ (instancetype)degreesFormatter;
-+ (instancetype)highPrecisionFormatter;
-+ (instancetype)normalPrecisionFormatter;
-+ (instancetype)normalizedFormatter;
-+ (instancetype)integerFormatter;
-@end
-
-@interface NSValueTransformer (Blocks)
-+ (void)initializeWithTransformedValueClass:(Class)class
-				allowsReverseTransformation:(BOOL)allowsReverseTransformation
-					  transformedValueBlock:(id (^)(id value))transformedValueBlock
-			   reverseTransformedValueBlock:(id (^)(id value))reverseTransformedValueBlock;
-+ (instancetype) transformer;
-@end
-
-@interface PrecisionTransformer : NSValueTransformer
-@end
-
-@interface DegreesTransformer : NSValueTransformer
-@end
-
-@interface AttributeNameTransformer : NSValueTransformer
-@end
-
-@interface TextureTransformer : NSValueTransformer
-@end
-
-@interface ShaderTransformer : NSValueTransformer
-@end
-
 @interface AttributeNode : NSObject
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type children:(NSMutableArray *)children;
 + (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer;

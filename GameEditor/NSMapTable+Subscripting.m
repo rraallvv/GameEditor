@@ -1,5 +1,5 @@
 /*
- * InspectorView.h
+ * NSMapTable+Subscripting.h
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -22,11 +22,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#import "NSMapTable+Subscripting.h"
 
-#import <Cocoa/Cocoa.h>
-#import "AttributeNode.h"
-#import "SKNode+PhysicsBodyType.h"
-#import "NSOutlineView+TreeExpansion.h"
+@implementation NSMapTable (Subscripting)
 
-@interface InspectorView : NSOutlineView
+- (id)objectForKeyedSubscript:(id)key {
+	return [self objectForKey:key];
+}
+
+- (void)setObject:(id)obj forKeyedSubscript:(id)key {
+	[self setObject:obj forKey:key];
+}
+
 @end
