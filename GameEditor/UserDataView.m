@@ -249,12 +249,6 @@
 	[self updateBackgroundStyle];
 }
 
-- (BOOL)resignFirstResponder {
-	/* Make an empty selection */
-	[self selectRowIndexes:[NSIndexSet indexSet] byExtendingSelection:NO];
-	return YES;
-}
-
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([object isEqual:_inspectorTableRowView] && [keyPath isEqualToString:@"superview"]) {
 		[self updateTableHeight];
