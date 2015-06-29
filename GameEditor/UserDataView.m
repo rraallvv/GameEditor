@@ -182,11 +182,11 @@
 }
 
 - (void)updateTableHeight {
-	if (!_inspectorTableRowView && [self.enclosingScrollView.superview.superview isKindOfClass:[InspectorTableRowView class]])
+	/* Register to receive a notification when the table row containing the user data table is added to the inspector */
+	if (!_inspectorTableRowView && [self.enclosingScrollView.superview.superview isKindOfClass:[InspectorTableRowView class]]) {
 		_inspectorTableRowView = (InspectorTableRowView *)self.enclosingScrollView.superview.superview;
-
-	if (!_inspectorTableRowView)
-		return;
+		[_inspectorTableRowView addObserver:self forKeyPath:@"superview" options:0 context: NULL];
+	}
 
 	const CGFloat newHeight = MAX([self heightForRows:3], [self heightForRows:self.numberOfRows]);
 
@@ -214,6 +214,8 @@
 	CGFloat bottom = NSMaxY(_inspectorTableRowView.frame);
 	for (NSInteger row=tableRow + 1; row < inspectorTableView.numberOfRows; ++row) {
 		InspectorTableRowView *tableRowView = (InspectorTableRowView *)[inspectorTableView rowViewAtRow:row makeIfNecessary:NO];
+		if (!tableRowView)
+			break;
 		[tableRowView setConstraintConstant:bottom forAttribute:NSLayoutAttributeTop];
 		[inspectorTableView setTop:bottom forItem:[inspectorTableView itemAtRow:[inspectorTableView rowForView:tableRowView]]];
 		bottom = NSMaxY(tableRowView.frame);
@@ -251,6 +253,14 @@
 	/* Make an empty selection */
 	[self selectRowIndexes:nil byExtendingSelection:NO];
 	return YES;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if ([object isEqual:_inspectorTableRowView] && [keyPath isEqualToString:@"superview"]) {
+		[self updateTableHeight];
+		/* Remove the notification sice it's only needed when a user data table is added to the inspector */
+		[object removeObserver:self forKeyPath:keyPath];
+	}
 }
 
 // TODO: Add basic editing cababilities for the values in the table
