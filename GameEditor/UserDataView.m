@@ -251,7 +251,7 @@
 
 - (BOOL)resignFirstResponder {
 	/* Make an empty selection */
-	[self selectRowIndexes:nil byExtendingSelection:NO];
+	[self selectRowIndexes:[NSIndexSet indexSet] byExtendingSelection:NO];
 	return YES;
 }
 
@@ -260,6 +260,8 @@
 		[self updateTableHeight];
 		/* Remove the notification sice it's only needed when a user data table is added to the inspector */
 		[object removeObserver:self forKeyPath:keyPath];
+	} else {
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 	}
 }
 

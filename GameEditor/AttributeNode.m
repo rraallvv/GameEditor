@@ -358,6 +358,8 @@ labels = _labels;
 				child.node = node;
 			}
 		}
+	} else {
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 	}
 }
 
