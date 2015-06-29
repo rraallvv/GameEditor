@@ -206,13 +206,13 @@
 	[inspectorTableView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndex:tableRow]];
 	[NSAnimationContext endGrouping];
 
-	InspectorTableRowView *prevRowView = inspectorTableRowView;
-	for (NSInteger i=tableRow + 1; i<inspectorTableView.numberOfRows; ++i) {
-		InspectorTableRowView *nextRowView = (InspectorTableRowView *)[inspectorTableView rowViewAtRow:i makeIfNecessary:NO];
-		CGFloat newTop = NSMaxY(prevRowView.frame);
-		[nextRowView setConstraintConstant:newTop forAttribute:NSLayoutAttributeTop];
-		[inspectorTableView setTop:newTop forItem:[inspectorTableView itemAtRow:[inspectorTableView rowForView:nextRowView]]];
-		prevRowView = nextRowView;
+	/* Update the position for the rows below the user data table */
+	CGFloat bottom = NSMaxY(inspectorTableRowView.frame);
+	for (NSInteger row=tableRow + 1; row < inspectorTableView.numberOfRows; ++row) {
+		InspectorTableRowView *tableRowView = (InspectorTableRowView *)[inspectorTableView rowViewAtRow:row makeIfNecessary:NO];
+		[tableRowView setConstraintConstant:bottom forAttribute:NSLayoutAttributeTop];
+		[inspectorTableView setTop:bottom forItem:[inspectorTableView itemAtRow:[inspectorTableView rowForView:tableRowView]]];
+		bottom = NSMaxY(tableRowView.frame);
 	}
 }
 
