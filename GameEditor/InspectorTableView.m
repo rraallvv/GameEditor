@@ -149,7 +149,7 @@
 
 - (void)viewDidMoveToSuperview {
 	/* Force call to set frame to create the show/hide button in all collapsible rows */
-	[self setFrame:self.frame];
+	//[self setFrame:self.frame];
 }
 
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
