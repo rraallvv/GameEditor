@@ -8,11 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		E401BDBA1B21DC2600280F27 /* ControlsAutosave.m in Sources */ = {isa = PBXBuildFile; fileRef = E401BDB91B21DC2600280F27 /* ControlsAutosave.m */; };
-		E408138F1AC228F400F54824 /* InspectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E408138E1AC228F400F54824 /* InspectorView.m */; };
+		E408138F1AC228F400F54824 /* InspectorTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = E408138E1AC228F400F54824 /* InspectorTableView.m */; };
 		E40813921AC3C45300F54824 /* ValueEditors.xib in Resources */ = {isa = PBXBuildFile; fileRef = E40813901AC3C45300F54824 /* ValueEditors.xib */; };
 		E40813951AC42FFF00F54824 /* ColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = E40813941AC42FFF00F54824 /* ColorWell.m */; };
 		E40965ED1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m in Sources */ = {isa = PBXBuildFile; fileRef = E40965EC1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m */; };
 		E40965F81B3798D000DBEC44 /* Shader1.fsh in Resources */ = {isa = PBXBuildFile; fileRef = E40965F71B3798D000DBEC44 /* Shader1.fsh */; };
+		E4149D151B3C8081002F02FC /* NSMapTable+Subscripting.m in Sources */ = {isa = PBXBuildFile; fileRef = E4149D141B3C8081002F02FC /* NSMapTable+Subscripting.m */; };
 		E4220B2D1ACFF92B00753375 /* Particles.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2B1ACFF92B00753375 /* Particles.sks */; };
 		E4220B2E1ACFF92B00753375 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = E4220B2C1ACFF92B00753375 /* spark.png */; };
 		E44764CC1B36AFA100B7355F /* SKNode+PhysicsBodyType.m in Sources */ = {isa = PBXBuildFile; fileRef = E44764CB1B36AFA100B7355F /* SKNode+PhysicsBodyType.m */; };
@@ -21,6 +22,8 @@
 		E474192F1AD84EDC00061932 /* NewGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E474192E1AD84EDC00061932 /* NewGameScene.sks */; };
 		E48286631AE7D74F00C51F8D /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = E48286621AE7D74F00C51F8D /* art.scnassets */; };
 		E486C0851B35F2F900276F20 /* normal.png in Resources */ = {isa = PBXBuildFile; fileRef = E486C0841B35F2F900276F20 /* normal.png */; };
+		E4977F921B3B273B007E60AF /* UserDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4977F911B3B273B007E60AF /* UserDataView.m */; };
+		E4977F9D1B3B282A007E60AF /* ValueTransformers.m in Sources */ = {isa = PBXBuildFile; fileRef = E4977F9C1B3B282A007E60AF /* ValueTransformers.m */; };
 		E4A1779F1B327B0F005A8692 /* Spaceship.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A1779D1B327B0F005A8692 /* Spaceship.png */; };
 		E4A177A01B327B0F005A8692 /* SpaceshipTest.png in Resources */ = {isa = PBXBuildFile; fileRef = E4A1779E1B327B0F005A8692 /* SpaceshipTest.png */; };
 		E4ABDB4F1AB3933900AAE82E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E4ABDB4E1AB3933900AAE82E /* AppDelegate.m */; };
@@ -37,6 +40,7 @@
 		E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */; };
 		E4E6DA3B1AE9987500F4CE6F /* LibraryView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E6DA3A1AE9987500F4CE6F /* LibraryView.m */; };
 		E4E935F81B08AE88007A48C4 /* libobjc2lua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E935F21B08ABAF007A48C4 /* libobjc2lua.a */; };
+		E4F20C871B3BB76D00F57180 /* NSView+LayoutConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F20C861B3BB76D00F57180 /* NSView+LayoutConstraint.m */; };
 		E4F3B6A71ACD7EC4001482D2 /* NavigationNode.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F3B6A61ACD7EC4001482D2 /* NavigationNode.m */; };
 /* End PBXBuildFile section */
 
@@ -109,14 +113,16 @@
 /* Begin PBXFileReference section */
 		E401BDB81B21DC2600280F27 /* ControlsAutosave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlsAutosave.h; sourceTree = "<group>"; };
 		E401BDB91B21DC2600280F27 /* ControlsAutosave.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControlsAutosave.m; sourceTree = "<group>"; };
-		E408138D1AC228F400F54824 /* InspectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InspectorView.h; sourceTree = "<group>"; };
-		E408138E1AC228F400F54824 /* InspectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InspectorView.m; sourceTree = "<group>"; };
+		E408138D1AC228F400F54824 /* InspectorTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InspectorTableView.h; sourceTree = "<group>"; };
+		E408138E1AC228F400F54824 /* InspectorTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InspectorTableView.m; sourceTree = "<group>"; };
 		E40813911AC3C45300F54824 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ValueEditors.xib; sourceTree = "<group>"; };
 		E40813931AC42FFF00F54824 /* ColorWell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorWell.h; sourceTree = "<group>"; };
 		E40813941AC42FFF00F54824 /* ColorWell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorWell.m; sourceTree = "<group>"; };
 		E40965EB1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSOutlineView+TreeExpansion.h"; sourceTree = "<group>"; };
 		E40965EC1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOutlineView+TreeExpansion.m"; sourceTree = "<group>"; };
 		E40965F71B3798D000DBEC44 /* Shader1.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader1.fsh; sourceTree = "<group>"; };
+		E4149D131B3C8081002F02FC /* NSMapTable+Subscripting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMapTable+Subscripting.h"; sourceTree = "<group>"; };
+		E4149D141B3C8081002F02FC /* NSMapTable+Subscripting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMapTable+Subscripting.m"; sourceTree = "<group>"; };
 		E4220B2B1ACFF92B00753375 /* Particles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Particles.sks; sourceTree = "<group>"; };
 		E4220B2C1ACFF92B00753375 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		E44764CA1B36AFA100B7355F /* SKNode+PhysicsBodyType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKNode+PhysicsBodyType.h"; sourceTree = "<group>"; };
@@ -128,6 +134,10 @@
 		E474192E1AD84EDC00061932 /* NewGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = NewGameScene.sks; sourceTree = "<group>"; };
 		E48286621AE7D74F00C51F8D /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		E486C0841B35F2F900276F20 /* normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = normal.png; sourceTree = "<group>"; };
+		E4977F901B3B273B007E60AF /* UserDataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataView.h; sourceTree = "<group>"; };
+		E4977F911B3B273B007E60AF /* UserDataView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataView.m; sourceTree = "<group>"; };
+		E4977F9B1B3B282A007E60AF /* ValueTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueTransformers.h; sourceTree = "<group>"; };
+		E4977F9C1B3B282A007E60AF /* ValueTransformers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValueTransformers.m; sourceTree = "<group>"; };
 		E4A1779D1B327B0F005A8692 /* Spaceship.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Spaceship.png; sourceTree = "<group>"; };
 		E4A1779E1B327B0F005A8692 /* SpaceshipTest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SpaceshipTest.png; sourceTree = "<group>"; };
 		E4ABDB481AB3933900AAE82E /* GameEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -156,6 +166,8 @@
 		E4E6DA391AE9987500F4CE6F /* LibraryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryView.h; sourceTree = "<group>"; };
 		E4E6DA3A1AE9987500F4CE6F /* LibraryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryView.m; sourceTree = "<group>"; };
 		E4E935EB1B08ABAF007A48C4 /* LuaTests.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LuaTests.xcodeproj; path = "ObjC-Lua/LuaTests.xcodeproj"; sourceTree = "<group>"; };
+		E4F20C851B3BB76D00F57180 /* NSView+LayoutConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+LayoutConstraint.h"; sourceTree = "<group>"; };
+		E4F20C861B3BB76D00F57180 /* NSView+LayoutConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+LayoutConstraint.m"; sourceTree = "<group>"; };
 		E4F3B6A51ACD7EC4001482D2 /* NavigationNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationNode.h; sourceTree = "<group>"; };
 		E4F3B6A61ACD7EC4001482D2 /* NavigationNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationNode.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -184,10 +196,14 @@
 			children = (
 				E401BDB81B21DC2600280F27 /* ControlsAutosave.h */,
 				E401BDB91B21DC2600280F27 /* ControlsAutosave.m */,
+				E4149D131B3C8081002F02FC /* NSMapTable+Subscripting.h */,
+				E4149D141B3C8081002F02FC /* NSMapTable+Subscripting.m */,
 				E40965EB1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.h */,
 				E40965EC1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m */,
 				E44764CA1B36AFA100B7355F /* SKNode+PhysicsBodyType.h */,
 				E44764CB1B36AFA100B7355F /* SKNode+PhysicsBodyType.m */,
+				E4F20C851B3BB76D00F57180 /* NSView+LayoutConstraint.h */,
+				E4F20C861B3BB76D00F57180 /* NSView+LayoutConstraint.m */,
 				E4BFABB01B33ACDB000A51EB /* NSBundle-ProxyBundle */,
 			);
 			name = Utils;
@@ -198,8 +214,12 @@
 			children = (
 				E4ABDB701AB3BCA700AAE82E /* AttributeNode.h */,
 				E4ABDB711AB3BCA700AAE82E /* AttributeNode.m */,
-				E408138D1AC228F400F54824 /* InspectorView.h */,
-				E408138E1AC228F400F54824 /* InspectorView.m */,
+				E408138D1AC228F400F54824 /* InspectorTableView.h */,
+				E408138E1AC228F400F54824 /* InspectorTableView.m */,
+				E4977F901B3B273B007E60AF /* UserDataView.h */,
+				E4977F911B3B273B007E60AF /* UserDataView.m */,
+				E4977F9B1B3B282A007E60AF /* ValueTransformers.h */,
+				E4977F9C1B3B282A007E60AF /* ValueTransformers.m */,
 				E41894D81AD975B200E704BB /* Controls */,
 			);
 			name = Inspector;
@@ -575,15 +595,19 @@
 				E45B16B81B35AA97007883BF /* ComboBoxCell.m in Sources */,
 				E40813951AC42FFF00F54824 /* ColorWell.m in Sources */,
 				E4ABDB511AB3933900AAE82E /* main.m in Sources */,
+				E4977F9D1B3B282A007E60AF /* ValueTransformers.m in Sources */,
+				E4F20C871B3BB76D00F57180 /* NSView+LayoutConstraint.m in Sources */,
 				E401BDBA1B21DC2600280F27 /* ControlsAutosave.m in Sources */,
 				E44764CC1B36AFA100B7355F /* SKNode+PhysicsBodyType.m in Sources */,
 				E4BFABB81B33ACDB000A51EB /* NSBundle+ProxyBundle.m in Sources */,
 				E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */,
 				E40965ED1B375E8700DBEC44 /* NSOutlineView+TreeExpansion.m in Sources */,
 				E4F3B6A71ACD7EC4001482D2 /* NavigationNode.m in Sources */,
+				E4977F921B3B273B007E60AF /* UserDataView.m in Sources */,
 				E4ABDB761AB47BB700AAE82E /* AttributeNode.m in Sources */,
+				E4149D151B3C8081002F02FC /* NSMapTable+Subscripting.m in Sources */,
 				E4E6DA3B1AE9987500F4CE6F /* LibraryView.m in Sources */,
-				E408138F1AC228F400F54824 /* InspectorView.m in Sources */,
+				E408138F1AC228F400F54824 /* InspectorTableView.m in Sources */,
 				E460AB931ACDC9B900859EA2 /* NavigatorView.m in Sources */,
 				E4ABDB4F1AB3933900AAE82E /* AppDelegate.m in Sources */,
 			);

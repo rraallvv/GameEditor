@@ -24,11 +24,13 @@
  */
 
 #import "AppDelegate.h"
-#import "InspectorView.h"
+#import "InspectorTableView.h"
 #import "LibraryView.h"
 #import <SceneKit/SceneKit.h>
 #import "LuaContext.h"
 #import "LuaExport.h"
+#import "UserDataView.h"
+#import "ValueTransformers.h"
 #import "NSBundle+ProxyBundle.h"
 
 #pragma mark Main Window
@@ -49,8 +51,10 @@
 		case NSDeleteCharacter:
 		case NSBackTabCharacter:
 			/* Forward Del and Backspace to the delete action */
-			[(AppDelegate *)[NSApp delegate] delete:self];
-			return;
+			if ([self.firstResponder respondsToSelector:@selector(delete:)]) {
+				[(id)self.firstResponder delete:self];
+				return;
+			}
 	}
 
 	[super keyDown:theEvent];
@@ -83,8 +87,8 @@
 
 @implementation AppDelegate {
 	IBOutlet EditorView *_editorView;
-	IBOutlet InspectorView *_nodeInspectorView;
-	IBOutlet InspectorView *_identityInspectorView;
+	IBOutlet InspectorTableView *_nodeInspectorView;
+	IBOutlet InspectorTableView *_identityInspectorView;
 	IBOutlet NavigatorView *_navigatorView;
 	IBOutlet LibraryView *_objectLibraryCollectionView;
 	IBOutlet LibraryView *_mediaLibraryCollectionView;
@@ -184,6 +188,14 @@
 
 	/* Set focus on the editor view */
 	[[self window] makeFirstResponder:_editorView];
+}
+
+- (void)applicationDidBecomeActive:(NSNotification *)notification {
+	/* Load the last edited document */
+	NSString *lastDocumentFilename = [[NSUserDefaults standardUserDefaults] valueForKey:@"Last edited document"];
+	if (lastDocumentFilename) {
+		[self openSceneWithFilename:lastDocumentFilename];
+	}
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
@@ -306,7 +318,20 @@
 #endif
 		/* Build the tree of attributes in the background thread */
 		NSMutableArray *nodeInspectorContents = [self attributesForAllClassesWithNode:node];
-		NSMutableArray *identityInspectorContents = @[@{@"name": @"User Data",
+		NSMutableArray *identityInspectorContents = @[@{@"name": @"Header",
+														@"type": @"header",
+														@"isLeaf": @NO,
+														@"isEditable": @NO,
+														@"isCollapsible": @YES,
+														@"children": @[@{@"name": @"Attrinute",
+																		 @"type": @"generic attribute",
+																		 @"isLeaf": @YES,
+																		 @"isEditable": @NO
+																		 }.mutableCopy
+																	   ].mutableCopy
+														}.mutableCopy,
+#if 1 // Dummy user data table
+													  @{@"name": @"User Data",
 														@"type": @"header",
 														@"isLeaf": @NO,
 														@"isEditable": @NO,
@@ -314,8 +339,43 @@
 														@"children": @[@{@"name": @"userData",
 																		 @"type": @"@\"NSMutableDictionary\"",
 																		 @"isLeaf": @NO,
-																		 @"isEditable": @NO}]
-														}].mutableCopy;
+																		 @"isEditable": @NO,
+																		 @"content":
+																		 [[NSDictionaryController alloc] initWithContent:[[UserDataDictionary alloc] initWithNode:_selectedNode]]
+																		 }.mutableCopy
+																	   ].mutableCopy
+														}.mutableCopy,
+#endif
+													  @{@"name": @"Header",
+														@"type": @"header",
+														@"isLeaf": @NO,
+														@"isEditable": @NO,
+														@"isCollapsible": @YES,
+														@"children": @[@{@"name": @"Attrinute",
+																		 @"type": @"generic attribute",
+																		 @"isLeaf": @YES,
+																		 @"isEditable": @NO
+																		 }.mutableCopy
+																	   ].mutableCopy
+														}.mutableCopy,
+													  @{@"name": @"Header",
+														@"type": @"header",
+														@"isLeaf": @NO,
+														@"isEditable": @NO,
+														@"isCollapsible": @YES,
+														@"children": @[@{@"name": @"Attrinute",
+																		 @"type": @"generic attribute",
+																		 @"isLeaf": @YES,
+																		 @"isEditable": @NO
+																		 }.mutableCopy,
+																	   @{@"name": @"Attrinute",
+																		 @"type": @"generic attribute",
+																		 @"isLeaf": @YES,
+																		 @"isEditable": @NO
+																		 }.mutableCopy
+																	   ].mutableCopy
+														}.mutableCopy
+													  ].mutableCopy;
 
 		/* Look up for the row to be selected */
 		NSInteger row = [_navigatorView rowForItem:[self navigationNodeOfObject:node inNodes:[[_navigatorTreeController arrangedObjects] childNodes]]];
@@ -862,6 +922,11 @@
 	_currentFilename = nil;
 	_sceneBundle = nil;
 	[self populateMediaLibrary];
+
+	/* Clear the filename of last edited document */
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults removeObjectForKey:@"Last edited document"];
+	[userDefaults synchronize];
 }
 
 - (void)addRecentDocument:(NSString *)filename {
@@ -1310,6 +1375,11 @@
 
 	_currentFilename = filename;
 	_sceneBundle = bundle;
+
+	/* Save the filename to the last edited document */
+	NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	[userDefaults setValue:_currentFilename forKey:@"Last edited document"];
+	[userDefaults synchronize];
 
 	[self useScene:scene];
 

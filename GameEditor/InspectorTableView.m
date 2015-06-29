@@ -1,5 +1,5 @@
 /*
- * InspectorView.m
+ * InspectorTableView.m
  * GameEditor
  *
  * Copyright (c) 2015 Rhody Lugo.
@@ -23,17 +23,25 @@
  * THE SOFTWARE.
  */
 
-#import "InspectorView.h"
+#import "InspectorTableView.h"
 #import "StepperTextField.h"
+#import "NSView+LayoutConstraint.h"
+#import "NSMapTable+Subscripting.h"
 
-#pragma mark TableCellView
+#pragma mark InspectorTableCellView
 
-@interface TableCellView : NSTableCellView
-@end
-
-@implementation TableCellView {
+@implementation InspectorTableCellView {
 	NSMutableArray *_textFields;
 	IBOutlet NSPopover *_popover;
+}
+
+- (void)drawRect:(NSRect)dirtyRect {
+	if (self.backgroundColor) {
+		[self.backgroundColor set];
+		NSRectFill(dirtyRect);
+	} else {
+		[super drawRect:dirtyRect];
+	}
 }
 
 - (void)setObjectValue:(id)objectValue {
@@ -130,9 +138,6 @@
 
 #pragma mark InspectorTableRowView
 
-@interface InspectorTableRowView : NSTableRowView
-@end
-
 @implementation InspectorTableRowView {
 	NSAttributedString *_showAttributedString;
 	NSAttributedString *_hideAttributedString;
@@ -144,7 +149,7 @@
 
 - (void)viewDidMoveToSuperview {
 	/* Force call to set frame to create the show/hide button in all collapsible rows */
-	[self setFrame:self.frame];
+	//[self setFrame:self.frame];
 }
 
 - (void)drawBackgroundInRect:(NSRect)dirtyRect {
@@ -154,7 +159,7 @@
 
 - (void)drawSeparatorInRect:(NSRect)dirtyRect {
 
-	InspectorView *outlineView = (InspectorView *)[self superview];
+	InspectorTableView *outlineView = (InspectorTableView *)[self superview];
 
 	NSInteger row = [outlineView rowForView:self];
 	id item = [outlineView itemAtRow:row];
@@ -198,14 +203,6 @@
 				[NSBezierPath strokeLineFromPoint:bottomLeft toPoint:bottomRight];
 			}
 
-			[groupNodeSeparatorColor set];
-
-			/* Separator between a root group a non-root group node */
-			if (indexPathLength < nextIndexPathLength
-				&& nextItemIsGroup) {
-				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
-			}
-
 		} else if (row == [outlineView numberOfRows] - 1) {
 			[rootNodeSeparatorColor set];
 
@@ -213,11 +210,11 @@
 			[NSBezierPath strokeLineFromPoint:bottomLeft toPoint:bottomRight];
 
 		} else {
-			[groupNodeSeparatorColor set];
-
-			/* Separator between two non-root group node */
-			if (nextIndexPathLength <= indexPathLength) {
-				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
+			/* Draw a line at the bottom of the row with the table cell's backgroundColor */
+			NSTableCellView *tableCellView = [self.subviews firstObject];
+			if ([tableCellView isKindOfClass:[InspectorTableCellView class]] && [(InspectorTableCellView *)tableCellView backgroundColor]) {
+				[[(InspectorTableCellView *)tableCellView backgroundColor] set];
+				[NSBezierPath strokeLineFromPoint:bottomLeft toPoint:bottomRight];
 			}
 		}
 
@@ -250,7 +247,7 @@
 - (void)setFrame:(NSRect)frame {
 	[super setFrame:frame];
 
-	InspectorView *outlineView = (InspectorView *)[self superview];
+	InspectorTableView *outlineView = (InspectorTableView *)[self superview];
 	NSInteger row = [outlineView rowForView:self];
 	id item = [outlineView itemAtRow:row];
 	BOOL isCollapsible = [[[item representedObject] valueForKey:@"isCollapsible"] boolValue];
@@ -295,7 +292,7 @@
 		}
 		[_hideGroupButton sizeToFit];
 		NSSize size = _hideGroupButton.frame.size;
-		_hideGroupButton.frame = NSMakeRect(NSMaxX(frame) - size.width, frame.size.height - size.height - 1, size.width, size.height);
+		_hideGroupButton.frame = NSMakeRect(NSMaxX(frame) - size.width, frame.size.height - size.height, size.width, size.height - 2);
 		/*
 		for (NSControl *control in self.subviews) {
 			if ([control isKindOfClass:[NSTableCellView class]]) {
@@ -308,7 +305,7 @@
 }
 
 - (void)toggleGroupVisibility {
-	InspectorView *outlineView = (InspectorView *)[self superview];
+	InspectorTableView *outlineView = (InspectorTableView *)[self superview];
 	id item = [outlineView itemAtRow:[outlineView rowForView:self]];
 	if ([outlineView isItemExpanded:item]) {
 		_hideGroupButton.attributedTitle = _showAttributedString;
@@ -344,18 +341,19 @@
 
 @end
 
-#pragma mark InspectorView
+#pragma mark InspectorTableView
 
 static const CGFloat kIndentationPerLevel = 0.0;
 
-@interface InspectorView () <NSOutlineViewDelegate, NSOutlineViewDataSource>
+@interface InspectorTableView () <NSOutlineViewDelegate, NSOutlineViewDataSource>
 @end
 
-@implementation InspectorView {
+@implementation InspectorTableView {
 	__weak id _actualDelegate;
 	__weak id _actualDataSource;
 	NSMutableDictionary *_prefferedSizes;
 	NSMutableArray *_editorIdentifiers;
+	NSMapTable *_itemHeights;
 }
 
 - (id)initWithCoder:(NSCoder *)coder {
@@ -369,6 +367,8 @@ static const CGFloat kIndentationPerLevel = 0.0;
 
 		_editorIdentifiers = [NSMutableArray array];
 		_prefferedSizes = [NSMutableDictionary dictionary];
+		_itemHeights = [NSMapTable mapTableWithKeyOptions:NSMapTableObjectPointerPersonality
+											 valueOptions:NSMapTableStrongMemory];
 
 		for (id object in objects) {
 			if ([object isKindOfClass:[NSTableCellView class]]) {
@@ -414,12 +414,31 @@ static const CGFloat kIndentationPerLevel = 0.0;
 	return [[InspectorTableRowView alloc] init];
 }
 
+- (void)setHeight:(CGFloat)height forItem:(id)item {
+	_itemHeights[[item representedObject]] = [NSNumber numberWithFloat:height];
+}
+
+- (void)setTop:(CGFloat)top forItem:(id)item {
+	NSTableRowView *rowView = [self rowViewAtRow:[self rowForItem:item] makeIfNecessary:NO];
+	CGRect viewFrame = rowView.frame;
+	viewFrame.origin.y = top;
+	rowView.frame = viewFrame;
+}
+
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item {
+	NSNumber *itemHeightValue = _itemHeights[[item representedObject]];
+	if (itemHeightValue) {
+		return [itemHeightValue floatValue];
+	}
+
 	NSString *type = [[item representedObject] valueForKey:@"type"];
+
 	if (type) {
 		for (NSString *identifier in _editorIdentifiers) {
 			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
-				return [_prefferedSizes[identifier] sizeValue].height;
+				CGFloat height = [_prefferedSizes[identifier] sizeValue].height;
+				_itemHeights[[item representedObject]] = [NSNumber numberWithFloat:height];
+				return height;
 			}
 		}
 	}
