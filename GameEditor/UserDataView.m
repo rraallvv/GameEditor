@@ -217,7 +217,7 @@
 }
 
 - (CGFloat)heightForRows:(NSInteger)rows {
-	return rows * (self.rowHeight + 2) + self.headerView.frame.size.height + 20;
+	return rows * (self.rowHeight + 2) + self.headerView.frame.size.height + 19;
 }
 
 - (void)updateBackgroundStyle {

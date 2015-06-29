@@ -927,11 +927,11 @@
             <point key="canvasLocation" x="634" y="236"/>
         </tableCellView>
         <tableCellView identifier="@&quot;NSMutableDictionary&quot;" id="pGv-Ji-A5t" userLabel="userData" customClass="UserDataTableCellView">
-            <rect key="frame" x="0.0" y="0.0" width="284" height="86"/>
+            <rect key="frame" x="0.0" y="0.0" width="284" height="84"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <scrollView verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" borderType="none" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0zv-gw-fpv">
-                    <rect key="frame" x="0.0" y="16" width="284" height="70"/>
+                    <rect key="frame" x="0.0" y="14" width="284" height="70"/>
                     <clipView key="contentView" id="V3N-Y2-AAv">
                         <rect key="frame" x="1" y="17" width="238" height="117"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1014,12 +1014,12 @@
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="14" id="QAY-NJ-lI4"/>
                                                         </constraints>
-                                                        <popUpButtonCell key="cell" type="bevel" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" imageScaling="proportionallyDown" inset="2" selectedItem="ktL-Bh-srH" id="9Qx-TV-hYJ">
+                                                        <popUpButtonCell key="cell" type="bevel" title="Boolean" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" selectedItem="ktL-Bh-srH" id="9Qx-TV-hYJ">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <menu key="menu" id="ZKw-3z-nJB">
                                                                 <items>
-                                                                    <menuItem title="Boolean" tag="0" id="ktL-Bh-srH"/>
+                                                                    <menuItem title="Boolean" state="on" id="ktL-Bh-srH"/>
                                                                     <menuItem title="Number" tag="1" id="oI6-0e-m9m"/>
                                                                     <menuItem title="String" tag="2" id="ze6-4I-mGe"/>
                                                                     <menuItem title="Localized String" tag="3" hidden="YES" enabled="NO" id="RRQ-6m-ila"/>
@@ -1416,7 +1416,7 @@
                     </tableHeaderView>
                 </scrollView>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="x8u-Dq-Tet">
-                    <rect key="frame" x="2" y="2" width="16" height="16"/>
+                    <rect key="frame" x="2" y="-1" width="16" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="16" id="5Hh-6a-ucW"/>
                         <constraint firstAttribute="height" constant="16" id="6PL-3g-kpi"/>
@@ -1430,7 +1430,7 @@
                     </connections>
                 </button>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="2NA-cf-M6m">
-                    <rect key="frame" x="22" y="2" width="16" height="16"/>
+                    <rect key="frame" x="22" y="0.0" width="16" height="16"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" enabled="NO" state="on" imageScaling="proportionallyDown" inset="2" id="IVl-Vm-l9v">
                         <behavior key="behavior" lightByContents="YES"/>
                         <font key="font" metaFont="system"/>
@@ -1445,11 +1445,11 @@
                 <constraint firstAttribute="trailing" secondItem="0zv-gw-fpv" secondAttribute="trailing" id="D8d-ga-1aR"/>
                 <constraint firstItem="2NA-cf-M6m" firstAttribute="leading" secondItem="x8u-Dq-Tet" secondAttribute="trailing" constant="4" id="Dxs-oW-jox"/>
                 <constraint firstItem="2NA-cf-M6m" firstAttribute="height" secondItem="x8u-Dq-Tet" secondAttribute="height" id="klB-5W-klz"/>
-                <constraint firstAttribute="bottom" secondItem="x8u-Dq-Tet" secondAttribute="bottom" constant="2" id="lr0-ER-kCl"/>
-                <constraint firstAttribute="bottom" secondItem="0zv-gw-fpv" secondAttribute="bottom" constant="16" id="tAj-hN-wTn"/>
+                <constraint firstAttribute="bottom" secondItem="x8u-Dq-Tet" secondAttribute="bottom" constant="-1" id="lr0-ER-kCl"/>
+                <constraint firstAttribute="bottom" secondItem="0zv-gw-fpv" secondAttribute="bottom" constant="14" id="tAj-hN-wTn"/>
                 <constraint firstItem="0zv-gw-fpv" firstAttribute="top" secondItem="pGv-Ji-A5t" secondAttribute="top" id="ti3-GC-LQr"/>
                 <constraint firstItem="2NA-cf-M6m" firstAttribute="width" secondItem="x8u-Dq-Tet" secondAttribute="width" id="uZM-NK-5GF"/>
-                <constraint firstItem="2NA-cf-M6m" firstAttribute="centerY" secondItem="x8u-Dq-Tet" secondAttribute="centerY" id="ueh-qV-n0u"/>
+                <constraint firstItem="2NA-cf-M6m" firstAttribute="centerY" secondItem="x8u-Dq-Tet" secondAttribute="centerY" constant="-1" id="ueh-qV-n0u"/>
                 <constraint firstItem="x8u-Dq-Tet" firstAttribute="leading" secondItem="pGv-Ji-A5t" secondAttribute="leading" constant="2" id="y3o-H4-GnF"/>
             </constraints>
             <userDefinedRuntimeAttributes>

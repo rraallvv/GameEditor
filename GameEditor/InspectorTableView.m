@@ -203,14 +203,6 @@
 				[NSBezierPath strokeLineFromPoint:bottomLeft toPoint:bottomRight];
 			}
 
-			[groupNodeSeparatorColor set];
-
-			/* Separator between a root group a non-root group node */
-			if (indexPathLength < nextIndexPathLength
-				&& nextItemIsGroup) {
-				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
-			}
-
 		} else if (row == [outlineView numberOfRows] - 1) {
 			[rootNodeSeparatorColor set];
 
@@ -218,11 +210,11 @@
 			[NSBezierPath strokeLineFromPoint:bottomLeft toPoint:bottomRight];
 
 		} else {
-			[groupNodeSeparatorColor set];
-
-			/* Separator between two non-root group node */
-			if (nextIndexPathLength <= indexPathLength) {
-				[NSBezierPath strokeLineFromPoint:marginBottomLeft toPoint:bottomRight];
+			/* Draw a line at the bottom of the row with the table cell's backgroundColor */
+			NSTableCellView *tableCellView = [self.subviews firstObject];
+			if ([tableCellView isKindOfClass:[InspectorTableCellView class]] && [(InspectorTableCellView *)tableCellView backgroundColor]) {
+				[[(InspectorTableCellView *)tableCellView backgroundColor] set];
+				[NSBezierPath strokeLineFromPoint:bottomLeft toPoint:bottomRight];
 			}
 		}
 
