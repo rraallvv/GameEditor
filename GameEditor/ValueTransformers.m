@@ -93,9 +93,9 @@
 			result = [NSNull null];
 			break;
 	}
-	self.value = nil;
+	[(id)self setValue:nil];
 	if (result) {
-		self.value = result;
+		[(id)self setValue:result];
 	}
 }
 
@@ -108,7 +108,7 @@ static BOOL isNumber(id value) {
 }
 
 - (UserDataType)type {
-	id value = self.value;
+	id value = [(id)self value];
 
 	if ([value isKindOfClass:[NSNumber class]]) {
 		if (isNumber(value)) {
