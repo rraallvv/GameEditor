@@ -50,7 +50,7 @@
 @implementation NSObject (DictionaryControllerType)
 
 - (void)setType:(UserDataType)type {
-	id result;
+	id result = nil;
 	switch (type) {
 		case UserDataTypeBoolean:
 			result = @NO;
@@ -90,7 +90,6 @@
 			break;
 
 		default:
-			result = [NSNull null];
 			break;
 	}
 	[(id)self setValue:nil];

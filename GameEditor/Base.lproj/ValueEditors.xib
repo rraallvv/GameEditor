@@ -1348,28 +1348,6 @@
                                                                 <view key="view" id="wGh-hf-iJl">
                                                                     <rect key="frame" x="0.0" y="0.0" width="101" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                    <subviews>
-                                                                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sPI-L6-bYA">
-                                                                            <rect key="frame" x="-2" y="-1" width="103" height="14"/>
-                                                                            <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="6Dx-m0-dUQ">
-                                                                                <font key="font" metaFont="smallSystem"/>
-                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                            </textFieldCell>
-                                                                            <connections>
-                                                                                <binding destination="5a0-VJ-GML" name="value" keyPath="objectValue.value" id="ZK8-Kk-lf2">
-                                                                                    <dictionary key="options">
-                                                                                        <string key="NSValueTransformerName">NilValidationTransformer</string>
-                                                                                    </dictionary>
-                                                                                </binding>
-                                                                            </connections>
-                                                                        </textField>
-                                                                    </subviews>
-                                                                    <constraints>
-                                                                        <constraint firstItem="sPI-L6-bYA" firstAttribute="leading" secondItem="wGh-hf-iJl" secondAttribute="leading" id="RnG-Mq-vWY"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="sPI-L6-bYA" secondAttribute="trailing" constant="2" id="v2d-18-BBo"/>
-                                                                        <constraint firstItem="sPI-L6-bYA" firstAttribute="top" secondItem="wGh-hf-iJl" secondAttribute="top" constant="1" id="z6K-5y-8Tr"/>
-                                                                    </constraints>
                                                                 </view>
                                                             </tabViewItem>
                                                         </tabViewItems>
