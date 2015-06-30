@@ -30,7 +30,7 @@
 #pragma mark AttributeNode
 
 @implementation AttributeNode {
-	NSString *_type;
+	NSString *_identifier;
 	id _value;
 	BOOL _splitValue;
 	BOOL _structValue;
@@ -52,7 +52,7 @@ labels = _labels;
 
 - (instancetype)initWithAttributeWithName:(NSString *)name
 									 node:(SKNode *)node
-									 type:(NSString *)type
+									 identifier:(NSString *)identifier
 								formatter:(id)formatter
 						 valueTransformer:(id)valueTransformer
 								 children:(NSMutableArray *)children
@@ -60,7 +60,7 @@ labels = _labels;
 	if (self = [super init]) {
 		_name = name;
 		_node = node;
-		_type = type;
+		_identifier = identifier;
 		_splitValue = NO;
 		_structValue = NO;
 		_formatter = formatter;
@@ -74,67 +74,67 @@ labels = _labels;
 	return self;
 }
 
-- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer {
-	return [self initWithAttributeWithName:name node:node type:type formatter:formatter valueTransformer:valueTransformer children:nil];
+- (instancetype)initWithAttributeWithName:(NSString *)name node:(SKNode *)node identifier:(NSString *)identifier formatter:(id)formatter valueTransformer:(id)valueTransformer {
+	return [self initWithAttributeWithName:name node:node identifier:identifier formatter:formatter valueTransformer:valueTransformer children:nil];
 }
 
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type children:(NSMutableArray *)children {
-	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:type formatter:nil valueTransformer:nil children:children];
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node identifier:(NSString *)identifier children:(NSMutableArray *)children {
+	return [[AttributeNode alloc] initWithAttributeWithName:name node:node identifier:identifier formatter:nil valueTransformer:nil children:children];
 }
 
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer {
-	return [[AttributeNode alloc] initWithAttributeWithName:name node:node type:type formatter:formatter valueTransformer:valueTransformer];
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node identifier:(NSString *)identifier formatter:(id)formatter valueTransformer:(id)valueTransformer {
+	return [[AttributeNode alloc] initWithAttributeWithName:name node:node identifier:identifier formatter:formatter valueTransformer:valueTransformer];
 }
 
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type {
-	return [self attributeWithName:name node:node type:type formatter:nil valueTransformer:nil];
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node identifier:(NSString *)identifier {
+	return [self attributeWithName:name node:node identifier:identifier formatter:nil valueTransformer:nil];
 }
 
 + (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode *)node {
-	return [self attributeWithName:name node:node type:@"color"];
+	return [self attributeWithName:name node:node identifier:@"color"];
 }
 
 + (instancetype)attributeForRotationAngleWithName:name node:(SKNode *)node {
-	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:@"d"
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node identifier:@"d"
 													  formatter:[NSNumberFormatter degreesFormatter]
 											   valueTransformer:[DegreesTransformer transformer]];
 	return attribute;
 }
 
-+ (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type {
-	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
++ (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode *)node identifier:(NSString *)identifier {
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node identifier:identifier
 													  formatter:[NSNumberFormatter highPrecisionFormatter]
 											   valueTransformer:[PrecisionTransformer transformer]];
 	return attribute;
 }
 
-+ (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type {
-	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
++ (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode *)node identifier:(NSString *)identifier {
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node identifier:identifier
 													  formatter:[NSNumberFormatter normalPrecisionFormatter]
 											   valueTransformer:nil];
 	return attribute;
 }
 
-+ (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type {
-	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
++ (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode *)node identifier:(NSString *)identifier {
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node identifier:identifier
 													  formatter:[NSNumberFormatter normalizedFormatter]
 											   valueTransformer:[PrecisionTransformer transformer]];
 	return attribute;
 }
 
-+ (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type {
-	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node type:type
++ (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode *)node identifier:(NSString *)identifier {
+	AttributeNode *attribute = [AttributeNode attributeWithName:name node:node identifier:identifier
 													  formatter:[NSNumberFormatter integerFormatter]
 											   valueTransformer:nil];
 	return attribute;
 }
 
-+ (NSDictionary *)attributeForNonEditableValue:(NSString *)name type:(NSString *)type {
++ (NSDictionary *)attributeForNonEditableValue:(NSString *)name identifier:(NSString *)identifier {
 	return @{@"name": name,
 			 @"value": @"(non-editable)",
-			 @"type": @"generic attribute",
+			 @"identifier": @"generic attribute",
 			 @"node": [NSNull null],
-			 @"description": [NSString stringWithFormat:@"%@\n%@", name, type],
+			 @"description": [NSString stringWithFormat:@"%@\n%@", name, identifier],
 			 @"isLeaf": @YES,
 			 @"isEditable": @NO};
 }
@@ -150,11 +150,11 @@ labels = _labels;
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"%@\n%@", _name, _type];
+	return [NSString stringWithFormat:@"%@\n%@", _name, _identifier];
 }
 
-- (NSString *)type {
-	return _type;
+- (NSString *)identifier {
+	return _identifier;
 }
 
 - (BOOL)isEditable {
@@ -192,8 +192,8 @@ labels = _labels;
 
 				_types = [NSMutableArray array];
 
-				for (NSInteger i=0; i<_type.length; i++) {
-					NSString *ch = [_type substringWithRange:NSMakeRange(i, 1)];
+				for (NSInteger i=0; i<_identifier.length; i++) {
+					NSString *ch = [_identifier substringWithRange:NSMakeRange(i, 1)];
 					if ([ch isEqualToString:@"{"]) {
 						level++;
 						tempArray = [NSMutableArray array];
@@ -296,7 +296,7 @@ labels = _labels;
 			int offset = [_typeSizes[subindex] intValue];
 			const char *objCType = [_types[subindex] UTF8String];
 			[(NSNumber *)value getValue:_pdata + offset withObjCType:objCType];
-			self.value = [NSValue value:_pdata withObjCType:_type.UTF8String];
+			self.value = [NSValue value:_pdata withObjCType:_identifier.UTF8String];
 		}
 
 	} else {
