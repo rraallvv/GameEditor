@@ -26,17 +26,18 @@
 #import <Foundation/Foundation.h>
 
 typedef enum UserDataType {
-	UserDataTypeBoolean			= 0,
-	UserDataTypeNumber			= 1,
-	UserDataTypeString			= 2,
-	UserDataTypeLocalizedString	= 3,
-	UserDataTypePoint			= 4,
-	UserDataTypeSize			= 5,
-	UserDataTypeRect			= 6,
-	UserDataTypeRange			= 7,
-	UserDataTypeColor			= 8,
-	UserDataTypeImage			= 9,
-	UserDataTypeNil				= 10
+	UserDataTypeNotAvailable	= 0,
+	UserDataTypeBoolean,
+	UserDataTypeNumber,
+	UserDataTypeString,
+	UserDataTypeLocalizedString,
+	UserDataTypePoint,
+	UserDataTypeSize,
+	UserDataTypeRect,
+	UserDataTypeRange,
+	UserDataTypeColor,
+	UserDataTypeImage,
+	UserDataTypeNil
 } UserDataType;
 
 @interface NSObject (DictionaryControllerType)

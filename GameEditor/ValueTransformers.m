@@ -50,6 +50,8 @@
 @implementation NSObject (DictionaryControllerType)
 
 - (void)setType:(UserDataType)type {
+	if (type == UserDataTypeNotAvailable)
+		return;
 	id result = nil;
 	switch (type) {
 		case UserDataTypeBoolean:
@@ -138,9 +140,12 @@ static BOOL isNumber(id value) {
 
 	} else if ([value isKindOfClass:[NSImage class]]) {
 		return UserDataTypeImage;
+
+	} else if (value == nil) {
+		return UserDataTypeNil;
 	}
-	
-	return UserDataTypeNil;
+
+	return UserDataTypeNotAvailable;
 }
 
 @end
