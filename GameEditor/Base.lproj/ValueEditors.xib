@@ -1034,11 +1034,7 @@
                                                             </menu>
                                                         </popUpButtonCell>
                                                         <connections>
-                                                            <binding destination="piR-sf-gg5" name="selectedTag" keyPath="objectValue.value" id="3IU-YM-QE2">
-                                                                <dictionary key="options">
-                                                                    <string key="NSValueTransformerName">UserDataTypeTransformer</string>
-                                                                </dictionary>
-                                                            </binding>
+                                                            <binding destination="piR-sf-gg5" name="selectedTag" keyPath="objectValue.type" id="IDe-Qt-RMR"/>
                                                         </connections>
                                                     </popUpButton>
                                                 </subviews>
@@ -1378,11 +1374,7 @@
                                                             </tabViewItem>
                                                         </tabViewItems>
                                                         <connections>
-                                                            <binding destination="5a0-VJ-GML" name="selectedIndex" keyPath="objectValue.value" id="dSv-4L-FKK">
-                                                                <dictionary key="options">
-                                                                    <string key="NSValueTransformerName">UserDataTypeTransformer</string>
-                                                                </dictionary>
-                                                            </binding>
+                                                            <binding destination="5a0-VJ-GML" name="selectedIndex" keyPath="objectValue.type" id="bjR-tT-eSo"/>
                                                         </connections>
                                                     </tabView>
                                                 </subviews>

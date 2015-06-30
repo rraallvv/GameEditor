@@ -25,21 +25,8 @@
 
 #import "ValueTransformers.h"
 #import <SpriteKit/SpriteKit.h>
+#import <AppKit/AppKit.h>
 #import <objc/runtime.h>
-
-typedef enum UserDataType {
-	UserDataTypeBoolean			= 0,
-	UserDataTypeNumber			= 1,
-	UserDataTypeString			= 2,
-	UserDataTypeLocalizedString	= 3,
-	UserDataTypePoint			= 4,
-	UserDataTypeSize			= 5,
-	UserDataTypeRect			= 6,
-	UserDataTypeRange			= 7,
-	UserDataTypeColor			= 8,
-	UserDataTypeImage			= 9,
-	UserDataTypeNil				= 10
-} UserDataType;
 
 #pragma mark NSBundle
 
@@ -54,6 +41,107 @@ typedef enum UserDataType {
 		}
 	}
 	return result;
+}
+
+@end
+
+#pragma mark NSObject
+
+@implementation NSObject (DictionaryControllerType)
+
+- (void)setType:(UserDataType)type {
+	id result;
+	switch (type) {
+		case UserDataTypeBoolean:
+			result = @NO;
+			break;
+
+		case UserDataTypeNumber:
+			result = @0;
+			break;
+
+		case UserDataTypeString:
+		case UserDataTypeLocalizedString:
+			result = @"";
+			break;
+
+		case UserDataTypePoint:
+			result = [NSValue valueWithPoint:NSZeroPoint];
+			break;
+
+		case UserDataTypeSize:
+			result = [NSValue valueWithSize:NSZeroSize];
+			break;
+
+		case UserDataTypeRect:
+			result = [NSValue valueWithRect:NSZeroRect];
+			break;
+
+		case UserDataTypeRange:
+			result = [NSValue valueWithRange:NSMakeRange(0, 0)];
+			break;
+
+		case UserDataTypeColor:
+			result = [NSColor blueColor];
+			break;
+
+		case UserDataTypeImage:
+			result = [NSImage imageNamed:NSImageNameInfo];
+			break;
+
+		default:
+			result = [NSNull null];
+			break;
+	}
+	self.value = nil;
+	if (result) {
+		self.value = result;
+	}
+}
+
+static BOOL isNumber(id value) {
+	if (strcmp([value objCType], @encode(int)) == 0
+		|| strcmp([value objCType], @encode(double)) == 0) {
+		return YES;
+	}
+	return NO;
+}
+
+- (UserDataType)type {
+	id value = self.value;
+
+	if ([value isKindOfClass:[NSNumber class]]) {
+		if (isNumber(value)) {
+			return UserDataTypeNumber;
+		}
+		return UserDataTypeBoolean;
+
+	} else if ([value isKindOfClass:[NSString class]]) {
+		return UserDataTypeString;
+
+	} else if ([value isKindOfClass:[NSValue class]]) {
+		const char *type = [value objCType];
+		if (strcmp(type, @encode(NSPoint)) == 0) {
+			return UserDataTypePoint;
+
+		} else if (strcmp(type, @encode(NSSize)) == 0) {
+			return UserDataTypeSize;
+
+		} else if (strcmp(type, @encode(NSRect)) == 0) {
+			return UserDataTypeRect;
+
+		} else if (strcmp(type, @encode(NSRange)) == 0) {
+			return UserDataTypeRange;
+		}
+
+	} else if ([value isKindOfClass:[NSColor class]]) {
+		return UserDataTypeColor;
+
+	} else if ([value isKindOfClass:[NSImage class]]) {
+		return UserDataTypeImage;
+	}
+	
+	return UserDataTypeNil;
 }
 
 @end
@@ -441,14 +529,6 @@ typedef enum UserDataType {
 
 @end
 
-static BOOL isNumber(id value) {
-	if (strcmp([value objCType], @encode(int)) == 0
-		|| strcmp([value objCType], @encode(double)) == 0) {
-		return YES;
-	}
-	return NO;
-}
-
 @implementation BooleanValidationTransformer
 
 + (void)initialize {
@@ -653,98 +733,6 @@ static BOOL isNumber(id value) {
 						}
 				 reverseTransformedValueBlock:^id(id value){
 							return [NSNull null];
-						}];
-}
-
-@end
-
-@implementation UserDataTypeTransformer
-
-+ (void)initialize {
-	[self initializeWithTransformedValueClass:[NSObject class]
-				  allowsReverseTransformation:YES
-						transformedValueBlock:^id(id value){
-
-							if ([value isKindOfClass:[NSNumber class]]) {
-								if (isNumber(value)) {
-									return @(UserDataTypeNumber);
-								}
-								return @(UserDataTypeBoolean);
-
-							} else if ([value isKindOfClass:[NSString class]]) {
-								return @(UserDataTypeString);
-
-							} else if ([value isKindOfClass:[NSValue class]]) {
-								const char *type = [value objCType];
-								if (strcmp(type, @encode(NSPoint)) == 0) {
-									return @(UserDataTypePoint);
-
-								} else if (strcmp(type, @encode(NSSize)) == 0) {
-									return @(UserDataTypeSize);
-
-								} else if (strcmp(type, @encode(NSRect)) == 0) {
-									return @(UserDataTypeRect);
-
-								} else if (strcmp(type, @encode(NSRange)) == 0) {
-									return @(UserDataTypeRange);
-								}
-
-							} else if ([value isKindOfClass:[NSColor class]]) {
-								return @(UserDataTypeColor);
-
-							} else if ([value isKindOfClass:[NSImage class]]) {
-								return @(UserDataTypeImage);
-							}
-							return @(UserDataTypeNil);
-						}
-
-				 reverseTransformedValueBlock:^id(id value){
-
-							UserDataType type = [value intValue];
-							id result = nil;
-							switch (type) {
-								case UserDataTypeBoolean:
-									result = @NO;
-									break;
-
-								case UserDataTypeNumber:
-									result = @0;
-									break;
-
-								case UserDataTypeString:
-								case UserDataTypeLocalizedString:
-									result = @"";
-									break;
-
-								case UserDataTypePoint:
-									result = [NSValue valueWithPoint:NSZeroPoint];
-									break;
-
-								case UserDataTypeSize:
-									result = [NSValue valueWithSize:NSZeroSize];
-									break;
-
-								case UserDataTypeRect:
-									result = [NSValue valueWithRect:NSZeroRect];
-									break;
-
-								case UserDataTypeRange:
-									result = [NSValue valueWithRange:NSMakeRange(0, 0)];
-									break;
-
-								case UserDataTypeColor:
-									result = [NSColor blueColor];
-									break;
-
-								case UserDataTypeImage:
-									result = [NSImage imageNamed:NSImageNameInfo];
-									break;
-
-								default:
-									result = [NSNull null];
-									break;
-							}
-							return result;
 						}];
 }
 
