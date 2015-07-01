@@ -37,6 +37,7 @@
 
 - (void)textDidEndEditing:(NSNotification *)notification {
 	NSDictionary *bindingInfo = [self infoForBinding: NSValueBinding];
+	NSTableCellView *observedObject = bindingInfo[NSObservedObjectKey];
 	NSDictionary *options = bindingInfo[NSOptionsKey];
 	NSValueTransformer *transformer = options[NSValueTransformerBindingOption];
 
@@ -48,6 +49,11 @@
 		NSText* textEditor = [self.window fieldEditor:YES forObject:self];
 		NSRange selectionRange = NSMakeRange(0, 0);
 		[textEditor setSelectedRange:selectionRange];
+	}
+
+	UserDataTableView *userDataTableView = (UserDataTableView *)observedObject.superview.superview;
+	if (userDataTableView && [userDataTableView isKindOfClass:[UserDataTableView class]]) {
+		[userDataTableView selectRowIndexes:[NSIndexSet indexSet] byExtendingSelection:NO];
 	}
 }
 
