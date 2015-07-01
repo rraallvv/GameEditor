@@ -37,10 +37,11 @@
 
 - (void)textDidEndEditing:(NSNotification *)notification {
 	NSDictionary *bindingInfo = [self infoForBinding: NSValueBinding];
+	NSTableCellView *observedObject = bindingInfo[NSObservedObjectKey];
 	NSDictionary *options = bindingInfo[NSOptionsKey];
 	NSValueTransformer *transformer = options[NSValueTransformerBindingOption];
 
-	if (transformer) {
+	if (transformer && ![transformer isEqual:[NSNull null]]) {
 		/* Ensure the string value is valid acording to the value transformer */
 		self.stringValue = [transformer transformedValue:[transformer reverseTransformedValue:self.stringValue]];
 
@@ -49,6 +50,21 @@
 		NSRange selectionRange = NSMakeRange(0, 0);
 		[textEditor setSelectedRange:selectionRange];
 	}
+
+	NSInteger textMovement = [[[notification userInfo] objectForKey:@"NSTextMovement"] integerValue];
+	if (textMovement == NSReturnTextMovement || textMovement == NSTabTextMovement){
+		UserDataTableView *userDataTableView = (UserDataTableView *)observedObject.superview.superview;
+		if (userDataTableView && [userDataTableView isKindOfClass:[UserDataTableView class]]) {
+			[userDataTableView selectRowIndexes:[NSIndexSet indexSet] byExtendingSelection:NO];
+			[userDataTableView updateBackgroundStyle];
+		}
+	}
+
+	[super textDidEndEditing:notification];
+}
+
+-(void)mouseDown:(nonnull NSEvent *)theEvent {
+	//[self performSelector:@selector(selectText:) withObject:self afterDelay:0];
 }
 
 @end
@@ -249,17 +265,13 @@
 	[self updateBackgroundStyle];
 }
 
-- (BOOL)resignFirstResponder {
-	/* Make an empty selection */
-	[self selectRowIndexes:nil byExtendingSelection:NO];
-	return YES;
-}
-
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([object isEqual:_inspectorTableRowView] && [keyPath isEqualToString:@"superview"]) {
 		[self updateTableHeight];
 		/* Remove the notification sice it's only needed when a user data table is added to the inspector */
 		[object removeObserver:self forKeyPath:keyPath];
+	} else {
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 	}
 }
 

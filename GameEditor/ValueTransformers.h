@@ -25,6 +25,26 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum UserDataType {
+	UserDataTypeNotAvailable	= 0,
+	UserDataTypeBoolean,
+	UserDataTypeNumber,
+	UserDataTypeString,
+	UserDataTypeLocalizedString,
+	UserDataTypePoint,
+	UserDataTypeSize,
+	UserDataTypeRect,
+	UserDataTypeRange,
+	UserDataTypeColor,
+	UserDataTypeImage,
+	UserDataTypeNil
+} UserDataType;
+
+@interface NSObject (DictionaryControllerType)
+- (void)setType:(UserDataType)type;
+- (UserDataType)type;
+@end
+
 @interface NSNumber (NumberFromType)
 + numberWithValue:(const void *)aValue objCType:(const char *)aTypeDescription;
 - (instancetype)initWithValue:(const void *)aValue objCType:(const char *)aTypeDescription;
@@ -91,7 +111,3 @@ reverseTransformedValueBlock:(id (^)(id value))reverseTransformedValueBlock;
 
 @interface NilValidationTransformer : NSValueTransformer
 @end
-
-@interface UserDataTypeTransformer : NSValueTransformer
-@end
-

@@ -46,16 +46,16 @@
 @end
 
 @interface AttributeNode : NSObject
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type children:(NSMutableArray *)children;
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type formatter:(id)formatter valueTransformer:(id)valueTransformer;
-+ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type;
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node identifier:(NSString *)identifier children:(NSMutableArray *)children;
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node identifier:(NSString *)identifier formatter:(id)formatter valueTransformer:(id)valueTransformer;
++ (instancetype)attributeWithName:(NSString *)name node:(SKNode *)node identifier:(NSString *)identifier;
 + (instancetype)attributeForColorWithName:(NSString *)name node:(SKNode *)node;
 + (instancetype)attributeForRotationAngleWithName:(NSString *)name node:(SKNode *)node;
-+ (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type;
-+ (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type;
-+ (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type;
-+ (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode *)node type:(NSString *)type;
-+ (NSDictionary *)attributeForNonEditableValue:(NSString *)name type:(NSString *)type;
++ (instancetype)attributeForHighPrecisionValueWithName:(NSString *)name node:(SKNode *)node identifier:(NSString *)identifier;
++ (instancetype)attributeForNormalPrecisionValueWithName:(NSString *)name node:(SKNode *)node identifier:(NSString *)identifier;
++ (instancetype)attributeForNormalizedValueWithName:(NSString *)name node:(SKNode *)node identifier:(NSString *)identifier;
++ (instancetype)attributeForIntegerValueWithName:(NSString *)name node:(SKNode *)node identifier:(NSString *)identifier;
++ (NSDictionary *)attributeForNonEditableValue:(NSString *)name identifier:(NSString *)identifier;
 @property (copy) NSString *name;
 @property id node;
 @property (readonly) NSMutableArray *children;
