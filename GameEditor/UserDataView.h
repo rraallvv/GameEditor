@@ -35,5 +35,7 @@
 
 @interface UserDataTableView : NSTableView
 
+- (void)updateBackgroundStyle;
+
 @end
 

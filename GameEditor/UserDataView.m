@@ -56,6 +56,7 @@
 		UserDataTableView *userDataTableView = (UserDataTableView *)observedObject.superview.superview;
 		if (userDataTableView && [userDataTableView isKindOfClass:[UserDataTableView class]]) {
 			[userDataTableView selectRowIndexes:[NSIndexSet indexSet] byExtendingSelection:NO];
+			[userDataTableView updateBackgroundStyle];
 		}
 	}
 
