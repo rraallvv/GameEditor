@@ -1555,7 +1555,7 @@
             </connections>
             <point key="canvasLocation" x="634" y="728"/>
         </tableCellView>
-        <tableCellView identifier="shaderUniforms" id="Wd2-vP-sR0" userLabel="shaderUniforms" customClass="UserDataTableCellView">
+        <tableCellView identifier="uniforms" id="Wd2-vP-sR0" userLabel="uniforms" customClass="UserDataTableCellView">
             <rect key="frame" x="0.0" y="0.0" width="284" height="84"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -1600,7 +1600,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <binding destination="gIS-W8-piD" name="value" keyPath="objectValue.key" id="PnI-fC-Pm4"/>
+                                                            <binding destination="gIS-W8-piD" name="value" keyPath="objectValue.name" id="Xrp-ln-iWp"/>
                                                         </connections>
                                                     </textField>
                                                 </subviews>
@@ -1658,7 +1658,7 @@
                                                             </menu>
                                                         </popUpButtonCell>
                                                         <connections>
-                                                            <binding destination="hxS-kH-hvY" name="selectedTag" keyPath="objectValue.type" id="9Ap-TG-XcG"/>
+                                                            <binding destination="hxS-kH-hvY" name="selectedTag" keyPath="objectValue.uniformType" id="fsI-77-D5E"/>
                                                         </connections>
                                                     </popUpButton>
                                                 </subviews>
@@ -1711,13 +1711,6 @@
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
-                                                                            <connections>
-                                                                                <binding destination="M8B-hw-opn" name="value" keyPath="objectValue.value" id="zOu-6Q-o4U">
-                                                                                    <dictionary key="options">
-                                                                                        <string key="NSValueTransformerName">NumberValidationTransformer</string>
-                                                                                    </dictionary>
-                                                                                </binding>
-                                                                            </connections>
                                                                         </textField>
                                                                     </subviews>
                                                                     <constraints>
@@ -1739,13 +1732,6 @@
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
-                                                                            <connections>
-                                                                                <binding destination="M8B-hw-opn" name="value" keyPath="objectValue.value" id="HlO-2E-gnj">
-                                                                                    <dictionary key="options">
-                                                                                        <string key="NSValueTransformerName">NumberValidationTransformer</string>
-                                                                                    </dictionary>
-                                                                                </binding>
-                                                                            </connections>
                                                                         </textField>
                                                                     </subviews>
                                                                     <constraints>
@@ -1767,13 +1753,6 @@
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
-                                                                            <connections>
-                                                                                <binding destination="M8B-hw-opn" name="value" keyPath="objectValue.value" id="D0v-uC-wvx">
-                                                                                    <dictionary key="options">
-                                                                                        <string key="NSValueTransformerName">NumberValidationTransformer</string>
-                                                                                    </dictionary>
-                                                                                </binding>
-                                                                            </connections>
                                                                         </textField>
                                                                     </subviews>
                                                                     <constraints>
@@ -1795,13 +1774,6 @@
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
-                                                                            <connections>
-                                                                                <binding destination="M8B-hw-opn" name="value" keyPath="objectValue.value" id="UTo-8N-vxL">
-                                                                                    <dictionary key="options">
-                                                                                        <string key="NSValueTransformerName">NumberValidationTransformer</string>
-                                                                                    </dictionary>
-                                                                                </binding>
-                                                                            </connections>
                                                                         </textField>
                                                                     </subviews>
                                                                     <constraints>
@@ -1823,13 +1795,6 @@
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
-                                                                            <connections>
-                                                                                <binding destination="M8B-hw-opn" name="value" keyPath="objectValue.value" id="dTf-Jp-h0r">
-                                                                                    <dictionary key="options">
-                                                                                        <string key="NSValueTransformerName">NumberValidationTransformer</string>
-                                                                                    </dictionary>
-                                                                                </binding>
-                                                                            </connections>
                                                                         </textField>
                                                                     </subviews>
                                                                     <constraints>
@@ -1841,7 +1806,7 @@
                                                             </tabViewItem>
                                                         </tabViewItems>
                                                         <connections>
-                                                            <binding destination="M8B-hw-opn" name="selectedIndex" keyPath="objectValue.type" id="V5j-9k-fSJ"/>
+                                                            <binding destination="M8B-hw-opn" name="selectedIndex" keyPath="objectValue.uniformType" id="kGI-Jz-wUF"/>
                                                         </connections>
                                                     </tabView>
                                                 </subviews>

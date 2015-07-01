@@ -715,6 +715,24 @@
 															   valueTransformer:[ShaderTransformer transformer]];
 					[attributesArray addObject:attribute];
 
+#if 1 // Dummy shader uniforms table
+					[attributesArray addObject:@{@"name": @"Custom Shader Uniforms",
+												 @"identifier": @"header",
+												 @"isLeaf": @NO,
+												 @"isEditable": @NO,
+												 @"isCollapsible": @YES,
+												 @"children": @[@{@"name": @"uniforms",
+																  @"identifier": @"uniforms",
+																  @"isLeaf": @NO,
+																  @"isEditable": @NO,
+																  @"content":
+																	  [[NSArrayController alloc] initWithContent:[[_selectedNode valueForKey:propertyName] uniforms]]
+																  }.mutableCopy
+																].mutableCopy
+												 }.mutableCopy];
+#endif
+
+
 				} else if (propertyClass == [SKPhysicsWorld class]) {
 					[attributesArray addObject:@{@"name": propertyName,
 												 @"identifier": @"expandable",
