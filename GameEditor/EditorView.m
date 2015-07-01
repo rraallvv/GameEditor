@@ -1033,6 +1033,8 @@ anchorPoint = _anchorPoint;
 		dispatch_async(dispatch_get_main_queue(), ^{
 			[self setNeedsDisplay:YES];
 		});
+	} else {
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 	}
 }
 

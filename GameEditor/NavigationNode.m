@@ -151,6 +151,8 @@ children = _childrenNavigationNodes;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([keyPath isEqualToString:@"name"]) {
 		self.name = [_node valueForKey:@"name"];
+	} else {
+		[super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 	}
 }
 

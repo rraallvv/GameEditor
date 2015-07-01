@@ -431,7 +431,7 @@ static const CGFloat kIndentationPerLevel = 0.0;
 		return [itemHeightValue floatValue];
 	}
 
-	NSString *type = [[item representedObject] valueForKey:@"type"];
+	NSString *type = [[item representedObject] valueForKey:@"identifier"];
 
 	if (type) {
 		for (NSString *identifier in _editorIdentifiers) {
@@ -464,15 +464,15 @@ static const CGFloat kIndentationPerLevel = 0.0;
 }
 
 - (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
-	NSString *type = [[item representedObject] valueForKey:@"type"];
+	NSString *type = [[item representedObject] valueForKey:@"identifier"];
 	if ([(id)outlineView outlineView:outlineView isGroupItem:item]) {
 		return [outlineView makeViewWithIdentifier:type owner:self];
 	} else if ([[tableColumn identifier] isEqualToString:@"key"]) {
 		return [outlineView makeViewWithIdentifier:@"attribute" owner:self];
 	} else {
-		for (NSString *identifier in _editorIdentifiers) {
-			if (type.length == [type rangeOfString:identifier options:NSRegularExpressionSearch].length) {
-				return [outlineView makeViewWithIdentifier:identifier owner:self];
+		for (NSString *editorIdentifier in _editorIdentifiers) {
+			if (type.length == [type rangeOfString:editorIdentifier options:NSRegularExpressionSearch].length) {
+				return [outlineView makeViewWithIdentifier:editorIdentifier owner:self];
 			}
 		}
 		return [outlineView makeViewWithIdentifier:@"generic attribute" owner:self];
