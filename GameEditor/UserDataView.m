@@ -41,7 +41,7 @@
 	NSDictionary *options = bindingInfo[NSOptionsKey];
 	NSValueTransformer *transformer = options[NSValueTransformerBindingOption];
 
-	if (transformer) {
+	if (transformer && ![transformer isEqual:[NSNull null]]) {
 		/* Ensure the string value is valid acording to the value transformer */
 		self.stringValue = [transformer transformedValue:[transformer reverseTransformedValue:self.stringValue]];
 
@@ -51,10 +51,19 @@
 		[textEditor setSelectedRange:selectionRange];
 	}
 
-	UserDataTableView *userDataTableView = (UserDataTableView *)observedObject.superview.superview;
-	if (userDataTableView && [userDataTableView isKindOfClass:[UserDataTableView class]]) {
-		[userDataTableView selectRowIndexes:[NSIndexSet indexSet] byExtendingSelection:NO];
+	NSInteger textMovement = [[[notification userInfo] objectForKey:@"NSTextMovement"] integerValue];
+	if (textMovement == NSReturnTextMovement || textMovement == NSTabTextMovement){
+		UserDataTableView *userDataTableView = (UserDataTableView *)observedObject.superview.superview;
+		if (userDataTableView && [userDataTableView isKindOfClass:[UserDataTableView class]]) {
+			[userDataTableView selectRowIndexes:[NSIndexSet indexSet] byExtendingSelection:NO];
+		}
 	}
+
+	[super textDidEndEditing:notification];
+}
+
+-(void)mouseDown:(nonnull NSEvent *)theEvent {
+	//[self performSelector:@selector(selectText:) withObject:self afterDelay:0];
 }
 
 @end
