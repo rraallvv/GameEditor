@@ -255,6 +255,17 @@ labels = _labels;
 
 #pragma mark Value
 
+- (id)valueWithCopiedUserData:(id)value {
+	/* Copy the custom shader uniforms */
+	if ([value isKindOfClass:[SKShader class]]) {
+		NSArray *uniforms = [_value uniforms];
+		if (uniforms) {
+			[value setUniforms:uniforms];
+		}
+	}
+	return value;
+}
+
 - (void)setValue:(id)value {
 	/* Do nothing if the value hasn't changed */
 	if ([_value isEqual:value])
@@ -262,7 +273,7 @@ labels = _labels;
 
 	NSAssert(!_splitValue, @"A split value is not replaced, but its subindexes are updated in setValue:forUndefinedKey:");
 
-	_value = value;
+	_value = [self valueWithCopiedUserData:value];
 
 	/* Update the bound object's property value */
 	@try {
