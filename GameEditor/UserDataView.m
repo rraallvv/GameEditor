@@ -63,7 +63,7 @@
 	[super textDidEndEditing:notification];
 }
 
--(void)mouseDown:(nonnull NSEvent *)theEvent {
+-(void)mouseDown:(NSEvent *)theEvent {
 	//[self performSelector:@selector(selectText:) withObject:self afterDelay:0];
 }
 
