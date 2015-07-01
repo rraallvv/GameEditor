@@ -4,7 +4,7 @@
 
 void main()
 {
-	float currTime = u_time;
+	float currTime = u_time * u_speed;
 
 	vec2 uv = v_tex_coord;
 	vec2 circleCenter = vec2(0.5, 0.5);
