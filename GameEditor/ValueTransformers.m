@@ -101,8 +101,7 @@
 }
 
 static BOOL isNumber(id value) {
-	if (strcmp([value objCType], @encode(int)) == 0
-		|| strcmp([value objCType], @encode(double)) == 0) {
+	if (strcmp([value objCType], @encode(BOOL)) != 0) {
 		return YES;
 	}
 	return NO;
