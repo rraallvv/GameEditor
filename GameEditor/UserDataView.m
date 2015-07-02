@@ -69,10 +69,84 @@
 
 @end
 
+#pragma mark UserDataUniformsArray
+
+@implementation UserDataUniformsArray {
+	__weak SKShader *_shader;
+}
+
++ (NSArrayController *)controllerWithShader:(SKShader *)shader {
+	return [[NSArrayController alloc] initWithContent:[[UserDataUniformsArray alloc] initWithShader:shader]];
+}
+
+- (instancetype)initWithShader:(SKShader *)shader {
+	if (self = [super init]) {
+		_shader = shader;
+		if (_shader.uniforms.count == 0) {
+			_shader.uniforms = nil;
+		}
+	}
+	return self;
+}
+
+- (NSUInteger)count {
+	return _shader.uniforms.count;
+}
+
+- (id)objectAtIndex:(NSUInteger)index {
+	return _shader.uniforms[index];
+}
+
+- (void)insertObject:(id)anObject atIndex:(NSUInteger)index {
+	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
+	[uniforms insertObject:anObject atIndex:index];
+	_shader.uniforms = uniforms;
+}
+
+- (void)removeObjectAtIndex:(NSUInteger)index {
+	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
+	[uniforms removeObjectAtIndex:index];
+	_shader.uniforms = uniforms;
+}
+
+- (void)addObject:(id)anObject {
+	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
+	[uniforms addObject:anObject];
+	_shader.uniforms = uniforms;
+}
+
+- (void)removeLastObject {
+	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
+	[uniforms removeLastObject];
+	_shader.uniforms = uniforms;
+}
+
+- (void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject {
+	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
+	[uniforms replaceObjectAtIndex:index withObject:anObject];
+	_shader.uniforms = uniforms;
+}
+
+@end
+
 #pragma mark UserDataDictionary
 
 @implementation UserDataDictionary {
 	__weak SKNode *_node;
+}
+
++ (NSDictionaryController *)controllerWithNode:(SKNode *)node {
+	return [[NSDictionaryController alloc] initWithContent:[[self alloc] initWithNode:node]];
+}
+
+- (instancetype)initWithNode:(SKNode *)node {
+	if (self = [super init]) {
+		_node = node;
+		if (_node.userData.count == 0) {
+			_node.userData = nil;
+		}
+	}
+	return self;
 }
 
 - (NSUInteger)count {
@@ -85,16 +159,6 @@
 
 -(NSEnumerator *)keyEnumerator {
 	return [_node.userData keyEnumerator];
-}
-
-- (instancetype)initWithNode:(SKNode *)node {
-	if (self = [super init]) {
-		_node = node;
-		if (_node.userData.count == 0) {
-			_node.userData = nil;
-		}
-	}
-	return self;
 }
 
 -(void)setObject:(id)anObject forKey:(id<NSCopying>)aKey {

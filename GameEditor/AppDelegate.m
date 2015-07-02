@@ -340,8 +340,7 @@
 																		 @"identifier": @"@\"NSMutableDictionary\"",
 																		 @"isLeaf": @NO,
 																		 @"isEditable": @NO,
-																		 @"content":
-																		 [[NSDictionaryController alloc] initWithContent:[[UserDataDictionary alloc] initWithNode:_selectedNode]]
+																		 @"content": [UserDataDictionary controllerWithNode:_selectedNode]
 																		 }.mutableCopy
 																	   ].mutableCopy
 														}.mutableCopy,
@@ -725,8 +724,7 @@
 																  @"identifier": @"uniforms",
 																  @"isLeaf": @NO,
 																  @"isEditable": @NO,
-																  @"content":
-																	  [[NSArrayController alloc] initWithContent:[[_selectedNode valueForKey:propertyName] uniforms]]
+																  @"content": [UserDataUniformsArray controllerWithShader:[_selectedNode valueForKey:propertyName]]
 																  }.mutableCopy
 																].mutableCopy
 												 }.mutableCopy];
