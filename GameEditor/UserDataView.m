@@ -196,28 +196,45 @@
 }
 
 - (IBAction)didClickAddValueButton:(NSButton *)sender {
-	NSDictionaryController *dictionaryController = [self.objectValue valueForKey:NSContentBinding];
-	NSInteger selectedRow = [self.userDataTable selectedRow];
-	id newObject = [dictionaryController newObject];
-	if (selectedRow == -1) {
-		/* Add a new value below the last row */
-		[newObject setKey:@"key"];
-		[newObject setValue:@YES];
-		[dictionaryController addObject:newObject];
-	} else {
-		/* Add a copy of the selected value below the selected row */
-		id value = [[[dictionaryController arrangedObjects] objectAtIndex:selectedRow] valueForKey:NSValueBinding];
-		[newObject setKey:@"key"];
-		[newObject setValue:value];
-		[dictionaryController insertObject:newObject atArrangedObjectIndex:selectedRow + 1];
+	id objectController = [self.objectValue valueForKey:NSContentBinding];
+
+	if ([[objectController content] isKindOfClass:[UserDataDictionary class]]) {
+		NSDictionaryController *dictionaryController = objectController;
+		NSInteger selectedRow = [self.userDataTable selectedRow];
+		id newObject = [dictionaryController newObject];
+
+		if (selectedRow == -1) {
+			/* Add a new value below the last row */
+			[newObject setKey:@"key"];
+			[newObject setValue:@YES];
+			[dictionaryController addObject:newObject];
+
+		} else {
+			/* Add a copy of the selected value below the selected row */
+			id value = [[[dictionaryController arrangedObjects] objectAtIndex:selectedRow] valueForKey:NSValueBinding];
+			[newObject setKey:@"key"];
+			[newObject setValue:value];
+			[dictionaryController insertObject:newObject atArrangedObjectIndex:selectedRow + 1];
+		}
+
+	} else 	if ([[objectController content] isKindOfClass:[UserDataUniformsArray class]]) {
+		NSLog(@">>>didClickAddValueButton");
 	}
 }
 
 - (IBAction)didClickRemoveValueButton:(NSButton *)sender {
-	NSDictionaryController *dictionaryController = [self.objectValue valueForKey:NSContentBinding];
-	NSIndexSet *selectedRows = [self.userDataTable selectedRowIndexes];
-	if (selectedRows) {
-		[dictionaryController removeObjectsAtArrangedObjectIndexes:selectedRows];
+	id objectController = [self.objectValue valueForKey:NSContentBinding];
+	if ([[objectController content] isKindOfClass:[UserDataDictionary class]]) {
+		NSDictionaryController *dictionaryController = objectController;
+
+		NSIndexSet *selectedRows = [self.userDataTable selectedRowIndexes];
+
+		if (selectedRows) {
+			[dictionaryController removeObjectsAtArrangedObjectIndexes:selectedRows];
+		}
+
+	} else 	if ([[objectController content] isKindOfClass:[UserDataUniformsArray class]]) {
+		NSLog(@">>>didClickRemoveValueButton");
 	}
 
 	/* -[selectionDidChange:] is not called when a value is removed, so the button it's disabled here */
