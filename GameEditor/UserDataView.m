@@ -134,7 +134,7 @@
 - (instancetype)initWithShader:(SKShader *)shader {
 	if (self = [super init]) {
 		_shader = shader;
-		if (_shader.uniforms.count == 0) {
+		if (_shader.uniforms && _shader.uniforms.count == 0) {
 			_shader.uniforms = nil;
 		}
 	}
@@ -180,7 +180,7 @@
 }
 
 - (void)updateUniforms:(NSArray *)uniforms {
-	if (uniforms.count) {
+	if (uniforms && uniforms.count) {
 		_shader.uniforms = uniforms;
 	} else {
 		_shader.uniforms = nil;
@@ -202,7 +202,7 @@
 - (instancetype)initWithNode:(SKNode *)node {
 	if (self = [super init]) {
 		_node = node;
-		if (_node.userData.count == 0) {
+		if (_node.userData && _node.userData.count == 0) {
 			_node.userData = nil;
 		}
 	}
@@ -230,7 +230,7 @@
 
 -(void)removeObjectForKey:(id)aKey {
 	[_node.userData removeObjectForKey:aKey];
-	if (_node.userData.count == 0) {
+	if (_node.userData && _node.userData.count == 0) {
 		_node.userData = nil;
 	}
 }
