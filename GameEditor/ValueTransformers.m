@@ -440,9 +440,9 @@ static BOOL isNumber(id value) {
 							return result;
 						}
 				 reverseTransformedValueBlock:^(NSNumber *value){
-					 NSNumber *result = @(value.floatValue*0.01);
-					 return result;
-				 }];
+							NSNumber *result = @(value.floatValue*0.01);
+							return result;
+						}];
 }
 
 @end
@@ -457,9 +457,9 @@ static BOOL isNumber(id value) {
 							return result;
 						}
 				 reverseTransformedValueBlock:^(NSNumber *value){
-					 NSNumber *result = @(GLKMathDegreesToRadians(value.floatValue*0.1));
-					 return result;
-				 }];
+							NSNumber *result = @(GLKMathDegreesToRadians(value.floatValue*0.1));
+							return result;
+						}];
 }
 
 @end
@@ -493,11 +493,11 @@ static BOOL isNumber(id value) {
 							return nil;
 						}
 				 reverseTransformedValueBlock:^id(NSString *value){
-					 if (value) {
-						 return [SKTexture textureWithImageNamed:value];
-					 }
-					 return nil;
-				 }];
+							if (value) {
+								return [SKTexture textureWithImageNamed:value];
+							}
+							return nil;
+						}];
 }
 
 @end
@@ -517,17 +517,16 @@ static BOOL isNumber(id value) {
 							return nil;
 						}
 				 reverseTransformedValueBlock:^id(NSString *value){
-					 if (value) {
-						 for (NSString *path in [[NSBundle mainBundle] pathsForResourcesOfType:@"fsh"]) {
-							 if ([[path lastPathComponent] isEqualToString:value]) {
-								 NSString *source = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-								 return [SKShader shaderWithSource:source];
-							 }
-						 }
-						 return nil;
-					 }
-					 return nil;
-				 }];
+							if (value) {
+								for (NSString *path in [[NSBundle mainBundle] pathsForResourcesOfType:@"fsh"]) {
+									if ([[path lastPathComponent] isEqualToString:value]) {
+										NSString *source = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+										return [SKShader shaderWithSource:source];
+									}
+								}
+							}
+							return nil;
+						}];
 }
 
 @end
