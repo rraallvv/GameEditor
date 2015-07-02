@@ -1711,6 +1711,13 @@
                                                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
+                                                                            <connections>
+                                                                                <binding destination="M8B-hw-opn" name="value" keyPath="objectValue.floatValue" id="Gfd-55-3RI">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSValueTransformerName">NumberValidationTransformer</string>
+                                                                                    </dictionary>
+                                                                                </binding>
+                                                                            </connections>
                                                                         </textField>
                                                                     </subviews>
                                                                     <constraints>
