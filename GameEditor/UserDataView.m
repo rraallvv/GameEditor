@@ -27,6 +27,58 @@
 #import "InspectorTableView.h"
 #import "NSView+LayoutConstraint.h"
 
+#pragma mark SKUniform
+
+@interface SKUniform (CreateFromUniform)
++ (instancetype)uniformWithName:(NSString *)name uniform:(SKUniform *)uniform;
+@end
+
+@implementation SKUniform (CreateFromUniform)
+
++ (instancetype)uniformWithName:(NSString *)name uniform:(SKUniform *)uniform {
+	SKUniform *result;
+	switch (uniform.uniformType) {
+		case SKUniformTypeFloat:
+			result = [SKUniform uniformWithName:name float:uniform.floatValue];
+			break;
+
+		case SKUniformTypeFloatVector2:
+			result = [SKUniform uniformWithName:name floatVector2:uniform.floatVector2Value];
+			break;
+
+		case SKUniformTypeFloatVector3:
+			result = [SKUniform uniformWithName:name floatVector3:uniform.floatVector3Value];
+			break;
+
+		case SKUniformTypeFloatVector4:
+			result = [SKUniform uniformWithName:name floatVector4:uniform.floatVector4Value];
+			break;
+
+		case SKUniformTypeFloatMatrix2:
+			result = [SKUniform uniformWithName:name floatMatrix2:uniform.floatMatrix2Value];
+			break;
+
+		case SKUniformTypeFloatMatrix3:
+			result = [SKUniform uniformWithName:name floatMatrix3:uniform.floatMatrix3Value];
+			break;
+
+		case SKUniformTypeFloatMatrix4:
+			result = [SKUniform uniformWithName:name floatMatrix4:uniform.floatMatrix4Value];
+			break;
+
+		case SKUniformTypeTexture:
+			result = [SKUniform uniformWithName:name texture:uniform.textureValue];
+			break;
+
+		default:
+			result = nil;
+			break;
+	}
+	return result;
+}
+
+@end
+
 #pragma mark UserDataTextField
 
 @interface UserDataTextField : NSTextField
@@ -245,45 +297,7 @@
 		} else {
 			/* Add a copy of the selected value below the selected row */
 			SKUniform *selectedUniform = [[arrayController arrangedObjects] objectAtIndex:selectedRow];
-			SKUniform *newUniform;
-			switch (selectedUniform.uniformType) {
-				case SKUniformTypeFloat:
-					newUniform = [SKUniform uniformWithName:uniformName float:selectedUniform.floatValue];
-					break;
-
-				case SKUniformTypeFloatVector2:
-					newUniform = [SKUniform uniformWithName:uniformName floatVector2:selectedUniform.floatVector2Value];
-					break;
-
-				case SKUniformTypeFloatVector3:
-					newUniform = [SKUniform uniformWithName:uniformName floatVector3:selectedUniform.floatVector3Value];
-					break;
-
-				case SKUniformTypeFloatVector4:
-					newUniform = [SKUniform uniformWithName:uniformName floatVector4:selectedUniform.floatVector4Value];
-					break;
-
-				case SKUniformTypeFloatMatrix2:
-					newUniform = [SKUniform uniformWithName:uniformName floatMatrix2:selectedUniform.floatMatrix2Value];
-					break;
-
-				case SKUniformTypeFloatMatrix3:
-					newUniform = [SKUniform uniformWithName:uniformName floatMatrix3:selectedUniform.floatMatrix3Value];
-					break;
-
-				case SKUniformTypeFloatMatrix4:
-					newUniform = [SKUniform uniformWithName:uniformName floatMatrix4:selectedUniform.floatMatrix4Value];
-					break;
-
-				case SKUniformTypeTexture:
-					newUniform = [SKUniform uniformWithName:uniformName texture:selectedUniform.textureValue];
-					break;
-
-				default:
-					newUniform = nil;
-					break;
-			}
-
+			SKUniform *newUniform = [SKUniform uniformWithName:uniformName uniform:selectedUniform];
 			if (newUniform) {
 				[arrayController insertObject:newUniform atArrangedObjectIndex:selectedRow + 1];
 			}
