@@ -25,11 +25,17 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class SKNode;
+@class SKNode, SKShader;
+
+@interface UserDataUniformsArray : NSMutableArray
+
++ (NSArrayController *)controllerWithShader:(SKShader *)shader;
+
+@end
 
 @interface UserDataDictionary : NSMutableDictionary
 
-- (instancetype)initWithNode:(SKNode *)node;
++ (NSDictionaryController *)controllerWithNode:(SKNode *)node;
 
 @end
 

@@ -27,6 +27,58 @@
 #import "InspectorTableView.h"
 #import "NSView+LayoutConstraint.h"
 
+#pragma mark SKUniform
+
+@interface SKUniform (CreateFromUniform)
++ (instancetype)uniformWithName:(NSString *)name uniform:(SKUniform *)uniform;
+@end
+
+@implementation SKUniform (CreateFromUniform)
+
++ (instancetype)uniformWithName:(NSString *)name uniform:(SKUniform *)uniform {
+	SKUniform *result;
+	switch (uniform.uniformType) {
+		case SKUniformTypeFloat:
+			result = [SKUniform uniformWithName:name float:uniform.floatValue];
+			break;
+
+		case SKUniformTypeFloatVector2:
+			result = [SKUniform uniformWithName:name floatVector2:uniform.floatVector2Value];
+			break;
+
+		case SKUniformTypeFloatVector3:
+			result = [SKUniform uniformWithName:name floatVector3:uniform.floatVector3Value];
+			break;
+
+		case SKUniformTypeFloatVector4:
+			result = [SKUniform uniformWithName:name floatVector4:uniform.floatVector4Value];
+			break;
+
+		case SKUniformTypeFloatMatrix2:
+			result = [SKUniform uniformWithName:name floatMatrix2:uniform.floatMatrix2Value];
+			break;
+
+		case SKUniformTypeFloatMatrix3:
+			result = [SKUniform uniformWithName:name floatMatrix3:uniform.floatMatrix3Value];
+			break;
+
+		case SKUniformTypeFloatMatrix4:
+			result = [SKUniform uniformWithName:name floatMatrix4:uniform.floatMatrix4Value];
+			break;
+
+		case SKUniformTypeTexture:
+			result = [SKUniform uniformWithName:name texture:uniform.textureValue];
+			break;
+
+		default:
+			result = nil;
+			break;
+	}
+	return result;
+}
+
+@end
+
 #pragma mark UserDataTextField
 
 @interface UserDataTextField : NSTextField
@@ -63,8 +115,76 @@
 	[super textDidEndEditing:notification];
 }
 
--(void)mouseDown:(nonnull NSEvent *)theEvent {
+-(void)mouseDown:(NSEvent *)theEvent {
 	//[self performSelector:@selector(selectText:) withObject:self afterDelay:0];
+}
+
+@end
+
+#pragma mark UserDataUniformsArray
+
+@implementation UserDataUniformsArray {
+	__weak SKShader *_shader;
+}
+
++ (NSArrayController *)controllerWithShader:(SKShader *)shader {
+	return [[NSArrayController alloc] initWithContent:[[UserDataUniformsArray alloc] initWithShader:shader]];
+}
+
+- (instancetype)initWithShader:(SKShader *)shader {
+	if (self = [super init]) {
+		_shader = shader;
+		if (_shader.uniforms.count == 0) {
+			_shader.uniforms = nil;
+		}
+	}
+	return self;
+}
+
+- (NSUInteger)count {
+	return _shader.uniforms.count;
+}
+
+- (id)objectAtIndex:(NSUInteger)index {
+	return _shader.uniforms[index];
+}
+
+- (void)insertObject:(id)anObject atIndex:(NSUInteger)index {
+	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
+	[uniforms insertObject:anObject atIndex:index];
+	[self updateUniforms:uniforms];
+}
+
+- (void)addObject:(id)anObject {
+	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
+	[uniforms addObject:anObject];
+	[self updateUniforms:uniforms];
+}
+
+- (void)removeObjectAtIndex:(NSUInteger)index {
+	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
+	[uniforms removeObjectAtIndex:index];
+	[self updateUniforms:uniforms];
+}
+
+- (void)removeLastObject {
+	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
+	[uniforms removeLastObject];
+	[self updateUniforms:uniforms];
+}
+
+- (void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject {
+	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
+	[uniforms replaceObjectAtIndex:index withObject:anObject];
+	[self updateUniforms:uniforms];
+}
+
+- (void)updateUniforms:(NSArray *)uniforms {
+	if (uniforms.count) {
+		_shader.uniforms = uniforms;
+	} else {
+		_shader.uniforms = nil;
+	}
 }
 
 @end
@@ -73,6 +193,20 @@
 
 @implementation UserDataDictionary {
 	__weak SKNode *_node;
+}
+
++ (NSDictionaryController *)controllerWithNode:(SKNode *)node {
+	return [[NSDictionaryController alloc] initWithContent:[[self alloc] initWithNode:node]];
+}
+
+- (instancetype)initWithNode:(SKNode *)node {
+	if (self = [super init]) {
+		_node = node;
+		if (_node.userData.count == 0) {
+			_node.userData = nil;
+		}
+	}
+	return self;
 }
 
 - (NSUInteger)count {
@@ -85,16 +219,6 @@
 
 -(NSEnumerator *)keyEnumerator {
 	return [_node.userData keyEnumerator];
-}
-
-- (instancetype)initWithNode:(SKNode *)node {
-	if (self = [super init]) {
-		_node = node;
-		if (_node.userData.count == 0) {
-			_node.userData = nil;
-		}
-	}
-	return self;
 }
 
 -(void)setObject:(id)anObject forKey:(id<NSCopying>)aKey {
@@ -132,30 +256,61 @@
 }
 
 - (IBAction)didClickAddValueButton:(NSButton *)sender {
-	NSDictionaryController *dictionaryController = [self.objectValue valueForKey:NSContentBinding];
-	NSInteger selectedRow = [self.userDataTable selectedRow];
-	id newObject = [dictionaryController newObject];
-	if (selectedRow == -1) {
-		/* Add a new value below the last row */
-		[newObject setKey:@"key"];
-		[newObject setValue:@YES];
-		[dictionaryController addObject:newObject];
-	} else {
-		/* Add a copy of the selected value below the selected row */
-		id value = [[[dictionaryController arrangedObjects] objectAtIndex:selectedRow] valueForKey:NSValueBinding];
-		[newObject setKey:@"key"];
-		[newObject setValue:value];
-		[dictionaryController insertObject:newObject atArrangedObjectIndex:selectedRow + 1];
+	id objectController = [self.objectValue valueForKey:NSContentBinding];
+
+	if ([[objectController content] isKindOfClass:[UserDataDictionary class]]) {
+
+		/* Add a value to the user data table */
+
+		NSDictionaryController *dictionaryController = objectController;
+		NSInteger selectedRow = [self.userDataTable selectedRow];
+		id newObject = [dictionaryController newObject];
+
+		if (selectedRow == -1) {
+			/* Add a new value below the last row */
+			[newObject setKey:@"key"];
+			[newObject setValue:@YES];
+			[dictionaryController addObject:newObject];
+
+		} else {
+			/* Add a copy of the selected value below the selected row */
+			id value = [[[dictionaryController arrangedObjects] objectAtIndex:selectedRow] valueForKey:NSValueBinding];
+			[newObject setKey:@"key"];
+			[newObject setValue:value];
+			[dictionaryController insertObject:newObject atArrangedObjectIndex:selectedRow + 1];
+		}
+
+	} else 	if ([[objectController content] isKindOfClass:[UserDataUniformsArray class]]) {
+
+		/* Add an uniform to the custom shader uniforms table */
+		
+		NSArrayController *arrayController = objectController;
+		NSInteger selectedRow = [self.userDataTable selectedRow];
+		NSInteger rowsCount = [self.userDataTable numberOfRows];
+		NSString *uniformName = [NSString stringWithFormat:@"u_%ld", rowsCount + 1];
+
+		if (selectedRow == -1) {
+			/* Add a new value below the last row */
+			SKUniform *newUniform = [SKUniform uniformWithName:uniformName float:0];
+			[arrayController addObject:newUniform];
+
+		} else {
+			/* Add a copy of the selected value below the selected row */
+			SKUniform *selectedUniform = [[arrayController arrangedObjects] objectAtIndex:selectedRow];
+			SKUniform *newUniform = [SKUniform uniformWithName:uniformName uniform:selectedUniform];
+			if (newUniform) {
+				[arrayController insertObject:newUniform atArrangedObjectIndex:selectedRow + 1];
+			}
+		}
 	}
 }
 
 - (IBAction)didClickRemoveValueButton:(NSButton *)sender {
-	NSDictionaryController *dictionaryController = [self.objectValue valueForKey:NSContentBinding];
+	NSArrayController *arrayController = [self.objectValue valueForKey:NSContentBinding];
 	NSIndexSet *selectedRows = [self.userDataTable selectedRowIndexes];
 	if (selectedRows) {
-		[dictionaryController removeObjectsAtArrangedObjectIndexes:selectedRows];
+		[arrayController removeObjectsAtArrangedObjectIndexes:selectedRows];
 	}
-
 	/* -[selectionDidChange:] is not called when a value is removed, so the button it's disabled here */
 	self.removeValue.enabled = NO;
 }
