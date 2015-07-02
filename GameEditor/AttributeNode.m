@@ -259,7 +259,7 @@ labels = _labels;
 	/* Copy the custom shader uniforms */
 	if ([value isKindOfClass:[SKShader class]]) {
 		NSArray *uniforms = [_value uniforms];
-		if (uniforms) {
+		if (uniforms.count) {
 			[value setUniforms:uniforms];
 		}
 	}
