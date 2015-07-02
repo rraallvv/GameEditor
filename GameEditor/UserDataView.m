@@ -292,31 +292,11 @@
 }
 
 - (IBAction)didClickRemoveValueButton:(NSButton *)sender {
-	id objectController = [self.objectValue valueForKey:NSContentBinding];
-
-	if ([[objectController content] isKindOfClass:[UserDataDictionary class]]) {
-
-		/* Remove the selected values from the user data table */
-
-		NSDictionaryController *dictionaryController = objectController;
-		NSIndexSet *selectedRows = [self.userDataTable selectedRowIndexes];
-
-		if (selectedRows) {
-			[dictionaryController removeObjectsAtArrangedObjectIndexes:selectedRows];
-		}
-
-	} else 	if ([[objectController content] isKindOfClass:[UserDataUniformsArray class]]) {
-
-		/* Remove the selected uniforms from the custom shader uniforms table */
-
-		NSArrayController *arrayController = objectController;
-		NSIndexSet *selectedRows = [self.userDataTable selectedRowIndexes];
-
-		if (selectedRows) {
-			[arrayController removeObjectsAtArrangedObjectIndexes:selectedRows];
-		}
+	NSArrayController *arrayController = [self.objectValue valueForKey:NSContentBinding];
+	NSIndexSet *selectedRows = [self.userDataTable selectedRowIndexes];
+	if (selectedRows) {
+		[arrayController removeObjectsAtArrangedObjectIndexes:selectedRows];
 	}
-
 	/* -[selectionDidChange:] is not called when a value is removed, so the button it's disabled here */
 	self.removeValue.enabled = NO;
 }
