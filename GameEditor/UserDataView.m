@@ -100,31 +100,39 @@
 - (void)insertObject:(id)anObject atIndex:(NSUInteger)index {
 	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
 	[uniforms insertObject:anObject atIndex:index];
-	_shader.uniforms = uniforms;
-}
-
-- (void)removeObjectAtIndex:(NSUInteger)index {
-	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
-	[uniforms removeObjectAtIndex:index];
-	_shader.uniforms = uniforms;
+	[self updateUniforms:uniforms];
 }
 
 - (void)addObject:(id)anObject {
 	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
 	[uniforms addObject:anObject];
-	_shader.uniforms = uniforms;
+	[self updateUniforms:uniforms];
+}
+
+- (void)removeObjectAtIndex:(NSUInteger)index {
+	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
+	[uniforms removeObjectAtIndex:index];
+	[self updateUniforms:uniforms];
 }
 
 - (void)removeLastObject {
 	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
 	[uniforms removeLastObject];
-	_shader.uniforms = uniforms;
+	[self updateUniforms:uniforms];
 }
 
 - (void)replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject {
 	NSMutableArray *uniforms = _shader.uniforms.mutableCopy;
 	[uniforms replaceObjectAtIndex:index withObject:anObject];
-	_shader.uniforms = uniforms;
+	[self updateUniforms:uniforms];
+}
+
+- (void)updateUniforms:(NSArray *)uniforms {
+	if (uniforms.count) {
+		_shader.uniforms = uniforms;
+	} else {
+		_shader.uniforms = nil;
+	}
 }
 
 @end
@@ -199,6 +207,9 @@
 	id objectController = [self.objectValue valueForKey:NSContentBinding];
 
 	if ([[objectController content] isKindOfClass:[UserDataDictionary class]]) {
+
+		/* Add a value to the user data table */
+
 		NSDictionaryController *dictionaryController = objectController;
 		NSInteger selectedRow = [self.userDataTable selectedRow];
 		id newObject = [dictionaryController newObject];
@@ -218,15 +229,76 @@
 		}
 
 	} else 	if ([[objectController content] isKindOfClass:[UserDataUniformsArray class]]) {
-		NSLog(@">>>didClickAddValueButton");
+
+		/* Add an uniform to the custom shader uniforms table */
+		
+		NSArrayController *arrayController = objectController;
+		NSInteger selectedRow = [self.userDataTable selectedRow];
+		NSInteger rowsCount = [self.userDataTable numberOfRows];
+		NSString *uniformName = [NSString stringWithFormat:@"u_%ld", rowsCount + 1];
+
+		if (selectedRow == -1) {
+			/* Add a new value below the last row */
+			SKUniform *newUniform = [SKUniform uniformWithName:uniformName float:0];
+			[arrayController addObject:newUniform];
+
+		} else {
+			/* Add a copy of the selected value below the selected row */
+			SKUniform *selectedUniform = [[arrayController arrangedObjects] objectAtIndex:selectedRow];
+			SKUniform *newUniform;
+			switch (selectedUniform.uniformType) {
+				case SKUniformTypeFloat:
+					newUniform = [SKUniform uniformWithName:uniformName float:selectedUniform.floatValue];
+					break;
+
+				case SKUniformTypeFloatVector2:
+					newUniform = [SKUniform uniformWithName:uniformName floatVector2:selectedUniform.floatVector2Value];
+					break;
+
+				case SKUniformTypeFloatVector3:
+					newUniform = [SKUniform uniformWithName:uniformName floatVector3:selectedUniform.floatVector3Value];
+					break;
+
+				case SKUniformTypeFloatVector4:
+					newUniform = [SKUniform uniformWithName:uniformName floatVector4:selectedUniform.floatVector4Value];
+					break;
+
+				case SKUniformTypeFloatMatrix2:
+					newUniform = [SKUniform uniformWithName:uniformName floatMatrix2:selectedUniform.floatMatrix2Value];
+					break;
+
+				case SKUniformTypeFloatMatrix3:
+					newUniform = [SKUniform uniformWithName:uniformName floatMatrix3:selectedUniform.floatMatrix3Value];
+					break;
+
+				case SKUniformTypeFloatMatrix4:
+					newUniform = [SKUniform uniformWithName:uniformName floatMatrix4:selectedUniform.floatMatrix4Value];
+					break;
+
+				case SKUniformTypeTexture:
+					newUniform = [SKUniform uniformWithName:uniformName texture:selectedUniform.textureValue];
+					break;
+
+				default:
+					newUniform = nil;
+					break;
+			}
+
+			if (newUniform) {
+				[arrayController insertObject:newUniform atArrangedObjectIndex:selectedRow + 1];
+			}
+		}
 	}
 }
 
 - (IBAction)didClickRemoveValueButton:(NSButton *)sender {
 	id objectController = [self.objectValue valueForKey:NSContentBinding];
-	if ([[objectController content] isKindOfClass:[UserDataDictionary class]]) {
-		NSDictionaryController *dictionaryController = objectController;
 
+	if ([[objectController content] isKindOfClass:[UserDataDictionary class]]) {
+
+		/* Remove the selected values from the user data table */
+
+		NSDictionaryController *dictionaryController = objectController;
 		NSIndexSet *selectedRows = [self.userDataTable selectedRowIndexes];
 
 		if (selectedRows) {
@@ -234,7 +306,15 @@
 		}
 
 	} else 	if ([[objectController content] isKindOfClass:[UserDataUniformsArray class]]) {
-		NSLog(@">>>didClickRemoveValueButton");
+
+		/* Remove the selected uniforms from the custom shader uniforms table */
+
+		NSArrayController *arrayController = objectController;
+		NSIndexSet *selectedRows = [self.userDataTable selectedRowIndexes];
+
+		if (selectedRows) {
+			[arrayController removeObjectsAtArrangedObjectIndexes:selectedRows];
+		}
 	}
 
 	/* -[selectionDidChange:] is not called when a value is removed, so the button it's disabled here */
