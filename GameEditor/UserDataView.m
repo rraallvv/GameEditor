@@ -135,7 +135,7 @@
 	if (self = [super init]) {
 		_shader = shader;
 		if (_shader.uniforms && _shader.uniforms.count == 0) {
-			_shader.uniforms = nil;
+			_shader.uniforms = @[];
 		}
 	}
 	return self;
@@ -183,7 +183,7 @@
 	if (uniforms && uniforms.count) {
 		_shader.uniforms = uniforms;
 	} else {
-		_shader.uniforms = nil;
+		_shader.uniforms = @[];
 	}
 }
 

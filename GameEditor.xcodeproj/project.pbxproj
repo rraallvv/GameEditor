@@ -19,7 +19,6 @@
 		E44764CC1B36AFA100B7355F /* SKNode+PhysicsBodyType.m in Sources */ = {isa = PBXBuildFile; fileRef = E44764CB1B36AFA100B7355F /* SKNode+PhysicsBodyType.m */; };
 		E45B16B81B35AA97007883BF /* ComboBoxCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E45B16B71B35AA97007883BF /* ComboBoxCell.m */; };
 		E460AB931ACDC9B900859EA2 /* NavigatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = E460AB921ACDC9B900859EA2 /* NavigatorView.m */; };
-		E474192F1AD84EDC00061932 /* NewGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E474192E1AD84EDC00061932 /* NewGameScene.sks */; };
 		E48286631AE7D74F00C51F8D /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = E48286621AE7D74F00C51F8D /* art.scnassets */; };
 		E486C0851B35F2F900276F20 /* normal.png in Resources */ = {isa = PBXBuildFile; fileRef = E486C0841B35F2F900276F20 /* normal.png */; };
 		E4977F921B3B273B007E60AF /* UserDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4977F911B3B273B007E60AF /* UserDataView.m */; };
@@ -38,6 +37,7 @@
 		E4BDDFD71B3A31D60008FE91 /* PanelView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BDDFD61B3A31D60008FE91 /* PanelView.m */; };
 		E4BFABB81B33ACDB000A51EB /* NSBundle+ProxyBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BFABB41B33ACDB000A51EB /* NSBundle+ProxyBundle.m */; };
 		E4BFF4B01AB78E24002DADD3 /* StepperTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */; };
+		E4DA58141B45E35E005291DA /* NewGameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = E4DA58131B45E35E005291DA /* NewGameScene.sks */; };
 		E4E6DA3B1AE9987500F4CE6F /* LibraryView.m in Sources */ = {isa = PBXBuildFile; fileRef = E4E6DA3A1AE9987500F4CE6F /* LibraryView.m */; };
 		E4E935F81B08AE88007A48C4 /* libobjc2lua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4E935F21B08ABAF007A48C4 /* libobjc2lua.a */; };
 		E4F20C871B3BB76D00F57180 /* NSView+LayoutConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F20C861B3BB76D00F57180 /* NSView+LayoutConstraint.m */; };
@@ -131,7 +131,6 @@
 		E45B16B71B35AA97007883BF /* ComboBoxCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComboBoxCell.m; sourceTree = "<group>"; };
 		E460AB911ACDC9B900859EA2 /* NavigatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigatorView.h; sourceTree = "<group>"; };
 		E460AB921ACDC9B900859EA2 /* NavigatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigatorView.m; sourceTree = "<group>"; };
-		E474192E1AD84EDC00061932 /* NewGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = NewGameScene.sks; sourceTree = "<group>"; };
 		E48286621AE7D74F00C51F8D /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		E486C0841B35F2F900276F20 /* normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = normal.png; sourceTree = "<group>"; };
 		E4977F901B3B273B007E60AF /* UserDataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataView.h; sourceTree = "<group>"; };
@@ -163,6 +162,7 @@
 		E4BFABB41B33ACDB000A51EB /* NSBundle+ProxyBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+ProxyBundle.m"; sourceTree = "<group>"; };
 		E4BFF4AE1AB78E24002DADD3 /* StepperTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StepperTextField.h; sourceTree = "<group>"; };
 		E4BFF4AF1AB78E24002DADD3 /* StepperTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StepperTextField.m; sourceTree = "<group>"; };
+		E4DA58131B45E35E005291DA /* NewGameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = NewGameScene.sks; sourceTree = "<group>"; };
 		E4E6DA391AE9987500F4CE6F /* LibraryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibraryView.h; sourceTree = "<group>"; };
 		E4E6DA3A1AE9987500F4CE6F /* LibraryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LibraryView.m; sourceTree = "<group>"; };
 		E4E935EB1B08ABAF007A48C4 /* LuaTests.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LuaTests.xcodeproj; path = "ObjC-Lua/LuaTests.xcodeproj"; sourceTree = "<group>"; };
@@ -341,7 +341,7 @@
 				E4ABDB591AB3933900AAE82E /* MainMenu.xib */,
 				E40813901AC3C45300F54824 /* ValueEditors.xib */,
 				E4ABDB551AB3933900AAE82E /* GameScene.sks */,
-				E474192E1AD84EDC00061932 /* NewGameScene.sks */,
+				E4DA58131B45E35E005291DA /* NewGameScene.sks */,
 				E4220B2B1ACFF92B00753375 /* Particles.sks */,
 				E4A1779D1B327B0F005A8692 /* Spaceship.png */,
 				E4A1779E1B327B0F005A8692 /* SpaceshipTest.png */,
@@ -444,7 +444,7 @@
 		E4ABDB401AB3933900AAE82E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0620;
+				LastUpgradeCheck = 0700;
 				TargetAttributes = {
 					E4ABDB471AB3933900AAE82E = {
 						CreatedOnToolsVersion = 6.2;
@@ -544,6 +544,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E4DA58141B45E35E005291DA /* NewGameScene.sks in Resources */,
 				E40965F81B3798D000DBEC44 /* Shader1.fsh in Resources */,
 				E4220B2D1ACFF92B00753375 /* Particles.sks in Resources */,
 				E4A1779F1B327B0F005A8692 /* Spaceship.png in Resources */,
@@ -554,7 +555,6 @@
 				E4220B2E1ACFF92B00753375 /* spark.png in Resources */,
 				E40813921AC3C45300F54824 /* ValueEditors.xib in Resources */,
 				E48286631AE7D74F00C51F8D /* art.scnassets in Resources */,
-				E474192F1AD84EDC00061932 /* NewGameScene.sks in Resources */,
 				E486C0851B35F2F900276F20 /* normal.png in Resources */,
 				E4B893F21B38DB1400C28D93 /* Shader2.fsh in Resources */,
 			);
@@ -717,6 +717,7 @@
 					"-image_base",
 					100000000,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "developer.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = GameEditor;
 			};
 			name = Test;
@@ -736,6 +737,7 @@
 				);
 				INFOPLIST_FILE = GameEditorTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "developer.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = GameEditorTests;
 			};
 			name = Test;
@@ -760,6 +762,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -840,6 +843,7 @@
 					"-image_base",
 					100000000,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "developer.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = GameEditor;
 			};
 			name = Debug;
@@ -866,6 +870,7 @@
 					"-image_base",
 					100000000,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "developer.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = GameEditor;
 			};
 			name = Release;
@@ -885,6 +890,7 @@
 				);
 				INFOPLIST_FILE = GameEditorTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "developer.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = GameEditorTests;
 			};
 			name = Debug;
@@ -900,6 +906,7 @@
 				);
 				INFOPLIST_FILE = GameEditorTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "developer.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = GameEditorTests;
 			};
 			name = Release;

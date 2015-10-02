@@ -54,7 +54,7 @@
 			if ([self.firstResponder respondsToSelector:@selector(delete:)]) {
 				[(id)self.firstResponder delete:self];
 			} else {
-				[[NSApp delegate] delete:self];
+				[(AppDelegate *)[NSApp delegate] delete:self];
 			}
 			break;
 
@@ -711,6 +711,7 @@
 					[attributesArray addObject:[AttributeNode attributeWithName:propertyName node:node identifier:@"expandable" children:attributes]];
 
 				} else if (propertyClass == [SKShader class]) {
+					/* Shader's selection */
 					AttributeNode *attribute = [AttributeNode attributeWithName:propertyName
 																		   node:node
 																	 identifier:propertyType
@@ -718,7 +719,15 @@
 															   valueTransformer:[ShaderTransformer transformer]];
 					[attributesArray addObject:attribute];
 
-#if 1 // Dummy shader uniforms table
+					/* Fix issue when the shader value needs to be refreshed for some reason (TODO: Check whether this is still needed) */
+					NSArray *uniforms = [[_selectedNode valueForKey:propertyName] uniforms];
+					for (SKUniform *uniform in uniforms) {
+						if (uniform.uniformType == SKUniformTypeFloat) {
+							uniform.floatValue = uniform.floatValue;
+						}
+					}
+
+					/* Dummy shader uniforms table */
 					[attributesArray addObject:@{@"name": @"Custom Shader Uniforms",
 												 @"identifier": @"header",
 												 @"isLeaf": @NO,
@@ -732,8 +741,6 @@
 																  }.mutableCopy
 																].mutableCopy
 												 }.mutableCopy];
-#endif
-
 
 				} else if (propertyClass == [SKPhysicsWorld class]) {
 					[attributesArray addObject:@{@"name": propertyName,
